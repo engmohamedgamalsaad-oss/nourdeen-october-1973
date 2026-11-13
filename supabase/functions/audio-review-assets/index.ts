@@ -62,7 +62,18 @@ async function ibnSinaArabicBlock(blockIndex: number) {
   return { block, sourceText, sourceTextHash, blocks };
 }
 const storyPathCache = new Map<string, string>();
-async function resolveStoryBlock(section: string, slug: string, language: string, blockIndex: number) {
+async function resolveStoryBlock(section: string, slug: string, language: string, blockIndex: number, snapshot?: any) {
+  // The preview page sends the story it is showing; use it instead of main so
+  // reordered/edited stories work before anything is published to GitHub.
+  const fromSnapshot = storyFromSnapshot(snapshot, section, slug);
+  if (fromSnapshot) {
+    const snapBlock = fromSnapshot?.i18n?.[language]?.blocks?.[blockIndex];
+    if (!isSpeakableBlock(snapBlock)) {
+      throw new Error("المقطع المحدد غير موجود في لغة الحكاية أو لا يحتوي نصًا صالحًا.");
+    }
+    const snapText = snapBlock.text.trim();
+    return { story: fromSnapshot, block: snapBlock, sourceText: snapText, sourceTextHash: await sha256Hex(new TextEncoder().encode(snapText)) };
+  }
   const identity = section + "/" + slug;
   let path = storyPathCache.get(identity);
   if (!path) {
@@ -114,12 +125,12 @@ async function invalidatePublicStoryAudio(service: any, section: string, slug: s
   }
 }
 function orderedStoryBlockIndexes(blocks: any[]): number[] {
-  const karma: number[] = [], narrator: number[] = [];
+  // Review order follows the story itself (block order), not speaker groups.
+  const ordered: number[] = [];
   blocks.forEach((block: any, index: number) => {
-    if (block?.speaker === "karma") karma.push(index);
-    else if (block?.speaker === "narrator") narrator.push(index);
+    if (block?.speaker === "karma" || block?.speaker === "narrator") ordered.push(index);
   });
-  return karma.concat(narrator);
+  return ordered;
 }
 function encodeBase64Utf8(value: string): string {
   const bytes = new TextEncoder().encode(value);
@@ -137,17 +148,144 @@ function acceptedArabicBlockIndexes(audioReview: any): Set<number> {
   );
 }
 function requiredEarlierIbnSinaBlocks(blocks: any[], targetIndex: number): number[] {
-  const karma: number[] = [];
-  const narrator: number[] = [];
-  blocks.forEach((block: any, index: number) => {
-    if (block?.speaker === "karma") karma.push(index);
-    else if (block?.speaker === "narrator") narrator.push(index);
-  });
-  const targetSpeaker = blocks[targetIndex]?.speaker;
-  return targetSpeaker === "karma"
-    ? karma.filter((index) => index < targetIndex)
-    : karma.concat(narrator.filter((index) => index < targetIndex));
+  return orderedStoryBlockIndexes(blocks).filter((index) => index < targetIndex);
 }
+
+// <reconcile-pure>
+function normSpoken(value: any): string { return String(value ?? "").replace(/\s+/g, " ").trim(); }
+function isSpeakableBlock(block: any): boolean {
+  return !!block && (block.speaker === "karma" || block.speaker === "narrator") &&
+    typeof block.text === "string" && !!block.text.trim();
+}
+function storyFromSnapshot(snapshot: any, section: string, slug: string): any {
+  if (!snapshot || typeof snapshot !== "object" || snapshot.section !== section || snapshot.slug !== slug) return null;
+  const i18n: Record<string, any> = {};
+  for (const lang of ["ar", "en"]) {
+    const blocks = snapshot.blocks?.[lang];
+    if (!Array.isArray(blocks)) continue;
+    if (blocks.length > 400) return null;
+    i18n[lang] = {
+      blocks: blocks.map((b: any) => ({
+        speaker: typeof b?.speaker === "string" ? b.speaker : "",
+        text: typeof b?.text === "string" ? b.text.slice(0, 20000) : "",
+      })),
+    };
+  }
+  if (!i18n.ar && !i18n.en) return null;
+  return { format: "KHALEDOON_STORY", section, slug, i18n };
+}
+/* يطابق سجل المراجعة والنصوص المعتمدة وmanifest الصوت مع الحكاية الحالية بالمحتوى لا برقم المقطع:
+   نص القراءة والصوت اللذان تغيّر مكانهما يتبعان المقطع، وما حُذف أو تغيّر نصه يُسقَط، ولا يُحذف أي صوت صالح بصمت. */
+async function reconcilePlan(review: any, snap: any, manifests: Record<string, any>) {
+  const summary = { speech_moved: 0, speech_dropped: 0, clips_dropped: 0, segments_moved: 0, segments_dropped: 0 };
+  const current: any = review && typeof review === "object"
+    ? JSON.parse(JSON.stringify(review)) : { version: 1, regen: {}, clips: {}, audio_hashes: {} };
+  if (!current.clips || typeof current.clips !== "object") current.clips = {};
+  const encoder = new TextEncoder();
+  const arBlocks: any[] = snap?.i18n?.ar?.blocks ?? [];
+
+  const oldSpeech: Record<string, any> = current.speech_texts && typeof current.speech_texts === "object" ? current.speech_texts : {};
+  const newSpeech: Record<string, any> = {};
+  const usedSpeech = new Set<string>();
+  const hashes: string[] = [];
+  for (let i = 0; i < arBlocks.length; i++) {
+    hashes.push(isSpeakableBlock(arBlocks[i]) ? await sha256Hex(encoder.encode(arBlocks[i].text.trim())) : "");
+  }
+  const speechMatches = (rec: any, i: number) => !!rec && typeof rec === "object" && !!hashes[i] &&
+    rec.source_text_hash === hashes[i] && rec.speaker === arBlocks[i].speaker;
+  for (let i = 0; i < arBlocks.length; i++) {
+    const key = "ar:" + i;
+    if (speechMatches(oldSpeech[key], i)) { newSpeech[key] = oldSpeech[key]; usedSpeech.add(key); }
+  }
+  for (let i = 0; i < arBlocks.length; i++) {
+    const key = "ar:" + i;
+    if (!hashes[i] || newSpeech[key]) continue;
+    const from = Object.keys(oldSpeech).find((k) => !usedSpeech.has(k) && speechMatches(oldSpeech[k], i));
+    if (from) { newSpeech[key] = { ...oldSpeech[from], block_index: i }; usedSpeech.add(from); summary.speech_moved++; }
+  }
+  summary.speech_dropped = Object.keys(oldSpeech).filter((k) => !usedSpeech.has(k)).length;
+  const speechChanged = summary.speech_moved > 0 || summary.speech_dropped > 0;
+  if (speechChanged) current.speech_texts = newSpeech;
+
+  const expectedFor = (lang: string, i: number): string => {
+    const block = snap?.i18n?.[lang]?.blocks?.[i];
+    if (!isSpeakableBlock(block)) return "";
+    if (lang === "ar") {
+      const rec = newSpeech["ar:" + i];
+      return rec && rec.status === "approved" && typeof rec.approved_text === "string" ? normSpoken(rec.approved_text) : "";
+    }
+    return normSpoken(block.text);
+  };
+
+  const newManifests: Record<string, any> = {};
+  for (const lang of ["ar", "en"]) {
+    const manifest = manifests?.[lang];
+    if (!manifest || !Array.isArray(manifest.segments) || !manifest.segments.length) continue;
+    const blocks: any[] = snap?.i18n?.[lang]?.blocks ?? [];
+    const groups = new Map<number, any[]>();
+    const untouched: any[] = [];
+    for (const seg of manifest.segments) {
+      const b = Number(seg?.block_index);
+      if (!Number.isInteger(b)) { untouched.push(seg); continue; }
+      const list = groups.get(b) ?? [];
+      list.push(seg);
+      groups.set(b, list);
+    }
+    const info = new Map<number, { text: string; speaker: string }>();
+    for (const [b, segs] of groups) {
+      segs.sort((x: any, y: any) => Number(x.chunk_index || 0) - Number(y.chunk_index || 0));
+      info.set(b, { text: normSpoken(segs.map((x: any) => x.text).join(" ")), speaker: String(segs[0]?.speaker ?? "") });
+    }
+    const assign = new Map<number, number>();
+    const usedOld = new Set<number>();
+    for (let i = 0; i < blocks.length; i++) {
+      const exp = expectedFor(lang, i), g = info.get(i);
+      if (exp && g && g.text === exp && g.speaker === blocks[i].speaker) { assign.set(i, i); usedOld.add(i); }
+    }
+    for (let i = 0; i < blocks.length; i++) {
+      if (assign.has(i)) continue;
+      const exp = expectedFor(lang, i);
+      if (!exp) continue;
+      for (const [old, g] of info) {
+        if (usedOld.has(old)) continue;
+        if (g.text === exp && g.speaker === blocks[i].speaker) { assign.set(i, old); usedOld.add(old); break; }
+      }
+    }
+    const next: any[] = [];
+    let moved = 0, dropped = 0;
+    for (const [i, old] of assign) {
+      for (const seg of groups.get(old) ?? []) {
+        if (i !== old) moved++;
+        next.push(i === old ? seg : { ...seg, block_index: i });
+      }
+    }
+    for (const [old, segs] of groups) {
+      if (usedOld.has(old)) continue;
+      if (isSpeakableBlock(blocks[old]) && !assign.has(old)) next.push(...segs);
+      else dropped += segs.length;
+    }
+    next.push(...untouched);
+    next.sort((x: any, y: any) => Number(x.block_index) - Number(y.block_index) || Number(x.chunk_index || 0) - Number(y.chunk_index || 0));
+    if (moved || dropped) {
+      summary.segments_moved += moved;
+      summary.segments_dropped += dropped;
+      newManifests[lang] = next.length ? { ...manifest, segments: next } : null;
+    }
+  }
+
+  for (const [clipKey, clip] of Object.entries(current.clips) as [string, any][]) {
+    if (!clip || (clip.lang !== "ar" && clip.lang !== "en")) continue;
+    const index = Number(clip.block_index);
+    const block = snap?.i18n?.[clip.lang]?.blocks?.[index];
+    let keep = isSpeakableBlock(block) && block.speaker === clip.speaker;
+    if (keep && Number(clip.chunk_index || 0) === 0) keep = normSpoken(clip.text) === expectedFor(clip.lang, index);
+    if (!keep) { delete current.clips[clipKey]; summary.clips_dropped++; }
+  }
+
+  const changed = speechChanged || summary.clips_dropped > 0 || Object.keys(newManifests).length > 0;
+  return { changed, review: current, manifests: newManifests, summary };
+}
+// </reconcile-pure>
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers });
@@ -184,12 +322,55 @@ Deno.serve(async (req: Request) => {
   });
   const prefix = section + "/" + slug + "/" + language;
 
+  if (body.action === "reconcile") {
+    const snap = storyFromSnapshot(body.story_snapshot, section, slug);
+    if (!snap) return reply(400, { error: "لقطة الحكاية الحالية غير صالحة؛ أعد فتح المعاينة من لوحة الإدارة." });
+    const { data: reviewRow, error: reviewReadError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewReadError) return reply(500, { error: "تعذر قراءة سجل مراجعة الصوت.", detail: reviewReadError.message });
+    const stored: Record<string, any> = {};
+    for (const lang of ["ar", "en"]) {
+      const { data: file } = await service.storage.from(BUCKET).download(section + "/" + slug + "/" + lang + "/manifest.json");
+      if (!file) continue;
+      try { stored[lang] = JSON.parse(await file.text()); } catch { /* malformed manifest: leave it for the normal checks */ }
+    }
+    const plan = await reconcilePlan(reviewRow?.audio_review ?? null, snap, stored);
+    if (!plan.changed) return reply(200, { success: true, changed: false });
+    const { data: activeJobs, error: jobsError } = await service.from("story_audio_generation_queue")
+      .select("id").eq("section", section).eq("slug", slug).in("status", ["pending", "processing"]);
+    if (jobsError) return reply(500, { error: "تعذر فحص طابور التوليد قبل مطابقة الحكاية.", detail: jobsError.message });
+    if ((activeJobs ?? []).length) {
+      return reply(409, {
+        error: "تغيّر ترتيب الحكاية أو نصها وهناك " + (activeJobs ?? []).length + " مقطع بالطابور أو قيد التوليد؛ انتظر اكتمالها (أو فشلها) ثم أعد فتح المعاينة.",
+        active_jobs: (activeJobs ?? []).length,
+      });
+    }
+    try { await invalidatePublicStoryAudio(service, section, slug); }
+    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
+    const { error: saveReviewError } = await service.from("story_audio_reviews")
+      .upsert({ section, slug, audio_review: plan.review }, { onConflict: "section,slug" });
+    if (saveReviewError) return reply(500, { error: "تعذر حفظ سجل المراجعة بعد المطابقة.", detail: saveReviewError.message });
+    for (const [lang, manifest] of Object.entries(plan.manifests) as [string, any][]) {
+      const path = section + "/" + slug + "/" + lang + "/manifest.json";
+      if (!manifest) {
+        const { error } = await service.storage.from(BUCKET).remove([path]);
+        if (error) return reply(500, { error: "تعذر تحديث manifest الصوت بعد المطابقة.", detail: error.message });
+      } else {
+        const { error } = await service.storage.from(BUCKET).upload(path, new TextEncoder().encode(JSON.stringify(manifest)), {
+          contentType: "application/json", upsert: true, cacheControl: "60",
+        });
+        if (error) return reply(500, { error: "تعذر تحديث manifest الصوت بعد المطابقة.", detail: error.message });
+      }
+    }
+    return reply(200, { success: true, changed: true, summary: plan.summary });
+  }
+
   if (body.action === "enqueue") {
     const blockIndex = Number(body.block_index);
     if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
     if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
     let source;
-    try { source = await resolveStoryBlock(section, slug, language, blockIndex); }
+    try { source = await resolveStoryBlock(section, slug, language, blockIndex, body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع." }); }
     const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
@@ -199,7 +380,7 @@ Deno.serve(async (req: Request) => {
     const ordered = orderedStoryBlockIndexes(source.story.i18n[language].blocks);
     const targetPosition = ordered.indexOf(blockIndex);
     if (targetPosition < 0 || ordered.slice(0, targetPosition).some((index) => !accepted.has(index))) {
-      return reply(409, { error: "يجب إكمال المقاطع السابقة واعتمادها أولًا، بترتيب كارما ثم الراوي." });
+      return reply(409, { error: "يجب إكمال المقاطع السابقة واعتمادها أولًا، بترتيب الحكاية." });
     }
     if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
     let spokenText = source.sourceText;
@@ -248,10 +429,22 @@ Deno.serve(async (req: Request) => {
 
   if (body.action === "queue_status") {
     const { data, error } = await service.from("story_audio_generation_queue")
-      .select("id,language,block_index,speaker,status,attempts,last_error,result,created_at,updated_at,completed_at")
+      .select("id,language,block_index,speaker,status,attempts,last_error,result,created_at,updated_at,completed_at,payload")
       .eq("section", section).eq("slug", slug).order("created_at", { ascending: false }).limit(100);
     if (error) return reply(500, { error: "تعذر قراءة حالة طابور الحكاية.", detail: error.message });
-    return reply(200, { success: true, jobs: data ?? [] });
+    let jobs: any[] = data ?? [];
+    const queueSnap = storyFromSnapshot(body.story_snapshot, section, slug);
+    if (queueSnap) {
+      const kept: any[] = [];
+      for (const job of jobs) {
+        const block = queueSnap.i18n?.[job.language]?.blocks?.[job.block_index];
+        if (!isSpeakableBlock(block) || block.speaker !== job.speaker) continue;
+        if (job.payload?.source_text_hash !== await sha256Hex(new TextEncoder().encode(block.text.trim()))) continue;
+        kept.push(job);
+      }
+      jobs = kept;
+    }
+    return reply(200, { success: true, jobs: jobs.map(({ payload: _payload, ...rest }: any) => rest) });
   }
 
   if (body.action === "publish_audio") {
@@ -262,7 +455,7 @@ Deno.serve(async (req: Request) => {
     const published = [];
     for (const lang of ["ar", "en"]) {
       let source;
-      try { source = await resolveStoryBlock(section, slug, lang, 0); }
+      try { source = await resolveStoryBlock(section, slug, lang, 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
       const blocks = source.story?.i18n?.[lang]?.blocks;
       if (!Array.isArray(blocks) || !blocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع صالحة باللغة " + lang + "." });
@@ -332,7 +525,7 @@ Deno.serve(async (req: Request) => {
     if (language !== "ar") return reply(400, { error: "تجهيز النص الصوتي متاح حاليًا للمقاطع العربية فقط." });
     if (!GEMINI_API_KEY) return reply(503, { error: "مفتاح Gemini غير متاح في أسرار دالة Supabase؛ لم يُرسل أي نص." });
     let source;
-    try { source = await resolveStoryBlock(section, slug, "ar", Number(body.block_index)); }
+    try { source = await resolveStoryBlock(section, slug, "ar", Number(body.block_index), body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع." }); }
     const index = Number(body.block_index);
     const { data: progressRow, error: progressError } = await service.from("story_audio_reviews")
@@ -342,7 +535,7 @@ Deno.serve(async (req: Request) => {
     const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
     const targetPosition = ordered.indexOf(index);
     if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
-      return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد مقاطع كارما بالترتيب، ثم مقاطع الراوي." });
+      return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد المقاطع بترتيب الحكاية." });
     }
     const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
@@ -380,7 +573,7 @@ Deno.serve(async (req: Request) => {
       "السياق التالي (للفهم فقط، لا تعِد صياغته): " + (next?.text ?? "لا يوجد"),
       "النص الأصلي المطلوب تجهيزه فقط:\n" + source.sourceText,
     ].join("\n\n");
-    const totalDeadlineMs = 78000;
+    const totalDeadlineMs = 58000;
     const perAttemptTimeoutMs = 22000;
     const startedAt = Date.now();
     const deadlineAt = startedAt + totalDeadlineMs;
@@ -416,7 +609,7 @@ Deno.serve(async (req: Request) => {
       const model = geminiModels[modelIndex];
       for (let attempt = 1; attempt <= 2; attempt++) {
         const remainingMs = deadlineAt - Date.now();
-        const reserveForFallbackMs = (geminiModels.length - modelIndex - 1) * 20000;
+        const reserveForFallbackMs = (geminiModels.length - modelIndex - 1) * 12000;
         const availableMs = remainingMs - reserveForFallbackMs;
         if (availableMs < 1000) break;
         const attemptTimeoutMs = Math.min(perAttemptTimeoutMs, availableMs);
@@ -547,7 +740,7 @@ Deno.serve(async (req: Request) => {
       return reply(400, { error: "بيانات نص القراءة أو قرار اعتماده غير صالحة." });
     }
     let source;
-    try { source = await resolveStoryBlock(section, slug, "ar", index); }
+    try { source = await resolveStoryBlock(section, slug, "ar", index, body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر التحقق من النص الأصلي." }); }
     if (source.sourceTextHash !== body.source_text_hash.toLowerCase()) {
       return reply(409, { error: "تغير النص الأصلي للحكاية؛ أعد تجهيز نص القراءة قبل اعتماده." });
@@ -559,7 +752,7 @@ Deno.serve(async (req: Request) => {
     const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
     const targetPosition = ordered.indexOf(index);
     if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
-      return reply(409, { error: "لا يمكن اعتماد نص مقطع خارج دوره؛ الترتيب هو مقاطع كارما أولًا ثم مقاطع الراوي." });
+      return reply(409, { error: "لا يمكن اعتماد نص مقطع خارج دوره؛ الترتيب هو ترتيب مقاطع الحكاية." });
     }
     const { data: existing, error: readError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
