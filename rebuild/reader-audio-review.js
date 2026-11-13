@@ -439,6 +439,7 @@ async function saveReview(entry, decision) {
       } catch (cleanupError) {
         var pendingClip = review.clips[key];
         if (pendingClip) pendingClip.replacement_cleanup = { status: 'pending', error: cleanupError.message || String(cleanupError) };
+        throw new Error('تم اعتماد الصوت الجديد، لكن تعذر تأكيد حذف الصوت القديم: ' + (cleanupError.message || cleanupError));
       }
     }
   } finally {
@@ -1559,7 +1560,7 @@ function renderBlocks() {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل الموافقة عليه.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       state.textContent = 'جارٍ الحفظ…';
-      try { await saveReview(entry, { status: 'accepted' }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
+      try { await saveReview(entry, { status: 'accepted' }); } catch (e) { state.textContent = e.message || 'تعذر حفظ القرار.'; }
     });
     setAcceptState(acceptBtn, !!played[entry.key], !!saved);
     acceptButtons[entry.key] = acceptBtn;
