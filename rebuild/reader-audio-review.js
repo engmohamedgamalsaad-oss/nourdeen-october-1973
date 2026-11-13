@@ -1598,6 +1598,39 @@ function renderBlocks() {
     player.append(playBtn, track, replayBtn);
     var actions = document.createElement('div'); actions.className = 'kh-audio-actions';
     actions.append(acceptBtn, rejectBtn);
+    var pendingReplacementCleanup = saved && saved.status === 'accepted' &&
+      story.section === 'history' && story.slug === 'ibn-sina' && entry.lang === 'ar' && Number(entry.block_index) === 4 &&
+      Object.keys(review.clips || {}).some(function (clipKey) {
+        var oldClip = review.clips[clipKey];
+        return oldClip && oldClip.status === 'rejected' && oldClip.lang === entry.lang &&
+          Number(oldClip.block_index) === Number(entry.block_index) &&
+          Number(oldClip.chunk_index || 0) === Number(entry.chunk_index || 0) &&
+          oldClip.replacement_cleanup && oldClip.replacement_cleanup.status === 'pending';
+      });
+    if (pendingReplacementCleanup) {
+      var retryCleanupBtn = iconButton('replay', 'إعادة محاولة حذف الصوت القديم', 'cleanup-retry', async function () {
+        retryCleanupBtn.disabled = true;
+        state.textContent = 'جارٍ التحقق من الصوت البديل وحذف الملف القديم…';
+        try {
+          var cleanupResult = await audioAssetsRequest({
+            action: 'cleanup_replaced_audio', section: story.section, slug: story.slug, clip_key: entry.key
+          });
+          if (cleanupResult && cleanupResult.cleaned) {
+            state.textContent = 'تم التحقق من الصوت البديل وحذف الملف القديم.';
+            var refreshed = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+            review = core.cloneReview(refreshed.audio_review || null);
+            render();
+          } else {
+            state.textContent = 'لم يُؤكد حذف ملف قديم مرتبط بهذا المقطع.';
+          }
+        } catch (cleanupError) {
+          state.textContent = 'تعذر حذف الصوت القديم: ' + (cleanupError.message || cleanupError);
+        } finally {
+          retryCleanupBtn.disabled = false;
+        }
+      });
+      actions.appendChild(retryCleanupBtn);
+    }
     if (saved && saved.status === 'rejected' && saved.issue === 'audio_only') {
       var regenerateBtn = iconButton('spark', 'إعادة توليد هذا المقطع', 'generate', function () {
         if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل إعادة التوليد.'; return; }
