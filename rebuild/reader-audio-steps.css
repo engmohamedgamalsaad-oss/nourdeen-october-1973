@@ -1,5 +1,15 @@
 /* Khaledoon — layered steps inside each audio-review block (loaded by reader-audio-flow.js) */
 
+/* شريط اللغات وحالة الإنجليزية */
+.kh-lang-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0;padding:10px 12px;border:1px solid rgba(194,157,93,.4);border-radius:14px;background:rgba(16,34,39,.72)}
+.kh-lang-tab{appearance:none;font:inherit;font-weight:800;color:inherit;background:transparent;padding:8px 18px;border:1.5px solid rgba(194,157,93,.5);border-radius:999px;cursor:pointer}
+.kh-lang-tab[aria-pressed="true"]{background:linear-gradient(135deg,#c9a45c,#a9843f);border-color:#c9a45c;color:#14202a}
+.kh-lang-send{appearance:none;font:inherit;font-weight:800;color:inherit;background:transparent;margin-inline-start:auto;padding:8px 14px;border:1.5px solid rgba(90,190,135,.6);border-radius:12px;cursor:pointer}
+.kh-lang-send:disabled{opacity:.55;cursor:progress}
+.kh-lang-status{flex-basis:100%;margin:0;font-size:.85rem;line-height:1.8;opacity:.92;overflow-wrap:anywhere}
+.kh-en-regen-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.kh-en-regen-row[hidden]{display:none!important}
+
 /* شرائح الحالة الأربع أصبحت أزرارًا تفتح خطوتها */
 .kh-flow-box .kh-flowbar{gap:6px}
 .kh-flow-box .kh-chip-item{list-style:none;margin:0;padding:0;min-width:0}
@@ -47,5 +57,6 @@
  .kh-step-state{flex-basis:100%;margin-inline-start:0;text-align:start}
  .kh-flow-body{padding-inline:8px}
  .kh-step-body{padding-inline:10px}
+ .kh-lang-send{margin-inline-start:0;flex-basis:100%}
 }
 @media (prefers-reduced-motion:reduce){.kh-flow-box button.kh-chip,.kh-step>summary::after{transition:none}}

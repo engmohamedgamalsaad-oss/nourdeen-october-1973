@@ -3,14 +3,16 @@
    1) ترتّب كل مقطع في أربع خطوات منفصلة قابلة للطي، لكل خطوة بياناتها: النص ← نص القراءة (Gemini) ← التوليد ← المعاينة والاعتماد؛
    2) تجعل شرائح الحالة الأربع أزرارًا تفتح الخطوة المقابلة، وتضع التفاصيل الثانوية (ملاحظات Gemini، تفاصيل الطلب، نتيجة مدقق النطق) في طبقات مطوية؛
    3) تعرض حالة التوليد الحقيقية من الطابور (لم يُرسل / في الطابور / بيتم الآن / تم / فشل) وتحدّثها تلقائيًا؛
-   4) تطوي المقاطع غير الحالية، وتنقل شريط الملخص والنشر إلى آخر الصفحة بعد النصوص. */
+   4) تطوي المقاطع غير الحالية، وتنقل شريط الملخص والنشر إلى آخر الصفحة بعد النصوص؛
+   5) شريط لغات (العربية / English) فوق المقاطع، وإرسال المقاطع الإنجليزية إلى الطابور تلقائيًا بعد اكتمال توليد العربية، كل مقطع طلبًا مستقلًا،
+      وزر لإعادة توليد مقطع إنجليزي واحد مرفوض دون المساس ببقية المقاطع. */
 (function () {
   'use strict';
   if (window.__khAudioFlow) return;
   window.__khAudioFlow = true;
 
   var SCRIPT_SRC = document.currentScript && document.currentScript.src ? document.currentScript.src : location.href;
-  var STEPS_CSS = 'reader-audio-steps.css?v=20261114-steps-1';
+  var STEPS_CSS = 'reader-audio-steps.css?v=20261114-steps-2';
   var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
   var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn'; /* publishable key، نفس المستخدم في الصفحة */
   var SPEAKERS = { karma: 'كارما', narrator: 'الراوي' };
@@ -18,6 +20,7 @@
   var JOB_STATUS = { pending: 'في الطابور', processing: 'قيد التوليد', completed: 'مكتمل', failed: 'فشل' };
 
   var jobs = {}, previousJobs = {}, openMemo = {}, stepMemo = {}, subMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false;
+  var enState = { data: null, message: '', busy: false, autoStarted: false, lastLoad: 0 };
 
   function $(id) { return document.getElementById(id); }
   function story() { return window.__KH_STORY_PACKAGE || null; }
@@ -76,6 +79,186 @@
   }
   function activeJobs() {
     return Object.keys(jobs).some(function (k) { return jobs[k].status === 'pending' || jobs[k].status === 'processing'; });
+  }
+
+  /* ---------- طلبات عامة للدالة (للإنجليزية والطابور الشامل) ---------- */
+  function api(action, extra) {
+    var st = story(), t = token();
+    if (!st) return Promise.reject(new Error('الحكاية غير محمّلة بعد.'));
+    if (!t) return Promise.reject(new Error('سجّل الدخول من لوحة الإدارة أولًا.'));
+    var payload = Object.assign({ action: action, section: st.section, slug: st.slug }, extra || {});
+    return fetch(SUPA + '/functions/v1/audio-review-assets', {
+      method: 'POST',
+      headers: { apikey: KEY, Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      cache: 'no-store'
+    }).then(function (r) {
+      return r.json().then(function (d) { return { ok: r.ok, status: r.status, d: d }; }, function () { return { ok: r.ok, status: r.status, d: null }; });
+    }).then(function (x) {
+      if (!x.ok) {
+        var e = new Error((x.d && (x.d.error || x.d.message)) || ('HTTP ' + x.status));
+        e.status = x.status;
+        throw e;
+      }
+      return x.d || {};
+    });
+  }
+  /* الحكاية كما تظهر في المعاينة الآن (المتحدث والنص فقط)؛ الخادم يعتمدها بدل نسخة main. */
+  function snapshot() {
+    var st = story();
+    if (!st || !st.i18n) return null;
+    var blocks = {};
+    ['ar', 'en'].forEach(function (l) {
+      var loc = st.i18n[l];
+      if (loc && Array.isArray(loc.blocks)) {
+        blocks[l] = loc.blocks.map(function (b) {
+          return { speaker: b && typeof b.speaker === 'string' ? b.speaker : '', text: b && typeof b.text === 'string' ? b.text : '' };
+        });
+      }
+    });
+    return { section: st.section, slug: st.slug, blocks: blocks };
+  }
+  function speakableIndexes(l) {
+    var st = story(), bl = st && st.i18n && st.i18n[l] && st.i18n[l].blocks || [], out = [];
+    bl.forEach(function (b, i) {
+      if (b && (b.speaker === 'karma' || b.speaker === 'narrator') && typeof b.text === 'string' && b.text.trim()) out.push(i);
+    });
+    return out;
+  }
+  function acceptedSet(review, l) {
+    var set = {}, clips = review && review.clips || {};
+    Object.keys(clips).forEach(function (k) {
+      var c = clips[k];
+      if (c && c.lang === l && c.status === 'accepted') set[Number(c.block_index)] = true;
+    });
+    return set;
+  }
+  function latestJobs(list, l) { /* الأحدث أولًا */
+    var map = {};
+    (list || []).forEach(function (j) {
+      if (!j || j.language !== l) return;
+      var k = String(j.block_index);
+      if (!map[k]) map[k] = j;
+    });
+    return map;
+  }
+  function loadQueueState() {
+    var snap = snapshot();
+    return Promise.all([
+      api('review_get'),
+      api('queue_status', { language: 'ar', story_snapshot: snap }),
+      api('queue_status', { language: 'en', story_snapshot: snap })
+    ]).then(function (r) {
+      var review = r[0].audio_review || {};
+      var ar = speakableIndexes('ar'), en = speakableIndexes('en');
+      var arAcc = acceptedSet(review, 'ar'), enAcc = acceptedSet(review, 'en');
+      var jobsAr = latestJobs(r[1].jobs, 'ar'), jobsEn = latestJobs(r[2].jobs, 'en');
+      /* توليد العربية «اكتمل» حين يكون كل مقطع معتمدًا أو له طلب مكتمل */
+      var arDone = ar.length > 0 && ar.every(function (i) {
+        var j = jobsAr[String(i)];
+        return arAcc[i] || (j && j.status === 'completed');
+      });
+      return { ar: ar, en: en, arAcc: arAcc, enAcc: enAcc, jobsAr: jobsAr, jobsEn: jobsEn, arDone: arDone };
+    });
+  }
+  function enSummaryText(s) {
+    var c = { accepted: 0, completed: 0, processing: 0, pending: 0, failed: 0, none: 0 };
+    s.en.forEach(function (i) {
+      if (s.enAcc[i]) { c.accepted++; return; }
+      var j = s.jobsEn[String(i)];
+      if (j && c[j.status] !== undefined) c[j.status]++; else c.none++;
+    });
+    return 'العربية: ' + (s.arDone ? 'اكتمل توليدها ✓' : 'لم يكتمل توليدها بعد') +
+      ' · الإنجليزية (' + s.en.length + ' مقطع): معتمد ' + c.accepted + ' · بانتظار المراجعة ' + c.completed +
+      ' · قيد التوليد ' + c.processing + ' · بالطابور ' + c.pending + ' · فاشل ' + c.failed + ' · لم يُرسل ' + c.none;
+  }
+  function switchLang(code) {
+    var b = document.querySelector('.langs button[data-lang="' + code + '"]');
+    if (b) { b.click(); return; }
+    try {
+      document.documentElement.lang = code;
+      document.dispatchEvent(new CustomEvent('site-language-change', { detail: { lang: code } }));
+    } catch (e) {}
+  }
+  function renderLangBar() {
+    var bar = $('kh-lang-bar');
+    if (!bar) return;
+    var cur = lang();
+    Array.prototype.forEach.call(bar.querySelectorAll('.kh-lang-tab'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === cur)); });
+    var status = bar.querySelector('.kh-lang-status'), send = bar.querySelector('.kh-lang-send');
+    var parts = [];
+    if (enState.data) parts.push(enSummaryText(enState.data));
+    if (enState.message) parts.push(enState.message);
+    status.textContent = parts.join(' — ') || 'جارٍ قراءة حالة الطابور…';
+    send.disabled = enState.busy;
+    send.textContent = enState.busy ? 'جارٍ الإرسال…' : 'إرسال المقاطع الإنجليزية الآن';
+  }
+  function ensureLangBar(host) {
+    if ($('kh-lang-bar')) { renderLangBar(); return; }
+    var bar = el('div', 'kh-lang-bar'); bar.id = 'kh-lang-bar';
+    [['ar', 'العربية'], ['en', 'English']].forEach(function (pair) {
+      var b = el('button', 'kh-lang-tab', pair[1]); b.type = 'button'; b.dataset.lang = pair[0];
+      b.addEventListener('click', function () { switchLang(pair[0]); setTimeout(renderLangBar, 50); });
+      bar.appendChild(b);
+    });
+    var send = el('button', 'kh-lang-send', 'إرسال المقاطع الإنجليزية الآن'); send.type = 'button';
+    send.addEventListener('click', function () { queueEnglish(false); });
+    bar.appendChild(send);
+    bar.appendChild(el('p', 'kh-lang-status', ''));
+    host.parentNode.insertBefore(bar, host);
+    renderLangBar();
+  }
+  /* يرسل كل مقطع إنجليزي لم يُطلب بعد كطلب مستقل في الطابور، بعد اكتمال توليد العربية.
+     لا يعيد إرسال مقطع له طلب (حتى لو فشل أو اكتمل)؛ إعادة المقطع الواحد تتم بزر خاص به. */
+  function queueEnglish(auto) {
+    if (enState.busy) return Promise.resolve();
+    enState.busy = true; renderLangBar();
+    return loadQueueState().then(function (s) {
+      enState.data = s;
+      if (!s.en.length) { enState.message = 'لا توجد مقاطع إنجليزية في هذه الحكاية.'; return null; }
+      if (!s.arDone) { enState.message = 'ستُرسل المقاطع الإنجليزية تلقائيًا بعد اكتمال توليد العربية.'; return null; }
+      var todo = s.en.filter(function (i) { return !s.enAcc[i] && !s.jobsEn[String(i)]; });
+      if (!todo.length) { enState.message = auto ? '' : 'كل المقاطع الإنجليزية لها طلب في الطابور بالفعل.'; return null; }
+      var sent = 0, stopped = '';
+      var chain = Promise.resolve();
+      todo.forEach(function (i) {
+        chain = chain.then(function () {
+          if (stopped) return null;
+          return api('enqueue', { language: 'en', block_index: i, story_snapshot: snapshot() }).then(function () { sent++; }, function (e) {
+            stopped = e && e.status === 409 && /السابقة/.test(String(e.message || ''))
+              ? 'الخادم ما زال يشترط ترتيب المقاطع الإنجليزية؛ يلزم نشر تحديث الدالة أولًا.'
+              : 'تعذر إرسال المقطع ' + (i + 1) + ': ' + (e && e.message || e);
+          });
+        });
+      });
+      return chain.then(function () {
+        enState.message = (sent ? 'أُرسل ' + sent + ' مقطعًا إنجليزيًا إلى الطابور، كلٌّ كطلب مستقل.' : '') + (stopped ? (sent ? ' ' : '') + stopped : '');
+        return loadQueueState().then(function (s2) { enState.data = s2; });
+      });
+    }).catch(function (e) {
+      enState.message = 'تعذر الوصول لحالة الطابور: ' + (e && e.message || e);
+    }).then(function () {
+      enState.busy = false; enState.lastLoad = Date.now(); renderLangBar();
+      if (lang() === 'en') fetchJobs().then(function () { refresh(); schedule(); });
+    });
+  }
+  function refreshQueueState() {
+    if (enState.busy || Date.now() - enState.lastLoad < 15000) return Promise.resolve();
+    enState.lastLoad = Date.now();
+    return loadQueueState().then(function (s) { enState.data = s; renderLangBar(); }, function () {});
+  }
+  /* إعادة توليد مقطع إنجليزي واحد مرفوض. الخادم يميّز الطلب الجديد بنسخة إعادة التوليد التي تُسجَّل عند رفض «المشكلة في الصوت فقط». */
+  function regenEnglish(index, btn, note) {
+    if (!window.confirm('سيُعاد توليد المقطع الإنجليزي رقم ' + (index + 1) + ' وحده، دون المساس ببقية المقاطع. هل توافق؟')) return;
+    btn.disabled = true; note.textContent = 'جارٍ الإرسال…';
+    api('enqueue', { language: 'en', block_index: index, story_snapshot: snapshot() }).then(function (d) {
+      note.textContent = d.already_queued
+        ? 'لا جديد: يوجد طلب مماثل بالفعل. سجّل الرفض بخيار «النص صحيح والمشكلة في الصوت فقط» ثم أعد المحاولة.'
+        : 'أُرسل المقطع إلى الطابور.';
+      return fetchJobs();
+    }).then(function () { refresh(); schedule(); }, function (e) {
+      note.textContent = 'تعذر الإرسال: ' + (e && e.message || e);
+    }).then(function () { btn.disabled = false; });
   }
 
   /* ---------- حالات الخطوات الأربع لمقطع ---------- */
@@ -171,12 +354,15 @@
     var reload = box.querySelector('.kh-gen-reload');
     var job = jobOf(Number(box.dataset.index));
     if (reload) reload.hidden = !(job && job.status === 'completed' && !box.querySelector('.kh-audio-card'));
+    var regen = box.querySelector('.kh-en-regen-row');
+    if (regen) regen.hidden = !(lang() === 'en' && box.querySelector('.kh-audio-card[data-review="rejected"]'));
   }
   function refresh() {
     Array.prototype.forEach.call(document.querySelectorAll('.kh-flow-box'), paint);
     var err = $('kh-flow-queue-error');
     if (err) { err.hidden = !queueError; err.textContent = queueError ? 'تعذر قراءة حالة الطابور: ' + queueError : ''; }
     updateTopSummary();
+    renderLangBar();
   }
 
   /* ---------- بناء الترتيب ---------- */
@@ -250,6 +436,7 @@
   function rebuild() {
     var host = $('blocks'); if (!host) return;
     loadStepStyles();
+    ensureLangBar(host);
     var L = lang(), st = story();
     var blocks = direct(host, '.block');
     var gp = document.querySelector('.kh-audio-generation-controls');
@@ -310,6 +497,15 @@
           var row = el('div', 'kh-gen-row'); row.appendChild(genButton); if (genStatus) row.appendChild(genStatus); step3.body.appendChild(row);
         }
         engine.forEach(function (p) { step3.body.appendChild(p); });
+        if (L === 'en') {
+          /* مقطع إنجليزي واحد مرفوض يُعاد وحده، بلا ترتيب ولا مساس بالمقاطع الأخرى */
+          var regenRow = el('div', 'kh-en-regen-row'); regenRow.hidden = true;
+          var regenNote = el('span', 'kh-audio-review-state', 'بعد رفض هذا المقطع بسبب الصوت يمكنك إعادة توليده وحده.');
+          var regenBtn = el('button', 'kh-gen-reload', '↻ إعادة توليد هذا المقطع وحده'); regenBtn.type = 'button';
+          regenBtn.addEventListener('click', function () { regenEnglish(rec.index, regenBtn, regenNote); });
+          regenRow.append(regenBtn, regenNote);
+          step3.body.appendChild(regenRow);
+        }
         var jobSub = makeSub(box, 'job', '⚙️ تفاصيل طلب التوليد');
         jobSub.appendChild(el('div', 'kh-job-data'));
         step3.body.appendChild(jobSub);
@@ -358,7 +554,7 @@
   function poll() {
     if (polling) return;
     polling = true;
-    fetchJobs().then(function () { refresh(); }).then(function () { polling = false; schedule(); }, function () { polling = false; schedule(); });
+    fetchJobs().then(function () { refresh(); return refreshQueueState(); }).then(function () { polling = false; schedule(); }, function () { polling = false; schedule(); });
   }
   var rebuildQueued = false;
   function onUpdated() {
@@ -368,6 +564,8 @@
       rebuildQueued = false;
       rebuild();
       fetchJobs().then(function () { refresh(); schedule(); });
+      /* مرة واحدة لكل فتح للصفحة: إن اكتمل توليد العربية أُرسلت المقاطع الإنجليزية الناقصة تلقائيًا */
+      if (!enState.autoStarted && token()) { enState.autoStarted = true; queueEnglish(true); }
     });
   }
   document.addEventListener('kh-audio-review-updated', onUpdated);
