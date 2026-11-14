@@ -604,8 +604,6 @@ Deno.serve(async (req: Request) => {
     const blocks = arabicSource.story?.i18n?.ar?.blocks ?? [];
     const queued: any[] = [];
     let alreadyQueued = 0, skippedUnapproved = 0;
-    try { await invalidatePublicStoryAudio(service, section, slug); }
-    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف الصوت المنشور السابق." }); }
     for (const index of orderedStoryBlockIndexes(blocks)) {
       const block = blocks[index];
       const sourceText = String(block?.text ?? "").trim();
@@ -760,9 +758,25 @@ Deno.serve(async (req: Request) => {
     if (!SUPPORTED_AUDIO_LANGUAGES.includes(targetLanguage)) return reply(400, { error: "حدد لغة صحيحة للنشر: ar أو en أو fr أو it أو de." });
     for (const lang of [targetLanguage]) {
       let source;
-      try { source = await resolveStoryBlock(section, slug, lang, 0, body.story_snapshot); }
+      try { source = await resolveStoryBlock(section, slug, lang === "en" ? "ar" : lang, 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
-      const blocks = source.story?.i18n?.[lang]?.blocks;
+      let blocks = source.story?.i18n?.[lang]?.blocks;
+      if (lang === "en") {
+        const arabicBlocks = source.story?.i18n?.ar?.blocks;
+        if (!Array.isArray(arabicBlocks) || !arabicBlocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع عربية صالحة." });
+        blocks = [];
+        for (let index = 0; index < arabicBlocks.length; index++) {
+          const arabicBlock = arabicBlocks[index];
+          if (!arabicBlock || !["karma", "narrator"].includes(arabicBlock.speaker)) continue;
+          const sourceHash = await sha256Hex(new TextEncoder().encode(String(arabicBlock.text ?? "").trim()));
+          const translation = audioReview?.translations?.["en:" + index];
+          if (!translation || translation.status !== "approved" || translation.source_arabic_hash !== sourceHash ||
+              typeof translation.translation_text !== "string" || !translation.translation_text.trim()) {
+            return reply(409, { error: "لا يمكن نشر الصوت الإنجليزي: ترجمة المقطع " + (index + 1) + " غير معتمدة أو أصبحت قديمة." });
+          }
+          blocks[index] = { ...arabicBlock, text: translation.translation_text.trim() };
+        }
+      }
       if (!Array.isArray(blocks) || !blocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع صالحة باللغة " + lang + "." });
       const prefix = section + "/" + slug + "/" + lang;
       const { data: manifestFile, error: manifestError } = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
