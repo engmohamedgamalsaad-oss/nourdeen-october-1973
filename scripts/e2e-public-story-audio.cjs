@@ -47,7 +47,7 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
                 provider: segment.provider === 'omnivoice',
                 model: segment.model === 'VoiceTut Egyptian Tashkeel',
                 voice: segment.voice === expectedVoice,
-                src: /^[A-Za-z0-9_-]+\\.mp3$/.test(String(segment.src || '')),
+                src: /^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src || '')),
                 speaker: ['karma', 'narrator'].includes(segment.speaker)
               };
               return Object.values(checks).every(Boolean) ? null : { index, src: segment.src, speaker: segment.speaker, provider: segment.provider, model: segment.model, voice: segment.voice, checks };
