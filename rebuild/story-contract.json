@@ -344,6 +344,11 @@
                 "type": "string",
                 "minLength": 1,
                 "description": "Optional scene or box heading shown above the block. For a timeline, text lines use \"year — event\"."
+              },
+              "source_ar_text": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact Arabic source block text used for this translation. Required by the current translation workflow; validator compares it with the current Arabic block to detect stale translations. Omit only for Arabic blocks."
               }
             }
           }
