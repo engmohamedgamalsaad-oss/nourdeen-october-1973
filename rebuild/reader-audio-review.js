@@ -16,7 +16,7 @@ var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang 
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
 var initialArabicStageAttempted = false;
-var speechTexts = {}, speechTextBusy = {}, speechTextDirty = {};
+var speechTexts = {}, speechTextBusy = {}, speechTextDirty = {}, pendingGeminiFollowups = {};
 var loadedAudio = {};
 var activeControl = null;
 var reconcileNotice = '', reconcileBlocked = false;
@@ -445,11 +445,12 @@ async function saveReview(entry, decision, followupStatusNode, followupButton) {
   } finally {
     busy = false;
   }
-  // A saved text/pronunciation rejection must immediately return to Gemini.
-  // Audio-only rejection is deliberately excluded: it does not request a text rewrite.
+  // Save the note first, then guide the reviewer to Gemini. Gemini runs only
+  // after the reviewer explicitly presses "إعادة تجهيز نص القراءة".
   if (decision.status === 'rejected' && decision.issue !== 'audio_only' && entry && entry.lang === 'ar' &&
       (String(decision.note || '').trim() || String(decision.suggestion || '').trim())) {
-    await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null, entry);
+    focusGeminiFollowup(Number(entry.block_index));
+    return;
   }
   render();
 }
@@ -1222,6 +1223,18 @@ function nextArabicBlockIndex() {
   return -1;
 }
 function speechTextKey(index) { return 'ar:' + String(index); }
+function focusGeminiFollowup(index) {
+  pendingGeminiFollowups[index] = true;
+  render();
+  var panel = document.querySelector('.kh-speech-text-controls[data-gemini-block="' + String(index) + '"]');
+  if (!panel) return;
+  panel.style.outline = '3px solid #d6ad58';
+  panel.style.outlineOffset = '4px';
+  panel.style.background = 'rgba(214,173,88,.12)';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  var status = panel.querySelector('.kh-audio-review-state');
+  if (status) text(status, 'وصلت ملاحظة جديدة من مراجعة الصوت لهذا المقطع. اضغط «إعادة تجهيز نص القراءة باستخدام Gemini» لإرسال النص والملاحظة.');
+}
 async function prepareSpeechText(index, statusNode, button) {
   var key = speechTextKey(index);
   if (speechTextBusy[key]) return;
@@ -1244,6 +1257,7 @@ async function prepareSpeechText(index, statusNode, button) {
     });
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
+    pendingGeminiFollowups[index] = false;
     speechTextBusy[key] = false;
     text(statusNode, 'جهّز Gemini نص القراءة من النص المكتوب والسياق وملاحظات المراجعة فقط؛ لم يُرسل أي ملف صوت إليه. تم حفظ الاقتراح كمسودة للمراجعة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
     render();
@@ -1297,6 +1311,7 @@ function speechBadgeText(statusKey) {
   return statusKey === 'approved' ? 'نص القراءة معتمد ✓'
     : statusKey === 'suggested' ? 'اقتراح بانتظار اعتمادك'
     : statusKey === 'dirty' ? 'تعديل غير معتمد'
+    : statusKey === 'pending' ? 'ملاحظة جديدة وصلت — أعد تجهيز النص'
     : 'لم يُجهز بعد';
 }
 function renderSpeechTextPanel(block, index, localizedBlock) {
@@ -1307,7 +1322,13 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   var statusKey = record.status === 'approved' ? 'approved' : record.status === 'suggested' ? 'suggested' : 'empty';
   var panel = document.createElement('section');
   panel.className = 'kh-audio-review-controls kh-speech-text-controls';
-  panel.dataset.status = statusKey;
+  panel.dataset.geminiBlock = String(index);
+  panel.dataset.status = pendingGeminiFollowups[index] ? 'pending' : statusKey;
+  if (pendingGeminiFollowups[index]) {
+    panel.style.outline = '3px solid #d6ad58';
+    panel.style.outlineOffset = '4px';
+    panel.style.background = 'rgba(214,173,88,.12)';
+  }
   panel.dataset.speaker = localizedBlock.speaker;
   panel.dataset.current = String(nextBlockIndexForLanguage('ar') === index || record.status === 'suggested');
   var head = document.createElement('div');
@@ -1320,8 +1341,8 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   who.append(speakerAvatar(localizedBlock.speaker), heading);
   var badge = document.createElement('span');
   badge.className = 'kh-audio-badge';
-  badge.dataset.status = statusKey;
-  badge.textContent = speechBadgeText(statusKey);
+  badge.dataset.status = pendingGeminiFollowups[index] ? 'pending' : statusKey;
+  badge.textContent = speechBadgeText(pendingGeminiFollowups[index] ? 'pending' : statusKey);
   head.append(who, badge);
   var flow = document.createElement('ol');
   flow.className = 'kh-flow';
@@ -1360,7 +1381,8 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   var isCurrentBlock = currentBlockIndex === index;
   status.textContent = !isCurrentBlock
     ? (currentBlockIndex < 0 ? 'اكتملت مراجعة المقاطع السابقة.' : 'سيُفتح هذا المقطع بعد اعتماد المقطع السابق بترتيب الحكاية.')
-    : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
+    : pendingGeminiFollowups[index] ? 'وصلت ملاحظة جديدة من مراجعة الصوت لهذا المقطع. اضغط إعادة تجهيز النص باستخدام Gemini.' :
+      speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
       record.status === 'approved' ? 'نص القراءة معتمد ✓' :
       record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
       'اضغط تجهيز النص باستخدام Gemini ليقترح صياغة مفهومة ومشكولة جزئيًا عند الحاجة فقط.';
@@ -1368,7 +1390,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   notes.className = 'kh-speech-notes';
   var rejectionNotes = Object.keys(review.clips || {}).map(function (clipKey) { return review.clips[clipKey]; })
     .filter(function (clip) { return clip && clip.lang === 'ar' && Number(clip.block_index) === index &&
-      clip.status === 'rejected' && clip.issue !== 'audio_only' && story.section === 'history' && story.slug === 'ibn-sina' && index === 4 && String(clip.note || '').trim(); });
+      clip.status === 'rejected' && clip.issue !== 'audio_only' && String(clip.note || '').trim(); });
   rejectionNotes.forEach(function (clip) {
     var rejection = document.createElement('p');
     rejection.textContent = 'ملاحظة الرفض التي ستصل إلى Gemini: ' + clip.note;
@@ -1395,7 +1417,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     badge.textContent = speechBadgeText('dirty');
     status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
   });
-  var prepare = iconButton('spark', record.status === 'suggested' || record.status === 'approved' ? 'إعادة تجهيز نص القراءة باستخدام Gemini' : 'تجهيز النص باستخدام Gemini', 'generate', function () {
+  var prepare = iconButton('spark', pendingGeminiFollowups[index] || record.status === 'suggested' || record.status === 'approved' ? 'إعادة تجهيز نص القراءة باستخدام Gemini' : 'تجهيز النص باستخدام Gemini', 'generate', function () {
     prepareSpeechText(index, status, prepare);
   });
   prepare.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
