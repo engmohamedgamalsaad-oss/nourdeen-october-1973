@@ -1004,6 +1004,11 @@ test('story builder derives the site base path from its current deployment inste
 });
 
 
+test('story publisher blocks packages that have not adopted Arabic-source translation provenance', function () {
+  assert.ok(storyPublisher.includes("story.translation_policy !== 'arabic-source-cultural-v1'"), 'publishing must require the current translation policy marker');
+  assert.ok(storyPublisher.includes('لقطات المصدر لكل لغة ومقطع'), 'publish error must explain the missing source snapshots');
+});
+
 test('unified publisher requires an approved canonical package from its source record before direct-main commit', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
