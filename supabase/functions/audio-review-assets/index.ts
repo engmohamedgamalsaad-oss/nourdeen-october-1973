@@ -581,7 +581,7 @@ Deno.serve(async (req: Request) => {
     }
     let story: any;
     try {
-      const bytes = Uint8Array.from(atob(file.content.replace(/\\s/g, "")), (ch) => ch.charCodeAt(0));
+      const bytes = Uint8Array.from(atob(file.content.replace(/\s/g, "")), (ch) => ch.charCodeAt(0));
       story = JSON.parse(new TextDecoder().decode(bytes));
     } catch {
       return reply(502, { error: "تعذر تحليل ملف الحكاية الحالي؛ لم يتم تعديل أي محتوى." });
@@ -596,6 +596,7 @@ Deno.serve(async (req: Request) => {
       return reply(409, { error: "عدد مقاطع اللغة لا يطابق عدد المقاطع العربية؛ لم يتم النشر." });
     }
     let publishedCount = 0;
+    const changedAudioIndexes: number[] = [];
     for (let index = 0; index < arabicBlocks.length; index++) {
       const arabicBlock = arabicBlocks[index];
       if (!isSpeakableBlock(arabicBlock)) continue;
@@ -609,10 +610,17 @@ Deno.serve(async (req: Request) => {
       if (!targetBlock || targetBlock.speaker !== arabicBlock.speaker) {
         return reply(409, { error: "هوية المتحدث لا تتطابق في " + TRANSLATION_LANGUAGES[language] + "، المقطع " + (index + 1) + "." });
       }
-      targetBlock.text = translation.translation_text.trim();
+      const approvedText = translation.translation_text.trim();
+      if (targetBlock.text !== approvedText) changedAudioIndexes.push(index);
+      targetBlock.text = approvedText;
       publishedCount++;
     }
     if (!publishedCount) return reply(409, { error: "لا توجد مقاطع منطوقة معتمدة لنشرها." });
+    // If the approved visitor-facing text differs, remove only that segment's old public audio before publishing the replacement text.
+    for (const index of changedAudioIndexes) {
+      try { await invalidatePublicClipAudio(service, section, slug, language, index); }
+      catch (error) { return reply(500, { error: "تعذر إيقاف الصوت القديم للمقطع " + (index + 1) + " قبل نشر الترجمة.", detail: error instanceof Error ? error.message : "خطأ غير معروف" }); }
+    }
 
     const commitMessage = "Publish approved " + language + " translations for " + section + "/" + slug;
     const updateResponse = await fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + encodedPath, {
@@ -620,7 +628,7 @@ Deno.serve(async (req: Request) => {
       headers: { ...githubHeaders, "Content-Type": "application/json" },
       body: JSON.stringify({
         message: commitMessage,
-        content: encodeBase64Utf8(JSON.stringify(story, null, 2) + "\\n"),
+        content: encodeBase64Utf8(JSON.stringify(story, null, 2) + "\n"),
         sha: file.sha,
         branch: "main",
       }),
