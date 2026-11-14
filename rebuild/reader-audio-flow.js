@@ -363,11 +363,11 @@
     });
     var byIndex = {}; info.forEach(function (i) { byIndex[i.index] = i; });
     var sb = st && st.i18n && st.i18n[L] && st.i18n[L].blocks || [], karma = [], narrator = [];
-    var localeGate = translationGate(st, L);
-    var currentTranslationStale = L !== 'ar' && !localeGate.ok && (!Array.isArray(localeGate.staleBlocks) || localeGate.staleBlocks.indexOf(current) >= 0);
     sb.forEach(function (b, i) { if (b && b.speaker === 'karma') karma.push(i); else if (b && b.speaker === 'narrator') narrator.push(i); });
     var order = karma.concat(narrator).sort(function (a, b) { return a - b; }), current = -1;
     for (var k = 0; k < order.length; k++) { var rec = byIndex[order[k]]; if (!rec || !rec.accepted) { current = order[k]; break; } }
+    var currentTranslation = L !== 'ar' ? translationRecords[L + ':' + current] : null;
+    var currentTranslationStale = L !== 'ar' && (!currentTranslation || currentTranslation.status !== 'approved');
     var genButton = gp && gp.querySelector('button:not(.kh-audio-publish-button)');
     var genStatus = gp && gp.querySelector('.kh-audio-review-state');
     if (currentTranslationStale && genButton) { genButton.disabled = true; genButton.title = localeGate.reason; }
@@ -414,7 +414,7 @@
       /* ③ التوليد */
       if (L === 'ar' || L === 'en') {
         var step3 = makeStep(box, 3, 'التوليد');
-        step3.body.appendChild(el('p', 'kh-gen-note', currentTranslationStale ? localeGate.reason : ''));
+        step3.body.appendChild(el('p', 'kh-gen-note', currentTranslationStale ? 'لا يمكن توليد الصوت قبل اعتماد ترجمة هذا المقطع بشريًا.' : ''));
         if (rec.index === current && genButton) {
           var row = el('div', 'kh-gen-row'); row.appendChild(genButton); if (genStatus) row.appendChild(genStatus); step3.body.appendChild(row);
         }
