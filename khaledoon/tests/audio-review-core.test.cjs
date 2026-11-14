@@ -8,6 +8,26 @@ const core = require('../assets/audio-review-core.js');
 (async function () {
   const S = 'science/magdi-yacoub';
 
+  const alignedStory = { i18n: {
+    ar: { blocks: [
+      { type: 'paragraph', speaker: 'karma', text: 'النص العربي الأول' },
+      { type: 'paragraph', speaker: 'narrator', text: 'النص العربي الثاني', image_after: 'photo' }
+    ] },
+    en: { blocks: [
+      { type: 'paragraph', speaker: 'karma', text: 'Natural English opening', source_ar_text: 'النص العربي الأول' },
+      { type: 'paragraph', speaker: 'narrator', text: 'Natural English body', image_after: 'photo', source_ar_text: 'النص العربي الثاني' }
+    ] }
+  } };
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, true, 'culturally natural target-language text is accepted when source provenance and structure match');
+  alignedStory.i18n.ar.blocks[1].text = 'النص العربي المعدل';
+  const staleTranslation = core.validateTranslationAlignment(alignedStory, 'en');
+  assert.equal(staleTranslation.ok, false, 'changing Arabic source must stale its paired translation');
+  assert.deepEqual(staleTranslation.staleBlocks, [1]);
+  alignedStory.i18n.en.blocks[1].source_ar_text = 'النص العربي المعدل';
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, true, 'refreshing the source snapshot revalidates the translated block');
+  alignedStory.i18n.en.blocks.pop();
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, false, 'missing translated blocks must block generation');
+
   /* المفتاح: المسافات لا تغيّره، والنص يغيّره، والترتيب لا يدخل فيه */
   const a = await core.baseKey(S, 'ar', 'narrator', 'مرحبا   بالعالم');
   const b = await core.baseKey(S, 'ar', 'narrator', ' مرحبا بالعالم ');
