@@ -197,7 +197,8 @@ const core = require('../assets/audio-review-core.js');
   /* Integration regression: draft preview must publish its story context after rendering,
      and the reviewer must not allow acceptance before a complete playback. */
   const reader = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.js'), 'utf8');
-  const reviewUi = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-review.js'), 'utf8');
+  const adminReviewSource = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-review.js'), 'utf8');
+  const reviewUi = adminReviewSource;
   const reviewActions = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-review-actions.js'), 'utf8');
   const readerHtml = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.html'), 'utf8');
   assert.doesNotThrow(function () { new Function(reviewUi); }, 'draft audio review UI must remain valid JavaScript');
@@ -269,5 +270,16 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewActions.includes('if(isApprove){'), 'all sections, including October, must pass the shared audio approval gate');
   assert.ok(reviewActions.includes('delete pendingMeta.audio_review') && reviewActions.includes('delete meta.pending_draft.story_meta.audio_review'), 'approval must not duplicate audio_review inside pending_draft metadata');
 
+  /* In admin preview, the page locale stays Arabic while the audio-review language is independently selected. */
+  const adminReaderSource = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.js'), 'utf8');
+  const adminFlowSource = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-flow.js'), 'utf8');
+  assert.ok(adminReaderSource.includes("var previewMode=new URLSearchParams(location.search).get('draft')==='1',previewAudioLanguage='ar'"), 'admin preview must initialize its visible page in Arabic');
+  assert.ok(adminReaderSource.includes("window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage"), 'selected audio language must be separate from page locale');
+  assert.ok(adminReaderSource.includes("if(previewMode){previewAudioLanguage=b.dataset.lang;window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;"), 'admin language selection must not switch the story page language');
+  assert.ok(adminReviewSource.includes("function audioReviewLanguage() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }"), 'review UI must use independent audio language');
+  assert.ok(adminReviewSource.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang))"), 'review controls must follow all five selected languages');
+  assert.ok(adminReviewSource.includes("if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة"), 'unsupported generation must be visibly disabled rather than falsely offered');
+  assert.ok(adminReviewSource.includes("englishStartButton.textContent = 'ابدأ توليد الحكاية الإنجليزية'") && adminReviewSource.includes("await sendBlockToEngine('en', nextIndex)"), 'admin must provide an explicit English start button that queues only the next eligible clip');
+  assert.ok(adminFlowSource.includes("window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'"), 'queue flow must follow selected audio language');
   console.log('audio-review-core tests passed');
 })().catch(function (e) { console.error(e); process.exit(1); });

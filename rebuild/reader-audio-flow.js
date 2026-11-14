@@ -21,7 +21,7 @@
 
   function $(id) { return document.getElementById(id); }
   function story() { return window.__KH_STORY_PACKAGE || null; }
-  function lang() { return document.documentElement.lang || 'ar'; }
+  function lang() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
   function direct(parent, selector) { return Array.prototype.filter.call(parent.children, function (n) { return n.matches(selector); }); }
   function blockIndexOf(block, position) { var n = Number(block.dataset.blockIndex); return Number.isInteger(n) && block.dataset.blockIndex !== '' ? n : position; }
@@ -47,7 +47,7 @@
   }
   function fetchJobs() {
     var st = story(), t = token();
-    if (!st || !t || (lang() !== 'ar' && lang() !== 'en')) return Promise.resolve(false);
+    if (!st || !t || (!['ar', 'en', 'fr', 'it', 'de'].includes(lang()))) return Promise.resolve(false);
     return fetch(SUPA + '/functions/v1/audio-review-assets', {
       method: 'POST',
       headers: { apikey: KEY, Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
@@ -85,7 +85,7 @@
     var cards = box.querySelectorAll('.kh-audio-card[data-review]');
     var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card[data-clip-key]').length > 0;
     var s2;
-    if (L !== 'ar') s2 = { s: 'na', t: 'لا يلزم' };
+    if (L !== 'ar') s2 = { s: 'na', t: 'لا يلزم في هذه اللغة' };
     else {
       var st = speech ? speech.dataset.status : '';
       s2 = st === 'approved' ? { s: 'done', t: 'معتمد' } : st === 'suggested' ? { s: 'warn', t: 'بانتظار اعتمادك' } : { s: 'todo', t: 'لم يُجهّز' };
@@ -303,7 +303,7 @@
       body.appendChild(step2.d);
 
       /* ③ التوليد */
-      if (L === 'ar' || L === 'en') {
+      if (['ar', 'en', 'fr', 'it', 'de'].includes(L)) {
         var step3 = makeStep(box, 3, 'التوليد');
         step3.body.appendChild(el('p', 'kh-gen-note', ''));
         if (rec.index === current && genButton) {
@@ -327,7 +327,7 @@
       }
       cards.forEach(function (p) { layerAudioCard(box, p); step4.body.appendChild(p); });
       other.forEach(function (p) { step4.body.appendChild(p); });
-      if (!cards.length && !other.length) step4.body.appendChild(el('p', 'kh-muted', 'لا يوجد صوت لهذا المقطع بعد. أرسله من خطوة التوليد، وسيظهر هنا بعد اكتماله.'));
+      if (!cards.length && !other.length) step4.body.appendChild(el('p', 'kh-muted', 'لا يوجد صوت لهذا المقطع باللغة المحددة بعد. أرسله من خطوة التوليد، وسيظهر هنا بعد اكتماله.'));
       body.appendChild(step4.d);
 
       box.appendChild(body);
