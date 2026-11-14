@@ -142,12 +142,12 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.evaluateGate([], rev, {}, {}).ok, false, 'empty must not pass');
   const allFive = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
   assert.equal(core.evaluateFiveLanguageGate(allFive, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
-  assert.deepEqual(core.REQUIRED_LANGS, ['ar', 'en'], 'current stage requires Arabic and English audio only');
+  assert.deepEqual(core.REQUIRED_LANGS, ['ar'], 'Arabic is the required publication language; English and other locales are optional');
   assert.equal(core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true, 'missing French/Italian/German audio must not block approval');
   assert.deepEqual(
     core.evaluateFiveLanguageGate({ ar: {} }, [e1], rev, { k1: 'ready' }, listened).missingLanguages,
-    ['en'],
-    'a missing required language must block preview approval'
+    [],
+    'missing optional English audio must not block Arabic-first publication'
   );
   assert.deepEqual(
     core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1], rev, { k1: 'ready' }, listened, ['ar', 'en', 'fr']).missingLanguages,
