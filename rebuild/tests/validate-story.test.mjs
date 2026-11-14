@@ -59,6 +59,7 @@ function fixture() {
   }));
   return {
     format: 'KHALEDOON_STORY',
+    translation_policy: 'arabic-source-cultural-v1',
     slug: 'sample-story',
     section: 'october',
     design: { variant: 'military-history', accent: '#d6ad55' },
@@ -98,6 +99,16 @@ test('requires source snapshots for every translated field and block', () => {
   const errors = validateStory(s);
   assert(errors.some(x => x.includes('i18n.it.blocks[1].source_ar_text is stale or missing')));
   assert(errors.some(x => x.includes('i18n.de.source_ar_title is stale or missing')));
+});
+
+test('keeps legacy packages compatible until they opt into Arabic-source provenance', () => {
+  const s = fixture();
+  delete s.translation_policy;
+  for (const lang of langs.filter(x => x !== 'ar')) {
+    for (const key of ['source_ar_title', 'source_ar_subtitle', 'source_ar_summary']) delete s.i18n[lang][key];
+    for (const block of s.i18n[lang].blocks) { delete block.source_ar_text; delete block.source_ar_heading; }
+  }
+  assert.deepEqual(validateStory(s), []);
 });
 
 test('preserves V1 metadata and requires every supplied metadata field in all locales', () => {
