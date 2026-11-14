@@ -37,7 +37,10 @@ function validKey(value: unknown): value is string {
   return typeof value === "string" && /^[a-z0-9-]{1,80}$/.test(value);
 }
 function sha256Hex(bytes: Uint8Array): Promise<string> {
-  return crypto.subtle.digest("SHA-256", bytes).then((digest) =>
+  // Copy into a definite ArrayBuffer for the current WebCrypto BufferSource typings.
+  const copy = new Uint8Array(bytes.length);
+  copy.set(bytes);
+  return crypto.subtle.digest("SHA-256", copy.buffer).then((digest) =>
     Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("")
   );
 }
@@ -94,8 +97,10 @@ async function resolveStoryBlock(section: string, slug: string, language: string
       if (!response.ok) continue;
       const candidate = await response.json();
       if (candidate?.format === "KHALEDOON_STORY" && candidate.section === section && candidate.slug === slug) {
-        path = item.path;
-        storyPathCache.set(identity, path);
+        const matchedPath = typeof item.path === "string" ? item.path : "";
+        if (!matchedPath) continue;
+        path = matchedPath;
+        storyPathCache.set(identity, matchedPath);
         break;
       }
     }
