@@ -293,7 +293,7 @@ function validateTranslationAlignment(story, language) {
     if (typeof b.source_ar_text !== 'string' || b.source_ar_text !== a.text ||
         (Object.prototype.hasOwnProperty.call(a, 'heading') && b.source_ar_heading !== a.heading)) stale.push(i);
     if (a.type === 'timeline') {
-      var arRows = String(a.text || '').split('\\n'), localRows = String(b.text || '').split('\\n');
+      var arRows = String(a.text || '').split('\n'), localRows = String(b.text || '').split('\n');
       if (arRows.length !== localRows.length || arRows.some(function (row, rowIndex) { return row.split(' — ')[0] !== String(localRows[rowIndex] || '').split(' — ')[0]; })) stale.push(i);
     }
   }
