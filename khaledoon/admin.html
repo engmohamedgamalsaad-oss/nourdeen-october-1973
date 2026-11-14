@@ -1179,9 +1179,9 @@ function pubRow(it){
         var providerPromptFile={chatgpt:'story-prompt-chatgpt.md',gemini:'story-prompt-gemini.md',claude:'story-prompt-claude.md',deepseek:'story-prompt-deepseek.md'}[provider]||'story-prompt-chatgpt.md';
         var promptRoot='../khaledoon/prompts/2026-11-02-unified-v5/';
         var storyResources=await Promise.all([fetch(promptRoot+providerPromptFile,{cache:'no-store'}),fetch('../rebuild/story-contract.json',{cache:'no-store'})]);
-        if(storyResources.some(function(response){return !response.ok}))throw new Error('تعذر تحميل ملف v5 المستقل للأداة أو مخطط الحكاية.');
+        if(storyResources.some(function(response){return !response.ok}))throw new Error('تعذر تحميل ملف v6 المستقل للأداة أو مخطط الحكاية.');
         var providerPromptText=await storyResources[0].text(),storyContractText=await storyResources[1].text(),storyContract=JSON.parse(storyContractText);
-        if(providerPromptText.indexOf('2026-11-14-v6')<0)throw new Error('ملف الأداة المحمّل ليس إصدار v5 المعتمد.');
+        if(providerPromptText.indexOf('2026-11-14-v6')<0)throw new Error('ملف الأداة المحمّل ليس إصدار v6 المعتمد.');
         basePrompt=providerPromptText+'\n\nأخرج JSON واحدًا يطابق المخطط الرسمي حرفيًا. لا تُخرج HTML أو CSS، ولا تغيّر تصميم القالب أو ترتيب الأزرار أو الخلفيات. لا تدّعِ التحقق من صور أو مصادر لم تفحصها.';
         schema='JSON Schema الرسمي — rebuild/story-contract.json:\n'+JSON.stringify(storyContract,null,2);
        }catch(storyPromptError){aiSay('err','تعذر تجهيز برومبت القالب الموحد من ملفات المشروع: '+String(storyPromptError&&storyPromptError.message||storyPromptError));return}
@@ -1289,7 +1289,7 @@ function adoptPromptManagerState(raw){
  var isV5=typeof raw.main==='string'&&raw.main.indexOf('2026-11-14-v6')>=0;
  var versions=Array.isArray(raw.versions)?raw.versions:[];
  if(!isV5&&(raw.main||raw.workflow||raw.providers)){
-  versions=versions.concat([{saved_at:new Date().toISOString(),note:'نسخة إعدادات قديمة قبل تفعيل v5 — أُضيفت إلى سجل الإصدارات في المحرر ولم تُحفظ مركزيًا',main:raw.main||'',workflow:raw.workflow||'',custom:Array.isArray(raw.custom)?raw.custom:[],providers:raw.providers||{}}]).slice(-10);
+  versions=versions.concat([{saved_at:new Date().toISOString(),note:'نسخة إعدادات قديمة قبل تفعيل v6 — أُضيفت إلى سجل الإصدارات في المحرر ولم تُحفظ مركزيًا',main:raw.main||'',workflow:raw.workflow||'',custom:Array.isArray(raw.custom)?raw.custom:[],providers:raw.providers||{}}]).slice(-10);
  }
  var activeProviders=Object.assign({},promptProvidersCache);
  if(isV5&&raw.providers&&typeof raw.providers==='object'){
@@ -1307,7 +1307,7 @@ function adoptPromptManagerState(raw){
  promptProvidersCache=Object.assign({},activeProviders);
 }
 function managedCustomPromptText(){return (promptManagerState.custom||[]).filter(function(p){return p&&String(p.name||'').trim()&&String(p.text||'').trim()}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n')}
-function managedPromptSections(providerKey){var lines=[],mainText=String(promptManagerState.main||STORY_PAGE_PROMPT||'');if(mainText.indexOf('2026-11-14-v6')<0)lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===',promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== المرجع الموحد v5 — مرة واحدة فقط ===',mainText);var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===',extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===',promptProvidersCache[providerKey||'chatgpt']||'');return lines.join('\n\n')}
+function managedPromptSections(providerKey){var lines=[],mainText=String(promptManagerState.main||STORY_PAGE_PROMPT||'');if(mainText.indexOf('2026-11-14-v6')<0)lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===',promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== المرجع الموحد v6 — مرة واحدة فقط ===',mainText);var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===',extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===',promptProvidersCache[providerKey||'chatgpt']||'');return lines.join('\n\n')}
 async function loadPromptProviders(){
  try{var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&typeof rows[0].config_value==='object'){adoptPromptManagerState(rows[0].config_value);try{localStorage.setItem('kh_prompt_manager_draft_v2',JSON.stringify(rows[0].config_value))}catch(e){}return}}}catch(e){}
  try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||localStorage.getItem('kh_prompt_manager_draft_v1')||'null');if(local)adoptPromptManagerState(local)}catch(e){}
