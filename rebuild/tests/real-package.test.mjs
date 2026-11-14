@@ -81,6 +81,7 @@ test('Ibn Sina unified story package validates and preserves its five-language r
   assert.equal(story.quiz.length, 10, 'keep the ten questions already translated in all five languages');
   assert.equal(story.sources.length, 3);
   assert.equal(story.images.length, 2);
+  assert.equal(story.quiz.length, 10, 'Ahmed Urabi must contain ten quiz questions');
   for (const lang of langs) {
     assert.ok(story.i18n[lang].blocks.length >= 11, 'story block count below the established minimum in ' + lang);
     assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
@@ -111,15 +112,50 @@ test('Ahmed Urabi unified story package validates with five-language blocks, ima
   assert.equal(story.section, 'history');
   assert.ok(story.i18n.ar.blocks.length >= 14, 'Arabic story block count below the established minimum');
   assert.equal(story.quiz.length, 10);
-  assert.equal(story.sources.length, 3);
+  assert.equal(story.sources.length, 4, 'retain four verified historical sources');
   assert.equal(story.images.length, 2);
+  assert.equal(story.original_body.length, 2827, 'preserve the original source text unchanged');
+  assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng),
+    'the story map must retain verified birthplace coordinates');
+  const allImages = [story.cover, ...story.images];
+  for (const image of allImages) {
+    assert.ok(image.source_url?.startsWith('https://'), 'image source URL missing');
+    assert.ok(image.rights?.trim(), 'image rights statement missing');
+    for (const lang of langs) {
+      for (const field of ['alt', 'caption', 'source_name', 'rights']) {
+        assert.ok(image.i18n?.[lang]?.[field]?.trim(), 'localized image ' + field + ' missing for ' + lang);
+        if (lang !== 'ar') assert.equal(arabicScript.test(image.i18n[lang][field]), false,
+          'Arabic fallback in image ' + field + ' for ' + lang);
+      }
+    }
+  }
   for (const lang of langs) {
-    assert.ok(story.i18n[lang].blocks.length >= 14, 'story block count below the established minimum in ' + lang);
-    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, 20, 'Ahmed Urabi must contain 20 story blocks in ' + lang);
+    assert.equal(story.i18n[lang].blocks.filter(block => block.speaker === 'karma').length, 4,
+      'Karma must have four childlike contributions in ' + lang);
+    assert.equal(story.i18n[lang].blocks.filter(block => block.type === 'did_you_know').length, 3,
+      'three did-you-know cards are required in ' + lang);
+    assert.equal(story.i18n[lang].blocks.at(-1).speaker, 'karma', 'Karma must be the final story speaker in ' + lang);
+    assert.deepEqual(
+      story.i18n[lang].blocks.map(block => block.image_after || null),
+      story.i18n.ar.blocks.map(block => block.image_after || null),
+      'image placements must match Arabic in ' + lang
+    );
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    assert.ok(story.map_location.place[lang]?.trim(), 'localized map place missing in ' + lang);
     for (const question of story.quiz) {
       assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
       assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+      assert.ok(question.i18n[lang].explanation?.trim(), 'quiz explanation missing in ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.url?.startsWith('https://'), 'source URL must use HTTPS');
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+      if (lang !== 'ar') {
+        assert.equal(arabicScript.test(source.i18n[lang].title), false, 'Arabic fallback in source title for ' + lang);
+        assert.equal(arabicScript.test(source.i18n[lang].organization), false, 'Arabic fallback in source organization for ' + lang);
+      }
     }
   }
   const page = await readFile(path.join(root, 'stories/history/006/index.html'), 'utf8');
@@ -127,6 +163,27 @@ test('Ahmed Urabi unified story package validates with five-language blocks, ima
   assert.match(page, /data-story-path="story\.json"/);
   assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
+  assert.match(page, /reader\.js\?v=20261108-ai-disclosure-1/, 'Ahmed Urabi page must load the refreshed shared reader');
+  assert.match(page, /reader-base\.css\?v=20261108-ai-disclosure-1/, 'Ahmed Urabi page must load the refreshed disclosure styling');
+  const reader = await readFile(path.join(root, 'rebuild/reader.js'), 'utf8');
+  const readerCss = await readFile(path.join(root, 'rebuild/reader-base.css'), 'utf8');
+  for (const disclosure of [
+    'تم توليد هذه النسخة اللغوية باستخدام الذكاء الاصطناعي.',
+    'This language version was generated using artificial intelligence.',
+    'Cette version linguistique a été générée à l’aide de l’intelligence artificielle.',
+    'Questa versione linguistica è stata generata utilizzando l’intelligenza artificiale.',
+    'Diese Sprachfassung wurde mithilfe künstlicher Intelligenz erstellt.'
+  ]) assert.ok(reader.includes(disclosure), 'shared reader AI disclosure missing: ' + disclosure);
+  assert.match(reader, /!isRealPhoto\(d\.cover\)&&!isOwnIllus\(d\.cover\)/,
+    'the shared reader must preserve an explicitly declared original illustration cover');
+  assert.equal(story.cover.path, 'stories/history/006/cover.svg', 'Ahmed Urabi cover object must remain canonical');
+  assert.ok(page.includes('/stories/history/006/cover.svg'), 'social preview must use the same canonical cover image');
+  assert.match(reader, /className='ai-disclosure'/, 'AI disclosure must be a separate element after the final story block');
+  assert.match(readerCss, /\.ai-disclosure\{/, 'AI disclosure needs shared reader styling');
+  for (const lang of langs) {
+    assert.doesNotMatch(story.i18n[lang].history_note, /الذكاء الاصطناعي|artificial intelligence|intelligence artificielle|intelligenza artificiale|künstlicher Intelligenz/,
+      'AI disclosure must not be duplicated in story JSON/history note (' + lang + ')');
+  }
 });
 
 test('Tawfiq al-Hakim unified story package validates with five-language text, archival image rights, sources, and quiz', async () => {

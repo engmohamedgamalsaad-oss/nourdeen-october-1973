@@ -398,3 +398,6 @@ header{
   .langs button{padding:5px 8px;font-size:.73rem}
   #theme-toggle{padding:6px 8px;font-size:.73rem}
 }
+
+/* Fixed, localized AI disclosure is a separate interface element after the final story block. */
+.ai-disclosure{margin:24px 0 0;padding:12px 16px;border-top:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));color:var(--muted);font-size:.88rem;line-height:1.8;text-align:center}

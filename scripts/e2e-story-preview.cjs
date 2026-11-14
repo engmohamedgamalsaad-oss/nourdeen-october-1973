@@ -32,6 +32,18 @@ async function main() {
   fs.copyFileSync(path.join(root, 'khaledoon/assets/story-workflow.js'), path.join(temp, 'khaledoon/assets/story-workflow.js'));
   fs.mkdirSync(path.join(temp, 'stories'), { recursive: true });
   fs.copyFileSync(path.join(root, 'stories/places.json'), path.join(temp, 'stories/places.json'));
+  const urabiDir = path.join(temp, 'stories/history/006');
+  fs.mkdirSync(urabiDir, { recursive: true });
+  for (const file of ['index.html', 'story.json', 'cover.svg', 'urabi-timeline.svg']) {
+    fs.copyFileSync(path.join(root, 'stories/history/006', file), path.join(urabiDir, file));
+  }
+  const urabiImageDir = path.join(temp, 'assets/images/stories');
+  fs.mkdirSync(urabiImageDir, { recursive: true });
+  fs.copyFileSync(path.join(root, 'assets/images/stories/Portrait_of_Ahmed_Orabi.jpg'), path.join(urabiImageDir, 'Portrait_of_Ahmed_Orabi.jpg'));
+  fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
+  for (const asset of ['home-language-only.js', 'story-audio.js']) {
+    fs.copyFileSync(path.join(root, 'assets/shared', asset), path.join(temp, 'assets/shared', asset));
+  }
   fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.js'), path.join(temp, 'assets/shared/reactions.js'));
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.css'), path.join(temp, 'assets/shared/reactions.css'));
@@ -56,6 +68,7 @@ async function main() {
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const base = 'http://127.0.0.1:' + server.address().port + '/stories/october/016/';
+  const urabiBase = 'http://127.0.0.1:' + server.address().port + '/stories/history/006/';
   browser = await chromium.launch({ headless: true });
   // The story page follows the visitor's system colour scheme until a theme is saved
   // (same early script as the published pages). Pin the scheme so the theme assertions
@@ -207,7 +220,74 @@ async function main() {
   const overflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert.ok(overflow <= 1, 'mobile story page must not overflow horizontally; measured ' + overflow + 'px');
   await mobile.screenshot({ path: path.join(artifactDir, 'story-mobile-fr.png'), fullPage: true, animations: 'disabled' });
-  assert.deepEqual(errors, [], 'unified story story page should not throw browser errors');
+
+  // Review Ahmed Urabi 006 from its real page, using the exact story package and local assets.
+  const urabiContext = await browser.newContext({ viewport: { width: 1366, height: 900 }, colorScheme: 'dark' });
+  await urabiContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
+    if (route.request().resourceType() === 'image') { await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: testImageSvg }); return; }
+    await route.abort();
+  });
+  const urabiPage = await urabiContext.newPage();
+  urabiPage.on('pageerror', error => errors.push(String(error.message || error)));
+  await urabiPage.goto(urabiBase, { waitUntil: 'load' });
+  await urabiPage.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
+  const urabiStory = JSON.parse(fs.readFileSync(path.join(urabiDir, 'story.json'), 'utf8'));
+  assert.equal(await urabiPage.locator('#title').textContent(), urabiStory.i18n.ar.title);
+  assert.equal(await urabiPage.locator('#story-intro-modal').isVisible(), true, 'Ahmed Urabi should open on its own start screen');
+  const urabiIntroCover = await urabiPage.locator('#intro-cover').getAttribute('src');
+  const urabiHeroCover = await urabiPage.locator('#cover img').getAttribute('src');
+  assert.ok(urabiIntroCover.endsWith('/stories/history/006/cover.svg'), 'start screen must use the canonical story cover');
+  assert.equal(urabiHeroCover, urabiIntroCover, 'hero and start screen must use the same canonical cover');
+  await urabiPage.locator('#intro-start').click();
+  await urabiPage.locator('#story-intro-modal').waitFor({ state: 'hidden' });
+  assert.equal(await urabiPage.locator('#blocks .block').count(), 20, 'Ahmed Urabi should render all 20 Arabic story blocks');
+  assert.equal(await urabiPage.locator('#blocks .block').last().getAttribute('data-speaker'), 'karma', 'Karma must remain the final story speaker');
+  assert.equal(await urabiPage.locator('#blocks .ai-disclosure').count(), 1, 'the fixed AI disclosure should appear once after the story');
+  assert.equal(await urabiPage.locator('#blocks .block').last().evaluate(node => node.nextElementSibling.className), 'ai-disclosure',
+    'the AI disclosure must be a separate interface element immediately after Karma, not a story block');
+  assert.equal(await urabiPage.locator('#sources a').count(), 4, 'all four historical sources should render');
+  const urabiImages = urabiPage.locator('#blocks img');
+  assert.equal(await urabiImages.count(), 2, 'both story illustrations should render in their assigned positions');
+  for (let imageIndex = 0; imageIndex < 2; imageIndex++) {
+    const image = urabiImages.nth(imageIndex);
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(node => node.decode());
+  }
+  const urabiImageFigures = await urabiPage.locator('#blocks').evaluate(node => Array.from(node.querySelectorAll('figure')).map(figure => ({
+    image: figure.querySelector('img')?.getAttribute('src') || null,
+    fallback: Boolean(figure.querySelector('.kh-image-fallback')),
+    imageLoaded: Boolean(figure.querySelector('img') && figure.querySelector('img').naturalWidth > 0)
+  })));
+  console.log('Ahmed Urabi image render:', JSON.stringify(urabiImageFigures));
+  assert.equal(urabiImageFigures.length, 2, 'both story illustrations should render in their assigned positions');
+  assert.ok(urabiImageFigures.every(item => item.imageLoaded && !item.fallback), 'both Ahmed Urabi story images must load successfully');
+  assert.equal(await urabiPage.locator('#map-section').isVisible(), true, 'the verified birthplace map location should render');
+  assert.equal(await urabiPage.locator('#quiz .q').count(), 1, 'the story quiz should show one question at a time');
+  const disclosures = {
+    ar: 'تم توليد هذه النسخة اللغوية باستخدام الذكاء الاصطناعي.',
+    en: 'This language version was generated using artificial intelligence.',
+    fr: 'Cette version linguistique a été générée à l’aide de l’intelligence artificielle.',
+    it: 'Questa versione linguistica è stata generata utilizzando l’intelligenza artificiale.',
+    de: 'Diese Sprachfassung wurde mithilfe künstlicher Intelligenz erstellt.'
+  };
+  for (const lang of ['ar', 'en', 'fr', 'it', 'de']) {
+    if (lang !== 'ar') await urabiPage.locator('[data-lang="' + lang + '"]').click();
+    await urabiPage.waitForFunction(expected => document.documentElement.lang === expected, lang);
+    assert.equal(await urabiPage.locator('#title').textContent(), urabiStory.i18n[lang].title, lang + ' story title should be localized');
+    assert.equal(await urabiPage.locator('html').getAttribute('dir'), lang === 'ar' ? 'rtl' : 'ltr', lang + ' direction should be correct');
+    assert.equal(await urabiPage.locator('#blocks .ai-disclosure').textContent(), disclosures[lang], lang + ' AI disclosure should be localized');
+    assert.equal(await urabiPage.locator('#blocks .block').last().getAttribute('data-speaker'), 'karma', lang + ' should keep Karma as the final speaker');
+  }
+  await urabiPage.locator('#theme-toggle').click();
+  assert.equal(await urabiPage.locator('html').getAttribute('data-theme'), 'light', 'Ahmed Urabi should support light mode');
+  await urabiPage.screenshot({ path: path.join(artifactDir, 'ahmed-urabi-desktop-de-light.png'), fullPage: true, animations: 'disabled' });
+  await urabiPage.setViewportSize({ width: 390, height: 844 });
+  const urabiOverflow = await urabiPage.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  assert.ok(urabiOverflow <= 1, 'Ahmed Urabi mobile page must not overflow horizontally; measured ' + urabiOverflow + 'px');
+  await urabiPage.screenshot({ path: path.join(artifactDir, 'ahmed-urabi-mobile-de-light.png'), fullPage: true, animations: 'disabled' });
+  await urabiContext.close();
+
+  assert.deepEqual(errors, [], 'unified story pages should not throw browser errors');
   console.log(JSON.stringify({ ok: true, story: story.slug, languagesChecked: ['ar','en','fr'], quizQuestions: story.quiz.length, galleryImages: galleryImages.length, sources: story.sources.length, mobileOverflowPx: overflow, screenshots: artifactDir }, null, 2));
 }
 main().catch(error => { console.error(error.stack || error); process.exitCode = 1; }).finally(async () => {
