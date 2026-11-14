@@ -303,7 +303,7 @@
       body.appendChild(step2.d);
 
       /* ③ التوليد */
-      if (L === 'ar' || L === 'en') {
+      if (['ar', 'en', 'fr', 'it', 'de'].includes(L)) {
         var step3 = makeStep(box, 3, 'التوليد');
         step3.body.appendChild(el('p', 'kh-gen-note', ''));
         if (rec.index === current && genButton) {
