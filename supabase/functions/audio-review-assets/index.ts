@@ -357,7 +357,7 @@ Deno.serve(async (req: Request) => {
   const slug = body?.slug;
   const language = body?.language;
   const action = body?.action;
-  const languageRequired = ["stage", "manifest", "enqueue", "enqueue_approved_language", "queue_status"].includes(action);
+  const languageRequired = ["stage", "manifest", "enqueue", "enqueue_approved_language", "queue_status", "publish_translations"].includes(action);
   if (!validKey(section) || !validKey(slug) ||
       (languageRequired && !["ar", "en", "fr", "it", "de"].includes(language))) {
     return reply(400, { error: "هوية الحكاية أو اللغة غير صالحة." });
@@ -528,6 +528,129 @@ Deno.serve(async (req: Request) => {
       .upsert({ section, slug, audio_review: review }, { onConflict: "section,slug" });
     if (saveError) return reply(500, { error: "تعذر حفظ قرار الترجمة.", detail: saveError.message });
     return reply(200, { success: true, translation: translations[key] });
+  }
+
+
+  if (body.action === "publish_translations") {
+    if (!TRANSLATION_LANGUAGES[language]) return reply(400, { error: "اختر لغة ترجمة صالحة للنشر." });
+    if (!GITHUB_TOKEN) return reply(503, { error: "مفتاح GitHub للنشر غير متاح؛ لم يتم تعديل ملف الحكاية." });
+
+    const { data: reviewRow, error: reviewReadError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewReadError) return reply(500, { error: "تعذر قراءة اعتمادات الترجمات.", detail: reviewReadError.message });
+    const review = reviewRow?.audio_review && typeof reviewRow.audio_review === "object" ? reviewRow.audio_review : {};
+    const translations = review.translations && typeof review.translations === "object" ? review.translations : {};
+
+    const githubHeaders = {
+      "Accept": "application/vnd.github+json",
+      "Authorization": "Bearer " + GITHUB_TOKEN,
+      "X-GitHub-Api-Version": "2022-11-28",
+    };
+    let treeResponse: Response;
+    try {
+      treeResponse = await fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + "/git/trees/main?recursive=1", { headers: githubHeaders });
+    } catch {
+      return reply(502, { error: "تعذر الاتصال بـGitHub للعثور على ملف الحكاية." });
+    }
+    if (!treeResponse.ok) return reply(502, { error: "تعذر قراءة شجرة المستودع قبل نشر الترجمة.", detail: "GitHub HTTP " + treeResponse.status });
+    const tree = await treeResponse.json();
+    if (tree.truncated) return reply(502, { error: "قائمة ملفات المستودع غير مكتملة؛ أوقفت النشر لحماية الحكايات." });
+    const candidates = (tree.tree ?? []).filter((item: any) =>
+      item.type === "blob" && typeof item.path === "string" &&
+      item.path.startsWith("stories/" + section + "/") && item.path.endsWith("/story.json")
+    );
+    let storyPath = "";
+    for (const item of candidates) {
+      const raw = await fetch("https://raw.githubusercontent.com/" + OWNER + "/" + REPO + "/main/" + item.path);
+      if (!raw.ok) continue;
+      let candidate: any;
+      try { candidate = await raw.json(); } catch { continue; }
+      if (candidate?.format === "KHALEDOON_STORY" && candidate.section === section && candidate.slug === slug) {
+        storyPath = item.path;
+        break;
+      }
+    }
+    if (!storyPath) return reply(404, { error: "لم يتم العثور على حزمة الحكاية المنشورة المطابقة؛ لم يتم نشر أي ترجمة." });
+
+    const encodedPath = storyPath.split("/").map(encodeURIComponent).join("/");
+    const fileResponse = await fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + encodedPath + "?ref=main", { headers: githubHeaders });
+    if (!fileResponse.ok) return reply(502, { error: "تعذر قراءة ملف الحكاية من GitHub.", detail: "GitHub HTTP " + fileResponse.status });
+    const file = await fileResponse.json();
+    if (file.encoding !== "base64" || typeof file.content !== "string" || typeof file.sha !== "string") {
+      return reply(502, { error: "استجابة ملف الحكاية من GitHub غير صالحة؛ لم يتم تعديلها." });
+    }
+    let story: any;
+    try {
+      const bytes = Uint8Array.from(atob(file.content.replace(/\\s/g, "")), (ch) => ch.charCodeAt(0));
+      story = JSON.parse(new TextDecoder().decode(bytes));
+    } catch {
+      return reply(502, { error: "تعذر تحليل ملف الحكاية الحالي؛ لم يتم تعديل أي محتوى." });
+    }
+    if (story?.format !== "KHALEDOON_STORY" || story.section !== section || story.slug !== slug ||
+        !Array.isArray(story?.i18n?.ar?.blocks) || !Array.isArray(story?.i18n?.[language]?.blocks)) {
+      return reply(409, { error: "حزمة الحكاية تغيرت أو لا تحتوي اللغة المطلوبة؛ أعد فتح المعاينة." });
+    }
+    const arabicBlocks = story.i18n.ar.blocks;
+    const translatedBlocks = story.i18n[language].blocks;
+    if (translatedBlocks.length !== arabicBlocks.length) {
+      return reply(409, { error: "عدد مقاطع اللغة لا يطابق عدد المقاطع العربية؛ لم يتم النشر." });
+    }
+    let publishedCount = 0;
+    for (let index = 0; index < arabicBlocks.length; index++) {
+      const arabicBlock = arabicBlocks[index];
+      if (!isSpeakableBlock(arabicBlock)) continue;
+      const translation = translations[language + ":" + index];
+      const currentHash = await sha256Hex(new TextEncoder().encode(arabicBlock.text.trim()));
+      if (!translation || translation.status !== "approved" || translation.source_arabic_hash !== currentHash ||
+          typeof translation.translation_text !== "string" || !translation.translation_text.trim()) {
+        return reply(409, { error: "لا يمكن نشر " + TRANSLATION_LANGUAGES[language] + ": ترجمة المقطع " + (index + 1) + " غير معتمدة أو قديمة." });
+      }
+      const targetBlock = translatedBlocks[index];
+      if (!targetBlock || targetBlock.speaker !== arabicBlock.speaker) {
+        return reply(409, { error: "هوية المتحدث لا تتطابق في " + TRANSLATION_LANGUAGES[language] + "، المقطع " + (index + 1) + "." });
+      }
+      targetBlock.text = translation.translation_text.trim();
+      publishedCount++;
+    }
+    if (!publishedCount) return reply(409, { error: "لا توجد مقاطع منطوقة معتمدة لنشرها." });
+
+    const commitMessage = "Publish approved " + language + " translations for " + section + "/" + slug;
+    const updateResponse = await fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + encodedPath, {
+      method: "PUT",
+      headers: { ...githubHeaders, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: commitMessage,
+        content: encodeBase64Utf8(JSON.stringify(story, null, 2) + "\\n"),
+        sha: file.sha,
+        branch: "main",
+      }),
+    });
+    if (!updateResponse.ok) {
+      const detail = await updateResponse.text();
+      return reply(updateResponse.status === 409 ? 409 : 502, {
+        error: updateResponse.status === 409
+          ? "تغير ملف الحكاية على main أثناء النشر؛ لم يتم استبدال التحديث الأحدث. أعد المحاولة."
+          : "تعذر نشر النص المعتمد إلى GitHub؛ لم يتم تأكيد النشر.",
+        detail: detail.slice(0, 500),
+      });
+    }
+    const update = await updateResponse.json();
+    const publications = review.translation_publications && typeof review.translation_publications === "object"
+      ? review.translation_publications : {};
+    publications[language] = {
+      published_at: new Date().toISOString(),
+      commit_sha: update.commit?.sha ?? null,
+      commit_url: update.commit?.html_url ?? null,
+      segments: publishedCount,
+    };
+    review.translation_publications = publications;
+    const { error: savePublicationError } = await service.from("story_audio_reviews")
+      .upsert({ section, slug, audio_review: review }, { onConflict: "section,slug" });
+    return reply(200, {
+      success: true, published_text: true, language, segments: publishedCount,
+      commit_sha: update.commit?.sha ?? null, commit_url: update.commit?.html_url ?? null,
+      review_record_updated: !savePublicationError,
+    });
   }
 
   if (body.action === "review_save") {
