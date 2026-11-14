@@ -659,96 +659,13 @@ Deno.serve(async (req: Request) => {
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
 
-    // Resolve the rejected clip from the trusted private manifest. The preview UI
-    // may omit audio_src when its text panel is re-rendered; never make the user
-    // upload the MP3 again when the server already owns the staged audio.
-    const requestedAudioSrc = String(body.audio_src ?? "");
-    const requestedChunkIndex = Number(body.chunk_index ?? 0);
-    const rejectedAudioClips = Object.values(progressRow?.audio_review?.clips ?? {})
-      .filter((clip: any) => clip?.lang === "ar" && Number(clip?.block_index) === index &&
-        clip?.speaker === source.block.speaker && clip?.status === "rejected" && clip?.issue !== "audio_only")
-      .sort((a: any, b: any) => String(b?.decided_at ?? "").localeCompare(String(a?.decided_at ?? "")));
-    const lastRejectedClip: any = rejectedAudioClips.length ? rejectedAudioClips[0] : null;
-    const rejectedChunkIndex = Number(lastRejectedClip?.chunk_index);
-    const safeRequestedAudioSrc = requestedAudioSrc.endsWith(".mp3") &&
-      /^[A-Za-z0-9_-]+$/.test(requestedAudioSrc.slice(0, -4));
-    if ((requestedAudioSrc && !safeRequestedAudioSrc) ||
-        !Number.isInteger(requestedChunkIndex) || requestedChunkIndex < 0 || requestedChunkIndex > 50) {
-      return reply(400, { error: "بيانات تحديد المقطع الصوتي غير صالحة؛ أعد تحميل المعاينة." });
-    }
-    const { data: audioManifestFile, error: audioManifestError } = await service.storage.from(BUCKET)
-      .download(prefix + "/manifest.json");
-    if (audioManifestError || !audioManifestFile) {
-      return reply(404, { error: "تعذر العثور على manifest الصوت الخاص لإرساله إلى Gemini." });
-    }
-    let audioManifest: any;
-    try { audioManifest = JSON.parse(await audioManifestFile.text()); }
-    catch { return reply(422, { error: "ملف manifest الصوت الخاص غير صالح." }); }
-    // Match the current audio using the manifest's block identity. Speaker labels
-    // can differ between the story snapshot and older manifests, so they must not
-    // exclude an otherwise exact audio file.
-    const blockSegments = (audioManifest?.segments ?? []).filter((segment: any) =>
-      Number(segment?.block_index) === index &&
-      typeof segment?.src === "string" &&
-      /^[A-Za-z0-9_-]+\.mp3$/.test(segment.src));
-    let audioSegment: any = null;
-    // If an actual rejection exists, use that exact reviewed chunk; rejection is
-    // optional and is never required to prepare speech text.
-    if (lastRejectedClip && Number.isInteger(rejectedChunkIndex) && rejectedChunkIndex >= 0 && rejectedChunkIndex <= 50 &&
-        typeof lastRejectedClip.src === "string" && /^[A-Za-z0-9_-]+\.mp3$/.test(lastRejectedClip.src) &&
-        /^[a-f0-9]{64}$/i.test(String(lastRejectedClip.audio_sha256 ?? ""))) {
-      audioSegment = {
-        src: lastRejectedClip.src,
-        chunk_index: rejectedChunkIndex,
-        audio_sha256: String(lastRejectedClip.audio_sha256).toLowerCase(),
-      };
-    }
-    // The manifest filename is the strongest identity supplied by the preview.
-    // Do not reject it merely because the UI's chunk index is stale after rerender.
-    if (!audioSegment && safeRequestedAudioSrc) {
-      audioSegment = blockSegments.find((segment: any) => segment?.src === requestedAudioSrc);
-    }
-    // If the filename was omitted, use the client SHA-256 to identify the exact
-    // current file before falling back to the requested chunk number.
-    const requestedHash = String(body.audio_sha256 ?? "").toLowerCase();
-    if (!audioSegment && /^[a-f0-9]{64}$/.test(requestedHash)) {
-      audioSegment = blockSegments.find((segment: any) =>
-        String(segment?.audio_sha256 ?? "").toLowerCase() === requestedHash);
-    }
-    if (!audioSegment) {
-      const chunkMatches = blockSegments.filter((segment: any) =>
-        Number(segment?.chunk_index || 0) === requestedChunkIndex);
-      if (chunkMatches.length === 1) audioSegment = chunkMatches[0];
-    }
-    if (!audioSegment && blockSegments.length === 1) audioSegment = blockSegments[0];
-    if (!audioSegment) {
-      return reply(409, { error: "لم أستطع تحديد ملف الصوت الحالي لهذا المقطع من manifest؛ لم يُرسل أي صوت إلى Gemini." });
-    }
-    const audioSrc = audioSegment.src;
-    const { data: audioFile, error: audioDownloadError } = await service.storage.from(BUCKET)
-      .download(prefix + "/" + audioSrc);
-    if (audioDownloadError || !audioFile) {
-      return reply(404, { error: "ملف MP3 المطلوب غير موجود في التخزين الخاص؛ لم يُرسل نص بديل إلى Gemini." });
-    }
-    const audioBytes = new Uint8Array(await audioFile.arrayBuffer());
-    if (!audioBytes.length || audioBytes.length > 20 * 1024 * 1024) {
-      return reply(413, { error: "حجم ملف الصوت غير صالح أو يتجاوز الحد المسموح لتحليله." });
-    }
-    const actualAudioHash = await sha256Hex(audioBytes);
-    const expectedAudioHash = String(audioSegment.audio_sha256 ?? "").toLowerCase();
-    const requestedAudioHash = String(body.audio_sha256 ?? "").toLowerCase();
-    const clientAudioMatches = safeRequestedAudioSrc && requestedAudioSrc === audioSrc;
-    if (!expectedAudioHash || actualAudioHash !== expectedAudioHash ||
-        (clientAudioMatches && requestedAudioHash && requestedAudioHash !== expectedAudioHash)) {
-      return reply(409, { error: "بصمة ملف الصوت لا تطابق النسخة المعروضة للمراجعة؛ أعد تحميل المقطع." });
-    }
-    const audioBase64 = encodeBase64Bytes(audioBytes);
+    // Gemini receives text and the saved rejection note only. No MP3 is downloaded or attached.
+    const textOnly = true;
     const prompt = [
-      "ملف MP3 مرفق مع هذا الطلب. استمع إليه فعليًا قبل كتابة أي اقتراح؛ لا تعتمد على النص وحده.",
-      "حلّل ما نُطق في الصوت مقارنةً بالنص الأصلي: حدّد الكلمات التي نُطقت خطأ، أو تغيّر معناها، أو سقطت، أو ابتُلعت نهايتها، وكذلك مواضع السرعة أو الوقف غير الطبيعي. لا تخترع أخطاء غير مسموعة.",
-      "استخدم ملاحظات المراجعة والتصحيح المسجلين أدناه إن وُجدا لمعالجة المشكلة المحددة. إذا كان البديل صريحًا فطبّقه حرفيًا ما دام يحافظ على المعنى التاريخي. إذا لم توجد ملاحظة رفض، فحلّل الصوت والنص من تلقاء نفسك ولا تفترض وجود رفض سابق.",
-      "إذا كانت المشكلة في جودة الصوت أو خامة الصوت فقط وليست في النص أو النطق، فلا تغيّر النص لمجرد إظهار اختلاف؛ اذكر ذلك في review_flags.",
-      "الصوت المرفق هو مرجع التشخيص، وليس مصدرًا لتغيير الحقائق أو اختلاق محتوى.",
+      "لا يُرسل أي ملف صوت إلى Gemini. جهّز نص القراءة من النص المكتوب والسياق وملاحظات الرفض النصية فقط؛ لا تدّعِ الاستماع إلى صوت ولا تذكر أخطاء نطق مسموعة.",
+      "راجع النص المكتوب والسياق التاريخي واللغوي فقط، وحدّد الكلمات التي تحتاج إلى ضبط نطقها بالتشكيل الجزئي. لا تستنتج أي شيء عن أداء صوتي سابق.",
+      "استخدم ملاحظات الرفض والتصحيح النصية المسجلة أدناه إن وُجدت لمعالجة المشكلة المحددة. إذا كان البديل صريحًا فطبّقه حرفيًا ما دام يحافظ على المعنى التاريخي. إذا لم توجد ملاحظة رفض، فجهّز النص اعتمادًا على النص المكتوب والسياق فقط.",
+      "لا تحاول تقييم جودة صوت أو خامة صوت؛ هذه المهمة تقتصر على تجهيز النص المكتوب لإنتاج الصوت.",
       ...(rejectedCorrections.length ? [
         "تصحيحات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — طبّقها صراحةً في نص القراءة الجديد، ولا تتجاهلها:",
         ...rejectedCorrections,
@@ -812,7 +729,6 @@ Deno.serve(async (req: Request) => {
       systemInstruction: { parts: [{ text: "أنت محرر لغوي ومخرج أداء صوتي متخصص في الحكايات التعليمية المصرية. لا تنفّذ استبدالًا آليًا للفصحى بالعامية: افهم المعنى والسياق الكامل أولًا، وميّز الكلمات المتشابهة بحسب معناها داخل الجملة، ثم اضبط كتابتها ونطقها بالتشكيل الجزئي أو بإعادة صياغة طبيعية عند الحاجة. افهم الجملة كاملةً، لكن لا تُشكّلها كاملةً أبدًا؛ ضع أقل قدر لازم من الحركات على الكلمة الملتبسة وحدها، واترك سائر الكلمات بلا تشكيل. لا تضف تشكيلًا إعرابيًا أو تجميليًا. إذا لم يحسم السياق القراءة، فلا تخمّن واذكر الالتباس في pronunciation_notes أو review_flags. مثال لازم للفهم: (عالِم) شخص صاحب علم، و(عالَم) الدنيا أو الكون؛ السياق هو الذي يحسم، وليس شكل الكلمة منفردًا. مهمتك تجهيز نص القراءة فقط، لا توليد الصوت ولا اعتماد النص نيابة عن صاحب المشروع. لا تغيّر الحقائق أو الأسماء أو الأرقام أو ترتيب الأحداث. اجعل الأداء المستهدف هادئًا ومتمهلًا بوضوح، أبطأ من القراءة الحوارية العادية، مع وحدات نطق قصيرة ومتوسطة ووقفات دلالية طبيعية، ومن دون ضغط أو ابتلاع آخر الكلمات. راجع نهاية كل جملة خصوصًا حتى تُنطق كاملة وبنفس الهدوء. عند تحرير مقاطع كارما، حافظ حرفيًا على هوية الشخصية الثابتة: طفلة مصرية عمرها 12 سنة، ذكية وفضولية وعفوية وودودة، تتحدث بعامية مصرية بيضاء طبيعية، لا كمذيعة أو معلمة أو امرأة بالغة أو طفلة متصنعة. يجب أن يظل أسلوبها واحدًا عبر جميع المقاطع والحكايات؛ لا تغيّر شخصيتها أو درجة نضجها أو طريقة مخاطبتها من مقطع لآخر. لا تختلق تجارب شخصية أو زيارات." }] },
       contents: [{ role: "user", parts: [
         { text: prompt },
-        { inlineData: { mimeType: "audio/mpeg", data: audioBase64 } },
       ] }],
       generationConfig: {
         maxOutputTokens: 2200,
@@ -948,12 +864,15 @@ Deno.serve(async (req: Request) => {
     }
     return reply(200, {
       success: true, language: "ar", block_index: index, speaker: source.block.speaker,
-      audio_analyzed: true, audio_src: audioSrc, audio_sha256: actualAudioHash,
+      audio_analyzed: false, text_only: true,
       source_text: source.sourceText, source_text_hash: source.sourceTextHash,
       speech_text: proposal.speech_text.trim(),
       changes_summary: proposal.changes_summary,
       pronunciation_notes: proposal.pronunciation_notes.filter((item: any) => typeof item === "string").slice(0, 20),
-      review_flags: proposal.review_flags.filter((item: any) => typeof item === "string").slice(0, 20),
+      review_flags: [
+        ["تم تجهيز النص من النص المكتوب وملاحظات المراجعة فقط؛ لم يُرسل أي ملف صوت إلى Gemini."],
+        ...proposal.review_flags.filter((item: any) => typeof item === "string"),
+      ].slice(0, 20),
       model: successfulModel,
     });
   }
