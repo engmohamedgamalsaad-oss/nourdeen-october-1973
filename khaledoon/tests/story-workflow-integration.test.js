@@ -55,7 +55,7 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes("This story has moved."));
   assert.ok(publisher.includes('published_to_main: true'), 'approved moves are committed directly to main');
 });
-test('new stories in every section require an admin-approved five-language audio-text review', function () {
+test('new stories in every section keep audio-text review separate from optional audio generation', function () {
   assert.ok(storyPublisher.includes("let audioTextReviewRequired = existingAt < 0"), 'new stories in every section receive the mandatory review flag');
   assert.ok(storyPublisher.includes("previousData.audio_text_review_required === true"), 'updates and moves must preserve an existing new-story review requirement');
   assert.ok(audioTextReviewer.includes('buildApprovedAudioPronunciation'), 'the admin must export the generator-compatible approval artifact');
@@ -64,7 +64,9 @@ test('new stories in every section require an admin-approved five-language audio
   assert.ok(admin.includes("../rebuild/october-audio-packages/'+storyId+'/story.json"), 'October review must load the committed source package used by the live admin');
   assert.ok(admin.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October must expose the same five-language text review UI');
   assert.ok(admin.includes('window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review'), 'October audio review metadata must not be excluded from the shared review prompt');
-  assert.ok(readerReviewActions.includes('if(isApprove){') && !readerReviewActions.includes("if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october')"), 'preview approval must enforce the same audio gate for October');
+  assert.ok(!readerReviewActions.includes('window.KHStoryAudioReview.canApprove()'), 'written preview approval must not depend on audio generation or listening');
+  assert.ok(readerReviewActions.includes('يمكن اعتماد ونشر النص دون صوت'), 'preview must explain that written publication is independent from audio');
+  assert.ok(readerReviewActions.includes('meta=window.KHWorkflow.markApproved'), 'the normal human preview approval remains required before written publication');
   assert.ok(audioWorker.includes('provider: "omnivoice"') && audioWorker.includes('VoiceTut Egyptian Tashkeel'), 'the persistent VoiceTut worker must create the active audio manifests');
   assert.ok(audioWorker.includes('story-audio-jobs') || audioWorker.includes('claim'), 'the unified worker must consume queued audio jobs rather than the retired batch generator');
   assert.ok(!fs.existsSync('scripts/generate_story_audio.py'), 'the retired Fish Audio generator must not be restored');
