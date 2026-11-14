@@ -400,10 +400,11 @@ Deno.serve(async (req: Request) => {
     const translations = review.translations && typeof review.translations === "object" ? review.translations : {};
     const key = language + ":" + index;
     const old = translations[key] && typeof translations[key] === "object" ? translations[key] : {};
-    if (old.status === "approved" && old.source_arabic_hash === sourceHash) {
-      return reply(409, { error: "هذه الترجمة معتمدة بالفعل. ألغِ اعتماد هذا المقطع صراحةً قبل إعادة تجهيزها.", translation: old });
+    const forceRegenerate = body.force === true;
+    if (old.status === "approved" && old.source_arabic_hash === sourceHash && !forceRegenerate) {
+      return reply(409, { error: "هذه الترجمة معتمدة بالفعل. استخدم زر إعادة التجهيز صراحةً لإلغاء اعتمادها وإعداد مسودة جديدة.", translation: old });
     }
-    if (old.source_arabic_hash && old.source_arabic_hash !== sourceHash) {
+    if ((old.source_arabic_hash && old.source_arabic_hash !== sourceHash) || forceRegenerate) {
       try { await invalidatePublicClipAudio(service, section, slug, language, index); }
       catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف صوت الترجمة القديمة." }); }
       if (review.clips && typeof review.clips === "object") {
@@ -497,6 +498,12 @@ Deno.serve(async (req: Request) => {
     const translations = review.translations && typeof review.translations === "object" ? review.translations : {};
     const key = language + ":" + index;
     const old = translations[key] && typeof translations[key] === "object" ? translations[key] : {};
+    const translationChanged = old.translation_text !== translationText;
+    // If a human changes or withdraws an approved translation, remove only this segment from the public audio manifest.
+    if ((decision !== "approved" || translationChanged) && old.status === "approved") {
+      try { await invalidatePublicClipAudio(service, section, slug, language, index); }
+      catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف الصوت القديم لهذا المقطع." }); }
+    }
     translations[key] = {
       ...old, language, block_index: index, speaker: source.block.speaker,
       source_arabic_hash: source.sourceTextHash, translation_text: translationText,
@@ -505,7 +512,7 @@ Deno.serve(async (req: Request) => {
     };
     review.translations = translations;
     // Editing or withdrawing approval invalidates only this segment's prior audio decision.
-    if (decision !== "approved" || old.translation_text !== translationText) {
+    if (decision !== "approved" || translationChanged) {
       if (review.clips && typeof review.clips === "object") {
         for (const [clipKey, clip] of Object.entries(review.clips) as [string, any][]) {
           if (clip?.lang === language && Number(clip.block_index) === index) delete review.clips[clipKey];
