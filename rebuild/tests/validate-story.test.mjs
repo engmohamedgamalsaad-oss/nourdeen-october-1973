@@ -42,9 +42,9 @@ function fixture() {
     history_note: 'historical note ' + l,
     images_note: 'image note ' + l,
     blocks: [
-      { type: 'paragraph', speaker: 'karma', text: 'opening ' + l },
-      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l, image_after: 'photo-one' },
-      { type: 'did_you_know', speaker: 'narrator', text: 'fact ' + l }
+      { type: 'paragraph', speaker: 'karma', text: 'opening ' + l, ...(l === 'ar' ? {} : { source_ar_text: 'opening ar' }) },
+      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l, image_after: 'photo-one', ...(l === 'ar' ? {} : { source_ar_text: 'story ar' }) },
+      { type: 'did_you_know', speaker: 'narrator', text: 'fact ' + l, ...(l === 'ar' ? {} : { source_ar_text: 'fact ar' }) }
     ]
   }]));
   const quiz = Array.from({ length: 5 }, (_, i) => ({
@@ -72,6 +72,30 @@ function fixture() {
 }
 
 test('accepts complete five-language package', () => assert.deepEqual(validateStory(fixture()), []));
+
+test('rejects translated blocks whose Arabic source snapshot is stale', () => {
+  const s = fixture();
+  s.i18n.ar.blocks[1].text = 'updated Arabic source';
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('i18n.en.blocks[1].source_ar_text is stale')));
+  assert(errors.some(x => x.includes('i18n.fr.blocks[1].source_ar_text is stale')));
+});
+
+test('requires translation structure to align one-to-one with Arabic', () => {
+  const s = fixture();
+  s.i18n.de.blocks.pop();
+  s.i18n.fr.blocks[0].speaker = 'narrator';
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('i18n.de.blocks must have the same number')));
+  assert(errors.some(x => x.includes('i18n.fr.blocks[0].speaker must match')));
+});
+
+test('requires provenance snapshots for every block once enabled for a locale', () => {
+  const s = fixture();
+  delete s.i18n.it.blocks[1].source_ar_text;
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('i18n.it.blocks must include source_ar_text for every block')));
+});
 
 test('preserves V1 metadata and requires every supplied metadata field in all locales', () => {
   const s = fixture();
