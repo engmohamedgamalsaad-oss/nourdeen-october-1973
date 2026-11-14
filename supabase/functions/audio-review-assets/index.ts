@@ -666,9 +666,9 @@ Deno.serve(async (req: Request) => {
     const requestedChunkIndex = Number(body.chunk_index ?? 0);
     const rejectedAudioClips = Object.values(progressRow?.audio_review?.clips ?? {})
       .filter((clip: any) => clip?.lang === "ar" && Number(clip?.block_index) === index &&
-        clip?.status === "rejected" && clip?.issue !== "audio_only");
-    const lastRejectedClip: any = rejectedAudioClips.length
-      ? rejectedAudioClips[rejectedAudioClips.length - 1] : null;
+        clip?.speaker === source.block.speaker && clip?.status === "rejected" && clip?.issue !== "audio_only")
+      .sort((a: any, b: any) => String(b?.decided_at ?? "").localeCompare(String(a?.decided_at ?? "")));
+    const lastRejectedClip: any = rejectedAudioClips.length ? rejectedAudioClips[0] : null;
     const rejectedChunkIndex = Number(lastRejectedClip?.chunk_index);
     const safeRequestedAudioSrc = requestedAudioSrc.endsWith(".mp3") &&
       /^[A-Za-z0-9_-]+$/.test(requestedAudioSrc.slice(0, -4));
@@ -690,11 +690,17 @@ Deno.serve(async (req: Request) => {
       typeof segment?.src === "string" &&
       /^[A-Za-z0-9_-]+\.mp3$/.test(segment.src));
     let audioSegment: any = null;
-    // The persisted rejection identifies the exact chunk; prefer it over a stale
-    // chunk-0 fallback passed by the re-rendered Gemini button.
-    if (lastRejectedClip && Number.isInteger(rejectedChunkIndex) && rejectedChunkIndex >= 0 && rejectedChunkIndex <= 50) {
-      audioSegment = blockSegments.find((segment: any) =>
-        Number(segment?.chunk_index || 0) === rejectedChunkIndex);
+    // A rejected clip can be absent from the current manifest after a replacement.
+    // Its exact private-storage object and saved SHA-256 remain the authoritative
+    // review source; resolve it directly before consulting the current manifest.
+    if (lastRejectedClip && Number.isInteger(rejectedChunkIndex) && rejectedChunkIndex >= 0 && rejectedChunkIndex <= 50 &&
+        typeof lastRejectedClip.src === "string" && /^[A-Za-z0-9_-]+\\.mp3$/.test(lastRejectedClip.src) &&
+        /^[a-f0-9]{64}$/i.test(String(lastRejectedClip.audio_sha256 ?? ""))) {
+      audioSegment = {
+        src: lastRejectedClip.src,
+        chunk_index: rejectedChunkIndex,
+        audio_sha256: String(lastRejectedClip.audio_sha256).toLowerCase(),
+      };
     }
     if (!audioSegment && safeRequestedAudioSrc) {
       audioSegment = blockSegments.find((segment: any) =>
@@ -716,11 +722,11 @@ Deno.serve(async (req: Request) => {
       return reply(413, { error: "حجم ملف الصوت غير صالح أو يتجاوز الحد المسموح لتحليله." });
     }
     const actualAudioHash = await sha256Hex(audioBytes);
-    const manifestAudioHash = String(audioSegment.audio_sha256 ?? "").toLowerCase();
+    const expectedAudioHash = String(audioSegment.audio_sha256 ?? "").toLowerCase();
     const requestedAudioHash = String(body.audio_sha256 ?? "").toLowerCase();
     const clientAudioMatches = safeRequestedAudioSrc && requestedAudioSrc === audioSrc;
-    if (!manifestAudioHash || actualAudioHash !== manifestAudioHash ||
-        (clientAudioMatches && requestedAudioHash && requestedAudioHash !== manifestAudioHash)) {
+    if (!expectedAudioHash || actualAudioHash !== expectedAudioHash ||
+        (clientAudioMatches && requestedAudioHash && requestedAudioHash !== expectedAudioHash)) {
       return reply(409, { error: "بصمة ملف الصوت لا تطابق النسخة المعروضة للمراجعة؛ أعد تحميل المقطع." });
     }
     const audioBase64 = encodeBase64Bytes(audioBytes);
