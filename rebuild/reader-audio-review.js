@@ -1016,7 +1016,7 @@ function makeButton(label, cls, handler) {
   var b = document.createElement('button'); b.type = 'button'; b.className = 'kh-audio-review-btn ' + (cls || ''); b.textContent = label;
   b.addEventListener('click', handler); return b;
 }
-var generationBusy = false, generationMessage = '';
+var generationBusy = false, generationMessage = '', englishStartBusy = false;
 var jobsByBlock = {}, jobPollTimer = null, jobSendBusy = {};
 function jobKey(language, index) { return language + ':' + index; }async function loadQueueStatus(language) {
   var res = await audioAssetsRequest({ action: 'queue_status', section: story.section, slug: story.slug, language: language });
@@ -1177,7 +1177,6 @@ function renderGenerationControls(banner) {
   var summary = document.createElement('span'); summary.id = 'kh-gen-summary'; summary.className = 'kh-audio-review-state';
   var status = document.createElement('span'); status.className = 'kh-audio-review-state';
   text(status, generationMessage);
-  var englishStartBusy = false;
   var englishStartButton = document.createElement('button');
   englishStartButton.type = 'button';
   englishStartButton.className = 'kh-audio-publish-button kh-audio-english-start';
@@ -1195,6 +1194,12 @@ function renderGenerationControls(banner) {
       });
       await loadQueueStatus('en');
       await loadManifests();
+      var englishTotal = (story.i18n && story.i18n.en && story.i18n.en.blocks || []).filter(function (block) { return block && ['karma', 'narrator'].includes(block.speaker); }).length;
+      if (!englishTotal) {
+        generationMessage = 'لا توجد مقاطع إنجليزية صالحة للتوليد في هذه الحكاية.';
+        render();
+        return;
+      }
       var nextIndex = nextBlockIndexForLanguage('en');
       if (nextIndex < 0) {
         generationMessage = 'تم اعتماد جميع المقاطع الإنجليزية في هذه الحكاية.';
