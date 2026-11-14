@@ -17,7 +17,7 @@
   var ICONS = { done: '✅', wait: '⏳', busy: '🔄', fail: '❌', warn: '✋', todo: '⬜', na: '—' };
   var JOB_STATUS = { pending: 'في الطابور', processing: 'قيد التوليد', completed: 'مكتمل', failed: 'فشل' };
 
-  var jobs = {}, previousJobs = {}, openMemo = {}, stepMemo = {}, subMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false;
+  var jobs = {}, previousJobs = {}, openMemo = {}, stepMemo = {}, subMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false, workerOnline = null, workerLastSeen = null, workerError = '';
 
   function $(id) { return document.getElementById(id); }
   function story() { return window.__KH_STORY_PACKAGE || null; }
@@ -146,6 +146,41 @@
     wrap.append(source, textarea, buttons, status);
     paintStatus();
     return wrap;
+  }
+
+  function paintWorkerStatus() {
+    var node = $('kh-colab-worker-status');
+    if (!node) return;
+    node.dataset.state = workerOnline === true ? 'online' : workerOnline === false ? 'offline' : 'unknown';
+    if (workerOnline === true) {
+      node.textContent = 'Colab متصل — المقاطع المعتمدة ستبدأ تلقائيًا عند دخولها الطابور.';
+      node.title = workerLastSeen ? 'آخر اتصال: ' + new Date(workerLastSeen).toLocaleString('ar-EG') : '';
+    } else if (workerOnline === false) {
+      node.textContent = 'Colab غير متصل حاليًا — المقاطع ستظل في الطابور حتى تشغيل الدفتر الموحد.';
+      node.title = workerLastSeen ? 'آخر اتصال: ' + new Date(workerLastSeen).toLocaleString('ar-EG') : 'لم يسجل العامل اتصالًا حديثًا.';
+    } else {
+      node.textContent = workerError ? 'تعذر التحقق من اتصال Colab: ' + workerError : 'جارٍ التحقق من اتصال Colab…';
+      node.title = '';
+    }
+  }
+  function fetchWorkerStatus() {
+    return fetch(SUPA + '/functions/v1/story-audio-worker', {
+      method: 'GET', headers: { apikey: KEY }, cache: 'no-store'
+    }).then(function (response) {
+      return response.json().then(function (data) {
+        if (!response.ok || typeof data.online !== 'boolean') throw new Error(data.error || 'استجابة حالة العامل غير صالحة.');
+        workerOnline = data.online;
+        workerLastSeen = data.last_seen_at || null;
+        workerError = '';
+        paintWorkerStatus();
+        return true;
+      });
+    }).catch(function (error) {
+      workerOnline = null;
+      workerError = String(error && error.message || error || 'خطأ غير معروف');
+      paintWorkerStatus();
+      return false;
+    });
   }
 
   function fetchJobs() {
@@ -299,6 +334,7 @@
       sum.appendChild(el('span', 'kh-top-pill', '')); top.appendChild(sum);
       var body = el('div', 'kh-top-body'); top.appendChild(body);
       var err = el('p', 'kh-flow-error'); err.id = 'kh-flow-queue-error'; err.hidden = true; body.appendChild(err);
+      var worker = el('p', 'kh-colab-worker-status', 'جارٍ التحقق من اتصال Colab…'); worker.id = 'kh-colab-worker-status'; worker.dataset.state = 'unknown'; body.appendChild(worker);
       sum.addEventListener('click', function () { setTimeout(function () { topOpen = top.open; }, 0); });
       host.insertAdjacentElement('afterend', top);
     }
@@ -522,7 +558,7 @@
   function poll() {
     if (polling) return;
     polling = true;
-    fetchJobs().then(function () { refresh(); }).then(function () { polling = false; schedule(); }, function () { polling = false; schedule(); });
+    Promise.all([fetchJobs(), fetchWorkerStatus()]).then(function () { refresh(); }).then(function () { polling = false; schedule(); }, function () { polling = false; schedule(); });
   }
   var rebuildQueued = false;
   function onUpdated() {
