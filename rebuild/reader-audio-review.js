@@ -1048,6 +1048,7 @@ function engineView(language, index) {
   return view;
 }
 function engineBlockReason(language, index) {
+  if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة، لكن إرسال التوليد غير مفعّل لها في المحرك الحالي.';
   if (reconcileBlocked) return 'تغيّرت الحكاية وهناك مقاطع قيد التوليد؛ انتظر اكتمالها ثم أعد فتح المعاينة.';
   var current = nextBlockIndexForLanguage(language);
   if (current !== index) return current < 0 ? 'كل المقاطع معتمدة.' : 'يُفتح بعد اعتماد المقطع السابق (بترتيب الحكاية).';
@@ -1067,9 +1068,9 @@ function fillEnginePanel(panel) {
   var reason = view.state === 'none' || view.canResend ? engineBlockReason(language, index) : '';
   var busy = !!jobSendBusy[jobKey(language, index)];
   text(msg, busy ? 'جارٍ الإرسال…' : (reason || view.detail || 'جاهز للإرسال إلى المحرك.'));
-  var sendable = (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
+  var sendable = ['ar', 'en'].includes(language) && (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
   btn.disabled = !sendable;
-  setButtonFace(btn, 'spark', view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك');
+  setButtonFace(btn, 'spark', !['ar', 'en'].includes(language) ? 'غير مفعّل لهذه اللغة' : (view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك'));
 }
 function updateEnginePanels() {
   Array.prototype.forEach.call(document.querySelectorAll('.kh-engine-controls'), fillEnginePanel);
@@ -1180,7 +1181,7 @@ function renderGenerationControls(banner) {
   publishButton.type = 'button';
   publishButton.className = 'kh-audio-publish-button';
   publishButton.textContent = 'نشر الصوت المعتمد على صفحة الحكاية';
-  publishButton.disabled = !gate().ok || generationBusy;
+  publishButton.disabled = !['ar', 'en'].includes(audioReviewLanguage()) || !gate().ok || generationBusy;
   publishButton.addEventListener('click', async function () {
     if (!gate().ok || generationBusy) return;
     publishButton.disabled = true;
@@ -1196,7 +1197,8 @@ function renderGenerationControls(banner) {
       publishButton.disabled = !gate().ok;
     }
   });
-  publishButton.title = 'لا يتاح النشر إلا بعد الاستماع الكامل واعتماد كل المقاطع المطلوبة.';
+  publishButton.hidden = !['ar', 'en'].includes(audioReviewLanguage());
+  publishButton.title = 'لا يتاح النشر إلا بعد الاستماع الكامل واعتماد كل المقاطع المطلوبة بالعربية والإنجليزية.';
   panel.append(title, summary, publishButton, status); banner.appendChild(panel);
   updateGenerationSummary();
 }
@@ -1450,7 +1452,7 @@ function renderBlocks() {
       renderSpeechTextPanel(block, index, localizedBlock);
     });
   }
-  if (lang === 'ar' || lang === 'en') {
+  if (['ar', 'en', 'fr', 'it', 'de'].includes(lang)) {
     blocks.forEach(function (block, position) {
       var index = Number.isInteger(Number(block.dataset.blockIndex)) ? Number(block.dataset.blockIndex) : position;
       renderEnginePanel(block, index, story.i18n && story.i18n[lang] && story.i18n[lang].blocks && story.i18n[lang].blocks[index], lang);
