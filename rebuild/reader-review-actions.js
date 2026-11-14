@@ -29,6 +29,8 @@ var PANEL_CSS=[
 
 '#kh-preview-decision-panel .khd-flag{display:none;padding:2px 10px;border-radius:999px;border:1px solid var(--bad);background:rgba(239,107,107,.15);color:#ffb8b8;font:800 11px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
 '#kh-preview-decision-panel[data-ctx="missing"] .khd-flag{display:inline-block}',
+'#kh-preview-decision-panel[data-ctx="published"] .khd-flag{display:inline-block;border-color:var(--ok);background:rgba(47,191,128,.15);color:#9ce8bf}',
+'#kh-preview-decision-panel[data-ctx="published"] .khd-actions,#kh-preview-decision-panel[data-ctx="published"] #kh-preview-reason{display:none!important}',
 '#kh-preview-decision-panel .khd-pill{max-width:min(46vw,420px);overflow:hidden;text-overflow:ellipsis;padding:3px 14px;border-radius:999px;border:1px solid var(--warn);background:rgba(240,165,58,.14);color:var(--warn);font:800 12px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
 '#kh-preview-decision-panel[data-gate="ok"] .khd-pill{border-color:var(--ok);background:rgba(47,191,128,.15);color:var(--ok)}',
 '#kh-preview-decision-panel[data-gate="bad"] .khd-pill{border-color:var(--bad);background:rgba(239,107,107,.15);color:var(--bad)}',
@@ -168,7 +170,12 @@ function getContext(){
  var params=new URLSearchParams(location.search),urlId=params.get('submission'),urlTable=params.get('table');
  function read(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}}
  var candidates=[read('kh-story-review-context'),read('kh-story-preview-context'),read('kh-story-preview-draft')];
- ctx=candidates.find(function(item){return item&&typeof item==='object'&&item.submission_id&&(!urlId||String(item.submission_id)===String(urlId))})||null;
+ ctx=candidates.find(function(item){
+  if(!item||typeof item!=='object')return false;
+  if(item.record_type==='published_site_story')return !urlId&&!!item.section&&!!item.slug&&!!item.story_id;
+  return !!item.submission_id&&(!urlId||String(item.submission_id)===String(urlId));
+ })||null;
+ if(ctx&&ctx.record_type==='published_site_story')return 'published';
  if(urlId&&(!ctx||String(ctx.submission_id)!==String(urlId))){
   ctx={submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':'khaledoon_submissions',record_type:'modern'};
   try{localStorage.setItem('kh-story-review-context',JSON.stringify(ctx))}catch(e){}
@@ -253,7 +260,12 @@ refreshGate();
 document.addEventListener('kh-audio-review-updated',refreshGate);
 document.addEventListener('kh-story-audio-context',refreshGate);
 setTimeout(refreshGate,1500);
-if(!getContext()){
+var contextState=getContext();
+if(contextState==='published'){
+ panel.dataset.ctx='published';flag.textContent='حكاية منشورة — مراجعة صوت فقط';
+ approve.disabled=true;reject.disabled=true;back.disabled=true;
+ message('هذه حكاية منشورة مباشرة من ملفات الموقع. مراجعة الصوت متاحة، ولا توجد هنا معاملة اعتماد أو رفض إدارية.',false);
+}else if(!contextState){
  approve.disabled=true;reject.disabled=true;
  panel.dataset.ctx='missing';flag.textContent='غير مرتبطة بسجل';
  message('لا توجد بيانات سجل مرتبطة بهذه المعاينة. افتح المعاينة من داخل لوحة الإدارة حتى تظهر أزرار القرار وتعمل.',true);
