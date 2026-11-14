@@ -122,7 +122,7 @@
     generate.addEventListener("click", async function () {
       generate.disabled = true; status.textContent = "Gemini يجهّز ترجمة هذا المقطع من النص العربي والسياق…";
       try {
-        var result = await audioReviewAction({ action: "translation_generate", block_index: index });
+        var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
         translationRecords[key] = result.translation;
         textarea.value = result.translation.translation_text || "";
         paintStatus();
@@ -423,7 +423,7 @@
     var currentTranslationStale = L !== 'ar' && (!currentTranslation || currentTranslation.status !== 'approved');
     var genButton = gp && gp.querySelector('button:not(.kh-audio-publish-button)');
     var genStatus = gp && gp.querySelector('.kh-audio-review-state');
-    if (currentTranslationStale && genButton) { genButton.disabled = true; genButton.title = localeGate.reason; }
+    if (currentTranslationStale && genButton) { genButton.disabled = true; genButton.title = 'اعتمد ترجمة هذا المقطع قبل توليد الصوت.'; }
     else if (genButton) { genButton.disabled = false; genButton.removeAttribute('title'); }
     info.forEach(function (rec) {
       if (!rec.panels.length && (L !== 'ar' && L !== 'en')) return;
