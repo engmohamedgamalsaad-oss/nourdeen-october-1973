@@ -1222,22 +1222,17 @@ function nextArabicBlockIndex() {
   return -1;
 }
 function speechTextKey(index) { return 'ar:' + String(index); }
-async function prepareSpeechText(index, statusNode, button, audioEntry) {
+async function prepareSpeechText(index, statusNode, button) {
   var key = speechTextKey(index);
   if (speechTextBusy[key]) return;
-  // The server can resolve the current clip directly from its private manifest.
-  // Do not block Gemini merely because this preview panel has no matching entry.
-  var requestChunkIndex = audioEntry ? Number(audioEntry.chunk_index || 0) : 0;
-  var requestAudioSrc = audioEntry && audioEntry.src ? audioEntry.src : '';
-  var requestAudioHash = audioEntry && audioEntry.audio_sha256 ? audioEntry.audio_sha256 : '';
+  // Gemini receives the written block and saved review notes only; no audio asset is read or sent.
   speechTextBusy[key] = true;
   if (button) button.disabled = true;
   text(statusNode, 'جارٍ إرسال النص المكتوب إلى Gemini لتجهيزه وفق التعليمات المتفق عليها…');
   try {
     var proposal = await audioAssetsRequest({
       action: 'prepare_speech_text', section: story.section, slug: story.slug,
-      language: 'ar', block_index: index, chunk_index: requestChunkIndex,
-      audio_src: requestAudioSrc, audio_sha256: requestAudioHash
+      language: 'ar', block_index: index
     });
     if (!proposal || !proposal.speech_text || !proposal.source_text_hash) throw new Error('لم يرجع Gemini نصًا صالحًا للمقطع.');
     var saved = await audioAssetsRequest({
@@ -1250,9 +1245,7 @@ async function prepareSpeechText(index, statusNode, button, audioEntry) {
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
     speechTextBusy[key] = false;
-    text(statusNode, proposal.audio_analyzed === true && proposal.text_only !== true
-      ? 'راجع Gemini النص مع ملف الصوت الموجود وملاحظاتك. تم حفظ اقتراح النص كمسودة للمراجعة — لم يُعتمد ولم يُرسل إلى محرك الصوت.'
-      : 'جهّز Gemini نص القراءة من النص المكتوب والسياق فقط؛ لم يُرسل أي ملف صوت إليه. تم حفظ الاقتراح كمسودة للمراجعة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
+    text(statusNode, 'جهّز Gemini نص القراءة من النص المكتوب والسياق وملاحظات المراجعة فقط؛ لم يُرسل أي ملف صوت إليه. تم حفظ الاقتراح كمسودة للمراجعة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
     render();
   } catch (error) {
     text(statusNode, 'تعذر تجهيز نص القراءة: ' + (error && error.message || error));
