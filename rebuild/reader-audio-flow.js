@@ -316,8 +316,21 @@
     var job = jobOf(Number(box.dataset.index));
     if (reload) reload.hidden = !(job && job.status === 'completed' && !box.querySelector('.kh-audio-card'));
   }
+  function updateTranslationPublishButton() {
+    var button = $('kh-translation-publish-text');
+    if (!button) return;
+    var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
+    var targets = blocks.map(function (block, index) {
+      return block && ['karma', 'narrator'].includes(block.speaker) ? translationRecords[lang() + ':' + index] : null;
+    }).filter(Boolean);
+    var allApproved = targets.length > 0 && targets.every(function (record) { return record.status === 'approved'; });
+    button.hidden = lang() === 'ar';
+    button.disabled = lang() === 'ar' || !translationLoaded || !allApproved;
+    button.title = allApproved ? 'كل المقاطع المنطوقة معتمدة؛ اضغط لنشر النص فقط.' : 'اعتمد ترجمة كل مقطع منطوق قبل نشر نص اللغة.';
+  }
   function refresh() {
     Array.prototype.forEach.call(document.querySelectorAll('.kh-flow-box'), paint);
+    updateTranslationPublishButton();
     var err = $('kh-flow-queue-error');
     if (err) { err.hidden = !queueError; err.textContent = queueError ? 'تعذر قراءة حالة الطابور: ' + queueError : ''; }
     updateTopSummary();
@@ -369,6 +382,32 @@
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
+      var publishText = el('button', 'kh-translation-publish-text', 'نشر النص المعتمد لهذه اللغة');
+      publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
+      publishText.addEventListener('click', async function () {
+        publishText.disabled = true;
+        bulkStatus.textContent = 'جارٍ التحقق من اعتمادات المقاطع ونشر النص فقط…';
+        try {
+          var result = await audioReviewAction({ action: 'publish_translations' });
+          var st = story(), localized = st && st.i18n && st.i18n[lang()];
+          var arabic = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
+          if (localized && Array.isArray(localized.blocks)) {
+            arabic.forEach(function (block, index) {
+              var rec = translationRecords[lang() + ':' + index];
+              if (block && ['karma', 'narrator'].includes(block.speaker) && rec && rec.status === 'approved') {
+                localized.blocks[index].text = rec.translation_text;
+              }
+            });
+            try { localStorage.setItem('kh-story-review-package', JSON.stringify(st)); } catch (ignore) {}
+          }
+          bulkStatus.textContent = 'تم نشر نص ' + ({en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[lang()] || lang()) +
+            ' في ' + result.segments + ' مقطع. لم يتم نشر أو توليد أي صوت. رقم التحديث: ' + String(result.commit_sha || '').slice(0, 10);
+          document.dispatchEvent(new CustomEvent('kh-audio-review-updated'));
+        } catch (e) {
+          bulkStatus.textContent = e.message || 'تعذر نشر النص المعتمد.';
+        } finally { publishText.disabled = false; updateTranslationPublishButton(); }
+      });
+      bulkRow.appendChild(publishText);
       if (['ar', 'en'].includes(lang())) {
         var queueAll = el('button', 'kh-translation-queue-all', 'إرسال كل المقاطع المعتمدة للطابور');
         queueAll.id = 'kh-translation-queue-all'; queueAll.type = 'button';
@@ -386,6 +425,8 @@
       }
       tbody.appendChild(bulkRow);
     }
+    var publishTextButton = $('kh-translation-publish-text');
+    if (publishTextButton) publishTextButton.hidden = lang() === 'ar';
     var bulkTranslateButton = $('kh-translation-bulk-generate');
     if (bulkTranslateButton) bulkTranslateButton.hidden = lang() === 'ar';
     top.open = topOpen;
