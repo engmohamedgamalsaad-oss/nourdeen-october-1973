@@ -20,6 +20,10 @@
       "const": "KHALEDOON_STORY",
       "description": "The only canonical persisted story package format."
     },
+    "translation_policy": {
+      "const": "arabic-source-cultural-v1",
+      "description": "Marks a package that carries exact Arabic-source snapshots for every translated story field and block."
+    },
     "slug": {
       "type": "string",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
