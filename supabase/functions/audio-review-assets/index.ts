@@ -403,6 +403,15 @@ Deno.serve(async (req: Request) => {
     if (old.status === "approved" && old.source_arabic_hash === sourceHash) {
       return reply(409, { error: "هذه الترجمة معتمدة بالفعل. ألغِ اعتماد هذا المقطع صراحةً قبل إعادة تجهيزها.", translation: old });
     }
+    if (old.source_arabic_hash && old.source_arabic_hash !== sourceHash) {
+      try { await invalidatePublicClipAudio(service, section, slug, language, index); }
+      catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف صوت الترجمة القديمة." }); }
+      if (review.clips && typeof review.clips === "object") {
+        for (const [clipKey, clip] of Object.entries(review.clips) as [string, any][]) {
+          if (clip?.lang === language && Number(clip.block_index) === index) delete review.clips[clipKey];
+        }
+      }
+    }
     const languageName = TRANSLATION_LANGUAGES[language];
     const prompt = [
       "Translate exactly one story segment from approved Egyptian Arabic into " + languageName + ".",
