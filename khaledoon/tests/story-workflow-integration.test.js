@@ -8,6 +8,7 @@ var W = require('../assets/story-workflow.js');
 var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
 var builder = fs.readFileSync('khaledoon/story-builder.html', 'utf8');
 var preview = fs.readFileSync('khaledoon/preview.html', 'utf8');
+var reader = fs.readFileSync('rebuild/reader.html', 'utf8');
 var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
 var favicon = fs.readFileSync('khaledoon/assets/admin-favicon.svg', 'utf8');
 var storyPublisher = fs.readFileSync('rebuild/publish-story.mjs', 'utf8');
