@@ -4,7 +4,7 @@ var params=new URLSearchParams(location.search);
 if(params.get('draft')!=='1')return;
 var SUPA='https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
-var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePill=null,gateFill=null,gateText=null,gateDetails=null,gateDetailsBody=null,bar=null,drop=null,flag=null,isOpen=false,pinned=false,closeTimer=null,busy=false,draft=null,ctx=null;
+var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePill=null,gateFill=null,gateText=null,gateDetails=null,gateDetailsBody=null,bar=null,drop=null,flag=null,isOpen=false,pinned=false,closeTimer=null,busy=false,finished=false,draft=null,ctx=null;
 function $(id){return document.getElementById(id)}
 function message(s,bad){if(status){status.textContent=s;status.dataset.tone=bad?'bad':'ok'}}
 /* اللوحة شريط رفيع واحد ثابت أعلى الصفحة؛ تنفتح تفاصيلها وأزرارها عند تقريب الماوس منها (أو بالضغط عليها في الهاتف) وتنطوي ثانية عند الابتعاد.
@@ -142,7 +142,7 @@ function setNote(short,full){
  if(full&&full!==short){gateDetails.hidden=false;gateDetailsBody.textContent=full}
  else{gateDetails.hidden=true;gateDetails.open=false;gateDetailsBody.textContent=''}
 }
-/* يعكس حالة مراجعة الصوت على اللوحة: لا يغيّر منطق القرار، فقط العرض */
+/* يعكس حالة مراجعة الصوت على اللوحة. زرا القبول والرفض يتفعّلان فقط بعد اعتماد العربية وانتهاء توليد الإنجليزية (api.decision). */
 function refreshGate(){
  if(!panel)return;
  var api=window.KHStoryAudioReview,g=null;
@@ -163,6 +163,17 @@ function refreshGate(){
  if(g.loadError){setNote('تعذر التحقق من ملفات الصوت، ولا يمكن قبول المعاينة قبل إصلاح المشكلة.',full)}
  else if(full.length>160){setNote(full.slice(0,157)+'…',full)}
  else{setNote(full)}
+ /* حالة القرار: العربية معتمدة + كل مقاطع الإنجليزية اكتمل توليدها */
+ var dr=null;
+ try{dr=typeof api.decision==='function'?api.decision():null}catch(e){dr=null}
+ if(dr){
+  panel.dataset.gate=dr.ready?'ok':(g.loadError?'bad':(g.loading?'wait':'warn'));
+  gatePill.textContent=dr.pill;
+  gateFill.style.width=(Number(dr.percent)||0)+'%';
+  var drMessage=String(dr.message||'');
+  setNote(drMessage.length>160?drMessage.slice(0,157)+'…':drMessage,drMessage);
+  if(!busy&&!finished&&panel.dataset.ctx!=='missing'){approve.disabled=!dr.ready;reject.disabled=!dr.ready}
+ }
 }
 function getContext(){
  var params=new URLSearchParams(location.search),urlId=params.get('submission'),urlTable=params.get('table');
@@ -238,6 +249,7 @@ async function decide(isApprove){
   var checkRows=await verify.json(),check=checkRows[0],review=check&&check.story_meta&&check.story_meta.preview_review;
   if(!review||review.decision!==expected)throw new Error('فشل التحقق النهائي من القرار. لا تعتبر المعاينة معتمدة.');
   try{localStorage.removeItem('kh-story-review-context')}catch(e){}
+  finished=true;
   approve.disabled=true;reject.disabled=true;reason.disabled=true;back.disabled=false;
   if(isApprove){
    message('تم اعتماد المعاينة وحفظ القرار والتحقق منه. ستعود الآن إلى لوحة الإدارة لاستكمال النشر.');
@@ -246,7 +258,7 @@ async function decide(isApprove){
    message('تم رفض المعاينة وإعادة الحكاية للتحرير. سبب الرفض محفوظ. ستعود الآن إلى لوحة الإدارة.');
    setTimeout(function(){location.href='../khaledoon/admin.html?returnfrompreview=1&submission='+encodeURIComponent(draft.submission_id)},1100);
   }
- }catch(e){message('لم يتم تأكيد القرار: '+(e&&e.message||'خطأ غير معروف')+' — لم يتم اعتبار المعاينة معتمدة.',true);setBusy(false)}
+ }catch(e){message('لم يتم تأكيد القرار: '+(e&&e.message||'خطأ غير معروف')+' — لم يتم اعتبار المعاينة معتمدة.',true);setBusy(false);refreshGate()}
 }
 addControls();
 refreshGate();
