@@ -139,8 +139,8 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   assert.ok(end > start, 'active story prompt must be a single embedded string');
   var prompt = JSON.parse(shared.slice(start, end));
   var canonical = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8').trim();
-  assert.equal(prompt.trim(), canonical, 'active admin prompt must exactly match the canonical v5 reference');
-  assert.ok(prompt.includes('الإصدار: 2026-11-02-v5'));
+  assert.equal(prompt.trim(), canonical, 'active admin prompt must exactly match the canonical v6 reference');
+  assert.ok(prompt.includes('الإصدار: 2026-11-14-v6'));
   assert.ok(prompt.includes('بوابة جودة حوار كارما للحكايات الجديدة'));
   assert.ok(prompt.includes('لا ادعاء بزيارة أو مشاهدة شخصية'));
   assert.ok(prompt.includes('أنا سمعت عن'));
@@ -149,16 +149,16 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   assert.ok(prompt.includes('تعود مرة واحدة على الأقل في النصف الثاني'));
   assert.ok(prompt.includes('## 5) الغلاف والصور'));
   assert.ok(prompt.includes('## 8) الموقع على الخريطة'));
-  assert.ok(!canonical.includes('\\`'), 'canonical v5 prompt must use real Markdown backticks, not escaped backticks');
+  assert.ok(!canonical.includes('\\`'), 'canonical v6 prompt must use real Markdown backticks, not escaped backticks');
   var repoLine = canonical.split('\n').find(function (line) { return line.startsWith('المستودع: '); });
   var siteLine = canonical.split('\n').find(function (line) { return line.startsWith('الموقع: '); });
   assert.ok(repoLine && siteLine && repoLine !== siteLine, 'repository and site links must be on separate lines');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
-  assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-11-02-v5')>=0"));
-  assert.ok(admin.includes("raw.main.indexOf('2026-11-02-v5')>=0"));
+  assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-11-14-v6')>=0"));
+  assert.ok(admin.includes("raw.main.indexOf('2026-11-14-v6')>=0"));
   assert.ok(admin.includes("workflow:isV5&&typeof raw.workflow==='string'"));
 });
-test('standalone v5 provider prompts share the exact canonical reference and match embedded provider appendices', function () {
+test('standalone v6 provider prompts share the exact canonical reference and match embedded provider appendices', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   var prefix = 'STORY_PROVIDER_PROMPTS = ';
   var start = texts.indexOf(prefix) + prefix.length;
@@ -210,9 +210,9 @@ test('unified v5 prompt is shared and legacy AI output is not copied into fresh 
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
-  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5"));
+  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261114-arabic-translation-v6"));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(shared.includes('الإصدار: 2026-11-14-v6'));
   assert.ok(shared.includes('استبدل أي نسخة قديمة به بالكامل'));
   assert.ok(shared.includes('ar/en/fr/it/de'));
   assert.ok(shared.includes('prefers-reduced-motion'));
@@ -564,10 +564,10 @@ test('Gemini is available in every admin story prompt flow with the complete v5 
   assert.ok(providers.gemini.includes('# تعليمات خاصة بـ Gemini'));
   assert.ok(providers.gemini.includes('لا تُخرج Markdown ولا عناوين ولا قوائم ولا سور كود ولا مقدمة.'));
   assert.ok(providers.gemini.includes('فعّل البحث لفتح المصادر والصور'));
-  assert.ok(providers.gemini.includes('لا تختصر الترجمات'));
+  assert.ok(providers.gemini.includes('source_ar_text'));
   ['original_body','كارما طفلة فضولية','ar/en/fr/it/de','خمسة على الأقل','source_url','map_location','WhatsApp وFacebook','لا تُنشر حكاية قبل الموافقة الصريحة'].forEach(function(term){assert.ok(shared.includes(term),'shared v5 prompt missing '+term)});
 });
-test('admin project instructions and AI provider prompts preserve the v5 design and image-rights contract', function () {
+test('admin project instructions and AI provider prompts preserve the v6 design and image-rights contract', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var marker = 'STORY_PAGE_PROMPT = ';
   var start = texts.indexOf(marker) + marker.length;
@@ -640,7 +640,7 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
-test('prompt manager preserves valid v5 customizations and migrates stale appended gates', function () {
+test('prompt manager preserves valid v6 customizations and migrates stale appended gates', function () {
   var vm = require('vm');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var start = admin.indexOf('function adoptPromptManagerState(raw)');
@@ -650,25 +650,25 @@ test('prompt manager preserves valid v5 customizations and migrates stale append
   var legacyGate = 'بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ';
   function adopt(raw) {
     var context = {
-      STORY_PAGE_PROMPT: 'DEFAULT MASTER\\nالإصدار: 2026-11-02-v5',
-      STORY_WORKFLOW: 'DEFAULT GUIDE\\nالإصدار: 2026-11-02-v5',
-      window: { STORY_PROVIDER_PROMPTS: { chatgpt: 'DEFAULT PROVIDER\\nالإصدار: 2026-11-02-v5' } },
+      STORY_PAGE_PROMPT: 'DEFAULT MASTER\\nالإصدار: 2026-11-14-v6',
+      STORY_WORKFLOW: 'DEFAULT GUIDE\\nالإصدار: 2026-11-14-v6',
+      window: { STORY_PROVIDER_PROMPTS: { chatgpt: 'DEFAULT PROVIDER\\nالإصدار: 2026-11-14-v6' } },
       promptManagerState: {},
-      promptProvidersCache: { chatgpt: 'DEFAULT PROVIDER\\nالإصدار: 2026-11-02-v5' },
+      promptProvidersCache: { chatgpt: 'DEFAULT PROVIDER\\nالإصدار: 2026-11-14-v6' },
       raw: raw
     };
     return JSON.parse(vm.runInNewContext(helper + '; adoptPromptManagerState(raw); JSON.stringify(promptManagerState)', context));
   }
   var valid = adopt({
-    main: 'CUSTOM MASTER\\nالإصدار: 2026-11-02-v5',
-    workflow: 'CUSTOM GUIDE\\nالإصدار: 2026-11-02-v5',
+    main: 'CUSTOM MASTER\\nالإصدار: 2026-11-14-v6',
+    workflow: 'CUSTOM GUIDE\\nالإصدار: 2026-11-14-v6',
     custom: [{ name: 'extra', text: 'keep me' }],
-    providers: { chatgpt: 'CUSTOM PROVIDER\\nالإصدار: 2026-11-02-v5' },
+    providers: { chatgpt: 'CUSTOM PROVIDER\\nالإصدار: 2026-11-14-v6' },
     versions: [{ version: 'saved' }]
   });
-  assert.equal(valid.main, 'CUSTOM MASTER\\nالإصدار: 2026-11-02-v5', 'valid v5 master customizations must survive reload');
-  assert.equal(valid.workflow, 'CUSTOM GUIDE\\nالإصدار: 2026-11-02-v5', 'valid v5 workflow customizations must survive reload');
-  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER\\nالإصدار: 2026-11-02-v5', 'valid v5 provider appendices must survive reload');
+  assert.equal(valid.main, 'CUSTOM MASTER\\nالإصدار: 2026-11-14-v6', 'valid v6 master customizations must survive reload');
+  assert.equal(valid.workflow, 'CUSTOM GUIDE\\nالإصدار: 2026-11-14-v6', 'valid v6 workflow customizations must survive reload');
+  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER\\nالإصدار: 2026-11-14-v6', 'valid v5 provider appendices must survive reload');
   assert.equal(valid.custom.length, 1, 'custom prompt entries must survive migration checks');
   var stale = adopt({
     main: 'STALE MASTER\\nالإصدار: 2026-10-23-v4\\n' + legacyGate,
@@ -676,9 +676,9 @@ test('prompt manager preserves valid v5 customizations and migrates stale append
     custom: [{ name: 'extra', text: 'keep me' }],
     providers: { chatgpt: 'STALE PROVIDER\\nالإصدار: 2026-10-23-v4' }
   });
-  assert.equal(stale.main, 'DEFAULT MASTER\\nالإصدار: 2026-11-02-v5', 'legacy master must fall back to the v5 canonical reference');
-  assert.equal(stale.workflow, 'DEFAULT GUIDE\\nالإصدار: 2026-11-02-v5', 'legacy guide must fall back to the v5 workflow pointer');
-  assert.equal(stale.providers.chatgpt, 'DEFAULT PROVIDER\\nالإصدار: 2026-11-02-v5', 'stale provider appendices must be refreshed');
+  assert.equal(stale.main, 'DEFAULT MASTER\\nالإصدار: 2026-11-14-v6', 'legacy master must fall back to the v5 canonical reference');
+  assert.equal(stale.workflow, 'DEFAULT GUIDE\\nالإصدار: 2026-11-14-v6', 'legacy guide must fall back to the v5 workflow pointer');
+  assert.equal(stale.providers.chatgpt, 'DEFAULT PROVIDER\\nالإصدار: 2026-11-14-v6', 'stale provider appendices must be refreshed');
   assert.equal(stale.custom.length, 1, 'migration must preserve separately managed custom prompt entries');
 });
 test('prompt admin links to the four canonical standalone v5 files', function () {
@@ -792,7 +792,7 @@ test('story i18n lookup supports both dictionary shapes and the real SVG artwork
 test('unified v5 story prompt requires complete five-language verification', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-11-14-v6'));
   assert.ok(promptTexts.includes('## 6) اللغات'));
   assert.ok(promptTexts.includes('ar/en/fr/it/de'));
   assert.ok(promptTexts.includes('لا يبقى نص عربي ظاهر بعد تغيير اللغة'));
@@ -844,7 +844,7 @@ test('v5 prompt architecture uses standalone provider files and one shared refer
   var workflow = fs.readFileSync('docs/khaledoon-story-production-workflow.md','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-11-14-v6'));
   assert.ok(promptTexts.includes('STORY_PAGE_PROMPT ='));
   assert.ok(promptTexts.includes('STORY_PROVIDER_PROMPTS ='));
   ['ChatGPT','Gemini','Claude','DeepSeek'].forEach(function(provider) {
@@ -856,7 +856,7 @@ test('v5 prompt architecture uses standalone provider files and one shared refer
   assert.ok(!admin.includes('2026-10-23-unified-v4'));
   assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
   assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
-  assert.ok(workflow.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(workflow.includes('الإصدار: 2026-11-14-v6'));
   assert.ok(workflow.includes('## 0) وضعا التشغيل'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
   var providerPromptDir = 'khaledoon/prompts/2026-11-02-unified-v5/';
