@@ -57,3 +57,7 @@
 .kh-translation-bulk-actions button:disabled{opacity:.5;cursor:wait}
 .kh-translation-bulk-status{margin:7px 0;color:#d8c9a8;font:12px/1.8 Cairo,Arial,sans-serif}
 @media(max-width:600px){.kh-translation-bulk-actions{display:grid;grid-template-columns:1fr}.kh-translation-bulk-actions button{width:100%}}
+
+.kh-colab-worker-status{margin:8px 0;padding:9px 12px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:rgba(255,255,255,.035);color:#c8d3d5;font:600 12px/1.8 Cairo,Arial,sans-serif}
+.kh-colab-worker-status[data-state="online"]{border-color:rgba(47,191,128,.35);background:rgba(47,191,128,.08);color:#a9e8c8}
+.kh-colab-worker-status[data-state="offline"]{border-color:rgba(222,162,72,.45);background:rgba(222,162,72,.09);color:#f0cf94}
