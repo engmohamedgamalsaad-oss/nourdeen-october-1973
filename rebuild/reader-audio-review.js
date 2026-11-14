@@ -706,9 +706,10 @@ function renderGateBanner(banner) {
     var langGate = languageGate(lang);
     var chip = document.createElement('span');
     chip.className = 'kh-lang-chip';
-    chip.dataset.state = !manifests[lang] ? 'none' : (langGate.ok ? 'done' : 'part');
-    var label = !manifests[lang] ? 'لم يُنشأ الصوت' : (list.length ? acc + '/' + list.length + ' مقبول' : 'قيد المراجعة');
-    if (publishedAudioStatus[lang] && publishedAudioStatus[lang].published) label += ' · منشور';
+    var isPublished = !!(publishedAudioStatus[lang] && publishedAudioStatus[lang].published);
+    chip.dataset.state = (!manifests[lang] && !isPublished) ? 'none' : (langGate.ok ? 'done' : 'part');
+    var label = isPublished && !manifests[lang] ? 'منشور' : (!manifests[lang] ? 'لم يُنشأ الصوت' : (list.length ? acc + '/' + list.length + ' مقبول' : 'قيد المراجعة'));
+    if (isPublished && manifests[lang]) label += ' · منشور';
     text(chip, LANG_NAMES[lang] + ' ' + label);
     chips.appendChild(chip);
   });
