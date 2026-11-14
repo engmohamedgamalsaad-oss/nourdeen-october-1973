@@ -587,14 +587,14 @@ Deno.serve(async (req: Request) => {
     if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
     if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
     let source;
-    try { source = await resolveStoryBlock(section, slug, language, blockIndex, body.story_snapshot); }
-    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع." }); }
+    try { source = await resolveStoryBlock(section, slug, "ar", blockIndex, body.story_snapshot); }
+    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع العربي." }); }
     const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (reviewError) return reply(500, { error: "تعذر قراءة سجل مراجعة الحكاية.", detail: reviewError.message });
     const audioReview = reviewRow?.audio_review ?? {};
     const accepted = acceptedBlockIndexes(audioReview, language);
-    const ordered = orderedStoryBlockIndexes(source.story.i18n[language].blocks);
+    const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
     const targetPosition = ordered.indexOf(blockIndex);
     if (targetPosition < 0 || ordered.slice(0, targetPosition).some((index) => !accepted.has(index))) {
       return reply(409, { error: "يجب إكمال المقاطع السابقة واعتمادها أولًا، بترتيب الحكاية." });
@@ -608,6 +608,24 @@ Deno.serve(async (req: Request) => {
         return reply(409, { error: "اعتمد نص القراءة الصوتية لهذا المقطع أولًا." });
       }
       spokenText = speechRecord.approved_text.trim();
+    } else {
+      const translation = audioReview?.translations?.[language + ":" + blockIndex];
+      if (!translation || translation.status !== "approved" ||
+          typeof translation.translation_text !== "string" || !translation.translation_text.trim() ||
+          translation.source_arabic_hash !== source.sourceTextHash) {
+        return reply(409, { error: "اعتمد ترجمة هذا المقطع بشريًا بعد مراجعة النص العربي المقابل أولًا." });
+      }
+      spokenText = translation.translation_text.trim();
+      const storyCopy = structuredClone(source.story);
+      storyCopy.i18n = storyCopy.i18n || {};
+      storyCopy.i18n[language] = storyCopy.i18n[language] || { blocks: [] };
+      storyCopy.i18n[language].blocks = Array.isArray(storyCopy.i18n[language].blocks)
+        ? storyCopy.i18n[language].blocks : [];
+      storyCopy.i18n[language].blocks[blockIndex] = {
+        ...(storyCopy.i18n[language].blocks[blockIndex] || {}),
+        type: source.block.type || "paragraph", speaker: source.block.speaker, text: spokenText,
+      };
+      source = { ...source, story: storyCopy, block: storyCopy.i18n[language].blocks[blockIndex] };
     }
     try { await invalidatePublicStoryAudio(service, section, slug); }
     catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
