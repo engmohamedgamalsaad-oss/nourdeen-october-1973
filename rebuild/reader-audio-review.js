@@ -624,7 +624,7 @@ function gateSummary() {
     return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إصلاح المشكلة.' + (details.length ? ' ' + details.join(' | ') : '');
   }
   if (g.missingLanguages) return 'مراجعة الصوت غير مكتملة: ملفات الصوت غير جاهزة للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '.';
-  if (g.ok) return 'تم قبول كل المقاطع الصوتية (' + g.accepted + '/' + g.total + ').';
+  if (g.ok) return 'تم قبول كل المقاطع الصوتية العربية (' + g.accepted + '/' + g.total + ').';
   if (g.staleBlocks) return 'يوجد ' + g.staleBlocks + ' مقطع صوته قديم ولا يطابق نص القراءة المعتمد؛ أعد توليد صوته من النص المعتمد قبل الاعتماد.';
   if (g.uncoveredBlocks) return 'يوجد ' + g.uncoveredBlocks + ' مقطع بلا ملف صوتي بعد؛ ولّد صوته قبل الاعتماد.';
   return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '.';
@@ -1188,11 +1188,12 @@ function renderGenerationControls(banner) {
   LANGS.forEach(function (language) {
     var row = document.createElement('div'); row.className = 'kh-language-publish-row';
     row.dataset.lang = language;
+    row.style.cssText = 'display:grid;grid-template-columns:minmax(80px,.7fr) minmax(160px,2fr) auto;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line,rgba(255,255,255,.12))';
     var label = document.createElement('strong'); text(label, LANG_NAMES[language]);
     var state = document.createElement('span'); state.className = 'kh-audio-review-state';
     var langGate = languageGate(language);
     var published = publishedAudioStatus[language] && publishedAudioStatus[language].published === true;
-    if (published && langGate.ok) text(state, 'منشور — توجد نسخة معتمدة أحدث جاهزة للتحديث.');
+    if (published && langGate.ok) text(state, 'منشور — النسخة الحالية متاحة للزوار، ويمكن تحديثها بعد اعتماد بديل.');
     else if (published) text(state, 'منشور حاليًا — النسخة المنشورة محفوظة حتى اعتماد البديل.');
     else if (langGate.ok) text(state, 'كل المقاطع جاهزة ومعتمدة — متاح النشر.');
     else if (langGate.missingLanguages) text(state, 'لم تُجهّز ملفات الصوت بعد.');
@@ -1216,6 +1217,7 @@ function renderGenerationControls(banner) {
           throw new Error('لم يؤكد الخادم نشر صوت هذه اللغة.');
         }
         await loadPublicAudioStatus();
+        generationBusy = false;
         render();
       } catch (error) {
         text(state, 'تعذر نشر اللغة: ' + (error && error.message || error));
