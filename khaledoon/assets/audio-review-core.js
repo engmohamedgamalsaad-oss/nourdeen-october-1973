@@ -279,7 +279,7 @@ function validateTranslationAlignment(story, language) {
   var ar = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks;
   var local = story && story.i18n && story.i18n[language] && story.i18n[language].blocks;
   if (!Array.isArray(ar) || !Array.isArray(local) || local.length !== ar.length) {
-    return { ok: false, reason: 'ترجمة هذه اللغة لا تطابق عدد المقاطع العربية؛ حدّث ترجمة الحكاية أولًا.', staleBlocks: [] };
+    return { ok: false, reason: 'ترجمة هذه اللغة لا تطابق عدد المقاطع العربية؛ حدّث ترجمة الحكاية أولًا.', staleBlocks: null };
   }
   var stale = [];
   for (var i = 0; i < ar.length; i++) {
