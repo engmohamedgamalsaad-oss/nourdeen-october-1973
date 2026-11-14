@@ -153,6 +153,7 @@ function refreshGate(){
  gatePill.textContent='النص قابل للنشر دون صوت';
  gateFill.style.width='100%';
  var total=Number(g&&g.total)||0,accepted=Number(g&&g.accepted)||0,full='';
+ gateFill.style.width=(total?Math.round(accepted/total*100):0)+'%';
  if(!g){setNote('يمكن اعتماد ونشر النص الآن دون ملفات صوت. حالة الصوت اختيارية ولا تمنع النشر.');return}
  try{full=String(api.gateSummary()||'')}catch(e){full=''}
  var note='';
