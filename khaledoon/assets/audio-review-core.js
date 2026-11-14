@@ -273,6 +273,31 @@ function evaluateFiveLanguageGate(manifests, entries, review, readyByKey, listen
   return evaluateGate(entries, review, readyByKey, listenedByKey);
 }
 
+/* Translation provenance gate: every non-Arabic block must still point to the exact current Arabic source block. */
+function validateTranslationAlignment(story, language) {
+  if (language === 'ar') return { ok: true, reason: '', staleBlocks: [] };
+  var ar = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks;
+  var local = story && story.i18n && story.i18n[language] && story.i18n[language].blocks;
+  if (!Array.isArray(ar) || !Array.isArray(local) || local.length !== ar.length) {
+    return { ok: false, reason: 'ترجمة هذه اللغة لا تطابق عدد المقاطع العربية؛ حدّث ترجمة الحكاية أولًا.', staleBlocks: [] };
+  }
+  var stale = [];
+  for (var i = 0; i < ar.length; i++) {
+    var a = ar[i] || {}, b = local[i] || {};
+    if (a.type !== b.type || a.speaker !== b.speaker ||
+        (a.image_after || '') !== (b.image_after || '') ||
+        Object.prototype.hasOwnProperty.call(a, 'heading') !== Object.prototype.hasOwnProperty.call(b, 'heading')) {
+      stale.push(i);
+      continue;
+    }
+    if (typeof b.source_ar_text !== 'string' || b.source_ar_text !== a.text) stale.push(i);
+  }
+  if (stale.length) {
+    return { ok: false, reason: 'ترجمة المقطع ' + (stale[0] + 1) + ' قديمة أو غير موثقة المصدر. أعد ترجمتها من النص العربي المعتمد قبل توليد الصوت.', staleBlocks: stale };
+  }
+  return { ok: true, reason: '', staleBlocks: [] };
+}
+
 function gateMessage(g) {
   if (g.ok) return '';
   var parts = [];
@@ -342,7 +367,7 @@ var api = {
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
-  evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
+  evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, validateTranslationAlignment: validateTranslationAlignment, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else root.KHAudioReviewCore = api;
