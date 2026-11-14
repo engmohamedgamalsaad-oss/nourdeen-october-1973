@@ -27,6 +27,7 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, true, 'refreshing the source snapshot revalidates the translated block');
   alignedStory.i18n.en.blocks.pop();
   assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, false, 'missing translated blocks must block generation');
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').staleBlocks, null, 'a locale-wide block-count mismatch must block all segments');
 
   /* المفتاح: المسافات لا تغيّره، والنص يغيّره، والترتيب لا يدخل فيه */
   const a = await core.baseKey(S, 'ar', 'narrator', 'مرحبا   بالعالم');
