@@ -1225,11 +1225,23 @@ function speechTextKey(index) { return 'ar:' + String(index); }
 async function prepareSpeechText(index, statusNode, button, audioEntry) {
   var key = speechTextKey(index);
   if (speechTextBusy[key]) return;
-  audioEntry = audioEntry || entries.find(function (item) {
-    return item.lang === 'ar' && Number(item.block_index) === Number(index) && Number(item.chunk_index || 0) === 0;
-  });
   if (!audioEntry || !audioEntry.src) {
-    text(statusNode, 'تعذر إرسال الصوت إلى Gemini: لم يُعثر على ملف الصوت العربي لهذا المقطع.');
+    // Some manifests number the first chunk from 1, or contain a single
+    // current clip with a non-zero chunk index after a replacement. Resolve
+    // by block first, then prefer chunk 0; otherwise use the lowest chunk.
+    var blockAudioEntries = entries.filter(function (item) {
+      return item.lang === 'ar' && Number(item.block_index) === Number(index) &&
+        typeof item.src === 'string' && item.src;
+    }).sort(function (a, b) {
+      return Number(a.chunk_index || 0) - Number(b.chunk_index || 0);
+    });
+    audioEntry = blockAudioEntries.find(function (item) {
+      return Number(item.chunk_index || 0) === 0;
+    }) || (blockAudioEntries.length ? blockAudioEntries[0] : null);
+  }
+  if (!audioEntry || !audioEntry.src) {
+    var manifestProblem = manifestErrors.ar ? ' سبب تعذر تحميل manifest: ' + manifestErrors.ar : '';
+    text(statusNode, 'تعذر إرسال الصوت إلى Gemini: لا يوجد ملف صوت عربي مسجل لهذا المقطع في المعاينة الحالية.' + manifestProblem);
     return;
   }
   speechTextBusy[key] = true;
