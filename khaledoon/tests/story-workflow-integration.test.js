@@ -668,7 +668,7 @@ test('prompt manager preserves valid v6 customizations and migrates stale append
   });
   assert.equal(valid.main, 'CUSTOM MASTER\\nالإصدار: 2026-11-14-v6', 'valid v6 master customizations must survive reload');
   assert.equal(valid.workflow, 'CUSTOM GUIDE\\nالإصدار: 2026-11-14-v6', 'valid v6 workflow customizations must survive reload');
-  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER\\nالإصدار: 2026-11-14-v6', 'valid v5 provider appendices must survive reload');
+  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER\\nالإصدار: 2026-11-14-v6', 'valid v6 provider appendices must survive reload');
   assert.equal(valid.custom.length, 1, 'custom prompt entries must survive migration checks');
   var stale = adopt({
     main: 'STALE MASTER\\nالإصدار: 2026-10-23-v4\\n' + legacyGate,
@@ -681,14 +681,14 @@ test('prompt manager preserves valid v6 customizations and migrates stale append
   assert.equal(stale.providers.chatgpt, 'DEFAULT PROVIDER\\nالإصدار: 2026-11-14-v6', 'stale provider appendices must be refreshed');
   assert.equal(stale.custom.length, 1, 'migration must preserve separately managed custom prompt entries');
 });
-test('prompt admin links to the four canonical standalone v5 files', function () {
+test('prompt admin links to the four canonical standalone v6 files', function () {
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
   assert.ok(promptAdmin.includes('prompts/2026-11-02-unified-v5/story-prompt-chatgpt.md'));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261114-arabic-translation-v6'));
   assert.ok(promptAdmin.includes('نسخة مستقلة كاملة'), 'prompt admin must explain that each provider file is standalone');
   assert.ok(!promptAdmin.includes('prompts/2026-10-23-unified-v4/'));
   ['story-prompt-chatgpt.md','story-prompt-claude.md','story-prompt-deepseek.md','story-prompt-gemini.md'].forEach(function(file){
-    assert.ok(fs.existsSync('khaledoon/prompts/2026-11-02-unified-v5/'+file), 'v5 prompt artifact must exist: '+file);
+    assert.ok(fs.existsSync('khaledoon/prompts/2026-11-02-unified-v5/'+file), 'v6 prompt artifact must exist: '+file);
   });
 });
 test('publisher duplicate-story guard normalizes actual whitespace', function () {
@@ -854,8 +854,8 @@ test('v5 prompt architecture uses standalone provider files and one shared refer
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
   assert.ok(admin.includes("var promptRoot='../khaledoon/prompts/2026-11-02-unified-v5/'"));
   assert.ok(!admin.includes('2026-10-23-unified-v4'));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
-  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261114-arabic-translation-v6'));
+  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261114-arabic-translation-v6'));
   assert.ok(workflow.includes('الإصدار: 2026-11-14-v6'));
   assert.ok(workflow.includes('## 0) وضعا التشغيل'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
