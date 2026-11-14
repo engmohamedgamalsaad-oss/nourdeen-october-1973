@@ -75,13 +75,13 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("u.searchParams.set('draft','1')"), 'the live story iframe must enter authenticated draft audio-review mode');
   assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js')"), 'the preview must load the shared audio review core');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js')"), 'the preview must mount the audio generation and listening controls');
-  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js')"), 'the preview must mount the ordered text-to-generation status flow');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261114-per-block-translation-1')"), 'the preview must mount the current per-block translation and audio status flow');
   assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261114-preview-listen-restore-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
   var readerHtml = fs.readFileSync('rebuild/reader.html', 'utf8');
   assert.ok(readerHtml.includes('arabic-source-provenance-1'), 'reader must load the Arabic translation provenance validator');
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   assert.ok(audioFlow.includes('validateTranslationAlignment') && audioFlow.includes('genButton.disabled = true'), 'non-Arabic audio generation must be blocked when its paired Arabic source is stale or unverified');
-  assert.ok(audioFlow.includes('localeGate.staleBlocks.indexOf(current) >= 0'), 'a stale translation blocks only its corresponding segment while aligned segments remain generatable');
+  assert.ok(audioFlow.includes("translationRecords[L + ':' + index]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment requires its own human approval before audio generation');
   assert.ok(readerHtml.includes('reader-audio-review.js?v=20261114-optional-audio-text-publish-1') && readerHtml.includes('reader-audio-flow.js?v=20261114-arabic-source-translation-gate-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
   assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
