@@ -452,8 +452,6 @@ async function saveReview(entry, decision, followupStatusNode, followupButton) {
     await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null, entry);
   }
   render();
-  // Once the last Arabic clip is accepted, English clips start queueing automatically.
-  autoQueueEnglish().catch(function () {});
 }
 function manifestUrl(lang) {
   return new URL('../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href).href;
@@ -1166,7 +1164,7 @@ function nextBlockIndexForLanguage(language) {
   for (var i = 0; i < ordered.length; i++) if (!accepted.has(ordered[i])) return ordered[i];
   return -1;
 }
-/* مقاطع الإنجليزية القابلة للنطق، وهل اكتملت مراجعة العربية (شرط بدء الإرسال التلقائي للإنجليزية). */
+/* مقاطع الإنجليزية القابلة للنطق، وهل اكتملت مراجعة العربية (شرط تفعيل زر توليد الإنجليزية). */
 function speakableIndexes(language) {
   var blocks = story && story.i18n && story.i18n[language] && story.i18n[language].blocks;
   var out = [];
@@ -1178,13 +1176,21 @@ function speakableIndexes(language) {
 function arabicReviewComplete() {
   return speakableIndexes('ar').length > 0 && nextBlockIndexForLanguage('ar') === -1;
 }
-/* بعد اكتمال العربية: كل مقطع إنجليزي يدخل الطابور كطلب مستقل. لا يُعاد إرسال مقطع له طلب أو قرار مراجعة. */
-async function autoQueueEnglish() {
+/* مقاطع الإنجليزية التي لم يُرسل لها طلب ولا لها قرار مراجعة بعد. */
+function englishUnsentIndexes() {
+  return speakableIndexes('en').filter(function (i) {
+    return !jobsByBlock[jobKey('en', i)] && !clipForBlock('en', i);
+  });
+}
+/* زر «توليد الإنجليزية»: كل مقطع إنجليزي يدخل الطابور كطلب مستقل. لا يُعاد إرسال مقطع له طلب أو قرار مراجعة. */
+async function queueAllEnglish() {
   if (englishAutoBusy || !story || !canWrite || reconcileBlocked || !arabicReviewComplete()) return;
   var indexes = speakableIndexes('en');
   if (!indexes.length) return;
   englishAutoBusy = true;
   englishAutoNote = '';
+  englishAutoTried = {};
+  renderEnglishList();
   try {
     await loadQueueStatus('en');
     for (var n = 0; n < indexes.length; n++) {
@@ -1254,10 +1260,19 @@ function renderEnglishList() {
     box.appendChild(note);
   } else if (!arabicReviewComplete()) {
     var wait = document.createElement('small');
-    text(wait, 'يبدأ الإرسال التلقائي للإنجليزية بعد اعتماد كل مقاطع العربية.');
+    text(wait, 'يُفعَّل زر توليد الإنجليزية بعد اعتماد كل مقاطع العربية.');
     box.appendChild(wait);
   }
   box.appendChild(rows);
+  // Final button: sends every English clip not yet queued, one independent job per block.
+  var unsent = englishUnsentIndexes();
+  var generateAll = iconButton('spark',
+    englishAutoBusy ? 'جارٍ إرسال المقاطع…' : 'توليد الإنجليزية (' + unsent.length + ' مقطع)',
+    'generate', function () { queueAllEnglish(); });
+  generateAll.id = 'kh-en-generate-all';
+  generateAll.style.marginTop = '10px';
+  generateAll.disabled = englishAutoBusy || !unsent.length || !arabicReviewComplete() || !canWrite || reconcileBlocked;
+  box.appendChild(generateAll);
 }
 function updateGenerationSummary() {
   var node = document.getElementById('kh-gen-summary');
@@ -1830,8 +1845,6 @@ async function initialize(nextStory) {
         'تعذر تحميل معاينة الصوت: ' + (audioError && audioError.message || audioError);
       render();
     }
-    // If Arabic is already fully accepted, queue every English clip (each as its own job).
-    autoQueueEnglish().catch(function () {});
   } catch (e) {
     initializing = false;
     var host = $('blocks');
