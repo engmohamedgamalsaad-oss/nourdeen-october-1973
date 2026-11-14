@@ -34,9 +34,21 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
       let manifestStatus = null;
       let audioFileStatus = null;
       let audioFileContentType = null;
+      let workerStatus = null;
+      let workerOnline = null;
+      let workerLastSeen = null;
       try {
         const response = await fetch('https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object/public/khaledoon-story-audio-public/history/ibn-sina/ar/manifest.json', { cache: 'no-store' });
         manifestStatus = response.status;
+        const workerResponse = await fetch('https://ypwprddkscnfblhftkeb.supabase.co/functions/v1/story-audio-worker', {
+          method: 'GET', headers: { apikey: 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn' }, cache: 'no-store'
+        });
+        workerStatus = workerResponse.status;
+        if (workerResponse.ok) {
+          const worker = await workerResponse.json();
+          workerOnline = worker.online;
+          workerLastSeen = worker.last_seen_at || null;
+        }
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data.segments) && data.segments[0]?.src) {
@@ -69,7 +81,7 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
         scriptSrc: script && script.src,
         playerExists: !!player,
         playerHidden: player ? player.hidden : null,
-        manifestStatus, audioFileStatus, audioFileContentType, manifest,
+        manifestStatus, audioFileStatus, audioFileContentType, workerStatus, workerOnline, workerLastSeen, manifest,
         playerText: player?.textContent?.slice(0, 300) || null
       };
     });
@@ -77,6 +89,8 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
     assert.equal(diagnostic.storyIdentity?.section, 'history', 'published story package should identify the history section');
     assert.equal(diagnostic.storyIdentity?.slug, 'ibn-sina', 'published story package slug must match the public audio folder');
     assert.equal(diagnostic.manifestStatus, 200, 'public Arabic manifest must be readable from the visitor page');
+    assert.equal(diagnostic.workerStatus, 200, 'the public worker-presence endpoint must allow browser CORS with the project API key');
+    assert.equal(typeof diagnostic.workerOnline, 'boolean', 'the worker-presence endpoint must return an online state');
     assert.ok([200, 206].includes(diagnostic.audioFileStatus), 'the first published MP3 must be publicly readable');
     assert.match(diagnostic.audioFileContentType || '', /audio\/mpeg/i, 'the published segment must be served as audio/mpeg');
     assert.equal(diagnostic.playerExists, true, 'the public audio player should be mounted');
