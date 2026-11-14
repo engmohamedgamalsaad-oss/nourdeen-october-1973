@@ -146,7 +146,7 @@ export function validateStory(s) {
       if (source.type === 'timeline') {
         const sourceRows = String(source.text || '').split('\n');
         const translatedRows = String(translated.text || '').split('\n');
-        const dateKey = row => (String(row || '').replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit))).match(/\\d+/g) || []).join('-');
+        const dateKey = row => (String(row || '').replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit))).match(/\d+/g) || []).join('-');
         if (sourceRows.length !== translatedRows.length || sourceRows.some((row, index) => {
           const sourceDate = dateKey(row), translatedDate = dateKey(translatedRows[index]);
           return !!sourceDate && sourceDate !== translatedDate;
