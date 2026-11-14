@@ -659,12 +659,22 @@ Deno.serve(async (req: Request) => {
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
 
-    // Gemini must hear the rejected MP3 itself; a text-only prompt cannot diagnose pronunciation.
-    const audioSrc = String(body.audio_src ?? "");
-    const audioChunkIndex = Number(body.chunk_index ?? 0);
-    if (!audioSrc.endsWith(".mp3") || !/^[A-Za-z0-9_-]+$/.test(audioSrc.slice(0, -4)) ||
-        !Number.isInteger(audioChunkIndex) || audioChunkIndex < 0 || audioChunkIndex > 50) {
-      return reply(400, { error: "لم يُرسل ملف الصوت المحدد للمراجعة؛ أعد تحميل المقطع وحاول مرة أخرى." });
+    // Resolve the rejected clip from the trusted private manifest. The preview UI
+    // may omit audio_src when its text panel is re-rendered; never make the user
+    // upload the MP3 again when the server already owns the staged audio.
+    const requestedAudioSrc = String(body.audio_src ?? "");
+    const requestedChunkIndex = Number(body.chunk_index ?? 0);
+    const rejectedAudioClips = Object.values(progressRow?.audio_review?.clips ?? {})
+      .filter((clip: any) => clip?.lang === "ar" && Number(clip?.block_index) === index &&
+        clip?.status === "rejected" && clip?.issue !== "audio_only");
+    const lastRejectedClip: any = rejectedAudioClips.length
+      ? rejectedAudioClips[rejectedAudioClips.length - 1] : null;
+    const rejectedChunkIndex = Number(lastRejectedClip?.chunk_index);
+    const safeRequestedAudioSrc = requestedAudioSrc.endsWith(".mp3") &&
+      /^[A-Za-z0-9_-]+$/.test(requestedAudioSrc.slice(0, -4));
+    if ((requestedAudioSrc && !safeRequestedAudioSrc) ||
+        !Number.isInteger(requestedChunkIndex) || requestedChunkIndex < 0 || requestedChunkIndex > 50) {
+      return reply(400, { error: "بيانات تحديد المقطع الصوتي غير صالحة؛ أعد تحميل المعاينة." });
     }
     const { data: audioManifestFile, error: audioManifestError } = await service.storage.from(BUCKET)
       .download(prefix + "/manifest.json");
@@ -674,14 +684,28 @@ Deno.serve(async (req: Request) => {
     let audioManifest: any;
     try { audioManifest = JSON.parse(await audioManifestFile.text()); }
     catch { return reply(422, { error: "ملف manifest الصوت الخاص غير صالح." }); }
-    const audioSegment = (audioManifest?.segments ?? []).find((segment: any) =>
+    const blockSegments = (audioManifest?.segments ?? []).filter((segment: any) =>
       Number(segment?.block_index) === index &&
-      Number(segment?.chunk_index || 0) === audioChunkIndex &&
-      segment?.src === audioSrc &&
-      segment?.speaker === source.block.speaker);
-    if (!audioSegment) {
-      return reply(409, { error: "ملف الصوت المرسل لا يطابق المتحدث والمقطع الحاليين؛ أعد تحميل المعاينة." });
+      segment?.speaker === source.block.speaker &&
+      typeof segment?.src === "string" &&
+      /^[A-Za-z0-9_-]+\.mp3$/.test(segment.src));
+    let audioSegment: any = null;
+    // The persisted rejection identifies the exact chunk; prefer it over a stale
+    // chunk-0 fallback passed by the re-rendered Gemini button.
+    if (lastRejectedClip && Number.isInteger(rejectedChunkIndex) && rejectedChunkIndex >= 0 && rejectedChunkIndex <= 50) {
+      audioSegment = blockSegments.find((segment: any) =>
+        Number(segment?.chunk_index || 0) === rejectedChunkIndex);
     }
+    if (!audioSegment && safeRequestedAudioSrc) {
+      audioSegment = blockSegments.find((segment: any) =>
+        Number(segment?.chunk_index || 0) === requestedChunkIndex &&
+        segment?.src === requestedAudioSrc);
+    }
+    if (!audioSegment && blockSegments.length === 1) audioSegment = blockSegments[0];
+    if (!audioSegment) {
+      return reply(409, { error: "لم أستطع مطابقة الصوت المرفوض مع المقطع الحالي. حدّث المعاينة ثم أعد المحاولة." });
+    }
+    const audioSrc = audioSegment.src;
     const { data: audioFile, error: audioDownloadError } = await service.storage.from(BUCKET)
       .download(prefix + "/" + audioSrc);
     if (audioDownloadError || !audioFile) {
@@ -694,8 +718,9 @@ Deno.serve(async (req: Request) => {
     const actualAudioHash = await sha256Hex(audioBytes);
     const manifestAudioHash = String(audioSegment.audio_sha256 ?? "").toLowerCase();
     const requestedAudioHash = String(body.audio_sha256 ?? "").toLowerCase();
+    const clientAudioMatches = safeRequestedAudioSrc && requestedAudioSrc === audioSrc;
     if (!manifestAudioHash || actualAudioHash !== manifestAudioHash ||
-        (requestedAudioHash && requestedAudioHash !== manifestAudioHash)) {
+        (clientAudioMatches && requestedAudioHash && requestedAudioHash !== manifestAudioHash)) {
       return reply(409, { error: "بصمة ملف الصوت لا تطابق النسخة المعروضة للمراجعة؛ أعد تحميل المقطع." });
     }
     const audioBase64 = encodeBase64Bytes(audioBytes);
