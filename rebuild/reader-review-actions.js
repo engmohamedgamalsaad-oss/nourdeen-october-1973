@@ -202,7 +202,7 @@ async function decide(isApprove){
  if(!draft||!draft.submission_id){message('لا يوجد رقم سجل مرتبط بهذه المعاينة. افتحها من لوحة الإدارة مرة أخرى.',true);return}
  if(isApprove){
   if(!window.KHStoryAudioReview){message('تعذر تحميل مدقق الصوت. أعد تحميل المعاينة؛ لا يمكن اعتمادها قبل التحقق من حالة الصوت.',true);return}
-  if(!window.KHStoryAudioReview.canApprove()){message(window.KHStoryAudioReview.gateSummary()||'راجع واعتمد كل المقاطع الصوتية باللغات الخمس أولًا.',true);return}
+  if(!window.KHStoryAudioReview.canApprove()){message(window.KHStoryAudioReview.gateSummary()||'راجع واعتمد كل المقاطع الصوتية العربية أولًا.',true);return}
  }
  var why=String(reason.value||'').trim();
  if(!isApprove&&!why){reason.style.display='block';reason.focus();message('سبب الرفض مطلوب.',true);return}

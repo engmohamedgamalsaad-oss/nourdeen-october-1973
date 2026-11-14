@@ -19,6 +19,7 @@ const GITHUB_TOKEN = Deno.env.get("GITHUB_PUBLISH_TOKEN") ?? "";
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
 const BUCKET = "khaledoon-audio-review";
 const PUBLIC_AUDIO_BUCKET = "khaledoon-story-audio-public";
+const SUPPORTED_AUDIO_LANGUAGES = ["ar", "en", "fr", "it", "de"];
 const OWNER = "engmohamedgamalsaad-oss";
 const REPO = "nourdeen-october-1973";
 const ALLOWED_ORIGIN = "https://engmohamedgamalsaad-oss.github.io";
@@ -200,7 +201,7 @@ function isSpeakableBlock(block: any): boolean {
 function storyFromSnapshot(snapshot: any, section: string, slug: string): any {
   if (!snapshot || typeof snapshot !== "object" || snapshot.section !== section || snapshot.slug !== slug) return null;
   const i18n: Record<string, any> = {};
-  for (const lang of ["ar", "en"]) {
+  for (const lang of SUPPORTED_AUDIO_LANGUAGES) {
     const blocks = snapshot.blocks?.[lang];
     if (!Array.isArray(blocks)) continue;
     if (blocks.length > 400) return null;
@@ -258,7 +259,7 @@ async function reconcilePlan(review: any, snap: any, manifests: Record<string, a
   };
 
   const newManifests: Record<string, any> = {};
-  for (const lang of ["ar", "en"]) {
+  for (const lang of SUPPORTED_AUDIO_LANGUAGES) {
     const manifest = manifests?.[lang];
     if (!manifest || !Array.isArray(manifest.segments) || !manifest.segments.length) continue;
     const blocks: any[] = snap?.i18n?.[lang]?.blocks ?? [];
@@ -389,14 +390,6 @@ Deno.serve(async (req: Request) => {
     if (serialized.length > 2_000_000) {
       return reply(413, { error: "سجل مراجعة الصوت أكبر من الحد المسموح." });
     }
-    const { data: previousRow, error: previousError } = await service.from("story_audio_reviews")
-      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
-    if (previousError) return reply(500, { error: "تعذر قراءة قرار الصوت السابق قبل تحديثه.", detail: previousError.message });
-    const previousReview = previousRow?.audio_review && typeof previousRow.audio_review === "object" ? previousRow.audio_review : {};
-    const newlyRejected = section === "history" && slug === "ibn-sina" &&
-      Object.entries(incoming.clips).some(([key, clip]: [string, any]) =>
-        clip?.lang === "ar" && Number(clip?.block_index) === 4 &&
-        clip?.status === "rejected" && previousReview?.clips?.[key]?.status !== "rejected");
     const audioReview = {
       ...incoming,
       version: 1,
@@ -405,23 +398,12 @@ Deno.serve(async (req: Request) => {
       audio_hashes: incoming.audio_hashes,
       speech_texts: incoming.speech_texts ?? {},
     };
-    // Rejecting a clip immediately removes the currently published story audio.
-    // Private staging files and the old manifest remain untouched for rollback.
-    if (newlyRejected) {
-      try {
-        for (const clip of Object.values(incoming.clips) as any[]) {
-          if (clip?.lang === "ar" && Number(clip.block_index) === 4 && clip.status === "rejected") {
-            await invalidatePublicClipAudio(service, section, slug, "ar", 4, Number(clip.chunk_index || 0));
-          }
-        }
-      } catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف إتاحة المقطع المنشور بعد الرفض." }); }
-    }
     const { error } = await service.from("story_audio_reviews").upsert(
       { section, slug, audio_review: audioReview },
       { onConflict: "section,slug" },
     );
     if (error) return reply(500, { error: "تعذر حفظ سجل مراجعة الصوت.", detail: error.message });
-    return reply(200, { success: true, audio_review: audioReview, public_audio_invalidated: newlyRejected });
+    return reply(200, { success: true, audio_review: audioReview, public_audio_invalidated: false });
   }
 
   if (body.action === "reconcile") {
@@ -431,7 +413,7 @@ Deno.serve(async (req: Request) => {
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (reviewReadError) return reply(500, { error: "تعذر قراءة سجل مراجعة الصوت.", detail: reviewReadError.message });
     const stored: Record<string, any> = {};
-    for (const lang of ["ar", "en"]) {
+    for (const lang of SUPPORTED_AUDIO_LANGUAGES) {
       const { data: file } = await service.storage.from(BUCKET).download(section + "/" + slug + "/" + lang + "/manifest.json");
       if (!file) continue;
       try { stored[lang] = JSON.parse(await file.text()); } catch { /* malformed manifest: leave it for the normal checks */ }
@@ -447,8 +429,7 @@ Deno.serve(async (req: Request) => {
         active_jobs: (activeJobs ?? []).length,
       });
     }
-    try { await invalidatePublicStoryAudio(service, section, slug); }
-    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
+    // Keep every previously published language live; a replacement is swapped only by publish_audio for that language.
     const { error: saveReviewError } = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: plan.review }, { onConflict: "section,slug" });
     if (saveReviewError) return reply(500, { error: "تعذر حفظ سجل المراجعة بعد المطابقة.", detail: saveReviewError.message });
@@ -555,7 +536,9 @@ Deno.serve(async (req: Request) => {
     if (reviewError) return reply(500, { error: "تعذر قراءة قرارات مراجعة الصوت.", detail: reviewError.message });
     const audioReview = reviewRow?.audio_review ?? {};
     const published = [];
-    for (const lang of ["ar", "en"]) {
+    const targetLanguage = String(body.language ?? "");
+    if (!SUPPORTED_AUDIO_LANGUAGES.includes(targetLanguage)) return reply(400, { error: "حدد لغة صحيحة للنشر: ar أو en أو fr أو it أو de." });
+    for (const lang of [targetLanguage]) {
       let source;
       try { source = await resolveStoryBlock(section, slug, lang, 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
@@ -1273,7 +1256,7 @@ Deno.serve(async (req: Request) => {
     if (reviewError) return reply(500, { error: "تعذر قراءة سجل المراجعة قبل تنظيف الصوت القديم.", detail: reviewError.message });
     const audioReview = reviewRow?.audio_review;
     const acceptedClip = audioReview?.clips?.[clipKey];
-    if (!acceptedClip || acceptedClip.status !== "accepted" || !["ar", "en"].includes(acceptedClip.lang)) {
+    if (!acceptedClip || acceptedClip.status !== "accepted" || !SUPPORTED_AUDIO_LANGUAGES.includes(acceptedClip.lang)) {
       return reply(409, { error: "لا يمكن حذف الصوت القديم قبل قبول المقطع البديل." });
     }
     const cleanup = acceptedClip.replacement_cleanup;
@@ -1339,6 +1322,27 @@ Deno.serve(async (req: Request) => {
       { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
     if (saveStateError) return reply(500, { error: "تم حذف الملف القديم لكن تعذر تسجيل حالة التنظيف.", detail: saveStateError.message });
     return reply(200, { success: true, cleaned: true, old_file_missing: true, new_file_verified: true, completed_at: acceptedClip.replacement_cleanup.completed_at });
+  }
+
+  if (body.action === "public_audio_status") {
+    const languages: Record<string, any> = {};
+    for (const lang of SUPPORTED_AUDIO_LANGUAGES) {
+      const path = section + "/" + slug + "/" + lang + "/manifest.json";
+      const { data: file, error } = await service.storage.from(PUBLIC_AUDIO_BUCKET).download(path);
+      if (error && !storageObjectNotFound(error)) {
+        return reply(500, { error: "تعذر قراءة حالة الصوت المنشور للغة " + lang + ".", detail: error.message });
+      }
+      if (!file) { languages[lang] = { published: false }; continue; }
+      let manifest: any;
+      try { manifest = JSON.parse(await file.text()); }
+      catch { return reply(422, { error: "manifest الصوت المنشور غير صالح للغة " + lang + "." }); }
+      if (manifest?.version !== 1 || manifest.section !== section || manifest.story !== slug ||
+          manifest.language !== lang || !Array.isArray(manifest.segments)) {
+        return reply(422, { error: "manifest الصوت المنشور لا يطابق الحكاية للغة " + lang + "." });
+      }
+      languages[lang] = { published: true, published_at: manifest.published_at ?? null, segments: manifest.segments.length };
+    }
+    return reply(200, { success: true, languages });
   }
 
   if (body.action === "manifest") {
