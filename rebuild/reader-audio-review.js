@@ -710,8 +710,14 @@ function renderGateBanner(banner) {
     banner.appendChild(partial);
   }
 }
-function canApprove() { return gate().ok; }
-window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate };
+/* قبول/رفض المعاينة (أعلى الصفحة) يتفعّلان بعد اعتماد العربية وانتهاء توليد كل مقاطع الإنجليزية (decisionState). */
+function canApprove() { return decisionState().ready; }
+window.KHStoryAudioReview = {
+  canApprove: canApprove,
+  gateSummary: function () { return decisionState().message; },
+  gate: gate,
+  decision: decisionState
+};
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
 async function play(entry, button, forceRestart) {
   if (!entry || !entry.src) return;
@@ -1182,6 +1188,49 @@ function englishUnsentIndexes() {
     return !jobsByBlock[jobKey('en', i)] && !clipForBlock('en', i);
   });
 }
+/* عدّاد توليد الإنجليزية: done = مقاطع اكتمل توليدها (أو اعتُمدت)، والباقي بحسب حالته. */
+function englishProgress() {
+  var indexes = speakableIndexes('en');
+  var p = { total: indexes.length, done: 0, processing: 0, pending: 0, failed: 0, none: 0, regen: 0 };
+  indexes.forEach(function (i) {
+    var view = engineView('en', i);
+    if (view.state === 'accepted') p.done++;
+    else if (view.state === 'completed') { if (view.canResend) p.regen++; else p.done++; }
+    else if (view.state === 'processing') p.processing++;
+    else if (view.state === 'pending') p.pending++;
+    else if (view.state === 'failed') p.failed++;
+    else p.none++;
+  });
+  return p;
+}
+/* جاهزية قرار المعاينة (أعلى الصفحة): العربية معتمدة بالكامل + كل مقاطع الإنجليزية اكتمل توليدها. */
+function decisionState() {
+  var p = englishProgress();
+  var percent = p.total ? Math.round(p.done / p.total * 100) : 0;
+  if (!initialized) {
+    return { ready: false, percent: 0, progress: p, pill: 'جارٍ فحص الصوت…',
+      message: 'جارٍ تحميل حالة مراجعة الصوت؛ لن يتاح قبول المعاينة أو رفضها قبل اكتمال الفحص.' };
+  }
+  if (!arabicReviewComplete()) {
+    return { ready: false, percent: 0, progress: p, pill: 'العربية: المراجعة غير مكتملة',
+      message: 'يُفعَّل قبول المعاينة ورفضها بعد اعتماد كل مقاطع العربية، ثم توليد الإنجليزية حتى الانتهاء.' };
+  }
+  if (!p.total) {
+    return { ready: false, percent: 0, progress: p, pill: 'لا توجد مقاطع إنجليزية',
+      message: 'لا توجد مقاطع إنجليزية قابلة للتوليد في هذه الحكاية.' };
+  }
+  if (p.done === p.total) {
+    return { ready: true, percent: 100, progress: p, pill: 'تم الانتهاء ✓ توليد الإنجليزية ' + p.done + '/' + p.total,
+      message: 'تم الانتهاء: اكتمل توليد كل مقاطع الإنجليزية (' + p.done + '/' + p.total + ') — يمكنك الآن قبول المعاينة أو رفضها.' };
+  }
+  var active = p.processing + p.pending;
+  var note;
+  if (active > 0) note = 'جارٍ توليد الإنجليزية تلقائيًا: تم ' + p.done + ' من ' + p.total + ' (قيد التوليد ' + p.processing + ' · بالطابور ' + p.pending + ').';
+  else if (p.failed > 0) note = 'فشل توليد ' + p.failed + ' مقطع إنجليزي؛ راجع قسم الإنجليزية. تم ' + p.done + ' من ' + p.total + '.';
+  else if (p.regen > 0) note = p.regen + ' مقطع إنجليزي مرفوض وينتظر إعادة التوليد. تم ' + p.done + ' من ' + p.total + '.';
+  else note = 'اضغط «توليد الإنجليزية» لإرسال المقاطع إلى الطابور؛ يُفعَّل القبول والرفض عند انتهاء التوليد (' + p.done + '/' + p.total + ').';
+  return { ready: false, percent: percent, progress: p, pill: 'الإنجليزية: ' + p.done + '/' + p.total, message: note };
+}
 /* زر «توليد الإنجليزية»: كل مقطع إنجليزي يدخل الطابور كطلب مستقل. لا يُعاد إرسال مقطع له طلب أو قرار مراجعة. */
 async function queueAllEnglish() {
   if (englishAutoBusy || !story || !canWrite || reconcileBlocked || !arabicReviewComplete()) return;
@@ -1250,6 +1299,44 @@ function renderEnglishList() {
     }
     rows.appendChild(rowEl);
   });
+  // Live counter: how many English clips are finished, updating automatically (polling) until all are done.
+  var prog = englishProgress(), decision = decisionState();
+  var counter = document.createElement('div');
+  counter.className = 'kh-meter-row';
+  counter.dataset.kind = 'accepted';
+  var counterCap = document.createElement('div');
+  counterCap.className = 'kh-meter-cap';
+  var counterLabel = document.createElement('span');
+  text(counterLabel, 'تقدّم توليد الإنجليزية');
+  var counterValue = document.createElement('strong');
+  text(counterValue, prog.done + '/' + prog.total);
+  counterCap.append(counterLabel, counterValue);
+  var counterBar = document.createElement('div');
+  counterBar.className = 'kh-meter';
+  counterBar.setAttribute('role', 'progressbar');
+  counterBar.setAttribute('aria-label', 'تقدّم توليد الإنجليزية');
+  counterBar.setAttribute('aria-valuemin', '0');
+  counterBar.setAttribute('aria-valuemax', String(prog.total));
+  counterBar.setAttribute('aria-valuenow', String(prog.done));
+  var counterFill = document.createElement('span');
+  counterFill.style.width = (prog.total ? Math.round(prog.done / prog.total * 100) : 0) + '%';
+  counterBar.appendChild(counterFill);
+  counter.append(counterCap, counterBar);
+  var counterNote = document.createElement('div');
+  counterNote.id = 'kh-en-progress-note';
+  counterNote.setAttribute('role', 'status');
+  counterNote.setAttribute('aria-live', 'polite');
+  if (decision.ready) {
+    text(counterNote, '✅ تم الانتهاء — اكتمل توليد كل المقاطع الإنجليزية، وزرا «قبول المعاينة» و«رفض المعاينة» أعلى الصفحة أصبحا مفعّلين.');
+    counterNote.style.fontWeight = '800';
+  } else if (prog.total > 0 && prog.done === prog.total) {
+    text(counterNote, 'اكتمل توليد الإنجليزية — بانتظار اعتماد كل مقاطع العربية لتفعيل القبول والرفض.');
+  } else if (prog.processing + prog.pending > 0) {
+    text(counterNote, 'جارٍ التوليد تلقائيًا… قيد التوليد ' + prog.processing + ' · بالطابور ' + prog.pending + ' · يتحدّث العدّاد كل بضع ثوانٍ حتى الانتهاء.');
+  } else if (prog.failed > 0) {
+    text(counterNote, 'فشل توليد ' + prog.failed + ' مقطع؛ التقدّم متوقف عند ' + prog.done + '/' + prog.total + '.');
+  }
+  box.append(counter, counterNote);
   var head = document.createElement('div');
   text(head, 'معتمد ' + counts.accepted + ' · مكتمل ' + counts.completed + ' · قيد التوليد ' + counts.processing +
     ' · بالطابور ' + counts.pending + ' · فاشل ' + counts.failed + ' · لم يُرسل ' + counts.none);
@@ -1283,6 +1370,8 @@ function updateGenerationSummary() {
   var accepted = Object.values(review.clips || {}).filter(function (x) { return x && x.lang === language && x.status === 'accepted'; }).length;
   text(node, 'معتمد ' + accepted + '/' + total + ' · قيد التوليد ' + c.processing + ' · بالطابور ' + c.pending + ' · مكتمل ' + c.completed + ' · فاشل ' + c.failed);
   renderEnglishList();
+  // Let the top-of-page approve/reject panel re-check readiness after every status refresh.
+  try { document.dispatchEvent(new CustomEvent('kh-audio-review-updated')); } catch (e) {}
 }
 function renderGenerationControls(banner) {
   if (!story || !['ar', 'en'].includes(document.documentElement.lang)) return;
@@ -1834,7 +1923,9 @@ async function initialize(nextStory) {
     initialized = true;
     initializing = false;
     render();
-    try { await loadQueueStatus(document.documentElement.lang === 'en' ? 'en' : 'ar'); } catch (queueError) {}
+    // Load both queues so the English counter is correct whichever language the page shows.
+    try { await loadQueueStatus('ar'); } catch (queueError) {}
+    try { await loadQueueStatus('en'); } catch (queueError) {}
     try {
       await loadManifests();
       render();
