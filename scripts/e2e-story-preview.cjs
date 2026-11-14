@@ -180,9 +180,10 @@ async function main() {
   assert.equal(await reviewer.locator('#story-quiz-app .story-quiz-question').count(), 1, 'shared reader preview must use the same one-question-at-a-time quiz');
   for (const lang of ['en', 'fr', 'it', 'de']) {
     await reviewer.locator('[data-lang="' + lang + '"]').click();
-    await reviewer.waitForFunction(expected => document.documentElement.lang === expected, lang);
-    assert.equal(await reviewer.locator('#title').textContent(), story.i18n[lang].title, 'shared reader preview must localize ' + lang);
-    assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', lang + ' preview must use LTR');
+    await reviewer.waitForFunction(expected => window.__KH_AUDIO_REVIEW_LANGUAGE === expected, lang);
+    assert.equal(await reviewer.locator('html').getAttribute('lang'), 'ar', 'admin preview page locale must remain Arabic while audio language changes');
+    assert.equal(await reviewer.locator('#title').textContent(), story.i18n.ar.title, 'admin preview story text must remain Arabic while audio language changes');
+    assert.equal(await reviewer.locator('html').getAttribute('dir'), 'rtl', 'admin preview direction must remain RTL');
   }
   await reviewer.locator('[data-lang="en"]').click();
   await reviewer.screenshot({ path: path.join(artifactDir, 'story-package-review-en.png'), fullPage: true, animations: 'disabled' });
