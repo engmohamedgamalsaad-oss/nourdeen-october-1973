@@ -94,12 +94,19 @@ export function validateStory(s) {
     languageObjectCheck(s.i18n, 'i18n', out);
     for (const lang of LANGUAGES) {
       const t = s.i18n[lang];
-      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'], 'i18n.' + lang, out)) continue;
+      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'source_ar_title', 'source_ar_subtitle', 'source_ar_summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'], 'i18n.' + lang, out)) continue;
       for (const key of ['title', 'subtitle', 'summary']) if (!nonempty(t[key])) out.push('i18n.' + lang + '.' + key + ' required');
+      if (lang !== 'ar') {
+        const arabicLocale = s.i18n?.ar || {};
+        for (const key of ['title', 'subtitle', 'summary']) {
+          const snapshotKey = 'source_ar_' + key;
+          if (t[snapshotKey] !== arabicLocale[key]) out.push('i18n.' + lang + '.' + snapshotKey + ' is stale or missing; refresh this localized field from the current Arabic source.');
+        }
+      }
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
         const label = 'i18n.' + lang + '.blocks[' + i + ']';
-        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after', 'heading', 'source_ar_text'], label, out)) continue;
+        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after', 'heading', 'source_ar_text', 'source_ar_heading'], label, out)) continue;
         if (!['paragraph', 'did_you_know', 'science_note', 'timeline'].includes(b.type)) out.push(label + '.type invalid');
         if (Object.hasOwn(b, 'heading') && !nonempty(b.heading)) out.push(label + '.heading must be a non-empty string when provided');
         if (b.type === 'timeline' && !(typeof b.text === 'string' && b.text.split('\n').every(line => /\S.*\s—\s\S/.test(line)))) out.push(label + '.text must be lines of "year — event" for a timeline');
@@ -124,14 +131,21 @@ export function validateStory(s) {
       if (translated.speaker !== source.speaker) out.push(label + '.speaker must match the corresponding Arabic block.');
       if (Object.hasOwn(source, 'heading') !== Object.hasOwn(translated, 'heading')) out.push(label + '.heading must be present in the same blocks as Arabic.');
       if ((source.image_after || '') !== (translated.image_after || '')) out.push(label + '.image_after must match the corresponding Arabic block.');
-      if (Object.hasOwn(translated, 'source_ar_text') && translated.source_ar_text !== source.text) {
-        out.push(label + '.source_ar_text is stale: regenerate this translation from the current approved Arabic block.');
+      if (translated.source_ar_text !== source.text) {
+        out.push(label + '.source_ar_text is stale or missing: regenerate this translation from the current approved Arabic block.');
+      }
+      if (Object.hasOwn(source, 'heading') && translated.source_ar_heading !== source.heading) {
+        out.push(label + '.source_ar_heading is stale or missing: refresh the translated heading from Arabic.');
+      }
+      if (source.type === 'timeline') {
+        const sourceRows = String(source.text || '').split('\\n');
+        const translatedRows = String(translated.text || '').split('\\n');
+        if (sourceRows.length !== translatedRows.length || sourceRows.some((row, index) => row.split(' — ')[0] !== String(translatedRows[index] || '').split(' — ')[0])) {
+          out.push(label + '.timeline rows and year/date labels must align with Arabic.');
+        }
       }
     }
-    const hasAnyBaseline = translatedBlocks.some(block => Object.hasOwn(block || {}, 'source_ar_text'));
-    if (hasAnyBaseline && translatedBlocks.some(block => !Object.hasOwn(block || {}, 'source_ar_text'))) {
-      out.push('i18n.' + lang + '.blocks must include source_ar_text for every block once provenance tracking is enabled.');
-    }
+
   }
 
   // Optional legacy metadata is preserved per locale. A missing translation is
