@@ -331,7 +331,7 @@
       var manifest = loaded.manifest;
       manifestUrl = loaded.url;
       if (!manifest || manifest.version !== 1 || manifest.section !== story.section || manifest.story !== story.slug || manifest.language !== lang || !Array.isArray(manifest.segments)) throw new Error('Invalid audio manifest');
-      if (manifest.segments.some(function (segment) { return !validPublicSegment(segment) || !/^[A-Za-z0-9_-]+\\.mp3$/.test(String(segment.src || '')); })) throw new Error('Audio manifest does not match the approved voices');
+      if (manifest.segments.some(function (segment) { return !validPublicSegment(segment) || !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src || '')); })) throw new Error('Audio manifest does not match the approved voices');
       var nextQueue = manifest.segments.map(function (segment) {
         return {
           block_index: segment.block_index,
@@ -343,12 +343,15 @@
       if (!nextQueue.length) throw new Error('Empty audio manifest');
       if (thisLoad !== manifestRun) return;
       queue = nextQueue;
+      delete host.dataset.manifestError;
       host.hidden = false;
       manifestState = 'ready';
       if (mode === 'idle') status.textContent = '';
-    }).catch(function () {
+    }).catch(function (error) {
       if (thisLoad !== manifestRun) return;
       queue = [];
+      host.dataset.manifestError = String(error && error.message || error || 'unknown');
+      console.error('[Khaledoon audio] Unable to load the published story manifest:', error);
       host.hidden = true;
       manifestState = 'failed';
       status.textContent = ui.noVoice;
