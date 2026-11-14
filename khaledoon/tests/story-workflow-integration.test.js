@@ -65,7 +65,7 @@ test('new stories in every section keep audio-text review separate from optional
   assert.ok(admin.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October must expose the same five-language text review UI');
   assert.ok(admin.includes('window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review'), 'October audio review metadata must not be excluded from the shared review prompt');
   assert.ok(!readerReviewActions.includes('window.KHStoryAudioReview.canApprove()'), 'written preview approval must not depend on audio generation or listening');
-  assert.ok(readerReviewActions.includes('يمكن اعتماد ونشر النص دون صوت'), 'preview must explain that written publication is independent from audio');
+  assert.ok(readerReviewActions.includes('النص قابل للنشر دون صوت'), 'preview must explain that written publication is independent from audio');
   assert.ok(readerReviewActions.includes('meta=window.KHWorkflow.markApproved'), 'the normal human preview approval remains required before written publication');
   assert.ok(audioWorker.includes('provider: "omnivoice"') && audioWorker.includes('VoiceTut Egyptian Tashkeel'), 'the persistent VoiceTut worker must create the active audio manifests');
   assert.ok(audioWorker.includes('story-audio-jobs') || audioWorker.includes('claim'), 'the unified worker must consume queued audio jobs rather than the retired batch generator');
