@@ -1,0 +1,51 @@
+/* Khaledoon — layered steps inside each audio-review block (loaded by reader-audio-flow.js) */
+
+/* شرائح الحالة الأربع أصبحت أزرارًا تفتح خطوتها */
+.kh-flow-box .kh-flowbar{gap:6px}
+.kh-flow-box .kh-chip-item{list-style:none;margin:0;padding:0;min-width:0}
+.kh-flow-box button.kh-chip{width:100%;appearance:none;font:inherit;color:inherit;text-align:start;background:rgba(255,255,255,.03);cursor:pointer;transition:transform .12s ease,background .2s ease,border-color .2s ease}
+.kh-flow-box button.kh-chip:hover{background:rgba(194,157,93,.14);transform:translateY(-1px)}
+.kh-flow-box button.kh-chip:focus-visible{outline:2px solid #d8b878;outline-offset:2px}
+.kh-flow-box .kh-chip[data-state="warn"]{border-color:rgba(235,190,90,.7)}
+.kh-flow-box .kh-chip[data-state="na"]{opacity:.55}
+
+/* الخطوات */
+.kh-flow-body{display:grid;gap:10px;padding:0 12px 14px}
+.kh-step{border:1px solid rgba(194,157,93,.28);border-radius:13px;background:rgba(255,255,255,.025);overflow:hidden}
+.kh-step[data-state="done"]{border-color:rgba(90,190,135,.42)}
+.kh-step[data-state="fail"]{border-color:rgba(220,85,75,.68)}
+.kh-step[data-state="warn"],.kh-step[data-state="busy"],.kh-step[data-state="wait"]{border-color:rgba(210,170,90,.68)}
+.kh-step>summary{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;list-style:none}
+.kh-step>summary::-webkit-details-marker{display:none}
+.kh-step>summary::after{content:"▾";opacity:.55;transition:transform .2s ease}
+.kh-step:not([open])>summary::after{transform:rotate(90deg)}
+.kh-step-num{display:inline-grid;place-items:center;flex:none;width:26px;height:26px;border-radius:50%;background:rgba(194,157,93,.18);color:#d8b878;font-weight:900;font-size:.85rem}
+.kh-step[data-state="done"] .kh-step-num{background:rgba(90,190,135,.22);color:#7fd6a5}
+.kh-step[data-state="fail"] .kh-step-num{background:rgba(220,85,75,.22);color:#ffb4ad}
+.kh-step-label{font-weight:800}
+.kh-step-state{margin-inline-start:auto;font-size:.8rem;opacity:.9;text-align:end}
+.kh-step-body{display:grid;gap:12px;padding:2px 13px 14px}
+.kh-step-body>.kh-audio-review-controls{margin:0}
+
+/* طبقات ثانوية مطوية */
+.kh-sub{border:1px dashed rgba(255,255,255,.18);border-radius:10px}
+.kh-sub>summary{padding:8px 11px;cursor:pointer;font-size:.86rem;opacity:.92}
+.kh-sub[open]>summary{border-bottom:1px dashed rgba(255,255,255,.14)}
+.kh-sub>*:not(summary){margin:10px 11px}
+
+/* بيانات كل خطوة */
+.kh-kv{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;font-size:.88rem}
+.kh-kv-k{opacity:.7}
+.kh-kv-v{font-weight:700;overflow-wrap:anywhere}
+.kh-orig-text,.kh-follow-text{margin:0;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
+.kh-follow-label{font-size:.8rem;font-weight:800;color:#d8b878}
+.kh-muted{margin:0;opacity:.75;line-height:1.7}
+.kh-job-data{display:grid;gap:6px}
+
+@media(max-width:680px){
+ .kh-step>summary{flex-wrap:wrap}
+ .kh-step-state{flex-basis:100%;margin-inline-start:0;text-align:start}
+ .kh-flow-body{padding-inline:8px}
+ .kh-step-body{padding-inline:10px}
+}
+@media (prefers-reduced-motion:reduce){.kh-flow-box button.kh-chip,.kh-step>summary::after{transition:none}}
