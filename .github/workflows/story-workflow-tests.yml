@@ -71,6 +71,10 @@ jobs:
         if: ${{ !cancelled() }}
         timeout-minutes: 5
         run: node scripts/e2e-story-preview.cjs
+      - name: Verify published Arabic audio on the public Ibn Sina page
+        if: ${{ !cancelled() }}
+        timeout-minutes: 5
+        run: node scripts/e2e-public-story-audio.cjs
       - name: Run mocked headless preview tests
         if: ${{ !cancelled() }}
         timeout-minutes: 5
