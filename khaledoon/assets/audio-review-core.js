@@ -294,7 +294,8 @@ function validateTranslationAlignment(story, language) {
         (Object.prototype.hasOwnProperty.call(a, 'heading') && b.source_ar_heading !== a.heading)) && stale.indexOf(i) < 0) stale.push(i);
     if (a.type === 'timeline') {
       var arRows = String(a.text || '').split('\n'), localRows = String(b.text || '').split('\n');
-      if ((arRows.length !== localRows.length || arRows.some(function (row, rowIndex) { return row.split(' — ')[0] !== String(localRows[rowIndex] || '').split(' — ')[0]; })) && stale.indexOf(i) < 0) stale.push(i);
+      function timelineDateKey(row) { return (String(row || '').replace(/[٠-٩]/g, function (digit) { return String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)); }).match(/\\d+/g) || []).join('-'); }
+      if ((arRows.length !== localRows.length || arRows.some(function (row, rowIndex) { var sourceDate = timelineDateKey(row), translatedDate = timelineDateKey(localRows[rowIndex]); return !!sourceDate && sourceDate !== translatedDate; })) && stale.indexOf(i) < 0) stale.push(i);
     }
   }
   if (stale.length) {
