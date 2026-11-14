@@ -105,6 +105,7 @@
       status.dataset.state = r.status || "missing";
       approve.disabled = !String(textarea.value || "").trim();
     }
+    textarea.addEventListener("input", paintStatus);
     async function saveDecision(decision) {
       var st = story(), ar = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks && st.i18n.ar.blocks[index];
       if (!ar || !ar.text) throw new Error("النص العربي المقابل غير موجود.");
@@ -126,6 +127,7 @@
         translationRecords[key] = result.translation;
         textarea.value = result.translation.translation_text || "";
         paintStatus();
+        document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
       } catch (e) { status.textContent = e.message || "تعذر تجهيز الترجمة."; }
       finally { generate.disabled = false; }
     });
