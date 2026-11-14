@@ -392,7 +392,7 @@ function installAudioReview(doc){
  }
  function addScript(path){
   return new Promise(function(resolve,reject){
-   var script=doc.createElement('script');var scriptUrl=new URL(path,location.href);scriptUrl.searchParams.set('v','20261114-arabic-source-provenance-1');script.src=scriptUrl.href;script.async=false;
+   var script=doc.createElement('script');var scriptUrl=new URL(path,location.href);scriptUrl.searchParams.set('v','20261114-preview-listen-restore-1');script.src=scriptUrl.href;script.async=false;
    script.onload=function(){resolve()};script.onerror=function(){reject(new Error('تعذر تحميل أداة '+path))};doc.body.appendChild(script);
   });
  }
