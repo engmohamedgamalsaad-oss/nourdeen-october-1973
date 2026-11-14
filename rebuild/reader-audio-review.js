@@ -4,7 +4,7 @@ var params = new URLSearchParams(location.search);
 if (params.get('draft') !== '1') return;
 var SCRIPT_SRC = document.currentScript && document.currentScript.src ? document.currentScript.src : location.href;
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
-var REQUIRED_LANGS = ['ar', 'en'];
+var REQUIRED_LANGS = ['ar'];
 var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الفرنسية', it: 'الإيطالية', de: 'الألمانية' };
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
@@ -17,6 +17,7 @@ var canWrite = false, manifestLoadFailure = false, initialized = false, initiali
 var pronunciationReport = null, pronunciationReportStatus = ''; 
 var initialArabicStageAttempted = false;
 var speechTexts = {}, speechTextBusy = {}, speechTextDirty = {};
+var publishedAudioStatus = {};
 var loadedAudio = {};
 var activeControl = null;
 var reconcileNotice = '', reconcileBlocked = false;
@@ -241,7 +242,7 @@ var SNAPSHOT_ACTIONS = ['enqueue', 'prepare_speech_text', 'speech_text_save', 'p
 function storySnapshot() {
   if (!story || !story.i18n) return null;
   var blocks = {};
-  ['ar', 'en'].forEach(function (lang) {
+  LANGS.forEach(function (lang) {
     var localized = story.i18n[lang];
     if (localized && Array.isArray(localized.blocks)) {
       blocks[lang] = localized.blocks.map(function (b) {
@@ -598,20 +599,21 @@ async function loadManifests() {
     });
   });
 }
-function gate() {
+function languageGate(language) {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  var requiredEntries = entries.filter(function (entry) { return REQUIRED_LANGS.indexOf(entry.lang) >= 0; });
-  var g = core.evaluateFiveLanguageGate(manifests, requiredEntries, review, readyByKey, played, REQUIRED_LANGS);
-  var stale = 0, gaps = 0;
-  REQUIRED_LANGS.forEach(function (lang) {
-    stale += (manifestStale[lang] || []).length;
-    gaps += (manifestGaps[lang] || []).length;
-  });
+  if (!LANGS.includes(language)) return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
+  if (manifestErrors[language] && !manifestMissing[language]) {
+    return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
+  }
+  var languageEntries = entries.filter(function (entry) { return entry.lang === language; });
+  var g = core.evaluateFiveLanguageGate(manifests, languageEntries, review, readyByKey, played, [language]);
+  var stale = (manifestStale[language] || []).length;
+  var gaps = (manifestGaps[language] || []).length;
   g.staleBlocks = stale; g.uncoveredBlocks = gaps;
   if (stale || gaps) g.ok = false;
   return g;
 }
+function gate() { return languageGate('ar'); }
 function gateSummary() {
   var g = gate();
   if (g.loading) return 'جارٍ تحميل وفحص ملفات الصوت؛ لن يتاح اعتماد المعاينة قبل اكتمال الفحص.';
@@ -657,9 +659,10 @@ function renderGateBanner(banner) {
     banner.appendChild(notice);
   }
   if (!entries.length) return;
-  var total = entries.length;
-  var ready = entries.filter(function (entry) { return readyByKey[entry.key] === 'ready'; }).length;
-  var accepted = entries.filter(function (entry) {
+  var requiredEntries = entries.filter(function (entry) { return entry.lang === 'ar'; });
+  var total = requiredEntries.length;
+  var ready = requiredEntries.filter(function (entry) { return readyByKey[entry.key] === 'ready'; }).length;
+  var accepted = requiredEntries.filter(function (entry) {
     var clip = review.clips[entry.key];
     return clip && clip.status === 'accepted';
   }).length;
@@ -697,21 +700,24 @@ function renderGateBanner(banner) {
       var clip = review.clips[entry.key];
       return clip && clip.status === 'accepted';
     }).length;
+    var langGate = languageGate(lang);
     var chip = document.createElement('span');
     chip.className = 'kh-lang-chip';
-    chip.dataset.state = !list.length ? 'none' : (acc === list.length ? 'done' : 'part');
-    text(chip, LANG_NAMES[lang] + ' ' + (list.length ? acc + '/' + list.length : '—'));
+    chip.dataset.state = langGate.ok ? 'done' : (langGate.missingLanguages ? 'none' : 'part');
+    var label = list.length ? acc + '/' + list.length : (manifests[lang] ? 'قيد المراجعة' : 'لم تُجهّز');
+    if (publishedAudioStatus[lang] && publishedAudioStatus[lang].published) label += ' · منشور';
+    text(chip, LANG_NAMES[lang] + ' ' + label);
     chips.appendChild(chip);
   });
   banner.appendChild(chips);
   if (g.missingLanguages || g.loadError) {
     var partial = document.createElement('small');
-    text(partial, 'هذه الأعداد تخص ملفات اللغات التي أمكن تحميلها فقط؛ الإجمالي النهائي لا يكتمل قبل توفر manifests اللغات الخمس.');
+    text(partial, 'عداد الاعتماد الرئيسي يخص العربية فقط؛ لكل لغة إضافية مراجعة ونشر مستقلان.');
     banner.appendChild(partial);
   }
 }
 function canApprove() { return gate().ok; }
-window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate };
+window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate, languageGate: languageGate };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
 async function play(entry, button, forceRestart) {
   if (!entry || !entry.src) return;
@@ -1167,36 +1173,61 @@ function updateGenerationSummary() {
   var accepted = Object.values(review.clips || {}).filter(function (x) { return x && x.lang === language && x.status === 'accepted'; }).length;
   text(node, 'معتمد ' + accepted + '/' + total + ' · قيد التوليد ' + c.processing + ' · بالطابور ' + c.pending + ' · مكتمل ' + c.completed + ' · فاشل ' + c.failed);
 }
+async function loadPublicAudioStatus() {
+  if (!story) return;
+  var result = await audioAssetsRequest({ action: 'public_audio_status', section: story.section, slug: story.slug });
+  publishedAudioStatus = result && result.languages && typeof result.languages === 'object' ? result.languages : {};
+}
 function renderGenerationControls(banner) {
-  if (!story || !['ar', 'en'].includes(document.documentElement.lang)) return;
+  if (!story) return;
   var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls kh-audio-generation-controls';
   var title = document.createElement('strong'); title.className = 'kh-gen-title';
-  text(title, '🎙️ حالة التوليد — VoiceTut');
+  text(title, '🌐 استكمال اللغات — نشر مستقل لكل لغة');
   var summary = document.createElement('span'); summary.id = 'kh-gen-summary'; summary.className = 'kh-audio-review-state';
-  var status = document.createElement('span'); status.className = 'kh-audio-review-state';
-  text(status, generationMessage);
-  var publishButton = document.createElement('button');
-  publishButton.type = 'button';
-  publishButton.className = 'kh-audio-publish-button';
-  publishButton.textContent = 'نشر الصوت المعتمد على صفحة الحكاية';
-  publishButton.disabled = !gate().ok || generationBusy;
-  publishButton.addEventListener('click', async function () {
-    if (!gate().ok || generationBusy) return;
-    publishButton.disabled = true;
-    text(status, 'جارٍ نشر المقاطع المعتمدة للعربية والإنجليزية…');
-    try {
-      var result = await audioAssetsRequest({ action: 'publish_audio', section: story.section, slug: story.slug });
-      if (!result || result.success !== true || result.published !== true) throw new Error('لم يؤكد الخادم نشر حزمة الصوت.');
-      generationMessage = 'تم نشر الصوت المعتمد للعربية والإنجليزية على صفحة الحكاية.';
-      text(status, generationMessage);
-    } catch (error) {
-      text(status, 'تعذر نشر الصوت: ' + (error && error.message || error));
-    } finally {
-      publishButton.disabled = !gate().ok;
-    }
+  panel.append(title, summary);
+  LANGS.forEach(function (language) {
+    var row = document.createElement('div'); row.className = 'kh-language-publish-row';
+    row.dataset.lang = language;
+    var label = document.createElement('strong'); text(label, LANG_NAMES[language]);
+    var state = document.createElement('span'); state.className = 'kh-audio-review-state';
+    var langGate = languageGate(language);
+    var published = publishedAudioStatus[language] && publishedAudioStatus[language].published === true;
+    if (published && langGate.ok) text(state, 'منشور — توجد نسخة معتمدة أحدث جاهزة للتحديث.');
+    else if (published) text(state, 'منشور حاليًا — النسخة المنشورة محفوظة حتى اعتماد البديل.');
+    else if (langGate.ok) text(state, 'كل المقاطع جاهزة ومعتمدة — متاح النشر.');
+    else if (langGate.missingLanguages) text(state, 'لم تُجهّز ملفات الصوت بعد.');
+    else if (langGate.loadError) text(state, 'تعذر التحقق من هذه اللغة.');
+    else text(state, 'قيد التجهيز أو المراجعة.');
+    var publishButton = document.createElement('button');
+    publishButton.type = 'button';
+    publishButton.className = 'kh-audio-publish-button';
+    publishButton.dataset.lang = language;
+    publishButton.textContent = published ? 'تحديث الصوت المنشور' : 'نشر صوت ' + LANG_NAMES[language];
+    publishButton.disabled = !langGate.ok || generationBusy;
+    publishButton.addEventListener('click', async function () {
+      if (!languageGate(language).ok || generationBusy) return;
+      generationBusy = true;
+      publishButton.disabled = true;
+      text(state, 'جارٍ نشر صوت ' + LANG_NAMES[language] + ' فقط…');
+      try {
+        var result = await audioAssetsRequest({ action: 'publish_audio', section: story.section, slug: story.slug, language: language });
+        if (!result || result.success !== true || result.published !== true ||
+            !Array.isArray(result.languages) || !result.languages.some(function (item) { return item.language === language; })) {
+          throw new Error('لم يؤكد الخادم نشر صوت هذه اللغة.');
+        }
+        await loadPublicAudioStatus();
+        render();
+      } catch (error) {
+        text(state, 'تعذر نشر اللغة: ' + (error && error.message || error));
+        publishButton.disabled = !languageGate(language).ok;
+      } finally {
+        generationBusy = false;
+      }
+    });
+    row.append(label, state, publishButton);
+    panel.appendChild(row);
   });
-  publishButton.title = 'لا يتاح النشر إلا بعد الاستماع الكامل واعتماد كل المقاطع المطلوبة.';
-  panel.append(title, summary, publishButton, status); banner.appendChild(panel);
+  banner.appendChild(panel);
   updateGenerationSummary();
 }
 function nextArabicBlockIndex() {
@@ -1704,6 +1735,7 @@ async function initialize(nextStory) {
     try { await loadQueueStatus(document.documentElement.lang === 'en' ? 'en' : 'ar'); } catch (queueError) {}
     try {
       await loadManifests();
+      try { await loadPublicAudioStatus(); } catch (statusError) { publishedAudioStatus = {}; }
       render();
       schedulePoll();
     } catch (audioError) {
