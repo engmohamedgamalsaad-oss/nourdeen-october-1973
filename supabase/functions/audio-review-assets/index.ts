@@ -390,10 +390,6 @@ Deno.serve(async (req: Request) => {
     if (serialized.length > 2_000_000) {
       return reply(413, { error: "سجل مراجعة الصوت أكبر من الحد المسموح." });
     }
-    const { data: previousRow, error: previousError } = await service.from("story_audio_reviews")
-      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
-    if (previousError) return reply(500, { error: "تعذر قراءة قرار الصوت السابق قبل تحديثه.", detail: previousError.message });
-    const previousReview = previousRow?.audio_review && typeof previousRow.audio_review === "object" ? previousRow.audio_review : {};
     const audioReview = {
       ...incoming,
       version: 1,
