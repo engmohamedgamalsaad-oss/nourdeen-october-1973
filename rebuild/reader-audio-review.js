@@ -1381,8 +1381,8 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   var isCurrentBlock = currentBlockIndex === index;
   status.textContent = !isCurrentBlock
     ? (currentBlockIndex < 0 ? 'اكتملت مراجعة المقاطع السابقة.' : 'سيُفتح هذا المقطع بعد اعتماد المقطع السابق بترتيب الحكاية.')
-    : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
-      pendingGeminiFollowups[index] ? 'وصلت ملاحظة جديدة من مراجعة الصوت لهذا المقطع. اضغط إعادة تجهيز النص باستخدام Gemini.' :
+    : pendingGeminiFollowups[index] ? 'وصلت ملاحظة جديدة من مراجعة الصوت لهذا المقطع. اضغط إعادة تجهيز النص باستخدام Gemini.' :
+      speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
       record.status === 'approved' ? 'نص القراءة معتمد ✓' :
       record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
       'اضغط تجهيز النص باستخدام Gemini ليقترح صياغة مفهومة ومشكولة جزئيًا عند الحاجة فقط.';
