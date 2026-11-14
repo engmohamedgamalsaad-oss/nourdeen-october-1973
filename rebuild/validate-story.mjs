@@ -119,9 +119,13 @@ export function validateStory(s) {
     }
   } else out.push('i18n must be an object');
 
-  // Every locale is the same story, aligned block-by-block to the approved Arabic source.
-  const arabicBlocks = Array.isArray(s.i18n?.ar?.blocks) ? s.i18n.ar.blocks : [];
-  for (const lang of LANGUAGES.filter(value => value !== 'ar')) {
+  // New-policy packages (or packages already carrying provenance) must be aligned block-by-block to Arabic.
+  const enforceTranslationAlignment = requireTranslationProvenance || LANGUAGES.some(lang =>
+    (Array.isArray(s.i18n?.[lang]?.blocks) ? s.i18n[lang].blocks : []).some(block => Object.hasOwn(block || {}, 'source_ar_text'))
+  );
+  if (enforceTranslationAlignment) {
+    const arabicBlocks = Array.isArray(s.i18n?.ar?.blocks) ? s.i18n.ar.blocks : [];
+    for (const lang of LANGUAGES.filter(value => value !== 'ar')) {
     const translatedBlocks = Array.isArray(s.i18n?.[lang]?.blocks) ? s.i18n[lang].blocks : [];
     if (translatedBlocks.length !== arabicBlocks.length) {
       out.push('i18n.' + lang + '.blocks must have the same number and order of blocks as Arabic.');
@@ -140,14 +144,14 @@ export function validateStory(s) {
         out.push(label + '.source_ar_heading is stale or missing: refresh the translated heading from Arabic.');
       }
       if (source.type === 'timeline') {
-        const sourceRows = String(source.text || '').split('\\n');
-        const translatedRows = String(translated.text || '').split('\\n');
+        const sourceRows = String(source.text || '').split('\n');
+        const translatedRows = String(translated.text || '').split('\n');
         if (sourceRows.length !== translatedRows.length || sourceRows.some((row, index) => row.split(' — ')[0] !== String(translatedRows[index] || '').split(' — ')[0])) {
           out.push(label + '.timeline rows and year/date labels must align with Arabic.');
         }
       }
     }
-
+    }
   }
 
   // Optional legacy metadata is preserved per locale. A missing translation is
