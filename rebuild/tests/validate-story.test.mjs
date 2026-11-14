@@ -33,6 +33,7 @@ function fixture() {
     title: 'title ' + l,
     subtitle: 'subtitle ' + l,
     summary: 'summary ' + l,
+    ...(l === 'ar' ? {} : { source_ar_title: 'title ar', source_ar_subtitle: 'subtitle ar', source_ar_summary: 'summary ar' }),
     student_name: 'student ' + l,
     narrator_name: 'narrator ' + l,
     figure_name: 'figure ' + l,
@@ -42,9 +43,9 @@ function fixture() {
     history_note: 'historical note ' + l,
     images_note: 'image note ' + l,
     blocks: [
-      { type: 'paragraph', speaker: 'karma', text: 'opening ' + l },
-      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l, image_after: 'photo-one' },
-      { type: 'did_you_know', speaker: 'narrator', text: 'fact ' + l }
+      { type: 'paragraph', speaker: 'karma', text: 'opening ' + l, ...(l === 'ar' ? {} : { source_ar_text: 'opening ar' }) },
+      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l, image_after: 'photo-one', ...(l === 'ar' ? {} : { source_ar_text: 'story ar' }) },
+      { type: 'did_you_know', speaker: 'narrator', text: 'fact ' + l, ...(l === 'ar' ? {} : { source_ar_text: 'fact ar' }) }
     ]
   }]));
   const quiz = Array.from({ length: 5 }, (_, i) => ({
@@ -58,6 +59,7 @@ function fixture() {
   }));
   return {
     format: 'KHALEDOON_STORY',
+    translation_policy: 'arabic-source-cultural-v1',
     slug: 'sample-story',
     section: 'october',
     design: { variant: 'military-history', accent: '#d6ad55' },
@@ -72,6 +74,42 @@ function fixture() {
 }
 
 test('accepts complete five-language package', () => assert.deepEqual(validateStory(fixture()), []));
+
+test('rejects translated blocks whose Arabic source snapshot is stale', () => {
+  const s = fixture();
+  s.i18n.ar.blocks[1].text = 'updated Arabic source';
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('i18n.en.blocks[1].source_ar_text is stale')));
+  assert(errors.some(x => x.includes('i18n.fr.blocks[1].source_ar_text is stale')));
+});
+
+test('requires translation structure to align one-to-one with Arabic', () => {
+  const s = fixture();
+  s.i18n.de.blocks.pop();
+  s.i18n.fr.blocks[0].speaker = 'narrator';
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('i18n.de.blocks must have the same number')));
+  assert(errors.some(x => x.includes('i18n.fr.blocks[0].speaker must match')));
+});
+
+test('requires source snapshots for every translated field and block', () => {
+  const s = fixture();
+  delete s.i18n.it.blocks[1].source_ar_text;
+  delete s.i18n.de.source_ar_title;
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('i18n.it.blocks[1].source_ar_text is stale or missing')));
+  assert(errors.some(x => x.includes('i18n.de.source_ar_title is stale or missing')));
+});
+
+test('keeps legacy packages compatible until they opt into Arabic-source provenance', () => {
+  const s = fixture();
+  delete s.translation_policy;
+  for (const lang of langs.filter(x => x !== 'ar')) {
+    for (const key of ['source_ar_title', 'source_ar_subtitle', 'source_ar_summary']) delete s.i18n[lang][key];
+    for (const block of s.i18n[lang].blocks) { delete block.source_ar_text; delete block.source_ar_heading; }
+  }
+  assert.deepEqual(validateStory(s), []);
+});
 
 test('preserves V1 metadata and requires every supplied metadata field in all locales', () => {
   const s = fixture();

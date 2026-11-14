@@ -189,6 +189,7 @@ export async function buildStoryFiles(story, options = {}) {
   const savedPackageRaw = getSavedPackage(options.record, options.draft, meta);
   const savedPackage = savedPackageRaw ? normalizeStoryFormat(JSON.parse(JSON.stringify(savedPackageRaw))) : null;
   if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة الحكاية التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
+  if (story.translation_policy !== 'arabic-source-cultural-v1') fail('لا يمكن نشر حكاية جديدة أو تحديث حكاية قبل اعتماد ترجمتها وفق سياسة المصدر العربي؛ أعد تجهيز الحزمة مع translation_policy ولقطات المصدر لكل لغة ومقطع.');
   const problems = validateStory(story);
   if (problems.length) fail('حزمة القالب الموحد غير مكتملة:\n• ' + problems.join('\n• '));
   if (!Object.hasOwn(story, 'map_location')) fail('أضف map_location صراحةً: موقع موثق أو null إذا لم يتوفر موقع موثوق.');

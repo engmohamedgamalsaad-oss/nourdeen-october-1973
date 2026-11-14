@@ -8,6 +8,27 @@ const core = require('../assets/audio-review-core.js');
 (async function () {
   const S = 'science/magdi-yacoub';
 
+  const alignedStory = { i18n: {
+    ar: { blocks: [
+      { type: 'paragraph', speaker: 'karma', text: 'النص العربي الأول' },
+      { type: 'paragraph', speaker: 'narrator', text: 'النص العربي الثاني', image_after: 'photo', heading: 'عنوان عربي' }
+    ] },
+    en: { blocks: [
+      { type: 'paragraph', speaker: 'karma', text: 'Natural English opening', source_ar_text: 'النص العربي الأول' },
+      { type: 'paragraph', speaker: 'narrator', text: 'Natural English body', image_after: 'photo', heading: 'Translated heading', source_ar_text: 'النص العربي الثاني', source_ar_heading: 'عنوان عربي' }
+    ] }
+  } };
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, true, 'culturally natural target-language text is accepted when source provenance and structure match');
+  alignedStory.i18n.ar.blocks[1].text = 'النص العربي المعدل';
+  const staleTranslation = core.validateTranslationAlignment(alignedStory, 'en');
+  assert.equal(staleTranslation.ok, false, 'changing Arabic source must stale its paired translation');
+  assert.deepEqual(staleTranslation.staleBlocks, [1]);
+  alignedStory.i18n.en.blocks[1].source_ar_text = 'النص العربي المعدل';
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, true, 'refreshing the source snapshot revalidates the translated block');
+  alignedStory.i18n.en.blocks.pop();
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, false, 'missing translated blocks must block generation');
+  assert.equal(core.validateTranslationAlignment(alignedStory, 'en').staleBlocks, null, 'a locale-wide block-count mismatch must block all segments');
+
   /* المفتاح: المسافات لا تغيّره، والنص يغيّره، والترتيب لا يدخل فيه */
   const a = await core.baseKey(S, 'ar', 'narrator', 'مرحبا   بالعالم');
   const b = await core.baseKey(S, 'ar', 'narrator', ' مرحبا بالعالم ');
@@ -114,7 +135,11 @@ const core = require('../assets/audio-review-core.js');
   const rev = { clips: { k1: { status: 'accepted' }, k2: { status: 'accepted' } } };
   const listened = { k1: true, k2: true };
   assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
-  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }, { k1: true }).notListened, 1, 'previous acceptance without current full playback must block approval');
+  const restored = core.restoreListenedFromDecisions([e1, e2], rev, {});
+  assert.deepEqual({ ...restored }, { k1: true, k2: true }, 'saved decisions restore full-playback evidence after preview reload');
+  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }, restored).ok, true);
+  const changedAudioEntries = [{ key: 'k1-new', lang: 'ar', block_index: 0, chunk_index: 0 }];
+  assert.deepEqual({ ...core.restoreListenedFromDecisions(changedAudioEntries, rev, {}) }, {}, 'a changed clip key must not inherit old playback evidence');
   assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'pending' }, listened).ok, false);
   assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'error' }, listened).ok, false);
   assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' } } }, { k1: 'ready', k2: 'ready' }, listened).unreviewed, 1);
@@ -122,12 +147,12 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.evaluateGate([], rev, {}, {}).ok, false, 'empty must not pass');
   const allFive = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
   assert.equal(core.evaluateFiveLanguageGate(allFive, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
-  assert.deepEqual(core.REQUIRED_LANGS, ['ar', 'en'], 'current stage requires Arabic and English audio only');
+  assert.deepEqual(core.REQUIRED_LANGS, ['ar'], 'Arabic is the required publication language; English and other locales are optional');
   assert.equal(core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true, 'missing French/Italian/German audio must not block approval');
-  assert.deepEqual(
-    core.evaluateFiveLanguageGate({ ar: {} }, [e1], rev, { k1: 'ready' }, listened).missingLanguages,
-    ['en'],
-    'a missing required language must block preview approval'
+  assert.equal(
+    core.evaluateFiveLanguageGate({ ar: {} }, [e1], rev, { k1: 'ready' }, listened).ok,
+    true,
+    'missing optional English audio must not block Arabic-first publication'
   );
   assert.deepEqual(
     core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1], rev, { k1: 'ready' }, listened, ['ar', 'en', 'fr']).missingLanguages,
@@ -204,12 +229,12 @@ const core = require('../assets/audio-review-core.js');
   const adminHtml = fs.readFileSync(path.join(__dirname, '../admin.html'), 'utf8');
   assert.ok(reader.includes("window.__KH_STORY_PACKAGE=story;document.dispatchEvent(new CustomEvent('kh-story-audio-context'"), 'reader must publish story context after rendering for the audio reviewer');
   assert.ok(reviewUi.includes("if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل الموافقة عليه.'; return; }"), 'a clip cannot be accepted before full playback');
-  assert.ok(reviewUi.includes('if (manifestLoadFailure) return { ok: false, loadError: true'), 'manifest verification errors must block preview approval');
+  assert.ok(reviewUi.includes('if (manifestErrors[language] && !manifestMissing[language])'), 'a manifest verification error must block approval for the affected language');
   assert.ok(reviewUi.includes('details.length ? \' \' + details.join(\' | \') : \'\''), 'manifest errors must identify the affected language and reason for the admin');
   assert.ok(reviewUi.includes('if (!initialized) return { ok: false, loading: true'), 'preview approval must remain blocked while manifests are loading');
-  assert.ok(reviewUi.includes('if (e && e.isMissingManifest) manifestMissing[lang] = true;') && reviewUi.includes('else if (REQUIRED_LANGS.indexOf(lang) >= 0) manifestLoadFailure = true;'), 'only a confirmed 404 may be treated as a missing language manifest, and only a failure in a required audio language may block approval');
+  assert.ok(reviewUi.includes('manifestMissing[lang] = true;') && reviewUi.includes('manifestErrors[lang] ='), 'only a confirmed 404 may be treated as a missing language manifest; other errors remain visible for that language');
   assert.ok(reviewUi.includes(String.raw`/^[A-Za-z0-9_-]+\.mp3$/`), 'manifest MP3 filenames must match a normal .mp3 extension');
-  assert.ok(reviewUi.includes('core.evaluateFiveLanguageGate(manifests, requiredEntries, review, readyByKey, played, REQUIRED_LANGS)'), 'preview must require current full playback for every clip in the required audio languages (Arabic and English in the current stage)');
+  assert.ok(reviewUi.includes('core.evaluateFiveLanguageGate(manifests, languageEntries, review, readyByKey, played, [language])') && reviewUi.includes("function gate() { return languageGate('ar'); }"), 'each locale is reviewed independently and Arabic alone is the story publication gate');
   assert.ok(reviewUi.includes('loadArabicExpectedTexts') && reviewUi.includes("core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], data.provider === 'omnivoice' || (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0)") && reviewUi.includes('core.expectedSpokenText(') && reviewUi.includes('core.splitStaleSegments('), 'Arabic audio must be checked against the approved speech text that was sent to generation (falling back to the approved pronunciation text), and all other languages against current story text; stale audio is separated, never silently accepted');
   assert.ok(reviewUi.includes('data.approved_audio_only_rewrites.forEach') && reviewUi.includes('return approved[index] ? data.blocks[String(index)] : fallback[index];'), 'only explicitly approved Arabic audio-only rewrites may differ from the visible story text');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');

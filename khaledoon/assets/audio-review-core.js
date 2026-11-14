@@ -248,6 +248,22 @@ function applyDecision(review, entry, decision, now) {
 }
 
 /* شرط اعتماد المعاينة: كل مقطع (في اللغات الخمس) جاهز ومقبول، ولا مرفوض ولا غير مراجَع. */
+/* A saved decision could only be recorded after the full clip was heard. Restore that proof across preview reloads,
+   but only for the exact clip key (which includes its text/audio revision); changed audio gets a new key. */
+function restoreListenedFromDecisions(entries, review, listenedByKey) {
+  var listened = Object.assign(Object.create(null), listenedByKey || {});
+  var r = cloneReview(review);
+  (Array.isArray(entries) ? entries : []).forEach(function (entry) {
+    var decision = r.clips[entry && entry.key];
+    if (!decision || (decision.status !== 'accepted' && decision.status !== 'rejected')) return;
+    if (decision.lang !== entry.lang ||
+        Number(decision.block_index) !== Number(entry.block_index) ||
+        Number(decision.chunk_index || 0) !== Number(entry.chunk_index || 0)) return;
+    listened[entry.key] = true;
+  });
+  return listened;
+}
+
 function evaluateGate(entries, review, readyByKey, listenedByKey) {
   var r = cloneReview(review), listened = listenedByKey || {}, out = { ok: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0 };
   entries.forEach(function (e) {
@@ -271,6 +287,37 @@ function evaluateFiveLanguageGate(manifests, entries, review, readyByKey, listen
     };
   }
   return evaluateGate(entries, review, readyByKey, listenedByKey);
+}
+
+/* Translation provenance gate: every non-Arabic block must still point to the exact current Arabic source block. */
+function validateTranslationAlignment(story, language) {
+  if (language === 'ar') return { ok: true, reason: '', staleBlocks: [] };
+  var ar = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks;
+  var local = story && story.i18n && story.i18n[language] && story.i18n[language].blocks;
+  if (!Array.isArray(ar) || !Array.isArray(local) || local.length !== ar.length) {
+    return { ok: false, reason: 'ترجمة هذه اللغة لا تطابق عدد المقاطع العربية؛ حدّث ترجمة الحكاية أولًا.', staleBlocks: null };
+  }
+  var stale = [];
+  for (var i = 0; i < ar.length; i++) {
+    var a = ar[i] || {}, b = local[i] || {};
+    if (a.type !== b.type || a.speaker !== b.speaker ||
+        (a.image_after || '') !== (b.image_after || '') ||
+        Object.prototype.hasOwnProperty.call(a, 'heading') !== Object.prototype.hasOwnProperty.call(b, 'heading')) {
+      stale.push(i);
+      continue;
+    }
+    if ((typeof b.source_ar_text !== 'string' || b.source_ar_text !== a.text ||
+        (Object.prototype.hasOwnProperty.call(a, 'heading') && b.source_ar_heading !== a.heading)) && stale.indexOf(i) < 0) stale.push(i);
+    if (a.type === 'timeline') {
+      var arRows = String(a.text || '').split('\n'), localRows = String(b.text || '').split('\n');
+      function timelineDateKey(row) { return (String(row || '').replace(/[٠-٩]/g, function (digit) { return String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)); }).match(/\d+/g) || []).join('-'); }
+      if ((arRows.length !== localRows.length || arRows.some(function (row, rowIndex) { var sourceDate = timelineDateKey(row), translatedDate = timelineDateKey(localRows[rowIndex]); return !!sourceDate && sourceDate !== translatedDate; })) && stale.indexOf(i) < 0) stale.push(i);
+    }
+  }
+  if (stale.length) {
+    return { ok: false, reason: 'ترجمة المقطع ' + (stale[0] + 1) + ' قديمة أو غير موثقة المصدر. أعد ترجمتها من النص العربي المعتمد قبل توليد الصوت.', staleBlocks: stale };
+  }
+  return { ok: true, reason: '', staleBlocks: [] };
 }
 
 function gateMessage(g) {
@@ -342,7 +389,8 @@ var api = {
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
-  evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
+  restoreListenedFromDecisions: restoreListenedFromDecisions,
+  evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, validateTranslationAlignment: validateTranslationAlignment, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else root.KHAudioReviewCore = api;

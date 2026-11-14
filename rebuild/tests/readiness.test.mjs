@@ -37,21 +37,21 @@ test('the unified story contract is the only workflow outside October', async ()
   assert.match(readme, /لا تُستخدم مصدرًا لإنشاء صفحة أو نشر حكاية خارج أكتوبر/);
 });
 
-test('canonical v5 prompt and prompt admin use the official story contract', async () => {
+test('canonical v6 prompt and prompt admin use the official story contract', async () => {
   const master = await readFile(new URL('../../docs/khaledoon-story-production-workflow.md', import.meta.url), 'utf8');
   const promptAdmin = await readFile(new URL('../../khaledoon/prompts-admin.html', import.meta.url), 'utf8');
   const activeAdminTexts = await readFile(new URL('../../khaledoon/assets/khaledoon-admin-texts.js', import.meta.url), 'utf8');
   assert.match(master, /المخطط الرسمي/);
   assert.match(master, /rebuild\/story-contract\.json/);
   assert.match(master, /لا تُخرج حقولًا غير موجودة في المخطط/);
-  assert.match(promptAdmin, /كل ملف أداة في مسار v5 نسخة مستقلة كاملة/);
+  assert.match(promptAdmin, /كل ملف أداة في المسار الحالي نسخة مستقلة كاملة/);
   assert.match(promptAdmin, /لا تجمع معه مرجعًا أو نسخة v4 إضافية/);
   assert.match(activeAdminTexts, /المخطط الرسمي/);
   assert.match(activeAdminTexts, /rebuild\/story-contract\.json/);
   assert.doesNotMatch(activeAdminTexts, /افحص مخطط KH_STORY_PACKAGE_V1 الفعلي/);
 });
 
-test('the four standalone v5 prompts contain the same shared reference and distinct provider appendices', async () => {
+test('the four standalone v6 prompts contain the same shared reference and distinct provider appendices', async () => {
   const master = (await readFile(new URL('../../docs/khaledoon-story-production-workflow.md', import.meta.url), 'utf8')).trim();
   const files = ['chatgpt', 'claude', 'deepseek', 'gemini'];
   const prompts = await Promise.all(files.map(name =>
@@ -62,11 +62,11 @@ test('the four standalone v5 prompts contain the same shared reference and disti
     assert.ok(appendixAt > 0, files[i] + ' must have a provider appendix');
     const shared = prompts[i].slice(0, appendixAt).replace(/\n*---\n*$/, '').trim();
     assert.equal(shared, master, files[i] + ' must include the exact canonical reference');
-    assert.match(prompts[i], /الإصدار: 2026-11-02-v5/);
+    assert.match(prompts[i], /الإصدار: 2026-11-14-v6/);
   }
 });
 
-test('v5 story content gate requires specific, source-grounded facts and balanced uncertainty', async () => {
+test('v6 story content gate requires specific, source-grounded facts and balanced uncertainty', async () => {
   const master = await readFile(new URL('../../docs/khaledoon-story-production-workflow.md', import.meta.url), 'utf8');
   const files = ['chatgpt', 'claude', 'deepseek', 'gemini'];
   const prompts = await Promise.all(files.map(name =>

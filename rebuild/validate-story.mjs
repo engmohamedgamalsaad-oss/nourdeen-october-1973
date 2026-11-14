@@ -54,9 +54,11 @@ function imageCheck(im, label, out) {
 export function validateStory(s) {
   const out = [];
   const topRequired = ['format', 'slug', 'section', 'design', 'original_body', 'i18n', 'cover', 'images', 'sources', 'quiz'];
-  const topAllowed = [...topRequired, 'map_location'];
+  const topAllowed = [...topRequired, 'map_location', 'translation_policy'];
   if (!keysCheck(s, topRequired, topAllowed, 'story', out)) return out;
   if (s.format !== 'KHALEDOON_STORY') out.push('format must be KHALEDOON_STORY; normalize transitional inputs before validation');
+  if (Object.hasOwn(s, 'translation_policy') && s.translation_policy !== 'arabic-source-cultural-v1') out.push('translation_policy must be arabic-source-cultural-v1 when provided');
+  const requireTranslationProvenance = s.translation_policy === 'arabic-source-cultural-v1';
   if (typeof s.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s.slug)) out.push('slug must be lowercase kebab-case');
   if (!sections.has(s.section)) out.push('section is unsupported');
   if (keysCheck(s.design, ['variant', 'accent'], ['variant', 'accent'], 'design', out)) {
@@ -94,12 +96,19 @@ export function validateStory(s) {
     languageObjectCheck(s.i18n, 'i18n', out);
     for (const lang of LANGUAGES) {
       const t = s.i18n[lang];
-      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'], 'i18n.' + lang, out)) continue;
+      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'source_ar_title', 'source_ar_subtitle', 'source_ar_summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'], 'i18n.' + lang, out)) continue;
       for (const key of ['title', 'subtitle', 'summary']) if (!nonempty(t[key])) out.push('i18n.' + lang + '.' + key + ' required');
+      if (lang !== 'ar') {
+        const arabicLocale = s.i18n?.ar || {};
+        for (const key of ['title', 'subtitle', 'summary']) {
+          const snapshotKey = 'source_ar_' + key;
+          if ((requireTranslationProvenance || Object.hasOwn(t, snapshotKey)) && t[snapshotKey] !== arabicLocale[key]) out.push('i18n.' + lang + '.' + snapshotKey + ' is stale or missing; refresh this localized field from the current Arabic source.');
+        }
+      }
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
         const label = 'i18n.' + lang + '.blocks[' + i + ']';
-        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after', 'heading'], label, out)) continue;
+        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after', 'heading', 'source_ar_text', 'source_ar_heading'], label, out)) continue;
         if (!['paragraph', 'did_you_know', 'science_note', 'timeline'].includes(b.type)) out.push(label + '.type invalid');
         if (Object.hasOwn(b, 'heading') && !nonempty(b.heading)) out.push(label + '.heading must be a non-empty string when provided');
         if (b.type === 'timeline' && !(typeof b.text === 'string' && b.text.split('\n').every(line => /\S.*\s—\s\S/.test(line)))) out.push(label + '.text must be lines of "year — event" for a timeline');
@@ -109,6 +118,45 @@ export function validateStory(s) {
       }
     }
   } else out.push('i18n must be an object');
+
+  // New-policy packages (or packages already carrying provenance) must be aligned block-by-block to Arabic.
+  const enforceTranslationAlignment = requireTranslationProvenance || LANGUAGES.some(lang =>
+    (Array.isArray(s.i18n?.[lang]?.blocks) ? s.i18n[lang].blocks : []).some(block => Object.hasOwn(block || {}, 'source_ar_text'))
+  );
+  if (enforceTranslationAlignment) {
+    const arabicBlocks = Array.isArray(s.i18n?.ar?.blocks) ? s.i18n.ar.blocks : [];
+    for (const lang of LANGUAGES.filter(value => value !== 'ar')) {
+    const translatedBlocks = Array.isArray(s.i18n?.[lang]?.blocks) ? s.i18n[lang].blocks : [];
+    if (translatedBlocks.length !== arabicBlocks.length) {
+      out.push('i18n.' + lang + '.blocks must have the same number and order of blocks as Arabic.');
+    }
+    for (let i = 0; i < Math.min(arabicBlocks.length, translatedBlocks.length); i++) {
+      const source = arabicBlocks[i] || {}, translated = translatedBlocks[i] || {};
+      const label = 'i18n.' + lang + '.blocks[' + i + ']';
+      if (translated.type !== source.type) out.push(label + '.type must match the corresponding Arabic block.');
+      if (translated.speaker !== source.speaker) out.push(label + '.speaker must match the corresponding Arabic block.');
+      if (Object.hasOwn(source, 'heading') !== Object.hasOwn(translated, 'heading')) out.push(label + '.heading must be present in the same blocks as Arabic.');
+      if ((source.image_after || '') !== (translated.image_after || '')) out.push(label + '.image_after must match the corresponding Arabic block.');
+      if ((requireTranslationProvenance || Object.hasOwn(translated, 'source_ar_text')) && translated.source_ar_text !== source.text) {
+        out.push(label + '.source_ar_text is stale or missing: regenerate this translation from the current approved Arabic block.');
+      }
+      if (Object.hasOwn(source, 'heading') && (requireTranslationProvenance || Object.hasOwn(translated, 'source_ar_heading')) && translated.source_ar_heading !== source.heading) {
+        out.push(label + '.source_ar_heading is stale or missing: refresh the translated heading from Arabic.');
+      }
+      if (source.type === 'timeline') {
+        const sourceRows = String(source.text || '').split('\n');
+        const translatedRows = String(translated.text || '').split('\n');
+        const dateKey = row => (String(row || '').replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit))).match(/\d+/g) || []).join('-');
+        if (sourceRows.length !== translatedRows.length || sourceRows.some((row, index) => {
+          const sourceDate = dateKey(row), translatedDate = dateKey(translatedRows[index]);
+          return !!sourceDate && sourceDate !== translatedDate;
+        })) {
+          out.push(label + '.timeline rows and numeric year/date values must align with Arabic.');
+        }
+      }
+    }
+    }
+  }
 
   // Optional legacy metadata is preserved per locale. A missing translation is
   // not a validation error and must never be invented just to fill the schema.

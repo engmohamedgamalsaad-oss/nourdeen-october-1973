@@ -598,6 +598,8 @@ async function loadManifests() {
       }
     });
   });
+  // A saved accept/reject decision proves full playback for this exact, unchanged clip.
+  played = core.restoreListenedFromDecisions(entries, review, played);
 }
 function languageGate(language) {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
