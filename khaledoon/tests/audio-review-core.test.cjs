@@ -131,8 +131,11 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(chunkReview.clips['chunk-2'].status, 'accepted');
 
   /* الشرط: لا اعتماد مع مرفوض أو غير مراجَع أو غير جاهز */
-  const e1 = { key: 'k1' }, e2 = { key: 'k2' };
-  const rev = { clips: { k1: { status: 'accepted' }, k2: { status: 'accepted' } } };
+  const e1 = { key: 'k1', lang: 'ar', block_index: 0, chunk_index: 0 }, e2 = { key: 'k2', lang: 'ar', block_index: 1, chunk_index: 0 };
+  const rev = { clips: {
+    k1: { status: 'accepted', lang: 'ar', block_index: 0, chunk_index: 0 },
+    k2: { status: 'accepted', lang: 'ar', block_index: 1, chunk_index: 0 }
+  } };
   const listened = { k1: true, k2: true };
   assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
   const restored = core.restoreListenedFromDecisions([e1, e2], rev, {});
