@@ -647,7 +647,7 @@ function makePreviewDraft(statusForPreview){
   // المصدر الموحد هو المرجع الكامل. لا نكدّس workflow وبوابات قديمة أو تعليمات صور مكررة.
   var selectedAI=providerSelect.value||'chatgpt';
   var savedMain=String(promptManagerState.main||'').trim();
-  var isCurrentMaster=savedMain.indexOf('الإصدار: 2026-11-02-v5')>=0;
+  var isCurrentMaster=savedMain.indexOf('الإصدار: 2026-11-14-v6')>=0;
   var workflowPrompt=(isCurrentMaster?savedMain:String(STORY_PAGE_PROMPT||'')).trim();
   L.push('================ البرومبت الموحد المعتمد — مرة واحدة فقط ================');
   if(workflowPrompt)L.push(workflowPrompt);
