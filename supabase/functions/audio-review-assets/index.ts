@@ -684,17 +684,18 @@ Deno.serve(async (req: Request) => {
     let audioManifest: any;
     try { audioManifest = JSON.parse(await audioManifestFile.text()); }
     catch { return reply(422, { error: "ملف manifest الصوت الخاص غير صالح." }); }
+    // Match the current audio using the manifest's block identity. Speaker labels
+    // can differ between the story snapshot and older manifests, so they must not
+    // exclude an otherwise exact audio file.
     const blockSegments = (audioManifest?.segments ?? []).filter((segment: any) =>
       Number(segment?.block_index) === index &&
-      segment?.speaker === source.block.speaker &&
       typeof segment?.src === "string" &&
       /^[A-Za-z0-9_-]+\.mp3$/.test(segment.src));
     let audioSegment: any = null;
-    // A rejected clip can be absent from the current manifest after a replacement.
-    // Its exact private-storage object and saved SHA-256 remain the authoritative
-    // review source; resolve it directly before consulting the current manifest.
+    // If an actual rejection exists, use that exact reviewed chunk; rejection is
+    // optional and is never required to prepare speech text.
     if (lastRejectedClip && Number.isInteger(rejectedChunkIndex) && rejectedChunkIndex >= 0 && rejectedChunkIndex <= 50 &&
-        typeof lastRejectedClip.src === "string" && /^[A-Za-z0-9_-]+\\.mp3$/.test(lastRejectedClip.src) &&
+        typeof lastRejectedClip.src === "string" && /^[A-Za-z0-9_-]+\.mp3$/.test(lastRejectedClip.src) &&
         /^[a-f0-9]{64}$/i.test(String(lastRejectedClip.audio_sha256 ?? ""))) {
       audioSegment = {
         src: lastRejectedClip.src,
@@ -702,14 +703,26 @@ Deno.serve(async (req: Request) => {
         audio_sha256: String(lastRejectedClip.audio_sha256).toLowerCase(),
       };
     }
+    // The manifest filename is the strongest identity supplied by the preview.
+    // Do not reject it merely because the UI's chunk index is stale after rerender.
     if (!audioSegment && safeRequestedAudioSrc) {
+      audioSegment = blockSegments.find((segment: any) => segment?.src === requestedAudioSrc);
+    }
+    // If the filename was omitted, use the client SHA-256 to identify the exact
+    // current file before falling back to the requested chunk number.
+    const requestedHash = String(body.audio_sha256 ?? "").toLowerCase();
+    if (!audioSegment && /^[a-f0-9]{64}$/.test(requestedHash)) {
       audioSegment = blockSegments.find((segment: any) =>
-        Number(segment?.chunk_index || 0) === requestedChunkIndex &&
-        segment?.src === requestedAudioSrc);
+        String(segment?.audio_sha256 ?? "").toLowerCase() === requestedHash);
+    }
+    if (!audioSegment) {
+      const chunkMatches = blockSegments.filter((segment: any) =>
+        Number(segment?.chunk_index || 0) === requestedChunkIndex);
+      if (chunkMatches.length === 1) audioSegment = chunkMatches[0];
     }
     if (!audioSegment && blockSegments.length === 1) audioSegment = blockSegments[0];
     if (!audioSegment) {
-      return reply(409, { error: "لم أستطع مطابقة الصوت المرفوض مع المقطع الحالي. حدّث المعاينة ثم أعد المحاولة." });
+      return reply(409, { error: "لم أستطع تحديد ملف الصوت الحالي لهذا المقطع من manifest؛ لم يُرسل أي صوت إلى Gemini." });
     }
     const audioSrc = audioSegment.src;
     const { data: audioFile, error: audioDownloadError } = await service.storage.from(BUCKET)
@@ -733,7 +746,7 @@ Deno.serve(async (req: Request) => {
     const prompt = [
       "ملف MP3 مرفق مع هذا الطلب. استمع إليه فعليًا قبل كتابة أي اقتراح؛ لا تعتمد على النص وحده.",
       "حلّل ما نُطق في الصوت مقارنةً بالنص الأصلي: حدّد الكلمات التي نُطقت خطأ، أو تغيّر معناها، أو سقطت، أو ابتُلعت نهايتها، وكذلك مواضع السرعة أو الوقف غير الطبيعي. لا تخترع أخطاء غير مسموعة.",
-      "استخدم ملاحظة الرفض والتصحيح المقترح المسجلين أدناه لمعالجة المشكلة المحددة. إذا كان البديل صريحًا فطبّقه حرفيًا ما دام يحافظ على المعنى التاريخي. لا تكتفِ بإعادة النص كما هو إذا كان الصوت يثبت وجود مشكلة نطق قابلة للعلاج.",
+      "استخدم ملاحظات المراجعة والتصحيح المسجلين أدناه إن وُجدا لمعالجة المشكلة المحددة. إذا كان البديل صريحًا فطبّقه حرفيًا ما دام يحافظ على المعنى التاريخي. إذا لم توجد ملاحظة رفض، فحلّل الصوت والنص من تلقاء نفسك ولا تفترض وجود رفض سابق.",
       "إذا كانت المشكلة في جودة الصوت أو خامة الصوت فقط وليست في النص أو النطق، فلا تغيّر النص لمجرد إظهار اختلاف؛ اذكر ذلك في review_flags.",
       "الصوت المرفق هو مرجع التشخيص، وليس مصدرًا لتغيير الحقائق أو اختلاق محتوى.",
       ...(rejectedCorrections.length ? [
