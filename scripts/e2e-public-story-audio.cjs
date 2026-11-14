@@ -13,6 +13,10 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
   const failedRequests = [];
   const manifestResponses = [];
   page.on('pageerror', error => pageErrors.push(error.message));
+  const candidatePlayer = require('node:fs').readFileSync(require('node:path').join(process.cwd(), 'assets/shared/story-audio.js'), 'utf8');
+  await page.route('**/assets/shared/story-audio.js*', route => route.fulfill({
+    status: 200, contentType: 'text/javascript; charset=utf-8', body: candidatePlayer
+  }));
   page.on('requestfailed', request => failedRequests.push({ url: request.url(), error: request.failure()?.errorText }));
   page.on('response', response => {
     if (response.url().includes('/history/ibn-sina/ar/manifest.json')) {
