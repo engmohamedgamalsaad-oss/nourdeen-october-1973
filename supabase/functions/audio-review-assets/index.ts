@@ -717,7 +717,7 @@ Deno.serve(async (req: Request) => {
     ].join("\n\n");
     // Retry transient Gemini failures/timeouts, then fall back to the next model.
     const totalDeadlineMs = 82000;
-    const perAttemptTimeoutMs = 18000;
+    const perAttemptTimeoutMs = 12000;
     const startedAt = Date.now();
     const deadlineAt = startedAt + totalDeadlineMs;
     let geminiResponse: Response | null = null;
@@ -761,7 +761,7 @@ Deno.serve(async (req: Request) => {
       const model = geminiModels[modelIndex];
       for (let attempt = 1; attempt <= 2; attempt++) {
         const remainingMs = deadlineAt - Date.now();
-        const reserveForFallbackMs = (geminiModels.length - modelIndex - 1) * 12000;
+        const reserveForFallbackMs = (geminiModels.length - modelIndex - 1) * 16000;
         const availableMs = remainingMs - reserveForFallbackMs;
         if (availableMs < 1500) break;
         const attemptTimeoutMs = Math.min(perAttemptTimeoutMs, availableMs);
