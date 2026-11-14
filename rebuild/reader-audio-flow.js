@@ -320,10 +320,14 @@
     var button = $('kh-translation-publish-text');
     if (!button) return;
     var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
-    var targets = blocks.map(function (block, index) {
-      return block && ['karma', 'narrator'].includes(block.speaker) ? translationRecords[lang() + ':' + index] : null;
-    }).filter(Boolean);
-    var allApproved = targets.length > 0 && targets.every(function (record) { return record.status === 'approved'; });
+    var targetIndexes = [];
+    blocks.forEach(function (block, index) {
+      if (block && ['karma', 'narrator'].includes(block.speaker)) targetIndexes.push(index);
+    });
+    var allApproved = targetIndexes.length > 0 && targetIndexes.every(function (index) {
+      var record = translationRecords[lang() + ':' + index];
+      return !!record && record.status === 'approved';
+    });
     button.hidden = lang() === 'ar';
     button.disabled = lang() === 'ar' || !translationLoaded || !allApproved;
     button.title = allApproved ? 'كل المقاطع المنطوقة معتمدة؛ اضغط لنشر النص فقط.' : 'اعتمد ترجمة كل مقطع منطوق قبل نشر نص اللغة.';
@@ -385,6 +389,7 @@
       var publishText = el('button', 'kh-translation-publish-text', 'نشر النص المعتمد لهذه اللغة');
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
       publishText.addEventListener('click', async function () {
+        if (!window.confirm('سيتم نشر النص المعتمد لهذه اللغة مباشرة على الموقع، دون نشر أو توليد أي صوت. هل تريد المتابعة؟')) return;
         publishText.disabled = true;
         bulkStatus.textContent = 'جارٍ التحقق من اعتمادات المقاطع ونشر النص فقط…';
         try {
