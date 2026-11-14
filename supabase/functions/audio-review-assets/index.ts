@@ -974,7 +974,10 @@ Deno.serve(async (req: Request) => {
       speech_text: proposal.speech_text.trim(),
       changes_summary: proposal.changes_summary,
       pronunciation_notes: proposal.pronunciation_notes.filter((item: any) => typeof item === "string").slice(0, 20),
-      review_flags: proposal.review_flags.filter((item: any) => typeof item === "string").slice(0, 20),
+      review_flags: [
+        ...(textOnly ? ["تم تجهيز النص من النص المكتوب فقط؛ لم يُحلَّل صوت سابق لهذا المقطع."] : []),
+        ...proposal.review_flags.filter((item: any) => typeof item === "string"),
+      ].slice(0, 20),
       model: successfulModel,
     });
   }
