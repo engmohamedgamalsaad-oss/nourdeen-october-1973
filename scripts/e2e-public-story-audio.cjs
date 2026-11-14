@@ -13,10 +13,6 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
   const failedRequests = [];
   const manifestResponses = [];
   page.on('pageerror', error => pageErrors.push(error.message));
-  const candidatePlayer = require('node:fs').readFileSync(require('node:path').join(process.cwd(), 'assets/shared/story-audio.js'), 'utf8');
-  await page.route('**/assets/shared/story-audio.js*', route => route.fulfill({
-    status: 200, contentType: 'text/javascript; charset=utf-8', body: candidatePlayer
-  }));
   page.on('requestfailed', request => failedRequests.push({ url: request.url(), error: request.failure()?.errorText }));
   page.on('response', response => {
     if (response.url().includes('/history/ibn-sina/ar/manifest.json')) {
@@ -75,6 +71,8 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
     assert.equal(diagnostic.manifestStatus, 200, 'public Arabic manifest must be readable from the visitor page');
     assert.equal(diagnostic.playerExists, true, 'the public audio player should be mounted');
     assert.equal(diagnostic.playerHidden, false, 'published Arabic audio must be visible on the public Ibn Sina story page');
+    assert.match(diagnostic.scriptSrc || '', /20261114-public-audio-mp3-fix-1/, 'live visitor page must load the fixed player cache version');
+    assert.deepEqual(diagnostic.manifest.invalidSegments, [], 'all 17 published segments must pass the public manifest contract');
     assert.deepEqual(pageErrors, [], 'public story page must not throw JavaScript errors');
   } finally {
     await browser.close();
