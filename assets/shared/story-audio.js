@@ -343,12 +343,15 @@
       if (!nextQueue.length) throw new Error('Empty audio manifest');
       if (thisLoad !== manifestRun) return;
       queue = nextQueue;
+      delete host.dataset.manifestError;
       host.hidden = false;
       manifestState = 'ready';
       if (mode === 'idle') status.textContent = '';
-    }).catch(function () {
+    }).catch(function (error) {
       if (thisLoad !== manifestRun) return;
       queue = [];
+      host.dataset.manifestError = String(error && error.message || error || 'unknown');
+      console.error('[Khaledoon audio] Unable to load the published story manifest:', error);
       host.hidden = true;
       manifestState = 'failed';
       status.textContent = ui.noVoice;

@@ -55,7 +55,7 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes("This story has moved."));
   assert.ok(publisher.includes('published_to_main: true'), 'approved moves are committed directly to main');
 });
-test('new stories in every section require an admin-approved five-language audio-text review', function () {
+test('new stories in every section keep audio-text review separate from optional audio generation', function () {
   assert.ok(storyPublisher.includes("let audioTextReviewRequired = existingAt < 0"), 'new stories in every section receive the mandatory review flag');
   assert.ok(storyPublisher.includes("previousData.audio_text_review_required === true"), 'updates and moves must preserve an existing new-story review requirement');
   assert.ok(audioTextReviewer.includes('buildApprovedAudioPronunciation'), 'the admin must export the generator-compatible approval artifact');
@@ -64,7 +64,9 @@ test('new stories in every section require an admin-approved five-language audio
   assert.ok(admin.includes("../rebuild/october-audio-packages/'+storyId+'/story.json"), 'October review must load the committed source package used by the live admin');
   assert.ok(admin.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October must expose the same five-language text review UI');
   assert.ok(admin.includes('window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review'), 'October audio review metadata must not be excluded from the shared review prompt');
-  assert.ok(readerReviewActions.includes('if(isApprove){') && !readerReviewActions.includes("if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october')"), 'preview approval must enforce the same audio gate for October');
+  assert.ok(!readerReviewActions.includes('window.KHStoryAudioReview.canApprove()'), 'written preview approval must not depend on audio generation or listening');
+  assert.ok(readerReviewActions.includes('النص قابل للنشر دون صوت'), 'preview must explain that written publication is independent from audio');
+  assert.ok(readerReviewActions.includes('meta=window.KHWorkflow.markApproved'), 'the normal human preview approval remains required before written publication');
   assert.ok(audioWorker.includes('provider: "omnivoice"') && audioWorker.includes('VoiceTut Egyptian Tashkeel'), 'the persistent VoiceTut worker must create the active audio manifests');
   assert.ok(audioWorker.includes('story-audio-jobs') || audioWorker.includes('claim'), 'the unified worker must consume queued audio jobs rather than the retired batch generator');
   assert.ok(!fs.existsSync('scripts/generate_story_audio.py'), 'the retired Fish Audio generator must not be restored');
@@ -73,14 +75,14 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("u.searchParams.set('draft','1')"), 'the live story iframe must enter authenticated draft audio-review mode');
   assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js')"), 'the preview must load the shared audio review core');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js')"), 'the preview must mount the audio generation and listening controls');
-  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js')"), 'the preview must mount the ordered text-to-generation status flow');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261114-per-block-translation-1')"), 'the preview must mount the current per-block translation and audio status flow');
   assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261114-preview-listen-restore-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
   var readerHtml = fs.readFileSync('rebuild/reader.html', 'utf8');
   assert.ok(readerHtml.includes('arabic-source-provenance-1'), 'reader must load the Arabic translation provenance validator');
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   assert.ok(audioFlow.includes('validateTranslationAlignment') && audioFlow.includes('genButton.disabled = true'), 'non-Arabic audio generation must be blocked when its paired Arabic source is stale or unverified');
-  assert.ok(audioFlow.includes('localeGate.staleBlocks.indexOf(current) >= 0'), 'a stale translation blocks only its corresponding segment while aligned segments remain generatable');
-  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261114-independent-language-publish-1') && readerHtml.includes('reader-audio-flow.js?v=20261114-arabic-source-translation-gate-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
+  assert.ok(audioFlow.includes("translationRecords[L + ':' + index]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment requires its own human approval before audio generation');
+  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261114-optional-audio-text-publish-1') && readerHtml.includes('reader-audio-flow.js?v=20261114-arabic-source-translation-gate-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
   assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
   assert.ok(!preview.includes('Khaledoon_VoiceTut_Colab_Worker.ipynb'), 'the obsolete single-clip worker link must not remain');
