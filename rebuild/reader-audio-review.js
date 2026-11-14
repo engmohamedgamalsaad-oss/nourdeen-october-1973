@@ -1177,6 +1177,68 @@ function renderGenerationControls(banner) {
   var summary = document.createElement('span'); summary.id = 'kh-gen-summary'; summary.className = 'kh-audio-review-state';
   var status = document.createElement('span'); status.className = 'kh-audio-review-state';
   text(status, generationMessage);
+  var englishStartBusy = false;
+  var englishStartButton = document.createElement('button');
+  englishStartButton.type = 'button';
+  englishStartButton.className = 'kh-audio-publish-button kh-audio-english-start';
+  englishStartButton.textContent = 'ابدأ توليد الحكاية الإنجليزية';
+  englishStartButton.title = 'يرسل مقطعًا إنجليزيًا واحدًا فقط. استمع إليه واعتمده قبل الضغط لإرسال المقطع التالي.';
+  englishStartButton.disabled = englishStartBusy || !canWrite;
+  englishStartButton.addEventListener('click', async function () {
+    if (englishStartBusy || !canWrite) return;
+    englishStartBusy = true;
+    englishStartButton.disabled = true;
+    try {
+      window.__KH_AUDIO_REVIEW_LANGUAGE = 'en';
+      document.querySelectorAll('[data-lang]').forEach(function (tab) {
+        tab.setAttribute('aria-pressed', String(tab.dataset.lang === 'en'));
+      });
+      await loadQueueStatus('en');
+      await loadManifests();
+      var nextIndex = nextBlockIndexForLanguage('en');
+      if (nextIndex < 0) {
+        generationMessage = 'تم اعتماد جميع المقاطع الإنجليزية في هذه الحكاية.';
+        render();
+        return;
+      }
+      var currentView = engineView('en', nextIndex);
+      if (currentView.state === 'pending' || currentView.state === 'processing') {
+        generationMessage = 'المقطع الإنجليزي رقم ' + (nextIndex + 1) + ' موجود بالفعل في الطابور أو قيد التوليد. انتظر اكتماله.';
+        render();
+        return;
+      }
+      if (currentView.state === 'completed' && !currentView.canResend) {
+        generationMessage = 'اكتمل المقطع الإنجليزي رقم ' + (nextIndex + 1) + '. استمع إليه واعتمده قبل الانتقال للمقطع التالي.';
+        render();
+        return;
+      }
+      if (currentView.state === 'failed') {
+        generationMessage = currentView.detail || 'فشل المقطع الإنجليزي؛ راجع تفاصيل الخطأ قبل إعادة المحاولة.';
+        render();
+        return;
+      }
+      var reason = engineBlockReason('en', nextIndex);
+      if (reason) {
+        generationMessage = reason;
+        render();
+        return;
+      }
+      generationMessage = 'جارٍ إرسال المقطع الإنجليزي رقم ' + (nextIndex + 1) + ' إلى Colab…';
+      render();
+      await sendBlockToEngine('en', nextIndex);
+      var queuedJob = jobsByBlock[jobKey('en', nextIndex)];
+      generationMessage = queuedJob && ['pending', 'processing', 'completed'].includes(queuedJob.status)
+        ? 'أُرسل المقطع الإنجليزي رقم ' + (nextIndex + 1) + '. استمع إليه واعتمده قبل طلب المقطع التالي.'
+        : String(queuedJob && queuedJob.last_error || 'تعذر إرسال المقطع الإنجليزي إلى الطابور.');
+      render();
+    } catch (error) {
+      generationMessage = 'تعذر بدء التوليد الإنجليزي: ' + (error && error.message || error);
+      render();
+    } finally {
+      englishStartBusy = false;
+      render();
+    }
+  });
   var publishButton = document.createElement('button');
   publishButton.type = 'button';
   publishButton.className = 'kh-audio-publish-button';
@@ -1199,7 +1261,7 @@ function renderGenerationControls(banner) {
   });
   publishButton.hidden = !['ar', 'en'].includes(audioReviewLanguage());
   publishButton.title = 'لا يتاح النشر إلا بعد الاستماع الكامل واعتماد كل المقاطع المطلوبة بالعربية والإنجليزية.';
-  panel.append(title, summary, publishButton, status); banner.appendChild(panel);
+  panel.append(title, summary, englishStartButton, publishButton, status); banner.appendChild(panel);
   updateGenerationSummary();
 }
 function nextArabicBlockIndex() {
