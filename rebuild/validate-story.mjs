@@ -99,7 +99,7 @@ export function validateStory(s) {
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
         const label = 'i18n.' + lang + '.blocks[' + i + ']';
-        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after', 'heading'], label, out)) continue;
+        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after', 'heading', 'source_ar_text'], label, out)) continue;
         if (!['paragraph', 'did_you_know', 'science_note', 'timeline'].includes(b.type)) out.push(label + '.type invalid');
         if (Object.hasOwn(b, 'heading') && !nonempty(b.heading)) out.push(label + '.heading must be a non-empty string when provided');
         if (b.type === 'timeline' && !(typeof b.text === 'string' && b.text.split('\n').every(line => /\S.*\s—\s\S/.test(line)))) out.push(label + '.text must be lines of "year — event" for a timeline');
@@ -109,6 +109,30 @@ export function validateStory(s) {
       }
     }
   } else out.push('i18n must be an object');
+
+  // Every locale is the same story, aligned block-by-block to the approved Arabic source.
+  const arabicBlocks = Array.isArray(s.i18n?.ar?.blocks) ? s.i18n.ar.blocks : [];
+  for (const lang of LANGUAGES.filter(value => value !== 'ar')) {
+    const translatedBlocks = Array.isArray(s.i18n?.[lang]?.blocks) ? s.i18n[lang].blocks : [];
+    if (translatedBlocks.length !== arabicBlocks.length) {
+      out.push('i18n.' + lang + '.blocks must have the same number and order of blocks as Arabic.');
+    }
+    for (let i = 0; i < Math.min(arabicBlocks.length, translatedBlocks.length); i++) {
+      const source = arabicBlocks[i] || {}, translated = translatedBlocks[i] || {};
+      const label = 'i18n.' + lang + '.blocks[' + i + ']';
+      if (translated.type !== source.type) out.push(label + '.type must match the corresponding Arabic block.');
+      if (translated.speaker !== source.speaker) out.push(label + '.speaker must match the corresponding Arabic block.');
+      if (Object.hasOwn(source, 'heading') !== Object.hasOwn(translated, 'heading')) out.push(label + '.heading must be present in the same blocks as Arabic.');
+      if ((source.image_after || '') !== (translated.image_after || '')) out.push(label + '.image_after must match the corresponding Arabic block.');
+      if (Object.hasOwn(translated, 'source_ar_text') && translated.source_ar_text !== source.text) {
+        out.push(label + '.source_ar_text is stale: regenerate this translation from the current approved Arabic block.');
+      }
+    }
+    const hasAnyBaseline = translatedBlocks.some(block => Object.hasOwn(block || {}, 'source_ar_text'));
+    if (hasAnyBaseline && translatedBlocks.some(block => !Object.hasOwn(block || {}, 'source_ar_text'))) {
+      out.push('i18n.' + lang + '.blocks must include source_ar_text for every block once provenance tracking is enabled.');
+    }
+  }
 
   // Optional legacy metadata is preserved per locale. A missing translation is
   // not a validation error and must never be invented just to fill the schema.
