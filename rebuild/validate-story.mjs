@@ -146,8 +146,12 @@ export function validateStory(s) {
       if (source.type === 'timeline') {
         const sourceRows = String(source.text || '').split('\n');
         const translatedRows = String(translated.text || '').split('\n');
-        if (sourceRows.length !== translatedRows.length || sourceRows.some((row, index) => row.split(' — ')[0] !== String(translatedRows[index] || '').split(' — ')[0])) {
-          out.push(label + '.timeline rows and year/date labels must align with Arabic.');
+        const dateKey = row => (String(row || '').replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit))).match(/\\d+/g) || []).join('-');
+        if (sourceRows.length !== translatedRows.length || sourceRows.some((row, index) => {
+          const sourceDate = dateKey(row), translatedDate = dateKey(translatedRows[index]);
+          return !!sourceDate && sourceDate !== translatedDate;
+        })) {
+          out.push(label + '.timeline rows and numeric year/date values must align with Arabic.');
         }
       }
     }
