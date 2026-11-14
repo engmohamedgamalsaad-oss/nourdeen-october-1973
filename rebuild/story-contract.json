@@ -305,6 +305,9 @@
           "minLength": 1,
           "description": "A concise localized summary; it may differ from subtitle."
         },
+        "source_ar_title": { "type": "string", "minLength": 1, "description": "Exact current Arabic title snapshot for this locale; internal provenance only." },
+        "source_ar_subtitle": { "type": "string", "minLength": 1, "description": "Exact current Arabic subtitle snapshot for this locale; internal provenance only." },
+        "source_ar_summary": { "type": "string", "minLength": 1, "description": "Exact current Arabic summary snapshot for this locale; internal provenance only." },
         "blocks": {
           "type": "array",
           "minItems": 3,
@@ -349,6 +352,11 @@
                 "type": "string",
                 "minLength": 1,
                 "description": "Exact Arabic source block text used for this translation. Required by the current translation workflow; validator compares it with the current Arabic block to detect stale translations. Omit only for Arabic blocks."
+              },
+              "source_ar_heading": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact Arabic heading snapshot for this translated block, when the Arabic block has a heading; internal provenance only."
               }
             }
           }
