@@ -54,9 +54,11 @@ function imageCheck(im, label, out) {
 export function validateStory(s) {
   const out = [];
   const topRequired = ['format', 'slug', 'section', 'design', 'original_body', 'i18n', 'cover', 'images', 'sources', 'quiz'];
-  const topAllowed = [...topRequired, 'map_location'];
+  const topAllowed = [...topRequired, 'map_location', 'translation_policy'];
   if (!keysCheck(s, topRequired, topAllowed, 'story', out)) return out;
   if (s.format !== 'KHALEDOON_STORY') out.push('format must be KHALEDOON_STORY; normalize transitional inputs before validation');
+  if (Object.hasOwn(s, 'translation_policy') && s.translation_policy !== 'arabic-source-cultural-v1') out.push('translation_policy must be arabic-source-cultural-v1 when provided');
+  const requireTranslationProvenance = s.translation_policy === 'arabic-source-cultural-v1';
   if (typeof s.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s.slug)) out.push('slug must be lowercase kebab-case');
   if (!sections.has(s.section)) out.push('section is unsupported');
   if (keysCheck(s.design, ['variant', 'accent'], ['variant', 'accent'], 'design', out)) {
@@ -100,7 +102,7 @@ export function validateStory(s) {
         const arabicLocale = s.i18n?.ar || {};
         for (const key of ['title', 'subtitle', 'summary']) {
           const snapshotKey = 'source_ar_' + key;
-          if (t[snapshotKey] !== arabicLocale[key]) out.push('i18n.' + lang + '.' + snapshotKey + ' is stale or missing; refresh this localized field from the current Arabic source.');
+          if ((requireTranslationProvenance || Object.hasOwn(t, snapshotKey)) && t[snapshotKey] !== arabicLocale[key]) out.push('i18n.' + lang + '.' + snapshotKey + ' is stale or missing; refresh this localized field from the current Arabic source.');
         }
       }
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
@@ -131,10 +133,10 @@ export function validateStory(s) {
       if (translated.speaker !== source.speaker) out.push(label + '.speaker must match the corresponding Arabic block.');
       if (Object.hasOwn(source, 'heading') !== Object.hasOwn(translated, 'heading')) out.push(label + '.heading must be present in the same blocks as Arabic.');
       if ((source.image_after || '') !== (translated.image_after || '')) out.push(label + '.image_after must match the corresponding Arabic block.');
-      if (translated.source_ar_text !== source.text) {
+      if ((requireTranslationProvenance || Object.hasOwn(translated, 'source_ar_text')) && translated.source_ar_text !== source.text) {
         out.push(label + '.source_ar_text is stale or missing: regenerate this translation from the current approved Arabic block.');
       }
-      if (Object.hasOwn(source, 'heading') && translated.source_ar_heading !== source.heading) {
+      if (Object.hasOwn(source, 'heading') && (requireTranslationProvenance || Object.hasOwn(translated, 'source_ar_heading')) && translated.source_ar_heading !== source.heading) {
         out.push(label + '.source_ar_heading is stale or missing: refresh the translated heading from Arabic.');
       }
       if (source.type === 'timeline') {
