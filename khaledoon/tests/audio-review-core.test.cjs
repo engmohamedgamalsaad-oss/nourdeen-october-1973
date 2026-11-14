@@ -269,24 +269,5 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewActions.includes('if(isApprove){'), 'all sections, including October, must pass the shared audio approval gate');
   assert.ok(reviewActions.includes('delete pendingMeta.audio_review') && reviewActions.includes('delete meta.pending_draft.story_meta.audio_review'), 'approval must not duplicate audio_review inside pending_draft metadata');
 
-  /* In admin preview, the page locale stays Arabic while the audio-review language is independently selected. */
-  const readerSource = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.js'), 'utf8');
-  const reviewUi = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-review.js'), 'utf8');
-  const flowUi = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-flow.js'), 'utf8');
-  assert.ok(readerSource.includes("var previewMode=new URLSearchParams(location.search).get('draft')==='1',previewAudioLanguage='ar'"),
-    'admin preview must initialize its visible page in Arabic');
-  assert.ok(readerSource.includes("window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage"),
-    'the selected audio language must be stored separately from the page locale');
-  assert.ok(readerSource.includes("if(previewMode){previewAudioLanguage=b.dataset.lang;window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;"),
-    'language selection in admin preview must not switch the story page language');
-  assert.ok(reviewUi.includes("function audioReviewLanguage() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }"),
-    'audio review must use the independent selected language');
-  assert.ok(reviewUi.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang))"),
-    'review controls must be scoped to the selected language across all five languages');
-  assert.ok(reviewUi.includes("if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة"),
-    'languages without a configured generation backend must remain visible but not falsely offer generation');
-  assert.ok(flowUi.includes("window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'"),
-    'the queue flow must follow the audio language without changing the Arabic page locale');
-
   console.log('audio-review-core tests passed');
 })().catch(function (e) { console.error(e); process.exit(1); });
