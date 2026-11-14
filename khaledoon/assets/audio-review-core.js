@@ -248,6 +248,22 @@ function applyDecision(review, entry, decision, now) {
 }
 
 /* شرط اعتماد المعاينة: كل مقطع (في اللغات الخمس) جاهز ومقبول، ولا مرفوض ولا غير مراجَع. */
+/* A saved decision could only be recorded after the full clip was heard. Restore that proof across preview reloads,
+   but only for the exact clip key (which includes its text/audio revision); changed audio gets a new key. */
+function restoreListenedFromDecisions(entries, review, listenedByKey) {
+  var listened = Object.assign(Object.create(null), listenedByKey || {});
+  var r = cloneReview(review);
+  (Array.isArray(entries) ? entries : []).forEach(function (entry) {
+    var decision = r.clips[entry && entry.key];
+    if (!decision || (decision.status !== 'accepted' && decision.status !== 'rejected')) return;
+    if (decision.lang !== entry.lang ||
+        Number(decision.block_index) !== Number(entry.block_index) ||
+        Number(decision.chunk_index || 0) !== Number(entry.chunk_index || 0)) return;
+    listened[entry.key] = true;
+  });
+  return listened;
+}
+
 function evaluateGate(entries, review, readyByKey, listenedByKey) {
   var r = cloneReview(review), listened = listenedByKey || {}, out = { ok: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0 };
   entries.forEach(function (e) {
@@ -373,6 +389,7 @@ var api = {
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
+  restoreListenedFromDecisions: restoreListenedFromDecisions,
   evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, validateTranslationAlignment: validateTranslationAlignment, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
