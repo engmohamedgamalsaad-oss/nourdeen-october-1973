@@ -275,7 +275,7 @@ const core = require('../assets/audio-review-core.js');
   const adminFlowSource = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-flow.js'), 'utf8');
   assert.ok(adminReaderSource.includes("var previewMode=new URLSearchParams(location.search).get('draft')==='1',previewAudioLanguage='ar'"), 'admin preview must initialize its visible page in Arabic');
   assert.ok(adminReaderSource.includes("window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage"), 'selected audio language must be separate from page locale');
-  assert.ok(readerSource.includes("if(previewMode){previewAudioLanguage=b.dataset.lang;window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;"), 'admin language selection must not switch the story page language');
+  assert.ok(adminReaderSource.includes("if(previewMode){previewAudioLanguage=b.dataset.lang;window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;"), 'admin language selection must not switch the story page language');
   assert.ok(adminReviewSource.includes("function audioReviewLanguage() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }"), 'review UI must use independent audio language');
   assert.ok(adminReviewSource.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang))"), 'review controls must follow all five selected languages');
   assert.ok(adminReviewSource.includes("if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة"), 'unsupported generation must be visibly disabled rather than falsely offered');
