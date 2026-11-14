@@ -1,19 +1,23 @@
 /* خالدون — ترتيب صفحة معاينة الصوت وإظهار حالة التوليد.
    طبقة إضافية فوق reader-audio-review.js: لا تغيّر منطقه ولا أزراره ولا الحفظ، بل:
-   1) ترتّب كل مقطع: النص ← نص القراءة (Gemini) ← التوليد ← المعاينة والاعتماد، مع شريط حالة بأربع خطوات؛
-   2) تعرض حالة التوليد الحقيقية من الطابور (لم يُرسل / في الطابور / بيتم الآن / تم / فشل) وتحدّثها تلقائيًا؛
-   3) تطوي المقاطع غير الحالية، وتنقل شريط الملخص والنشر إلى آخر الصفحة بعد النصوص. */
+   1) ترتّب كل مقطع في أربع خطوات منفصلة قابلة للطي، لكل خطوة بياناتها: النص ← نص القراءة (Gemini) ← التوليد ← المعاينة والاعتماد؛
+   2) تجعل شرائح الحالة الأربع أزرارًا تفتح الخطوة المقابلة، وتضع التفاصيل الثانوية (ملاحظات Gemini، تفاصيل الطلب، نتيجة مدقق النطق) في طبقات مطوية؛
+   3) تعرض حالة التوليد الحقيقية من الطابور (لم يُرسل / في الطابور / بيتم الآن / تم / فشل) وتحدّثها تلقائيًا؛
+   4) تطوي المقاطع غير الحالية، وتنقل شريط الملخص والنشر إلى آخر الصفحة بعد النصوص. */
 (function () {
   'use strict';
   if (window.__khAudioFlow) return;
   window.__khAudioFlow = true;
 
+  var SCRIPT_SRC = document.currentScript && document.currentScript.src ? document.currentScript.src : location.href;
+  var STEPS_CSS = 'reader-audio-steps.css?v=20261114-steps-1';
   var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
   var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn'; /* publishable key، نفس المستخدم في الصفحة */
   var SPEAKERS = { karma: 'كارما', narrator: 'الراوي' };
   var ICONS = { done: '✅', wait: '⏳', busy: '🔄', fail: '❌', warn: '✋', todo: '⬜', na: '—' };
+  var JOB_STATUS = { pending: 'في الطابور', processing: 'قيد التوليد', completed: 'مكتمل', failed: 'فشل' };
 
-  var jobs = {}, previousJobs = {}, openMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false;
+  var jobs = {}, previousJobs = {}, openMemo = {}, stepMemo = {}, subMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false;
 
   function $(id) { return document.getElementById(id); }
   function story() { return window.__KH_STORY_PACKAGE || null; }
@@ -21,6 +25,17 @@
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
   function direct(parent, selector) { return Array.prototype.filter.call(parent.children, function (n) { return n.matches(selector); }); }
   function blockIndexOf(block, position) { var n = Number(block.dataset.blockIndex); return Number.isInteger(n) && block.dataset.blockIndex !== '' ? n : position; }
+  function boxKey(box) { return lang() + ':' + box.dataset.index; }
+  function stepKey(box, n) { return boxKey(box) + ':' + n; }
+
+  /* تنسيقات الخطوات في ملف مستقل بوسم إصدار خاص به، فلا تتأثر بذاكرة المتصفح لملف التنسيق القديم. */
+  function loadStepStyles() {
+    if ($('kh-audio-steps-css')) return;
+    var link = document.createElement('link');
+    link.id = 'kh-audio-steps-css'; link.rel = 'stylesheet';
+    try { link.href = new URL(STEPS_CSS, SCRIPT_SRC).href; } catch (e) { link.href = STEPS_CSS; }
+    document.head.appendChild(link);
+  }
 
   /* ---------- حالة الطابور (من الخادم، لا من تخمين الواجهة) ---------- */
   function token() {
@@ -100,21 +115,59 @@
     if (job.status === 'failed') return 'فشل التوليد: ' + String(job.last_error || 'سبب غير معروف').slice(0, 160);
     return 'الحالة: ' + job.status;
   }
+  function kv(k, v) {
+    var row = el('div', 'kh-kv');
+    row.appendChild(el('span', 'kh-kv-k', k));
+    row.appendChild(el('span', 'kh-kv-v', v));
+    return row;
+  }
+  /* بيانات طلب التوليد الخاصة بالخطوة ٣ (تُملأ من الطابور وتتحدث مع كل متابعة) */
+  function fillJobData(box) {
+    var node = box.querySelector('.kh-job-data');
+    if (!node) return;
+    var job = jobOf(Number(box.dataset.index));
+    node.replaceChildren();
+    if (!job) { node.appendChild(el('p', 'kh-muted', 'لا يوجد طلب توليد لهذا المقطع في الطابور.')); return; }
+    node.appendChild(kv('الحالة', JOB_STATUS[job.status] || String(job.status || '—')));
+    node.appendChild(kv('المحاولات', String(job.attempts == null ? 0 : job.attempts)));
+    node.appendChild(kv('آخر تحديث', ageText(job) || '—'));
+    node.appendChild(kv('آخر خطأ', job.last_error ? String(job.last_error).slice(0, 300) : '—'));
+    node.appendChild(kv('رقم الطلب', job.id ? String(job.id).slice(0, 8) : '—'));
+  }
+  function openStep(box, n) {
+    box.open = true; openMemo[boxKey(box)] = true;
+    var step = box.querySelector(':scope > .kh-flow-body > .kh-step[data-step="' + n + '"]');
+    if (!step) return;
+    step.open = true; stepMemo[stepKey(box, n)] = true;
+    try { step.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+  }
   function paint(box) {
     var chips = chipStates(box), bar = box.querySelector(':scope > summary .kh-flowbar');
     if (bar) {
       bar.replaceChildren();
       chips.forEach(function (c) {
-        var li = el('li', 'kh-chip'); li.dataset.state = c.s;
-        li.appendChild(el('span', 'kh-chip-ico', ICONS[c.s] || '')); 
-        var tx = el('span', 'kh-chip-txt'); tx.appendChild(el('b', '', c.n + '. ' + c.label)); tx.appendChild(el('small', '', c.t)); li.appendChild(tx);
-        bar.appendChild(li);
+        var li = el('li', 'kh-chip-item');
+        var b = el('button', 'kh-chip'); b.type = 'button'; b.dataset.state = c.s; b.dataset.step = String(c.n);
+        b.title = 'افتح خطوة «' + c.label + '»';
+        b.appendChild(el('span', 'kh-chip-ico', ICONS[c.s] || ''));
+        var tx = el('span', 'kh-chip-txt'); tx.appendChild(el('b', '', c.n + '. ' + c.label)); tx.appendChild(el('small', '', c.t)); b.appendChild(tx);
+        b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); openStep(box, c.n); });
+        li.appendChild(b); bar.appendChild(li);
       });
     }
     var any = chips.some(function (c) { return c.s === 'fail'; }), all = chips.every(function (c) { return c.s === 'done' || c.s === 'na'; });
     box.dataset.state = any ? 'fail' : (all ? 'done' : 'open');
-    if (any && !box.open && openMemo[lang() + ':' + box.dataset.index] === undefined) box.open = true; /* الفشل يُفتح تلقائيًا ما لم تغلقه بنفسك */
+    if (any && !box.open && openMemo[boxKey(box)] === undefined) box.open = true; /* الفشل يُفتح تلقائيًا ما لم تغلقه بنفسك */
+    Array.prototype.forEach.call(box.querySelectorAll(':scope > .kh-flow-body > .kh-step'), function (d) {
+      var c = chips[Number(d.dataset.step) - 1];
+      if (!c) return;
+      d.dataset.state = c.s;
+      var st = d.querySelector(':scope > summary .kh-step-state');
+      if (st) st.textContent = (ICONS[c.s] || '') + ' ' + c.t;
+      if (c.s === 'fail' && stepMemo[stepKey(box, c.n)] === undefined && !d.open) d.open = true;
+    });
     var note = box.querySelector('.kh-gen-note'); if (note) note.textContent = genNote(box);
+    fillJobData(box);
     var reload = box.querySelector('.kh-gen-reload');
     var job = jobOf(Number(box.dataset.index));
     if (reload) reload.hidden = !(job && job.status === 'completed' && !box.querySelector('.kh-audio-card'));
@@ -152,8 +205,51 @@
     var banner = $('kh-audio-review-gate');
     top.dataset.state = banner ? (banner.dataset.state || '') : '';
   }
+  /* طبقة ثانوية مطوية داخل خطوة (تتذكر حالة فتحها بين إعادة البناء) */
+  function makeSub(box, name, title) {
+    var key = boxKey(box) + ':sub:' + name;
+    var d = el('details', 'kh-sub');
+    d.open = !!subMemo[key];
+    d.appendChild(el('summary', '', title));
+    d.addEventListener('toggle', function () { subMemo[key] = d.open; });
+    return d;
+  }
+  /* خطوة مستقلة: رأس فيه الرقم والاسم والحالة، وجسم فيه بياناتها وحدها */
+  function makeStep(box, n, label) {
+    var d = el('details', 'kh-step'); d.dataset.step = String(n);
+    var s = el('summary', 'kh-step-summary');
+    s.appendChild(el('span', 'kh-step-num', String(n)));
+    s.appendChild(el('span', 'kh-step-label', label));
+    s.appendChild(el('span', 'kh-step-state', ''));
+    d.appendChild(s);
+    var body = el('div', 'kh-step-body'); d.appendChild(body);
+    s.addEventListener('click', function () { setTimeout(function () { stepMemo[stepKey(box, n)] = d.open; }, 0); });
+    return { d: d, body: body };
+  }
+  function layerSpeechPanel(box, panel) {
+    var notes = panel.querySelector('.kh-speech-notes');
+    if (notes && notes.children.length) {
+      var sub = makeSub(box, 'gemini-notes', '📝 ملاحظات Gemini والتنبيهات (' + notes.children.length + ')');
+      notes.parentNode.insertBefore(sub, notes);
+      sub.appendChild(notes);
+    }
+    var hint = panel.querySelector('.kh-flow');
+    if (hint) {
+      var hintSub = makeSub(box, 'speech-hint', 'ℹ️ كيف تعمل هذه الخطوة؟');
+      hint.parentNode.insertBefore(hintSub, hint);
+      hintSub.appendChild(hint);
+    }
+  }
+  function layerAudioCard(box, card) {
+    var asr = card.querySelector('.kh-audio-asr-result');
+    if (!asr) return;
+    var sub = makeSub(box, 'asr:' + (card.dataset.clipKey || ''), '🔎 نتيجة مدقق النطق');
+    asr.parentNode.insertBefore(sub, asr);
+    sub.appendChild(asr);
+  }
   function rebuild() {
     var host = $('blocks'); if (!host) return;
+    loadStepStyles();
     var L = lang(), st = story();
     var blocks = direct(host, '.block');
     var gp = document.querySelector('.kh-audio-generation-controls');
@@ -182,28 +278,72 @@
       var body = el('div', 'kh-flow-body');
       var speech = rec.panels.filter(function (p) { return p.classList.contains('kh-speech-text-controls'); });
       var cards = rec.panels.filter(function (p) { return p.classList.contains('kh-audio-card'); });
-      var other = rec.panels.filter(function (p) { return speech.indexOf(p) < 0 && cards.indexOf(p) < 0; });
-      speech.forEach(function (p) { body.appendChild(p); });
+      var engine = rec.panels.filter(function (p) { return p.classList.contains('kh-engine-controls'); });
+      var other = rec.panels.filter(function (p) { return speech.indexOf(p) < 0 && cards.indexOf(p) < 0 && engine.indexOf(p) < 0; });
+      /* بطاقة الصوت قد تكون موضوعة داخل لوحة نص القراءة (مقطع ٥ من ابن سينا)؛ نُخرجها إلى خطوة المعاينة */
+      speech.forEach(function (sp) { direct(sp, '.kh-audio-card').forEach(function (c) { cards.unshift(c); }); });
+      var followText = '';
+      speech.forEach(function (sp) { var ta = sp.querySelector('textarea'); if (!followText && ta && String(ta.value || '').trim()) followText = String(ta.value).trim(); });
+
+      /* ① النص */
+      var step1 = makeStep(box, 1, 'النص');
+      var original = local && typeof local.text === 'string' ? local.text : '';
+      step1.body.appendChild(kv('المتحدث', SPEAKERS[speaker] || '—'));
+      step1.body.appendChild(kv('عدد الحروف', String(original.length)));
+      step1.body.appendChild(el('p', 'kh-orig-text', original || 'لا يوجد نص لهذا المقطع.'));
+      body.appendChild(step1.d);
+
+      /* ② نص القراءة (Gemini) */
+      var step2 = makeStep(box, 2, 'نص القراءة (Gemini)');
+      if (speech.length) {
+        speech.forEach(function (p) { layerSpeechPanel(box, p); step2.body.appendChild(p); });
+      } else {
+        step2.body.appendChild(el('p', 'kh-muted', L === 'ar' ? 'هذا المقطع لا يحتاج نص قراءة منفصلًا.' : 'لا يلزم نص قراءة منفصل لهذه اللغة؛ يُولَّد الصوت من نص الحكاية.'));
+      }
+      body.appendChild(step2.d);
+
+      /* ③ التوليد */
       if (L === 'ar' || L === 'en') {
-        var gen = el('section', 'kh-gen-step');
-        gen.appendChild(el('strong', 'kh-gen-head', '③ التوليد'));
-        gen.appendChild(el('p', 'kh-gen-note', ''));
+        var step3 = makeStep(box, 3, 'التوليد');
+        step3.body.appendChild(el('p', 'kh-gen-note', ''));
         if (rec.index === current && genButton) {
-          var row = el('div', 'kh-gen-row'); row.appendChild(genButton); if (genStatus) row.appendChild(genStatus); gen.appendChild(row);
+          var row = el('div', 'kh-gen-row'); row.appendChild(genButton); if (genStatus) row.appendChild(genStatus); step3.body.appendChild(row);
         }
+        engine.forEach(function (p) { step3.body.appendChild(p); });
+        var jobSub = makeSub(box, 'job', '⚙️ تفاصيل طلب التوليد');
+        jobSub.appendChild(el('div', 'kh-job-data'));
+        step3.body.appendChild(jobSub);
         var reload = el('button', 'kh-gen-reload', 'حدّث الصفحة لتسمع المقطع'); reload.type = 'button'; reload.hidden = true;
         reload.addEventListener('click', function () { location.reload(); });
-        gen.appendChild(reload);
-        body.appendChild(gen);
+        step3.body.appendChild(reload);
+        body.appendChild(step3.d);
       }
-      cards.forEach(function (p) { body.appendChild(p); });
-      other.forEach(function (p) { body.appendChild(p); });
+
+      /* ④ المعاينة والاعتماد */
+      var step4 = makeStep(box, 4, 'المعاينة والاعتماد');
+      if (cards.length && followText) {
+        step4.body.appendChild(el('div', 'kh-follow-label', 'نص القراءة — تابعه أثناء الاستماع'));
+        step4.body.appendChild(el('p', 'kh-follow-text', followText));
+      }
+      cards.forEach(function (p) { layerAudioCard(box, p); step4.body.appendChild(p); });
+      other.forEach(function (p) { step4.body.appendChild(p); });
+      if (!cards.length && !other.length) step4.body.appendChild(el('p', 'kh-muted', 'لا يوجد صوت لهذا المقطع بعد. أرسله من خطوة التوليد، وسيظهر هنا بعد اكتماله.'));
+      body.appendChild(step4.d);
+
       box.appendChild(body);
       rec.block.appendChild(box);
-      var memoKey = L + ':' + rec.index;
+      var memoKey = boxKey(box);
       paint(box);
       box.open = openMemo[memoKey] !== undefined ? openMemo[memoKey] : (rec.index === current || box.dataset.state === 'fail');
       sum.addEventListener('click', function () { setTimeout(function () { openMemo[memoKey] = box.open; }, 0); });
+      /* أي خطوة تُفتح تلقائيًا؟ أول خطوة فاشلة، وإلا أول خطوة لم تكتمل. وما فتحته أو أغلقته بنفسك يبقى كما هو. */
+      var chips = chipStates(box), focus = 0, i;
+      for (i = 1; i < chips.length && !focus; i++) if (chips[i].s === 'fail') focus = i + 1;
+      for (i = 1; i < chips.length && !focus; i++) if (chips[i].s !== 'done' && chips[i].s !== 'na') focus = i + 1;
+      Array.prototype.forEach.call(body.children, function (stepEl) {
+        var n = Number(stepEl.dataset.step), mk = stepKey(box, n);
+        stepEl.open = stepMemo[mk] !== undefined ? stepMemo[mk] : n === focus;
+      });
     });
     ensureTop(host);
     refresh();
