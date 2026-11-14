@@ -618,18 +618,18 @@ function languageGate(language) {
 function gate() { return languageGate('ar'); }
 function gateSummary() {
   var g = gate();
-  if (g.loading) return 'جارٍ تحميل وفحص ملفات الصوت؛ لن يتاح اعتماد المعاينة قبل اكتمال الفحص.';
+  if (g.loading) return 'يجري فحص الصوت الاختياري. يمكن اعتماد ونشر النص دون انتظار اكتمال الفحص.';
   if (g.loadError) {
     var details = REQUIRED_LANGS.filter(function (lang) { return !!manifestErrors[lang]; }).map(function (lang) {
       return LANG_NAMES[lang] + ': ' + manifestErrors[lang];
     });
-    return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إصلاح المشكلة.' + (details.length ? ' ' + details.join(' | ') : '');
+    return 'تعذر التحقق من ملفات الصوت. هذا لا يمنع اعتماد النص أو نشر الحكاية دون صوت؛ أصلح المشكلة عند تجهيز الصوت.' + (details.length ? ' ' + details.join(' | ') : '');
   }
-  if (g.missingLanguages) return 'مراجعة الصوت غير مكتملة: ملفات الصوت غير جاهزة للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '.';
+  if (g.missingLanguages) return 'لم يتم إنشاء الصوت بعد للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '. يمكنك اعتماد ونشر النص الآن، وإضافة الصوت لاحقًا.';
   if (g.ok) return 'تم قبول كل المقاطع الصوتية العربية (' + g.accepted + '/' + g.total + ').';
-  if (g.staleBlocks) return 'يوجد ' + g.staleBlocks + ' مقطع صوته قديم ولا يطابق نص القراءة المعتمد؛ أعد توليد صوته من النص المعتمد قبل الاعتماد.';
-  if (g.uncoveredBlocks) return 'يوجد ' + g.uncoveredBlocks + ' مقطع بلا ملف صوتي بعد؛ ولّد صوته قبل الاعتماد.';
-  return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '.';
+  if (g.staleBlocks) return 'يوجد ' + g.staleBlocks + ' مقطع صوته قديم ولا يطابق نص القراءة المعتمد؛ أعد توليده عند تجهيز الصوت. هذا لا يمنع نشر النص.';
+  if (g.uncoveredBlocks) return 'يوجد ' + g.uncoveredBlocks + ' مقطع لم يُنشأ صوته بعد. يمكنك نشر النص الآن وتوليد الصوت لاحقًا.';
+  return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '. حالة الصوت مستقلة عن نشر النص.';
 }
 function renderGateBanner(banner) {
   var g = gate();
@@ -644,11 +644,11 @@ function renderGateBanner(banner) {
   avatar.setAttribute('aria-hidden', 'true');
   avatar.textContent = '🎧';
   var titleText = document.createElement('span');
-  text(titleText, 'مراجعة الصوت قبل اعتماد المعاينة');
+  text(titleText, 'حالة الصوت — لا تمنع نشر النص');
   title.append(avatar, titleText);
   var pill = document.createElement('span');
   pill.className = 'kh-gate-pill';
-  text(pill, g.loading ? 'جارٍ الفحص…' : g.loadError ? 'خطأ في التحميل' : g.ok ? 'جاهز للاعتماد ✓' : 'المراجعة غير مكتملة');
+  text(pill, g.loading ? 'فحص الصوت الاختياري…' : g.loadError ? 'تعذر فحص الصوت' : g.ok ? 'الصوت جاهز (اختياري) ✓' : g.missingLanguages ? 'لم يُنشأ الصوت بعد — النص قابل للنشر' : 'الصوت قيد المراجعة (اختياري)');
   head.append(title, pill);
   var message = document.createElement('div');
   message.className = 'kh-gate-message';
@@ -660,7 +660,6 @@ function renderGateBanner(banner) {
     text(notice, reconcileNotice);
     banner.appendChild(notice);
   }
-  if (!entries.length) return;
   var requiredEntries = entries.filter(function (entry) { return entry.lang === 'ar'; });
   var total = requiredEntries.length;
   var ready = requiredEntries.filter(function (entry) { return readyByKey[entry.key] === 'ready'; }).length;
@@ -692,8 +691,10 @@ function renderGateBanner(banner) {
     rowEl.append(caption, bar);
     banner.appendChild(rowEl);
   }
-  meterRow('المقاطع الجاهزة للاستماع', ready, 'ready');
-  meterRow('المقاطع المقبولة بعد الاستماع', accepted, 'accepted');
+  if (entries.length) {
+    meterRow('المقاطع الجاهزة للاستماع', ready, 'ready');
+    meterRow('المقاطع المقبولة بعد الاستماع', accepted, 'accepted');
+  }
   var chips = document.createElement('div');
   chips.className = 'kh-lang-chips';
   LANGS.forEach(function (lang) {
@@ -705,8 +706,8 @@ function renderGateBanner(banner) {
     var langGate = languageGate(lang);
     var chip = document.createElement('span');
     chip.className = 'kh-lang-chip';
-    chip.dataset.state = langGate.ok ? 'done' : (langGate.missingLanguages ? 'none' : 'part');
-    var label = list.length ? acc + '/' + list.length : (manifests[lang] ? 'قيد المراجعة' : 'لم تُجهّز');
+    chip.dataset.state = !manifests[lang] ? 'none' : (langGate.ok ? 'done' : 'part');
+    var label = !manifests[lang] ? 'لم يُنشأ الصوت' : (list.length ? acc + '/' + list.length + ' مقبول' : 'قيد المراجعة');
     if (publishedAudioStatus[lang] && publishedAudioStatus[lang].published) label += ' · منشور';
     text(chip, LANG_NAMES[lang] + ' ' + label);
     chips.appendChild(chip);
@@ -714,7 +715,7 @@ function renderGateBanner(banner) {
   banner.appendChild(chips);
   if (g.missingLanguages || g.loadError) {
     var partial = document.createElement('small');
-    text(partial, 'عداد الاعتماد الرئيسي يخص العربية فقط؛ لكل لغة إضافية مراجعة ونشر مستقلان.');
+    text(partial, 'الترجمة والنشر الكتابي مستقلان عن الصوت. لكل لغة توليد صوت ومراجعة ونشر صوتي مستقل عند الحاجة.');
     banner.appendChild(partial);
   }
 }
