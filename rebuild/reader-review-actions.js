@@ -99,7 +99,7 @@ function addControls(){
  title.append(icon,titleText);
  var end=document.createElement('div');end.className='khd-end';
  flag=document.createElement('span');flag.className='khd-flag';flag.id='kh-preview-ctx-flag';
- gatePill=document.createElement('span');gatePill.className='khd-pill';gatePill.id='kh-preview-gate-pill';gatePill.textContent='جارٍ فحص الصوت…';
+ gatePill=document.createElement('span');gatePill.className='khd-pill';gatePill.id='kh-preview-gate-pill';gatePill.textContent='النص قابل للنشر دون صوت';
  var colabLink=document.createElement('a');colabLink.className='khd-colab-link';colabLink.href='https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb';colabLink.target='_blank';colabLink.rel='noopener noreferrer';colabLink.textContent='تشغيل Colab';colabLink.setAttribute('aria-label','فتح دفتر Colab لإعادة تشغيل عامل الصوت');colabLink.addEventListener('click',function(event){event.stopPropagation()});
 
  var chev=document.createElement('span');chev.className='khd-chev';chev.setAttribute('aria-hidden','true');chev.textContent='▾';
@@ -144,27 +144,24 @@ function setNote(short,full){
  if(full&&full!==short){gateDetails.hidden=false;gateDetailsBody.textContent=full}
  else{gateDetails.hidden=true;gateDetails.open=false;gateDetailsBody.textContent=''}
 }
-/* يعكس حالة مراجعة الصوت على اللوحة: لا يغيّر منطق القرار، فقط العرض */
+/* حالة الصوت معلومات مستقلة؛ اعتماد ونشر النص لا ينتظران إنشاء الصوت أو مراجعته. */
 function refreshGate(){
  if(!panel)return;
  var api=window.KHStoryAudioReview,g=null;
- if(!api||typeof api.gate!=='function'){
-  panel.dataset.gate='wait';gatePill.textContent='مدقق الصوت لم يُحمَّل بعد';gateFill.style.width='0%';
-  setNote('لا يمكن قبول المعاينة قبل تحميل مدقق الصوت.');return;
- }
- try{g=api.gate()}catch(e){g=null}
- if(!g){panel.dataset.gate='bad';gatePill.textContent='تعذر فحص الصوت';setNote('تعذر قراءة حالة مراجعة الصوت.');return}
- var total=Number(g.total)||0,accepted=Number(g.accepted)||0;
- gateFill.style.width=(total?Math.round(accepted/total*100):0)+'%';
- if(g.loading){panel.dataset.gate='wait';gatePill.textContent='جارٍ فحص ملفات الصوت…'}
- else if(g.loadError){panel.dataset.gate='bad';gatePill.textContent='خطأ في تحميل الصوت'}
- else if(g.ok){panel.dataset.gate='ok';gatePill.textContent='الصوت: كل المقاطع مقبولة ✓ ('+accepted+'/'+total+')'}
- else{panel.dataset.gate='warn';gatePill.textContent='الصوت: '+accepted+'/'+total+' مقبول'}
- var full='';
+ try{if(api&&typeof api.gate==='function')g=api.gate()}catch(e){g=null}
+ panel.dataset.gate='ok';
+ gatePill.textContent='النص قابل للنشر دون صوت';
+ gateFill.style.width='100%';
+ var total=Number(g&&g.total)||0,accepted=Number(g&&g.accepted)||0,full='';
+ if(!g){setNote('يمكن اعتماد ونشر النص الآن دون ملفات صوت. حالة الصوت اختيارية ولا تمنع النشر.');return}
  try{full=String(api.gateSummary()||'')}catch(e){full=''}
- if(g.loadError){setNote('تعذر التحقق من ملفات الصوت، ولا يمكن قبول المعاينة قبل إصلاح المشكلة.',full)}
- else if(full.length>160){setNote(full.slice(0,157)+'…',full)}
- else{setNote(full)}
+ var note='';
+ if(g.loading)note='يمكن اعتماد ونشر النص الآن. يجري فحص الصوت الاختياري في الخلفية.';
+ else if(g.loadError)note='يمكن اعتماد ونشر النص دون صوت. تعذر فحص ملفات الصوت؛ أصلح ذلك عند تجهيز الصوت.';
+ else if(g.missingLanguages)note='لم يتم إنشاء الصوت بعد لبعض اللغات. يمكنك اعتماد ونشر النص الآن، وإضافة الصوت لاحقًا.';
+ else if(g.ok)note='الصوت العربي جاهز ومقبول ('+accepted+'/'+total+')، لكنه ليس شرطًا لنشر النص.';
+ else note='حالة الصوت: '+accepted+'/'+total+' مقبول. يمكنك اعتماد ونشر النص دون انتظار اكتمال الصوت.';
+ setNote(note,full&&full!==note?full:'');
 }
 function getContext(){
  var params=new URLSearchParams(location.search),urlId=params.get('submission'),urlTable=params.get('table');
@@ -200,13 +197,9 @@ function setBusy(on){busy=on;[approve,reject].forEach(function(b){if(b)b.disable
 async function decide(isApprove){
  if(busy)return;
  if(!draft||!draft.submission_id){message('لا يوجد رقم سجل مرتبط بهذه المعاينة. افتحها من لوحة الإدارة مرة أخرى.',true);return}
- if(isApprove){
-  if(!window.KHStoryAudioReview){message('تعذر تحميل مدقق الصوت. أعد تحميل المعاينة؛ لا يمكن اعتمادها قبل التحقق من حالة الصوت.',true);return}
-  if(!window.KHStoryAudioReview.canApprove()){message(window.KHStoryAudioReview.gateSummary()||'راجع واعتمد كل المقاطع الصوتية العربية أولًا.',true);return}
- }
  var why=String(reason.value||'').trim();
  if(!isApprove&&!why){reason.style.display='block';reason.focus();message('سبب الرفض مطلوب.',true);return}
- setBusy(true);message(isApprove?'جارٍ حفظ الاعتماد والتحقق منه…':'جارٍ حفظ الرفض والتحقق منه…');
+ setBusy(true);message(isApprove?'جارٍ حفظ اعتماد النص والتحقق منه…':'جارٍ حفظ رفض المعاينة والتحقق منه…');
  try{
   if(!window.KHWorkflow)throw new Error('تعذر تحميل منطق سير العمل. أعد تحميل الصفحة.');
   var token=await adminToken(),table=draft.submission_table==='submitted_stories'?'submitted_stories':'khaledoon_submissions';
@@ -247,7 +240,7 @@ async function decide(isApprove){
   try{localStorage.removeItem('kh-story-review-context')}catch(e){}
   approve.disabled=true;reject.disabled=true;reason.disabled=true;back.disabled=false;
   if(isApprove){
-   message('تم اعتماد المعاينة وحفظ القرار والتحقق منه. ستعود الآن إلى لوحة الإدارة لاستكمال النشر.');
+   message('تم اعتماد النص وحفظ القرار والتحقق منه. يمكنك نشر الحكاية الآن دون صوت، وإضافة الصوت لاحقًا.');
    setTimeout(function(){location.href='../khaledoon/admin.html?returnfrompreview=1&submission='+encodeURIComponent(draft.submission_id)},1100);
   }else{
    message('تم رفض المعاينة وإعادة الحكاية للتحرير. سبب الرفض محفوظ. ستعود الآن إلى لوحة الإدارة.');
