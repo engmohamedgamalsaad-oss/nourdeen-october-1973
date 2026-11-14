@@ -481,7 +481,12 @@ Deno.serve(async (req: Request) => {
     const accepted = acceptedBlockIndexes(audioReview, language);
     const ordered = orderedStoryBlockIndexes(source.story.i18n[language].blocks);
     const targetPosition = ordered.indexOf(blockIndex);
-    if (targetPosition < 0 || ordered.slice(0, targetPosition).some((index) => !accepted.has(index))) {
+    // Arabic keeps the strict story order (each block's reading text is approved in turn).
+    // English clips are independent: they can all be queued once Arabic is done, and any
+    // single English block can be regenerated without touching the others.
+    const requiresPreviousAccepted = language === "ar";
+    if (targetPosition < 0 || (requiresPreviousAccepted &&
+        ordered.slice(0, targetPosition).some((index) => !accepted.has(index)))) {
       return reply(409, { error: "يجب إكمال المقاطع السابقة واعتمادها أولًا، بترتيب الحكاية." });
     }
     if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
