@@ -25,6 +25,22 @@
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
   function direct(parent, selector) { return Array.prototype.filter.call(parent.children, function (n) { return n.matches(selector); }); }
   function blockIndexOf(block, position) { var n = Number(block.dataset.blockIndex); return Number.isInteger(n) && block.dataset.blockIndex !== '' ? n : position; }
+  function translationGate(st, language) {
+    if (language === 'ar') return { ok: true, reason: '' };
+    var ar = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks;
+    var local = st && st.i18n && st.i18n[language] && st.i18n[language].blocks;
+    if (!Array.isArray(ar) || !Array.isArray(local) || local.length !== ar.length) return { ok: false, reason: 'ترجمة هذه اللغة لا تطابق عدد المقاطع العربية؛ حدّث ترجمة الحكاية أولًا.' };
+    for (var i = 0; i < ar.length; i++) {
+      var a = ar[i] || {}, b = local[i] || {};
+      if (a.type !== b.type || a.speaker !== b.speaker || (a.image_after || '') !== (b.image_after || '') || (Object.prototype.hasOwnProperty.call(a, 'heading') !== Object.prototype.hasOwnProperty.call(b, 'heading'))) {
+        return { ok: false, reason: 'ترجمة المقطع ' + (i + 1) + ' غير متزامنة مع بنية المقطع العربي المقابل.' };
+      }
+      if (typeof b.source_ar_text !== 'string' || b.source_ar_text !== a.text) {
+        return { ok: false, reason: 'ترجمة المقطع ' + (i + 1) + ' قديمة أو غير موثقة المصدر. أعد ترجمتها من النص العربي المعتمد قبل توليد الصوت.' };
+      }
+    }
+    return { ok: true, reason: '' };
+  }
   function boxKey(box) { return lang() + ':' + box.dataset.index; }
   function stepKey(box, n) { return boxKey(box) + ':' + n; }
 
@@ -262,11 +278,14 @@
     });
     var byIndex = {}; info.forEach(function (i) { byIndex[i.index] = i; });
     var sb = st && st.i18n && st.i18n[L] && st.i18n[L].blocks || [], karma = [], narrator = [];
+    var localeGate = translationGate(st, L);
     sb.forEach(function (b, i) { if (b && b.speaker === 'karma') karma.push(i); else if (b && b.speaker === 'narrator') narrator.push(i); });
     var order = karma.concat(narrator).sort(function (a, b) { return a - b; }), current = -1;
     for (var k = 0; k < order.length; k++) { var rec = byIndex[order[k]]; if (!rec || !rec.accepted) { current = order[k]; break; } }
     var genButton = gp && gp.querySelector('button:not(.kh-audio-publish-button)');
     var genStatus = gp && gp.querySelector('.kh-audio-review-state');
+    if (L !== 'ar' && !localeGate.ok && genButton) { genButton.disabled = true; genButton.title = localeGate.reason; }
+    else if (genButton) { genButton.disabled = false; genButton.removeAttribute('title'); }
     info.forEach(function (rec) {
       if (!rec.panels.length && (L !== 'ar' && L !== 'en')) return;
       var local = sb[rec.index], speaker = local && local.speaker;
@@ -305,7 +324,7 @@
       /* ③ التوليد */
       if (L === 'ar' || L === 'en') {
         var step3 = makeStep(box, 3, 'التوليد');
-        step3.body.appendChild(el('p', 'kh-gen-note', ''));
+        step3.body.appendChild(el('p', 'kh-gen-note', L !== 'ar' && !localeGate.ok ? localeGate.reason : ''));
         if (rec.index === current && genButton) {
           var row = el('div', 'kh-gen-row'); row.appendChild(genButton); if (genStatus) row.appendChild(genStatus); step3.body.appendChild(row);
         }
