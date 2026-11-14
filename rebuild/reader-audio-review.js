@@ -452,6 +452,8 @@ async function saveReview(entry, decision, followupStatusNode, followupButton) {
     await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null, entry);
   }
   render();
+  // Once the last Arabic clip is accepted, English clips start queueing automatically.
+  autoQueueEnglish().catch(function () {});
 }
 function manifestUrl(lang) {
   return new URL('../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href).href;
@@ -1017,6 +1019,7 @@ function makeButton(label, cls, handler) {
 }
 var generationBusy = false, generationMessage = '';
 var jobsByBlock = {}, jobPollTimer = null, jobSendBusy = {};
+var englishAutoBusy = false, englishAutoTried = {}, englishAutoNote = '';
 function jobKey(language, index) { return language + ':' + index; }async function loadQueueStatus(language) {
   var res = await audioAssetsRequest({ action: 'queue_status', section: story.section, slug: story.slug, language: language });
   Object.keys(jobsByBlock).forEach(function (k) { if (k.indexOf(language + ':') === 0) delete jobsByBlock[k]; });
@@ -1048,8 +1051,14 @@ function engineView(language, index) {
 }
 function engineBlockReason(language, index) {
   if (reconcileBlocked) return 'تغيّرت الحكاية وهناك مقاطع قيد التوليد؛ انتظر اكتمالها ثم أعد فتح المعاينة.';
-  var current = nextBlockIndexForLanguage(language);
-  if (current !== index) return current < 0 ? 'كل المقاطع معتمدة.' : 'يُفتح بعد اعتماد المقطع السابق (بترتيب الحكاية).';
+  if (language === 'en') {
+    // English clips are independent: any single block can be (re)generated without the others.
+    var englishClip = clipForBlock('en', index);
+    if (englishClip && englishClip.status === 'accepted') return 'هذا المقطع معتمد بالفعل.';
+  } else {
+    var current = nextBlockIndexForLanguage(language);
+    if (current !== index) return current < 0 ? 'كل المقاطع معتمدة.' : 'يُفتح بعد اعتماد المقطع السابق (بترتيب الحكاية).';
+  }
   if (language === 'ar') {
     var rec = speechTexts[speechTextKey(index)];
     if (!rec || rec.status !== 'approved' || !rec.approved_text) return 'اعتمد نص القراءة أولًا (الخطوة ٢).';
@@ -1108,13 +1117,12 @@ function anyJobActive(language) {
   });
 }
 function schedulePoll() {
-  var language = document.documentElement.lang;
-  if (jobPollTimer || !story || !anyJobActive(language)) return;
+  if (jobPollTimer || !story || !(anyJobActive('ar') || anyJobActive('en'))) return;
   jobPollTimer = setTimeout(async function () {
     jobPollTimer = null;
     var before = {};
     Object.keys(jobsByBlock).forEach(function (k) { before[k] = jobsByBlock[k].status; });
-    try { await loadQueueStatus(language); } catch (e) { schedulePoll(); return; }
+    try { await loadQueueStatus('ar'); await loadQueueStatus('en'); } catch (e) { schedulePoll(); return; }
     var finished = Object.keys(jobsByBlock).some(function (k) { return before[k] && before[k] !== 'completed' && jobsByBlock[k].status === 'completed'; });
     if (finished) {
       try { await loadManifests(); } catch (e) {}
@@ -1158,6 +1166,99 @@ function nextBlockIndexForLanguage(language) {
   for (var i = 0; i < ordered.length; i++) if (!accepted.has(ordered[i])) return ordered[i];
   return -1;
 }
+/* مقاطع الإنجليزية القابلة للنطق، وهل اكتملت مراجعة العربية (شرط بدء الإرسال التلقائي للإنجليزية). */
+function speakableIndexes(language) {
+  var blocks = story && story.i18n && story.i18n[language] && story.i18n[language].blocks;
+  var out = [];
+  (Array.isArray(blocks) ? blocks : []).forEach(function (b, i) {
+    if (b && ['karma', 'narrator'].indexOf(b.speaker) >= 0 && typeof b.text === 'string' && b.text.trim()) out.push(i);
+  });
+  return out;
+}
+function arabicReviewComplete() {
+  return speakableIndexes('ar').length > 0 && nextBlockIndexForLanguage('ar') === -1;
+}
+/* بعد اكتمال العربية: كل مقطع إنجليزي يدخل الطابور كطلب مستقل. لا يُعاد إرسال مقطع له طلب أو قرار مراجعة. */
+async function autoQueueEnglish() {
+  if (englishAutoBusy || !story || !canWrite || reconcileBlocked || !arabicReviewComplete()) return;
+  var indexes = speakableIndexes('en');
+  if (!indexes.length) return;
+  englishAutoBusy = true;
+  englishAutoNote = '';
+  try {
+    await loadQueueStatus('en');
+    for (var n = 0; n < indexes.length; n++) {
+      var i = indexes[n], k = jobKey('en', i);
+      if (jobsByBlock[k] || clipForBlock('en', i) || englishAutoTried[i]) continue;
+      englishAutoTried[i] = true;
+      try {
+        await audioAssetsRequest({ action: 'enqueue', section: story.section, slug: story.slug, language: 'en', block_index: i });
+      } catch (error) {
+        if (error && error.status === 409) { englishAutoTried[i] = false; englishAutoNote = String(error.message || ''); break; }
+        englishAutoNote = 'تعذر الإرسال التلقائي لمقطع ' + (i + 1) + ': ' + (error && error.message || error);
+      }
+    }
+    await loadQueueStatus('en');
+  } catch (error) {
+    englishAutoNote = 'تعذر تحديث حالة الإنجليزية: ' + (error && error.message || error);
+  } finally {
+    englishAutoBusy = false;
+  }
+  updateEnginePanels(); updateGenerationSummary(); schedulePoll();
+}
+function renderEnglishList() {
+  var box = document.getElementById('kh-en-list');
+  if (!box || !story) return;
+  box.replaceChildren();
+  var indexes = speakableIndexes('en');
+  if (!indexes.length) {
+    var none = document.createElement('div');
+    text(none, 'لا توجد مقاطع إنجليزية في هذه الحكاية.');
+    box.appendChild(none);
+    return;
+  }
+  var counts = { accepted: 0, completed: 0, processing: 0, pending: 0, failed: 0, none: 0 };
+  var blocks = story.i18n.en.blocks;
+  var rows = document.createElement('div');
+  rows.style.cssText = 'display:grid;gap:6px;margin-top:8px';
+  indexes.forEach(function (i) {
+    var view = engineView('en', i);
+    counts[view.state] = (counts[view.state] || 0) + 1;
+    var rowEl = document.createElement('div');
+    rowEl.className = 'kh-en-row';
+    rowEl.dataset.state = view.state;
+    rowEl.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;gap:8px';
+    var label = document.createElement('span');
+    text(label, 'مقطع ' + (i + 1) + ' · ' + speakerLabel(blocks[i].speaker));
+    var chip = document.createElement('span');
+    chip.className = 'kh-engine-chip';
+    chip.dataset.state = view.state;
+    text(chip, view.label);
+    var btn = iconButton('spark', 'إعادة توليد هذا المقطع', 'generate', function () { sendBlockToEngine('en', i); });
+    btn.disabled = !(view.canResend && !engineBlockReason('en', i) && canWrite && !jobSendBusy[jobKey('en', i)]);
+    rowEl.append(label, chip, btn);
+    if (view.state === 'failed') {
+      var why = document.createElement('small');
+      text(why, view.detail);
+      rowEl.appendChild(why);
+    }
+    rows.appendChild(rowEl);
+  });
+  var head = document.createElement('div');
+  text(head, 'معتمد ' + counts.accepted + ' · مكتمل ' + counts.completed + ' · قيد التوليد ' + counts.processing +
+    ' · بالطابور ' + counts.pending + ' · فاشل ' + counts.failed + ' · لم يُرسل ' + counts.none);
+  box.appendChild(head);
+  if (englishAutoNote) {
+    var note = document.createElement('small');
+    text(note, englishAutoNote);
+    box.appendChild(note);
+  } else if (!arabicReviewComplete()) {
+    var wait = document.createElement('small');
+    text(wait, 'يبدأ الإرسال التلقائي للإنجليزية بعد اعتماد كل مقاطع العربية.');
+    box.appendChild(wait);
+  }
+  box.appendChild(rows);
+}
 function updateGenerationSummary() {
   var node = document.getElementById('kh-gen-summary');
   if (!node || !story) return;
@@ -1166,6 +1267,7 @@ function updateGenerationSummary() {
   var total = (story.i18n && story.i18n[language] && story.i18n[language].blocks || []).filter(function (b) { return b && ['karma', 'narrator'].includes(b.speaker); }).length;
   var accepted = Object.values(review.clips || {}).filter(function (x) { return x && x.lang === language && x.status === 'accepted'; }).length;
   text(node, 'معتمد ' + accepted + '/' + total + ' · قيد التوليد ' + c.processing + ' · بالطابور ' + c.pending + ' · مكتمل ' + c.completed + ' · فاشل ' + c.failed);
+  renderEnglishList();
 }
 function renderGenerationControls(banner) {
   if (!story || !['ar', 'en'].includes(document.documentElement.lang)) return;
@@ -1197,6 +1299,17 @@ function renderGenerationControls(banner) {
   });
   publishButton.title = 'لا يتاح النشر إلا بعد الاستماع الكامل واعتماد كل المقاطع المطلوبة.';
   panel.append(title, summary, publishButton, status); banner.appendChild(panel);
+  // English status + per-block regenerate: visible whichever language the page is showing.
+  var enWrap = document.createElement('details');
+  enWrap.className = 'kh-audio-review-controls kh-en-wrap';
+  enWrap.open = true;
+  var enSummary = document.createElement('summary');
+  text(enSummary, '🌐 توليد الإنجليزية — كل مقطع منفصل');
+  var enList = document.createElement('div');
+  enList.id = 'kh-en-list';
+  enList.className = 'kh-en-list';
+  enWrap.append(enSummary, enList);
+  banner.appendChild(enWrap);
   updateGenerationSummary();
 }
 function nextArabicBlockIndex() {
@@ -1717,6 +1830,8 @@ async function initialize(nextStory) {
         'تعذر تحميل معاينة الصوت: ' + (audioError && audioError.message || audioError);
       render();
     }
+    // If Arabic is already fully accepted, queue every English clip (each as its own job).
+    autoQueueEnglish().catch(function () {});
   } catch (e) {
     initializing = false;
     var host = $('blocks');
