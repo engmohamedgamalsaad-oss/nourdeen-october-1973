@@ -11,11 +11,11 @@ const core = require('../assets/audio-review-core.js');
   const alignedStory = { i18n: {
     ar: { blocks: [
       { type: 'paragraph', speaker: 'karma', text: 'النص العربي الأول' },
-      { type: 'paragraph', speaker: 'narrator', text: 'النص العربي الثاني', image_after: 'photo' }
+      { type: 'paragraph', speaker: 'narrator', text: 'النص العربي الثاني', image_after: 'photo', heading: 'عنوان عربي' }
     ] },
     en: { blocks: [
       { type: 'paragraph', speaker: 'karma', text: 'Natural English opening', source_ar_text: 'النص العربي الأول' },
-      { type: 'paragraph', speaker: 'narrator', text: 'Natural English body', image_after: 'photo', source_ar_text: 'النص العربي الثاني' }
+      { type: 'paragraph', speaker: 'narrator', text: 'Natural English body', image_after: 'photo', heading: 'Translated heading', source_ar_text: 'النص العربي الثاني', source_ar_heading: 'عنوان عربي' }
     ] }
   } };
   assert.equal(core.validateTranslationAlignment(alignedStory, 'en').ok, true, 'culturally natural target-language text is accepted when source provenance and structure match');
