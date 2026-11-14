@@ -1390,7 +1390,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   notes.className = 'kh-speech-notes';
   var rejectionNotes = Object.keys(review.clips || {}).map(function (clipKey) { return review.clips[clipKey]; })
     .filter(function (clip) { return clip && clip.lang === 'ar' && Number(clip.block_index) === index &&
-      clip.status === 'rejected' && clip.issue !== 'audio_only' && story.section === 'history' && story.slug === 'ibn-sina' && index === 4 && String(clip.note || '').trim(); });
+      clip.status === 'rejected' && clip.issue !== 'audio_only' && String(clip.note || '').trim(); });
   rejectionNotes.forEach(function (clip) {
     var rejection = document.createElement('p');
     rejection.textContent = 'ملاحظة الرفض التي ستصل إلى Gemini: ' + clip.note;
