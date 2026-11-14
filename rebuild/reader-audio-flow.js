@@ -297,6 +297,53 @@
     var tbody = top.querySelector('.kh-top-body');
     if (banner && banner.parentNode !== tbody) tbody.appendChild(banner);
     if (importer && importer.parentNode !== tbody) tbody.appendChild(importer);
+    if (!$('kh-translation-bulk-status')) {
+      var bulkStatus = el('p', 'kh-translation-bulk-status', '');
+      bulkStatus.id = 'kh-translation-bulk-status';
+      tbody.appendChild(bulkStatus);
+      var bulkRow = el('div', 'kh-translation-bulk-actions');
+      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'تجهيز ترجمات كل المقاطع باستخدام Gemini');
+      bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
+      bulkTranslate.addEventListener('click', async function () {
+        var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
+        if (lang() === 'ar' || !blocks.length) return;
+        bulkTranslate.disabled = true;
+        var done = 0, skipped = 0, failed = 0;
+        for (var i = 0; i < blocks.length; i++) {
+          if (!blocks[i] || !['karma', 'narrator'].includes(blocks[i].speaker)) continue;
+          bulkStatus.textContent = 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + '…';
+          try {
+            var result = await audioReviewAction({ action: 'translation_generate', block_index: i });
+            translationRecords[lang() + ':' + i] = result.translation; done++;
+          } catch (e) {
+            if (/معتمدة بالفعل/.test(String(e.message || ''))) skipped++;
+            else failed++;
+          }
+        }
+        bulkStatus.textContent = 'انتهى تجهيز الترجمات: ' + done + ' مسودة جديدة، ' + skipped + ' ترجمة معتمدة تم الحفاظ عليها، ' + failed + ' تعذر تجهيزها. راجع كل مقطع واعتمده منفردًا.';
+        bulkTranslate.disabled = false;
+        onUpdated();
+      });
+      bulkRow.appendChild(bulkTranslate);
+      if (['ar', 'en'].includes(lang())) {
+        var queueAll = el('button', 'kh-translation-queue-all', 'إرسال كل المقاطع المعتمدة للطابور');
+        queueAll.id = 'kh-translation-queue-all'; queueAll.type = 'button';
+        queueAll.addEventListener('click', async function () {
+          queueAll.disabled = true;
+          bulkStatus.textContent = 'جارٍ إرسال المقاطع المعتمدة إلى طابور Colab…';
+          try {
+            var result = await audioReviewAction({ action: 'enqueue_approved_language' });
+            bulkStatus.textContent = 'تم إرسال ' + result.queued_count + ' مقطع، وكان ' + result.already_queued + ' موجودًا بالطابور، وتُرك ' + result.skipped_unapproved + ' مقطعًا دون اعتماد بشري.';
+            poll();
+          } catch (e) { bulkStatus.textContent = e.message || 'تعذر إرسال المقاطع إلى الطابور.'; }
+          finally { queueAll.disabled = false; }
+        });
+        bulkRow.appendChild(queueAll);
+      }
+      tbody.appendChild(bulkRow);
+    }
+    var bulkTranslateButton = $('kh-translation-bulk-generate');
+    if (bulkTranslateButton) bulkTranslateButton.hidden = lang() === 'ar';
     top.open = topOpen;
   }
   function updateTopSummary() {
