@@ -186,8 +186,14 @@
     var cards = box.querySelectorAll('.kh-audio-card[data-review]');
     var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card[data-clip-key]').length > 0;
     var s2;
-    if (L !== 'ar') s2 = { s: 'na', t: 'لا يلزم' };
-    else {
+    if (L !== 'ar') {
+      var translation = translationRecords[L + ':' + index];
+      s2 = translation && translation.status === 'approved'
+        ? { s: 'done', t: 'الترجمة معتمدة' }
+        : translation && translation.status === 'draft'
+          ? { s: 'warn', t: 'تحتاج مراجعتك' }
+          : { s: 'todo', t: 'لم تُعتمد' };
+    } else {
       var st = speech ? speech.dataset.status : '';
       s2 = st === 'approved' ? { s: 'done', t: 'معتمد' } : st === 'suggested' ? { s: 'warn', t: 'بانتظار اعتمادك' } : { s: 'todo', t: 'لم يُجهّز' };
     }
