@@ -33,6 +33,7 @@ function fixture() {
     title: 'title ' + l,
     subtitle: 'subtitle ' + l,
     summary: 'summary ' + l,
+    ...(l === 'ar' ? {} : { source_ar_title: 'title ar', source_ar_subtitle: 'subtitle ar', source_ar_summary: 'summary ar' }),
     student_name: 'student ' + l,
     narrator_name: 'narrator ' + l,
     figure_name: 'figure ' + l,
@@ -90,11 +91,13 @@ test('requires translation structure to align one-to-one with Arabic', () => {
   assert(errors.some(x => x.includes('i18n.fr.blocks[0].speaker must match')));
 });
 
-test('requires provenance snapshots for every block once enabled for a locale', () => {
+test('requires source snapshots for every translated field and block', () => {
   const s = fixture();
   delete s.i18n.it.blocks[1].source_ar_text;
+  delete s.i18n.de.source_ar_title;
   const errors = validateStory(s);
-  assert(errors.some(x => x.includes('i18n.it.blocks must include source_ar_text for every block')));
+  assert(errors.some(x => x.includes('i18n.it.blocks[1].source_ar_text is stale or missing')));
+  assert(errors.some(x => x.includes('i18n.de.source_ar_title is stale or missing')));
 });
 
 test('preserves V1 metadata and requires every supplied metadata field in all locales', () => {
