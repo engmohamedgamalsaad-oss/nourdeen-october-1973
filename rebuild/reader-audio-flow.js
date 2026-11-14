@@ -26,20 +26,9 @@
   function direct(parent, selector) { return Array.prototype.filter.call(parent.children, function (n) { return n.matches(selector); }); }
   function blockIndexOf(block, position) { var n = Number(block.dataset.blockIndex); return Number.isInteger(n) && block.dataset.blockIndex !== '' ? n : position; }
   function translationGate(st, language) {
-    if (language === 'ar') return { ok: true, reason: '' };
-    var ar = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks;
-    var local = st && st.i18n && st.i18n[language] && st.i18n[language].blocks;
-    if (!Array.isArray(ar) || !Array.isArray(local) || local.length !== ar.length) return { ok: false, reason: 'ترجمة هذه اللغة لا تطابق عدد المقاطع العربية؛ حدّث ترجمة الحكاية أولًا.' };
-    for (var i = 0; i < ar.length; i++) {
-      var a = ar[i] || {}, b = local[i] || {};
-      if (a.type !== b.type || a.speaker !== b.speaker || (a.image_after || '') !== (b.image_after || '') || (Object.prototype.hasOwnProperty.call(a, 'heading') !== Object.prototype.hasOwnProperty.call(b, 'heading'))) {
-        return { ok: false, reason: 'ترجمة المقطع ' + (i + 1) + ' غير متزامنة مع بنية المقطع العربي المقابل.' };
-      }
-      if (typeof b.source_ar_text !== 'string' || b.source_ar_text !== a.text) {
-        return { ok: false, reason: 'ترجمة المقطع ' + (i + 1) + ' قديمة أو غير موثقة المصدر. أعد ترجمتها من النص العربي المعتمد قبل توليد الصوت.' };
-      }
-    }
-    return { ok: true, reason: '' };
+    var core = window.KHAudioReviewCore;
+    if (!core || typeof core.validateTranslationAlignment !== 'function') return { ok: false, reason: 'تعذر تحميل مدقق ارتباط الترجمة بالمصدر العربي.' };
+    return core.validateTranslationAlignment(st, language);
   }
   function boxKey(box) { return lang() + ':' + box.dataset.index; }
   function stepKey(box, n) { return boxKey(box) + ':' + n; }
