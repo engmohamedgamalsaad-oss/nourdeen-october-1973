@@ -35,3 +35,19 @@
  .kh-chip{min-width:0}
  .kh-top-body{padding-inline:10px}
 }
+
+
+/* مراجعة الترجمة المستقلة لكل مقطع */
+.kh-translation-review{display:grid;gap:10px;margin:12px 0;padding:14px;border:1px solid rgba(191,160,105,.28);border-radius:14px;background:rgba(10,25,31,.55)}
+.kh-translation-source{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.035);color:#d9e2e4;line-height:1.85;white-space:pre-wrap}
+.kh-translation-source b{display:block;margin-bottom:5px;color:#d7ad66}
+.kh-translation-source p{margin:0}
+.kh-translation-editor{box-sizing:border-box;width:100%;min-height:110px;padding:12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:#101f25;color:#f7f2e8;font:14px/1.8 inherit;resize:vertical}
+.kh-translation-actions{display:flex;flex-wrap:wrap;gap:8px}
+.kh-translation-actions button{min-height:38px;padding:8px 12px;border:1px solid rgba(215,173,102,.4);border-radius:9px;background:rgba(215,173,102,.1);color:#f5e6c7;font:700 12px/1.5 inherit;cursor:pointer}
+.kh-translation-actions button:disabled{opacity:.5;cursor:not-allowed}
+.kh-translation-actions .kh-translation-approve{border-color:rgba(47,191,128,.55);background:rgba(47,191,128,.14);color:#b8f1ce}
+.kh-translation-status{margin:0;color:#d6c49d;font-size:12px}
+.kh-translation-status[data-state="approved"]{color:#8ce0ae}
+.kh-translation-status[data-state="needs_revision"]{color:#ffb7a9}
+@media(max-width:600px){.kh-translation-actions{display:grid;grid-template-columns:1fr}.kh-translation-actions button{width:100%}}
