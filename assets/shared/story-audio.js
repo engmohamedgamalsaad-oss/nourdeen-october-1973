@@ -331,7 +331,7 @@
       var manifest = loaded.manifest;
       manifestUrl = loaded.url;
       if (!manifest || manifest.version !== 1 || manifest.section !== story.section || manifest.story !== story.slug || manifest.language !== lang || !Array.isArray(manifest.segments)) throw new Error('Invalid audio manifest');
-      if (manifest.segments.some(function (segment) { return !validPublicSegment(segment) || !/^[A-Za-z0-9_-]+\\.mp3$/.test(String(segment.src || '')); })) throw new Error('Audio manifest does not match the approved voices');
+      if (manifest.segments.some(function (segment) { return !validPublicSegment(segment) || !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src || '')); })) throw new Error('Audio manifest does not match the approved voices');
       var nextQueue = manifest.segments.map(function (segment) {
         return {
           block_index: segment.block_index,
