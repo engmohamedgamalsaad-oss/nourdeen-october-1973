@@ -352,7 +352,7 @@ Deno.serve(async (req: Request) => {
   const slug = body?.slug;
   const language = body?.language;
   const action = body?.action;
-  const languageRequired = ["stage", "manifest", "enqueue", "queue_status"].includes(action);
+  const languageRequired = ["stage", "manifest", "enqueue", "enqueue_approved_language", "queue_status"].includes(action);
   if (!validKey(section) || !validKey(slug) ||
       (languageRequired && !["ar", "en", "fr", "it", "de"].includes(language))) {
     return reply(400, { error: "هوية الحكاية أو اللغة غير صالحة." });
@@ -589,6 +589,65 @@ Deno.serve(async (req: Request) => {
       }
     }
     return reply(200, { success: true, changed: true, summary: plan.summary });
+  }
+
+
+  if (body.action === "enqueue_approved_language") {
+    if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
+    let arabicSource;
+    try { arabicSource = await resolveStoryBlock(section, slug, "ar", 0, body.story_snapshot); }
+    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية العربية." }); }
+    const { data: row, error: readError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (readError) return reply(500, { error: "تعذر قراءة اعتمادات المقاطع.", detail: readError.message });
+    const review = row?.audio_review ?? {};
+    const blocks = arabicSource.story?.i18n?.ar?.blocks ?? [];
+    const queued: any[] = [];
+    let alreadyQueued = 0, skippedUnapproved = 0;
+    try { await invalidatePublicStoryAudio(service, section, slug); }
+    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف الصوت المنشور السابق." }); }
+    for (const index of orderedStoryBlockIndexes(blocks)) {
+      const block = blocks[index];
+      const sourceText = String(block?.text ?? "").trim();
+      if (!sourceText) { skippedUnapproved++; continue; }
+      const sourceHash = await sha256Hex(new TextEncoder().encode(sourceText));
+      let spokenText = "";
+      if (language === "ar") {
+        const speech = review?.speech_texts?.["ar:" + index];
+        if (speech?.status === "approved" && speech.source_text_hash === sourceHash && typeof speech.approved_text === "string") {
+          spokenText = speech.approved_text.trim();
+        }
+      } else {
+        const translation = review?.translations?.["en:" + index];
+        if (translation?.status === "approved" && translation.source_arabic_hash === sourceHash &&
+            typeof translation.translation_text === "string") spokenText = translation.translation_text.trim();
+      }
+      if (!spokenText) { skippedUnapproved++; continue; }
+      const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
+      const relatedBases = Object.values(review?.clips ?? {})
+        .filter((clip: any) => clip?.lang === language && Number(clip.block_index) === index)
+        .map((clip: any) => String(clip.base ?? "")).filter(Boolean);
+      const regenRevision = relatedBases.reduce((max, base) => Math.max(max, Number(review?.regen?.[base] ?? 0) || 0), 0);
+      const idempotencyKey = await sha256Hex(new TextEncoder().encode([section, slug, language, index, sourceHash, spokenHash, regenRevision].join(":")));
+      const payload = {
+        text: spokenText, speaker: block.speaker, source_text: sourceText,
+        source_text_hash: sourceHash, spoken_text_hash: spokenHash,
+        regeneration_revision: regenRevision, language_code: language === "ar" ? "arz" : "eng",
+        reference_role: block.speaker, sample_rate: 24000,
+      };
+      const { data: inserted, error: insertError } = await service.from("story_audio_generation_queue").insert({
+        section, slug, language, block_index: index, speaker: block.speaker,
+        engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
+        idempotency_key: idempotencyKey, status: "pending",
+      }).select("id,status,block_index,speaker").maybeSingle();
+      if (insertError?.code === "23505") { alreadyQueued++; continue; }
+      if (insertError) return reply(500, { error: "تعذر إضافة المقطع " + (index + 1) + " إلى الطابور.", detail: insertError.message });
+      if (inserted) queued.push(inserted);
+    }
+    return reply(200, {
+      success: true, queued_count: queued.length, already_queued: alreadyQueued,
+      skipped_unapproved: skippedUnapproved, jobs: queued,
+    });
   }
 
   if (body.action === "enqueue") {
