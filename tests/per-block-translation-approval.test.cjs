@@ -54,3 +54,13 @@ test('the single Colab notebook registers both voices and the admin preview repo
   assert.match(preview, /story-audio-worker/);
   assert.match(preview, /workerOnline === false/);
 });
+
+test('visitor-facing language text publishes only after every segment has a current human approval', () => {
+  assert.match(assets, /body\.action === "publish_translations"/);
+  assert.match(assets, /translation\.status !== "approved"/);
+  assert.match(assets, /translation\.source_arabic_hash !== currentHash/);
+  assert.match(assets, /branch: "main"/);
+  assert.match(preview, /action: 'publish_translations'/);
+  assert.match(preview, /نشر النص المعتمد لهذه اللغة/);
+  assert.match(preview, /لم يتم نشر أو توليد أي صوت/);
+});
