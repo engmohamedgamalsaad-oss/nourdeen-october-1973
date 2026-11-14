@@ -82,7 +82,7 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   assert.ok(audioFlow.includes('validateTranslationAlignment') && audioFlow.includes('genButton.disabled = true'), 'non-Arabic audio generation must be blocked when its paired Arabic source is stale or unverified');
   assert.ok(audioFlow.includes('localeGate.staleBlocks.indexOf(current) >= 0'), 'a stale translation blocks only its corresponding segment while aligned segments remain generatable');
-  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261114-independent-language-publish-1') && readerHtml.includes('reader-audio-flow.js?v=20261114-arabic-source-translation-gate-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
+  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261114-optional-audio-text-publish-1') && readerHtml.includes('reader-audio-flow.js?v=20261114-arabic-source-translation-gate-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
   assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
   assert.ok(!preview.includes('Khaledoon_VoiceTut_Colab_Worker.ipynb'), 'the obsolete single-clip worker link must not remain');
