@@ -1225,33 +1225,19 @@ function speechTextKey(index) { return 'ar:' + String(index); }
 async function prepareSpeechText(index, statusNode, button, audioEntry) {
   var key = speechTextKey(index);
   if (speechTextBusy[key]) return;
-  if (!audioEntry || !audioEntry.src) {
-    // Some manifests number the first chunk from 1, or contain a single
-    // current clip with a non-zero chunk index after a replacement. Resolve
-    // by block first, then prefer chunk 0; otherwise use the lowest chunk.
-    var blockAudioEntries = entries.filter(function (item) {
-      return item.lang === 'ar' && Number(item.block_index) === Number(index) &&
-        typeof item.src === 'string' && item.src;
-    }).sort(function (a, b) {
-      return Number(a.chunk_index || 0) - Number(b.chunk_index || 0);
-    });
-    audioEntry = blockAudioEntries.find(function (item) {
-      return Number(item.chunk_index || 0) === 0;
-    }) || (blockAudioEntries.length ? blockAudioEntries[0] : null);
-  }
-  if (!audioEntry || !audioEntry.src) {
-    var manifestProblem = manifestErrors.ar ? ' سبب تعذر تحميل manifest: ' + manifestErrors.ar : '';
-    text(statusNode, 'تعذر إرسال الصوت إلى Gemini: لا يوجد ملف صوت عربي مسجل لهذا المقطع في المعاينة الحالية.' + manifestProblem);
-    return;
-  }
+  // The server can resolve the current clip directly from its private manifest.
+  // Do not block Gemini merely because this preview panel has no matching entry.
+  var requestChunkIndex = audioEntry ? Number(audioEntry.chunk_index || 0) : 0;
+  var requestAudioSrc = audioEntry && audioEntry.src ? audioEntry.src : '';
+  var requestAudioHash = audioEntry && audioEntry.audio_sha256 ? audioEntry.audio_sha256 : '';
   speechTextBusy[key] = true;
   if (button) button.disabled = true;
-  text(statusNode, 'جارٍ إرسال الصوت الفعلي وملاحظة الرفض إلى Gemini لتحليل النطق وتجهيز النص…');
+  text(statusNode, 'جارٍ تحديد ملف الصوت الحالي من التخزين الخاص وإرساله إلى Gemini لتحليل النطق وتجهيز النص…');
   try {
     var proposal = await audioAssetsRequest({
       action: 'prepare_speech_text', section: story.section, slug: story.slug,
-      language: 'ar', block_index: index, chunk_index: Number(audioEntry.chunk_index || 0),
-      audio_src: audioEntry.src, audio_sha256: audioEntry.audio_sha256 || ''
+      language: 'ar', block_index: index, chunk_index: requestChunkIndex,
+      audio_src: requestAudioSrc, audio_sha256: requestAudioHash
     });
     if (!proposal || !proposal.speech_text || !proposal.source_text_hash) throw new Error('لم يرجع Gemini نصًا صالحًا للمقطع.');
     var saved = await audioAssetsRequest({
