@@ -393,7 +393,7 @@
       audioPending.id = 'kh-translation-audio-pending';
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
       publishText.addEventListener('click', function () {
-        try { localStorage.setItem('kh-text-publish-language', lang()); } catch (e) {}\n        bulkStatus.textContent = 'تم تحديد لغة ' + lang().toUpperCase() + ' لطلب النشر. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)»؛ سيُرسل طلب مراجعة لهذه اللغة وحدها. الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لم يبدأ أي توليد صوتي.';
+        try { localStorage.setItem('kh-text-publish-language', lang()); } catch (e) {}\n        bulkStatus.textContent = 'تم تحديد لغة ' + lang().toUpperCase() + ' لطلب النشر. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)»؛ سيُرسل طلب مراجعة لهذه اللغة وحدها. الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لا يبدأ أي توليد صوتي تلقائيًا.';
       });
       bulkRow.appendChild(publishText);
       bulkRow.appendChild(audioPending);
