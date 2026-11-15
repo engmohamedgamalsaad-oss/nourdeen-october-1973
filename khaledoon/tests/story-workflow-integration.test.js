@@ -1045,3 +1045,12 @@ test('unified publisher requires an approved canonical package before creating a
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'));
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;'));
 });
+
+
+test('translation preview starts blank and blocks publishing until each language segment is freshly prepared', function () {
+  var reader = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
+  assert.ok(reader.includes('textarea.value = Object.prototype.hasOwnProperty.call(translationWorkingText, key) ? translationWorkingText[key] : "";'), 'saved translation text must not be injected when a language preview opens');
+  assert.ok(reader.includes('translationWorkingText = Object.create(null);'), 'each new preview session must start with empty working translations');
+  assert.ok(reader.includes('translationConfirmed[key] === true && !!String(translationWorkingText[key] || \'\').trim()'), 'old approved records alone must not enable language publishing');
+  assert.ok(reader.includes('توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة»'), 'the UI must distinguish old saved translations from freshly prepared preview text');
+});

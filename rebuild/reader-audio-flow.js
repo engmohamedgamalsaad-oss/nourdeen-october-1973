@@ -52,6 +52,8 @@
   }
 
   var translationRecords = {};
+  var translationWorkingText = Object.create(null);
+  var translationConfirmed = Object.create(null);
   var translationLoaded = false;
   function storyIdentity(st) {
     return { section: st && st.section, slug: st && st.slug };
@@ -74,6 +76,8 @@
     try {
       var data = await audioReviewAction({ action: "review_get" });
       translationRecords = data.audio_review && data.audio_review.translations || {};
+      translationWorkingText = Object.create(null);
+      translationConfirmed = Object.create(null);
       translationLoaded = true;
     } catch (e) {
       queueError = String(e && e.message || e);
@@ -90,21 +94,26 @@
     var textarea = document.createElement("textarea");
     textarea.className = "kh-translation-editor";
     textarea.rows = 5;
-    textarea.value = record.translation_text || "";
-    textarea.placeholder = "تظهر هنا الترجمة التي يجهزها Gemini وتُعتمد تلقائيًا. التعديل اليدوي اختياري.";
+    textarea.value = Object.prototype.hasOwnProperty.call(translationWorkingText, key) ? translationWorkingText[key] : "";
+    textarea.placeholder = "المساحة تبدأ فارغة. اضغط «إعادة الترجمة» لتجهيز ترجمة جديدة من النص العربي.";
     var buttons = el("div", "kh-translation-actions");
     var generate = el("button", "kh-translation-generate", "إعادة الترجمة");
     var save = el("button", "kh-translation-save", "حفظ تعديلي (اختياري)");
     [generate, save].forEach(function (b2) { b2.type = "button"; });
     function paintStatus() {
       var r = translationRecords[key] || {};
-      status.textContent = r.status === "approved" ? "✓ الترجمة جاهزة ومعتمدة" + (r.auto_approved ? " تلقائيًا" : "") :
+      status.textContent = r.status === "approved" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة الجديدة جاهزة ومعتمدة" + (r.auto_approved ? " تلقائيًا" : "") : "توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة» لتجهيز ترجمة جديدة في هذه المعاينة.") :
         r.status === "draft" ? "مسودة قديمة — اضغط «إعادة الترجمة»" :
         r.status === "needs_revision" ? "تحتاج إلى إعادة ترجمة" : "لم تُجهَّز الترجمة بعد — اضغط «الترجمة»";
-      status.dataset.state = r.status || "missing";
+      status.dataset.state = translationConfirmed[key] ? (r.status || "missing") : (r.status === "approved" ? "saved-not-loaded" : (r.status || "missing"));
       save.disabled = !String(textarea.value || "").trim();
     }
-    textarea.addEventListener("input", paintStatus);
+    textarea.addEventListener("input", function () {
+      translationWorkingText[key] = String(textarea.value || "");
+      translationConfirmed[key] = false;
+      paintStatus();
+      updateTranslationPublishButton();
+    });
     async function saveManualEdit() {
       var st = story(), ar = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks && st.i18n.ar.blocks[index];
       if (!ar || !ar.text) throw new Error("النص العربي المقابل غير موجود.");
@@ -115,6 +124,8 @@
         translation_text: String(textarea.value || "").trim(), source_arabic_hash: hash,
       });
       translationRecords[key] = result.translation;
+      translationWorkingText[key] = String(textarea.value || "").trim();
+      translationConfirmed[key] = true;
       paintStatus();
       document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
     }
@@ -124,6 +135,8 @@
         var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
         translationRecords[key] = result.translation;
         textarea.value = result.translation.translation_text || "";
+        translationWorkingText[key] = String(textarea.value || "");
+        translationConfirmed[key] = !!String(textarea.value || "").trim();
         paintStatus();
         status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
@@ -318,12 +331,13 @@
       if (block && ['karma', 'narrator'].includes(block.speaker)) targetIndexes.push(index);
     });
     var allApproved = targetIndexes.length > 0 && targetIndexes.every(function (index) {
-      var record = translationRecords[lang() + ':' + index];
-      return !!record && record.status === 'approved';
+      var key = lang() + ':' + index;
+      var record = translationRecords[key];
+      return !!record && record.status === 'approved' && translationConfirmed[key] === true && !!String(translationWorkingText[key] || '').trim();
     });
     button.hidden = lang() === 'ar';
     button.disabled = lang() === 'ar' || !translationLoaded || !allApproved;
-    button.title = allApproved ? 'كل المقاطع المنطوقة معتمدة؛ اضغط لنشر النص فقط.' : 'نفّذ «الترجمة» لكل مقطع منطوق قبل نشر نص اللغة.';
+    button.title = allApproved ? 'كل المقاطع المنطوقة أُعيد تجهيز ترجمتها واعتمادها في هذه المعاينة؛ اضغط لنشر النص فقط.' : 'أعد ترجمة كل المقاطع المنطوقة واعتمدها في هذه المعاينة قبل النشر.';
   }
   function refresh() {
     Array.prototype.forEach.call(document.querySelectorAll('.kh-flow-box'), paint);
