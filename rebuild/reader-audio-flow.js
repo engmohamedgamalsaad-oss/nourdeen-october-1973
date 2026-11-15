@@ -538,11 +538,15 @@
       speech.forEach(function (sp) { var ta = sp.querySelector('textarea'); if (!followText && ta && String(ta.value || '').trim()) followText = String(ta.value).trim(); });
 
       /* ① النص */
-      var step1 = makeStep(box, 1, 'النص');
-      var original = local && typeof local.text === 'string' ? local.text : '';
+      var step1 = makeStep(box, 1, L === 'ar' ? 'النص' : 'مصدر الترجمة');
+      var original = L === 'ar' && local && typeof local.text === 'string' ? local.text : '';
       step1.body.appendChild(kv('المتحدث', SPEAKERS[speaker] || '—'));
-      step1.body.appendChild(kv('عدد الحروف', String(original.length)));
-      step1.body.appendChild(el('p', 'kh-orig-text', original || 'لا يوجد نص لهذا المقطع.'));
+      if (L === 'ar') {
+        step1.body.appendChild(kv('عدد الحروف', String(original.length)));
+        step1.body.appendChild(el('p', 'kh-orig-text', original || 'لا يوجد نص لهذا المقطع.'));
+      } else {
+        step1.body.appendChild(el('p', 'kh-muted', 'النص العربي المعتمد معروض في خطوة الترجمة التالية؛ مساحة الترجمة تبدأ فارغة.'));
+      }
       body.appendChild(step1.d);
 
       /* ② نص القراءة (Gemini) */
