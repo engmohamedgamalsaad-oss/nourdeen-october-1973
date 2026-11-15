@@ -12,6 +12,7 @@ from omnivoice_engine import (  # noqa: E402
     KARMA_SETTINGS,
     NARRATOR_SETTINGS,
     KarmaProvider,
+    LanguageModelRouter,
     NarratorProvider,
     ProviderError,
     ProviderRegistry,
@@ -101,6 +102,24 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(call["ref_text"], KARMA_TEXT)
         self.assertTrue(call["ref_audio"].endswith("karma_ref_24k.wav"))
 
+
+    def test_multilingual_languages_use_official_model_and_existing_languages_stay_unchanged(self):
+        from omnivoice_engine.config import MODEL_ID, MULTILINGUAL_MODEL_ID
+        router = LanguageModelRouter(lambda model_id: (model_id, FakeModel()))
+        self.assertEqual(router.model_id_for("ar"), MODEL_ID)
+        self.assertEqual(router.model_id_for("en"), MODEL_ID)
+        for language in ("fr", "it", "de"):
+            self.assertEqual(router.model_id_for(language), MULTILINGUAL_MODEL_ID)
+        with self.assertRaises(ValueError):
+            router.model_id_for("es")
+
+    def test_multilingual_provider_passes_target_language_to_official_model(self):
+        model = FakeModel()
+        self.karma().generate(model, "Bonjour tout le monde", "fr")
+        self.assertEqual(model.calls[0]["language"], "fr")
+        self.assertEqual(model.calls[0]["ref_text"], KARMA_TEXT)
+        self.assertEqual((model.calls[0]["num_step"], model.calls[0]["guidance_scale"], model.calls[0]["speed"]), (36, 3.0, 0.90))
+
     def test_narrator_is_independent_provider(self):
         model = FakeModel()
         self.narrator().generate(model, "hello", "en")
@@ -129,7 +148,7 @@ class EngineTests(unittest.TestCase):
 
     def test_empty_text_and_bad_language_release_job(self):
         registry = ProviderRegistry({"karma": self.karma()})
-        for job in (make_job(text="  "), make_job(language="fr")):
+        for job in (make_job(text="  "), make_job(language="es")):
             client = FakeClient()
             with self.assertRaises(ProviderError):
                 process_job(job, FakeModel(), registry, client, encoder=lambda *a: b"x")
