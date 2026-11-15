@@ -714,7 +714,7 @@ Deno.serve(async (req: Request) => {
   if (body.action === "enqueue") {
     const blockIndex = Number(body.block_index);
     if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
-    if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
+    if (!SUPPORTED_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "لغة الصوت غير مدعومة." });
     let source;
     try { source = await resolveStoryBlock(section, slug, "ar", blockIndex, body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع العربي." }); }
