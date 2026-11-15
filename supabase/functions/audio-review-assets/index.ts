@@ -825,6 +825,7 @@ Deno.serve(async (req: Request) => {
     const audioReview = reviewRow?.audio_review ?? {};
     const accepted = acceptedBlockIndexes(audioReview, language);
     const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
+    if (ordered.indexOf(blockIndex) < 0) return reply(409, { error: "هذا المقطع غير منطوق أو غير موجود." });
     // No turn-order requirement: any spoken block can be queued at any time.
     if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
     let spokenText = source.sourceText;
