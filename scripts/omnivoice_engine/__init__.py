@@ -3,7 +3,7 @@
 Karma and the narrator are independent voice providers behind one queue worker.
 """
 from .client import WorkerClient, WorkerHTTPError
-from .config import KARMA_SETTINGS, MODEL_ID, NARRATOR_SETTINGS
+from .config import KARMA_SETTINGS, MODEL_ID, MULTILINGUAL_MODEL_ID, NARRATOR_SETTINGS
 from .providers import KarmaProvider, NarratorProvider, ProviderError, ProviderRegistry
 from .model_router import LanguageModelRouter
 from .worker import process_job, run_worker
@@ -11,6 +11,7 @@ from .worker import process_job, run_worker
 __all__ = [
     "KARMA_SETTINGS",
     "MODEL_ID",
+    "MULTILINGUAL_MODEL_ID",
     "NARRATOR_SETTINGS",
     "KarmaProvider",
     "LanguageModelRouter",
