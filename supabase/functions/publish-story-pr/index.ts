@@ -685,8 +685,6 @@ Deno.serve(async (req: Request) => {
       method: "POST", body: JSON.stringify({ message: `Publish approved story: ${title}`, tree: tree.sha, parents: [baseSha] }),
     });
     const latestRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
-    if (latestRef.object.sha !== baseSha) throw new Error("تغير main أثناء تجهيز الحكاية؛ أوقفت النشر لتجنب استبدال تحديث أحدث. أعد المحاولة.");
-    const latestRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     if (latestRef.object.sha !== baseSha) throw new Error("تغير main أثناء تجهيز الحكاية؛ أوقفت العملية لتجنب إنشاء طلب مراجعة مبني على نسخة قديمة. أعد المحاولة.");
     publishBranchForCleanup = "khaledoon/publish-" + storySection + "-" + storyId + "-" + crypto.randomUUID().slice(0, 8);
     await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
@@ -694,7 +692,7 @@ Deno.serve(async (req: Request) => {
     });
     const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
       method: "POST",
-      body: JSON.stringify({ title, head: publishBranchForCleanup, base: BASE, body: description + "\\n\\nهذا طلب مراجعة فقط؛ لم يتم تعديل main أو نشر الصفحة." }),
+      body: JSON.stringify({ title, head: publishBranchForCleanup, base: BASE, body: description + "\n\nهذا طلب مراجعة فقط؛ لم يتم تعديل main أو نشر الصفحة." }),
     });
     const publishedBranch = publishBranchForCleanup;
     publishBranchForCleanup = "";
