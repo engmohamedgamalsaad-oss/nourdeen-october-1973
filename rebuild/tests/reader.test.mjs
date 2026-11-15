@@ -70,5 +70,5 @@ test('static builder validates story packages and will not overwrite existing st
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /story\.json/);
   assert.match(builder, /reader\.js\?v=20261102-canonical-preview-reader-3/);
-  assert.match(html, /reader\.js\?v=20261114-admin-ar-shell-1/);
+  assert.match(html, /reader\.js\?v=20261115-preview-ar-source-1/);
 });
