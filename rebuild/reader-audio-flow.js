@@ -423,7 +423,7 @@
           bulkStatus.textContent = 'جارٍ إرسال كل المقاطع المستحقة إلى طابور التوليد…';
           try {
             var result = await audioReviewAction({ action: 'enqueue_approved_language' });
-            bulkStatus.textContent = 'أُرسل ' + result.queued_count + ' مقطع للطابور (منها ' + (result.retried_failed || 0) + ' أُعيدت محاولتها بعد فشل)، و' + result.already_queued + ' موجودة أو مكتملة دون تكرار، وتُرك ' + result.skipped_unapproved + ' مقطعًا لم يُجهَّز نصه بعد.';
+            bulkStatus.textContent = 'اكتمل فحص اللغة: ' + (result.prepared_segments || result.queued_count + result.already_queued) + ' من ' + (result.required_segments || result.prepared_segments || result.queued_count) + ' مقطعًا مؤهلًا. أُرسل ' + result.queued_count + ' للطابور، وأُعيدت محاولة ' + (result.retried_failed || 0) + '، وكان ' + result.already_queued + ' موجودًا أو مكتملًا دون تكرار.';
             poll();
           } catch (e) { bulkStatus.textContent = e.message || 'تعذر إرسال المقاطع إلى الطابور.'; }
           finally { queueAll.disabled = false; }
