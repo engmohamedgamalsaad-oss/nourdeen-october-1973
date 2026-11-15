@@ -57,10 +57,10 @@ test('the single Colab notebook registers both voices and the admin preview repo
 });
 
 test('legacy direct-to-main translation publishing is disabled in favor of the reviewed text-only PR path', () => {
-  assert.match(assets, /body\\.action === "publish_translations"/);
+  assert.ok(assets.includes('body.action === "publish_translations"'));
   assert.match(assets, /تم إيقاف النشر المباشر إلى main/);
-  assert.doesNotMatch(assets, /branch: "main"/);
-  assert.doesNotMatch(preview, /action: 'publish_translations'/);
+  assert.ok(!assets.includes('branch: "main"'));
+  assert.ok(!preview.includes("action: 'publish_translations'"));
   assert.match(preview, /نشر النص فقط/);
   assert.match(preview, /لم يبدأ أي توليد صوتي/);
 });
