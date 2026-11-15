@@ -82,6 +82,11 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   assert.ok(audioFlow.includes('validateTranslationAlignment') && audioFlow.includes('genButton.disabled = true'), 'non-Arabic audio generation must be blocked when its paired Arabic source is stale or unverified');
   assert.ok(audioFlow.includes("translationRecords[L + ':' + index]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment must have a current approved translation (default-approved after Gemini) before audio generation');
+  assert.ok(audioFlow.includes('textarea.value = record.translation_text || "";'), 'translation editor must not preload the old published package translation');
+  assert.ok(audioFlow.includes("localStorage.setItem('kh-text-publish-language', lang())"), 'preview must remember the selected language for the admin text-only PR');
+  assert.ok(audioFlow.includes("type: 'KH_TEXT_LANGUAGE_PUBLISH'") && audioFlow.includes("context.submission_id"), 'preview must hand the selected language and submission ID to its opener');
+  assert.ok(admin.includes("data.type!=='KH_TEXT_LANGUAGE_PUBLISH'"), 'admin must route the preview request to the matching submission only');
+  assert.ok(audioFlow.includes('الصوت لم يكتمل بعد'), 'each translated-language preview must show the text-only audio readiness notice');
   assert.ok(readerHtml.includes('reader-audio-review.js?v=20261114-reject-counter-1') && readerHtml.includes('reader-audio-flow.js?v=20261115-text-only-pr-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
   assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
@@ -985,6 +990,8 @@ test('story publisher creates a review PR and admin verifies merge plus the actu
   assert.ok(admin.includes("fetch(verifyUrl.href,{cache:'no-store'})"));
   assert.ok(admin.includes('liveStoryPackage.i18n[lang]'));
   assert.ok(admin.includes("publication_mode:publicationMode==='text_only'?'text_only':'full'"));
+  assert.ok(admin.includes("text_languages:publicationMode==='text_only'?[selectedTextLanguage]:undefined"), 'text-only publisher must submit only the language selected in the preview');
+  assert.ok(admin.includes("localStorage.getItem('kh-text-publish-language')"), 'admin must require a selected preview language instead of silently publishing all four');
   assert.ok(admin.includes('نشر النص فقط (طلب مراجعة)'));
   assert.ok(admin.includes("if(review.publish_pr_number||review.publish_commit_sha||review.published_to_main_at)"));
 });

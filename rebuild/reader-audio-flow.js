@@ -90,7 +90,7 @@
     var textarea = document.createElement("textarea");
     textarea.className = "kh-translation-editor";
     textarea.rows = 5;
-    textarea.value = record.translation_text || (currentBlock && currentBlock.text) || "";
+    textarea.value = record.translation_text || "";
     textarea.placeholder = "تظهر هنا الترجمة التي يجهزها Gemini وتُعتمد تلقائيًا. التعديل اليدوي اختياري.";
     var buttons = el("div", "kh-translation-actions");
     var generate = el("button", "kh-translation-generate", "إعادة الترجمة");
@@ -388,12 +388,23 @@
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
-      var publishText = el('button', 'kh-translation-publish-text', 'تعليمات طلب مراجعة النص');
+      var publishText = el('button', 'kh-translation-publish-text', 'نشر هذه اللغة (طلب مراجعة)');
+      var audioPending = el('p', 'kh-translation-audio-pending', 'الصوت لم يكتمل بعد — هذه الصفحة تجهّز النص فقط، ولا يظهر مشغل للزائر دون manifest صوت صالح.');
+      audioPending.id = 'kh-translation-audio-pending';
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
       publishText.addEventListener('click', function () {
-        bulkStatus.textContent = 'الترجمات المعتمدة جاهزة. لم يتم نشر أي ملف من صفحة المعاينة. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)» لإنشاء PR بعد فحص جميع الترجمات؛ لا يبدأ أي توليد صوتي.';
+        var context = {};
+        try { context = JSON.parse(localStorage.getItem('kh-story-review-context') || '{}'); } catch (e) {}
+        try { localStorage.setItem('kh-text-publish-language', lang()); } catch (e) {}
+        if (window.opener && !window.opener.closed && context.submission_id != null) {
+          window.opener.postMessage({ type: 'KH_TEXT_LANGUAGE_PUBLISH', submission_id: String(context.submission_id), language: lang() }, location.origin);
+          bulkStatus.textContent = 'أُرسل طلب النشر من هذه المعاينة إلى لوحة الإدارة للغة ' + lang().toUpperCase() + '. راجع رسالة التأكيد هناك. الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لا يبدأ أي توليد صوتي تلقائيًا.';
+        } else {
+          bulkStatus.textContent = 'تم تحديد لغة ' + lang().toUpperCase() + '. افتح لوحة الإدارة من نفس الحكاية واضغط «نشر النص فقط (طلب مراجعة)». الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لا يبدأ أي توليد صوتي تلقائيًا.';
+        }
       });
       bulkRow.appendChild(publishText);
+      bulkRow.appendChild(audioPending);
       if (['ar', 'en'].includes(lang())) {
         var queueAll = el('button', 'kh-translation-queue-all', 'توليد كل المقاطع');
         queueAll.id = 'kh-translation-queue-all'; queueAll.type = 'button';
@@ -413,6 +424,8 @@
     }
     var publishTextButton = $('kh-translation-publish-text');
     if (publishTextButton) publishTextButton.hidden = lang() === 'ar';
+    var audioPendingLabel = $('kh-translation-audio-pending');
+    if (audioPendingLabel) audioPendingLabel.hidden = lang() === 'ar';
     var bulkTranslateButton = $('kh-translation-bulk-generate');
     if (bulkTranslateButton) bulkTranslateButton.hidden = false;
     var queueAllButton = $('kh-translation-queue-all');
