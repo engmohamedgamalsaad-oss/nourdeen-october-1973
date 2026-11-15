@@ -664,7 +664,7 @@ Deno.serve(async (req: Request) => {
           spokenText = speech.approved_text.trim();
         }
       } else {
-        const translation = review?.translations?.["en:" + index];
+        const translation = review?.translations?.[language + ":" + index];
         if (translation?.status === "approved" && translation.source_arabic_hash === sourceHash &&
             translation.speaker === block.speaker && typeof translation.translation_text === "string") {
           spokenText = translation.translation_text.trim();
@@ -672,7 +672,7 @@ Deno.serve(async (req: Request) => {
       }
       if (!spokenText) {
         return reply(409, {
-          error: "لم يبدأ توليد الصوت. " + (language === "ar" ? "نص القراءة العربي" : "الترجمة الإنجليزية") +
+          error: "لم يبدأ توليد الصوت. " + (language === "ar" ? "نص القراءة العربي" : "ترجمة " + (TRANSLATION_LANGUAGES[language] ?? language)) +
             " للمقطع " + (index + 1) + " غير معتمد أو لم يعد يطابق النص العربي الحالي.",
           missing_block_index: index,
           required_segments: indexes.length,
@@ -766,13 +766,13 @@ Deno.serve(async (req: Request) => {
       source_text_hash: source.sourceTextHash,
       spoken_text_hash: spokenHash,
       regeneration_revision: regenRevision,
-      language_code: language === "ar" ? "arz" : "eng",
+      language_code: ({ ar: "arz", en: "en", fr: "fr", it: "it", de: "de" } as Record<string, string>)[language],
       reference_role: source.block.speaker,
       sample_rate: 24000,
     };
     const result = await insertOrReuseJob(service, {
       section, slug, language, block_index: blockIndex, speaker: source.block.speaker,
-      engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
+      engine: ["fr", "it", "de"].includes(language) ? "omnivoice-multilingual" : "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
       idempotency_key: idempotencyKey, status: "pending",
     }, idempotencyKey);
     if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع إلى طابور التوليد.", detail: result.error?.message });
