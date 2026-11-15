@@ -30,7 +30,13 @@ test('unified publisher creates a review PR and never writes directly to main', 
   assert.ok(source.includes('record.source_arabic_hash !== sourceHash'));
   assert.ok(source.includes('record.speaker !== sourceBlock.speaker'));
   assert.ok(source.includes('targetBlock.text = record.translation_text.trim()'));
-  assert.ok(source.includes('for (const lang of ["en", "fr", "it", "de"])'));
+  // Per-language text publishing: default is all four languages; text_languages narrows validation and rewriting to the chosen ones.
+  assert.ok(source.includes('const textLanguageOptions = ["en", "fr", "it", "de"];'));
+  assert.ok(source.includes('let textLanguages = textLanguageOptions;'));
+  assert.ok(source.includes('for (const lang of textLanguages)'));
+  assert.ok(source.includes('text_languages يجب أن تكون قائمة غير فارغة'));
+  assert.ok(source.indexOf('for (const lang of textLanguages)') > source.indexOf('body.text_languages !== undefined'),
+    'language subset must be validated before it is used');
   assert.ok(!source.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'));
 });
 
