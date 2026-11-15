@@ -242,6 +242,22 @@ function applyDecision(review, entry, decision, now) {
     clip.note = String(decision.note || '').slice(0, 1000);
     clip.suggestion = String(decision.suggestion || '').slice(0, 1000);
     clip.issue = decision.issue === 'audio_only' ? 'audio_only' : 'text';
+    if (clip.issue === 'text') {
+      /* Explicit per-block rejection counter (not time based). It enters the queue idempotency key, so every
+         approved text rejection gets a fresh audio job even if Gemini returns the same text word for word.
+         Saving the very same rejection again (double click / retry) keeps the same number: no duplicate job. */
+      var revKey = entry.lang + ':' + entry.block_index;
+      if (!r.reject_rev || typeof r.reject_rev !== 'object') r.reject_rev = {};
+      var sameOpenRejection = previousClip && previousClip.status === 'rejected' && !previousClip.resolved &&
+        previousClip.issue === 'text' && Number(previousClip.rejection_version) > 0 &&
+        previousClip.note === clip.note && previousClip.suggestion === clip.suggestion;
+      if (sameOpenRejection) {
+        clip.rejection_version = Number(previousClip.rejection_version);
+      } else {
+        r.reject_rev[revKey] = (Number(r.reject_rev[revKey]) || 0) + 1;
+        clip.rejection_version = r.reject_rev[revKey];
+      }
+    }
   }
   r.clips[entry.key] = clip;
   return r;

@@ -36,6 +36,7 @@ var ICONS = {
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
+function audioReviewLanguage() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }
 function speakerLabel(speaker) { return speaker === 'karma' ? 'كارما' : speaker === 'narrator' ? 'الراوي' : String(speaker || ''); }
 function speakerAvatar(speaker) {
   var a = document.createElement('span');
@@ -237,7 +238,7 @@ function upstreamServiceName(action) {
   if (action === 'generate' || action === 'generation_status' || action === 'stage') return 'GitHub Actions';
   return 'خدمة خارجية';
 }
-var SNAPSHOT_ACTIONS = ['enqueue', 'prepare_speech_text', 'speech_text_save', 'publish_audio', 'queue_status', 'reconcile'];
+var SNAPSHOT_ACTIONS = ['enqueue', 'prepare_speech_text', 'speech_text_save', 'translation_generate', 'publish_audio', 'queue_status', 'reconcile'];
 /* الحكاية كما تظهر في المعاينة الآن (المتحدث والنص فقط)؛ الخادم يعتمدها بدل نسخة main. */
 function storySnapshot() {
   if (!story || !story.i18n) return null;
@@ -312,7 +313,7 @@ async function audioAssetsRequest(payload) {
 }
 async function ensureArabicAudioStaged(expectedArabicTexts) {
   if (story.section !== 'history' || story.slug !== 'ibn-sina' ||
-      document.documentElement.lang !== 'ar') return;
+      audioReviewLanguage() !== 'ar') return;
   // Restore the verified restart-baseline package into private review storage.
   // The pinned artifact is the successful Arabic Ibn Sina package; it is not public.
   var artifact = {
@@ -446,11 +447,15 @@ async function saveReview(entry, decision, followupStatusNode, followupButton) {
   } finally {
     busy = false;
   }
-  // A saved text/pronunciation rejection must immediately return to Gemini.
+  // A saved text/pronunciation rejection returns to Gemini automatically (this block only);
+  // on success the new text is the default-approved text and only this block is regenerated.
   // Audio-only rejection is deliberately excluded: it does not request a text rewrite.
-  if (decision.status === 'rejected' && decision.issue !== 'audio_only' && entry && entry.lang === 'ar' &&
+  if (decision.status === 'rejected' && decision.issue !== 'audio_only' && entry &&
+      (entry.lang === 'ar' || entry.lang === 'en') &&
       (String(decision.note || '').trim() || String(decision.suggestion || '').trim())) {
-    await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null, entry);
+    if (entry.lang === 'ar') await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null, { autoQueue: true });
+    else await retranslateBlock(entry.lang, Number(entry.block_index), followupStatusNode || null, followupButton || null, { autoQueue: true });
+    return;
   }
   render();
 }
@@ -721,7 +726,8 @@ function renderGateBanner(banner) {
   }
 }
 function canApprove() { return gate().ok; }
-window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate, languageGate: languageGate };
+window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate, languageGate: languageGate,
+  prepareAllSpeechTexts: function (onProgress) { return prepareAllSpeechTexts(onProgress); } };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
 async function play(entry, button, forceRestart) {
   if (!entry || !entry.src) return;
@@ -1056,10 +1062,10 @@ function engineView(language, index) {
   }
   return view;
 }
-function engineBlockReason(language, index) {
+function engineBlockReason(language, index, opts) {
+  if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة، لكن إرسال التوليد غير مفعّل لها في المحرك الحالي.';
   if (reconcileBlocked) return 'تغيّرت الحكاية وهناك مقاطع قيد التوليد؛ انتظر اكتمالها ثم أعد فتح المعاينة.';
-  var current = nextBlockIndexForLanguage(language);
-  if (current !== index) return current < 0 ? 'كل المقاطع معتمدة.' : 'يُفتح بعد اعتماد المقطع السابق (بترتيب الحكاية).';
+  /* No turn-order requirement: any block can be sent at any time. */
   if (language === 'ar') {
     var rec = speechTexts[speechTextKey(index)];
     if (!rec || rec.status !== 'approved' || !rec.approved_text) return 'اعتمد نص القراءة أولًا (الخطوة ٢).';
@@ -1076,26 +1082,31 @@ function fillEnginePanel(panel) {
   var reason = view.state === 'none' || view.canResend ? engineBlockReason(language, index) : '';
   var busy = !!jobSendBusy[jobKey(language, index)];
   text(msg, busy ? 'جارٍ الإرسال…' : (reason || view.detail || 'جاهز للإرسال إلى المحرك.'));
-  var sendable = (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
+  var sendable = ['ar', 'en'].includes(language) && (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
   btn.disabled = !sendable;
-  setButtonFace(btn, 'spark', view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك');
+  setButtonFace(btn, 'spark', !['ar', 'en'].includes(language) ? 'غير مفعّل لهذه اللغة' : (view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك'));
 }
 function updateEnginePanels() {
   Array.prototype.forEach.call(document.querySelectorAll('.kh-engine-controls'), fillEnginePanel);
 }
-async function sendBlockToEngine(language, index) {
+async function sendBlockToEngine(language, index, opts) {
   var k = jobKey(language, index);
-  if (jobSendBusy[k]) return;
-  if (engineBlockReason(language, index)) { updateEnginePanels(); return; }
+  if (jobSendBusy[k]) return { job: null, error: 'الإرسال جارٍ بالفعل لهذا المقطع.' };
+  var blocked = engineBlockReason(language, index, opts);
+  if (blocked) { updateEnginePanels(); return { job: null, error: blocked }; }
   jobSendBusy[k] = true; updateEnginePanels();
+  var outcome = { job: null, error: '' };
   try {
     var queued = await audioAssetsRequest({ action: 'enqueue', section: story.section, slug: story.slug, language: language, block_index: index });
     if (!queued || !queued.job || !queued.job.id) throw new Error('لم يرجع الخادم رقم طلب التوليد.');
+    outcome.job = queued.job;
     await loadQueueStatus(language);
   } catch (error) {
-    jobsByBlock[k] = { status: 'failed', attempts: 0, last_error: 'تعذر الإرسال: ' + (error && error.message || error), block_index: index, language: language };
+    outcome.error = 'تعذر الإرسال: ' + (error && error.message || error);
+    if (!outcome.job) jobsByBlock[k] = { status: 'failed', attempts: 0, last_error: outcome.error, block_index: index, language: language };
   } finally { jobSendBusy[k] = false; }
   updateEnginePanels(); updateGenerationSummary(); schedulePoll();
+  return outcome;
 }
 /* يرسل مقطعًا واحدًا إلى طابور الصوت بعد اعتماد نصه (أو لإعادة توليده)، ويكتب النتيجة في سطر الحالة. */
 async function generateNextQueuedBlock(language, statusNode, button, index) {
@@ -1118,7 +1129,7 @@ function anyJobActive(language) {
   });
 }
 function schedulePoll() {
-  var language = document.documentElement.lang;
+  var language = audioReviewLanguage();
   if (jobPollTimer || !story || !anyJobActive(language)) return;
   jobPollTimer = setTimeout(async function () {
     jobPollTimer = null;
@@ -1171,7 +1182,7 @@ function nextBlockIndexForLanguage(language) {
 function updateGenerationSummary() {
   var node = document.getElementById('kh-gen-summary');
   if (!node || !story) return;
-  var language = document.documentElement.lang, c = { pending: 0, processing: 0, completed: 0, failed: 0 };
+  var language = audioReviewLanguage(), c = { pending: 0, processing: 0, completed: 0, failed: 0 };
   Object.keys(jobsByBlock).forEach(function (k) { if (k.indexOf(language + ':') === 0 && c[jobsByBlock[k].status] !== undefined) c[jobsByBlock[k].status]++; });
   var total = (story.i18n && story.i18n[language] && story.i18n[language].blocks || []).filter(function (b) { return b && ['karma', 'narrator'].includes(b.speaker); }).length;
   var accepted = Object.values(review.clips || {}).filter(function (x) { return x && x.lang === language && x.status === 'accepted'; }).length;
@@ -1259,37 +1270,94 @@ function nextArabicBlockIndex() {
   return -1;
 }
 function speechTextKey(index) { return 'ar:' + String(index); }
-async function prepareSpeechText(index, statusNode, button) {
+async function prepareSpeechText(index, statusNode, button, opts) {
   var key = speechTextKey(index);
-  if (speechTextBusy[key]) return;
+  statusNode = statusNode || document.createElement('span');
+  if (speechTextBusy[key]) return false;
   // Gemini receives the written block and saved review notes only; no audio asset is read or sent.
   speechTextBusy[key] = true;
   if (button) button.disabled = true;
-  text(statusNode, 'جارٍ إرسال النص المكتوب إلى Gemini لتجهيزه وفق التعليمات المتفق عليها…');
+  text(statusNode, 'جارٍ إرسال النص المكتوب وملاحظاتك إلى Gemini لتجهيز هذا المقطع وحده…');
+  var ok = false;
   try {
     var proposal = await audioAssetsRequest({
       action: 'prepare_speech_text', section: story.section, slug: story.slug,
       language: 'ar', block_index: index
     });
     if (!proposal || !proposal.speech_text || !proposal.source_text_hash) throw new Error('لم يرجع Gemini نصًا صالحًا للمقطع.');
+    // Success is the default-approved reading text; the previous audio of this block is withdrawn by the server.
     var saved = await audioAssetsRequest({
       action: 'speech_text_save', section: story.section, slug: story.slug, language: 'ar',
-      block_index: index, decision: 'suggested', speech_text: proposal.speech_text,
+      block_index: index, decision: 'approved', origin: 'gemini', speech_text: proposal.speech_text,
       source_text_hash: proposal.source_text_hash, model: proposal.model,
       changes_summary: proposal.changes_summary,
       pronunciation_notes: proposal.pronunciation_notes, review_flags: proposal.review_flags
     });
-    speechTexts[key] = saved.speech_text;
+    speechTexts[key] = Object.assign({}, saved.speech_text, {
+      suggested_text: proposal.speech_text, model: proposal.model, changes_summary: proposal.changes_summary,
+      pronunciation_notes: proposal.pronunciation_notes, review_flags: proposal.review_flags
+    });
     speechTextDirty[index] = false;
     speechTextBusy[key] = false;
-    text(statusNode, 'جهّز Gemini نص القراءة من النص المكتوب والسياق وملاحظات المراجعة فقط؛ لم يُرسل أي ملف صوت إليه. تم حفظ الاقتراح كمسودة للمراجعة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
+    ok = true;
+    if (opts && opts.autoQueue) {
+      text(statusNode, 'جهّز Gemini نص هذا المقطع واعتُمد تلقائيًا. الصوت القديم أصبح غير صالح؛ جارٍ إرسال هذا المقطع وحده لإعادة التوليد…');
+      var sent = await sendBlockToEngine('ar', index, { regen: true });
+      var queued = !!sent.job && ['pending', 'processing'].indexOf(sent.job.status) >= 0;
+      text(statusNode, queued ? 'أُرسل هذا المقطع وحده لإعادة توليد الصوت من البداية.'
+        : 'جُهّز النص واعتُمد لكن لم يدخل المقطع الطابور: ' + String(sent.error || 'سبب غير معروف') + ' — اضغط «توليد كل المقاطع» لإعادة المحاولة.');
+      ok = queued;
+    } else {
+      text(statusNode, 'جهّز Gemini نص القراءة واعتُمد تلقائيًا. لم يبدأ أي توليد صوتي؛ استخدم «توليد كل المقاطع».');
+    }
     render();
   } catch (error) {
-    text(statusNode, 'تعذر تجهيز نص القراءة: ' + (error && error.message || error));
+    text(statusNode, 'تعذر تجهيز نص القراءة (يمكنك إعادة المحاولة): ' + (error && error.message || error));
   } finally {
     speechTextBusy[key] = false;
     if (button) button.disabled = false;
   }
+  return ok;
+}
+/* «الترجمة» للمقاطع العربية: يجهّز Gemini كل مقطع منطوق بالتتابع؛ فشل مقطع لا يوقف بقية المقاطع. */
+async function prepareAllSpeechTexts(onProgress) {
+  var blocks = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
+  var result = { done: 0, skipped: 0, failed: [] };
+  for (var i = 0; i < blocks.length; i++) {
+    var b = blocks[i];
+    if (!b || ['karma', 'narrator'].indexOf(b.speaker) < 0 || !String(b.text || '').trim()) continue;
+    var rec = speechTexts[speechTextKey(i)];
+    var hash = await speechSourceHash(b.text);
+    if (rec && rec.status === 'approved' && rec.approved_text && rec.source_text_hash === hash) { result.skipped++; continue; }
+    if (onProgress) onProgress(i, blocks.length);
+    var node = document.createElement('span');
+    var ok = await prepareSpeechText(i, node, null, null);
+    if (ok) result.done++; else result.failed.push({ index: i, error: node.textContent });
+  }
+  return result;
+}
+/* إعادة ترجمة مقطع إنجليزي واحد، ثم (عند الرفض) إعادة توليده وحده. */
+async function retranslateBlock(language, index, statusNode, button, opts) {
+  statusNode = statusNode || document.createElement('span');
+  if (button) button.disabled = true;
+  text(statusNode, 'جارٍ إرسال ملاحظتك إلى Gemini لإعادة ترجمة هذا المقطع وحده…');
+  try {
+    await audioAssetsRequest({ action: 'translation_generate', section: story.section, slug: story.slug, language: language, block_index: index, force: true });
+    if (opts && opts.autoQueue) {
+      var sent = await sendBlockToEngine(language, index, { regen: true });
+      var queued = !!sent.job && ['pending', 'processing'].indexOf(sent.job.status) >= 0;
+      text(statusNode, queued ? 'أُعيدت ترجمة المقطع واعتُمدت تلقائيًا، وأُرسل هذا المقطع وحده لإعادة التوليد.'
+        : 'أُعيدت الترجمة واعتُمدت لكن لم يدخل المقطع الطابور: ' + String(sent.error || 'سبب غير معروف') + ' — اضغط «توليد كل المقاطع» لإعادة المحاولة.');
+    } else {
+      text(statusNode, 'أُعيدت ترجمة المقطع واعتُمدت تلقائيًا. لم يبدأ أي توليد صوتي.');
+    }
+    document.dispatchEvent(new CustomEvent('kh-audio-review-updated'));
+  } catch (error) {
+    text(statusNode, 'تعذرت إعادة الترجمة (يمكنك إعادة المحاولة): ' + (error && error.message || error));
+  } finally {
+    if (button) button.disabled = false;
+  }
+  render();
 }
 async function speechSourceHash(sourceText) {
   if (!window.crypto || !window.crypto.subtle || typeof TextEncoder === 'undefined') {
@@ -1309,7 +1377,7 @@ async function approveSpeechText(index, textarea, statusNode, button, sourceText
   if (speechTextBusy[key]) return;
   speechTextBusy[key] = true;
   if (button) button.disabled = true;
-  text(statusNode, 'جارٍ حفظ اعتماد نص القراءة…');
+  text(statusNode, 'جارٍ حفظ تعديلك على نص القراءة…');
   try {
     var sourceHash = record.source_text_hash || await speechSourceHash(sourceText);
     var saved = await audioAssetsRequest({
@@ -1320,8 +1388,7 @@ async function approveSpeechText(index, textarea, statusNode, button, sourceText
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
     speechTextBusy[key] = false;
-    text(statusNode, 'تم اعتماد نص القراءة. جارٍ إرسال هذا المقطع تلقائيًا إلى طابور الصوت…');
-    await generateNextQueuedBlock('ar', statusNode, button, index);
+    text(statusNode, 'تم حفظ تعديلك على نص القراءة. الصوت القديم لهذا المقطع أصبح غير صالح؛ أعد توليده بزر «توليد كل المقاطع».');
     render();
   } catch (error) {
     text(statusNode, 'تعذر اعتماد النص: ' + (error && error.message || error));
@@ -1383,29 +1450,27 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   proposalCol.className = 'kh-speech-col';
   var proposalLabel = document.createElement('label');
   proposalLabel.className = 'kh-speech-label';
-  proposalLabel.textContent = 'نص القراءة الذي جهزه Gemini — راجعه وعدّله هنا';
+  proposalLabel.textContent = 'نص القراءة الذي جهزه Gemini (معتمد تلقائيًا) — التعديل اليدوي اختياري';
   var textarea = document.createElement('textarea');
   textarea.rows = 4;
   textarea.maxLength = 6000;
   textarea.value = record.status === 'approved' ? (record.approved_text || '') : (record.suggested_text || '');
-  textarea.placeholder = 'اضغط «تجهيز النص باستخدام Gemini»، ثم راجع الصياغة هنا وعدّلها إذا احتجت…';
+  textarea.placeholder = 'اضغط «الترجمة» لتجهيز نص القراءة. يمكنك تعديله هنا اختياريًا…';
   proposalCol.append(proposalLabel, textarea);
   grid.append(originalCol, proposalCol);
   var status = document.createElement('span');
   status.className = 'kh-audio-review-state';
   var currentBlockIndex = nextBlockIndexForLanguage('ar');
   var isCurrentBlock = currentBlockIndex === index;
-  status.textContent = !isCurrentBlock
-    ? (currentBlockIndex < 0 ? 'اكتملت مراجعة المقاطع السابقة.' : 'سيُفتح هذا المقطع بعد اعتماد المقطع السابق بترتيب الحكاية.')
-    : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
-      record.status === 'approved' ? 'نص القراءة معتمد ✓' :
-      record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
-      'اضغط تجهيز النص باستخدام Gemini ليقترح صياغة مفهومة ومشكولة جزئيًا عند الحاجة فقط.';
+  status.textContent = speechTextDirty[index] ? 'يوجد تعديل يدوي غير محفوظ (اختياري).' :
+      record.status === 'approved' ? 'نص القراءة جاهز ومعتمد ✓' :
+      record.status === 'suggested' ? 'نص قديم غير معتمد — اضغط «إعادة الترجمة».' :
+      'اضغط «الترجمة» (أو «إعادة الترجمة») ليجهّز Gemini نص هذا المقطع.';
   var notes = document.createElement('div');
   notes.className = 'kh-speech-notes';
   var rejectionNotes = Object.keys(review.clips || {}).map(function (clipKey) { return review.clips[clipKey]; })
     .filter(function (clip) { return clip && clip.lang === 'ar' && Number(clip.block_index) === index &&
-      clip.status === 'rejected' && clip.issue !== 'audio_only' && story.section === 'history' && story.slug === 'ibn-sina' && index === 4 && String(clip.note || '').trim(); });
+      clip.status === 'rejected' && clip.issue !== 'audio_only' && String(clip.note || '').trim(); });
   rejectionNotes.forEach(function (clip) {
     var rejection = document.createElement('p');
     rejection.textContent = 'ملاحظة الرفض التي ستصل إلى Gemini: ' + clip.note;
@@ -1430,16 +1495,16 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     speechTextDirty[index] = true;
     badge.dataset.status = 'dirty';
     badge.textContent = speechBadgeText('dirty');
-    status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
+    status.textContent = 'تعديل يدوي غير محفوظ؛ لن يُستخدم في التوليد حتى تضغط حفظ التعديل (اختياري).';
   });
-  var prepare = iconButton('spark', record.status === 'suggested' || record.status === 'approved' ? 'إعادة تجهيز نص القراءة باستخدام Gemini' : 'تجهيز النص باستخدام Gemini', 'generate', function () {
+  var prepare = iconButton('spark', 'إعادة الترجمة', 'generate', function () {
     prepareSpeechText(index, status, prepare);
   });
-  prepare.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
-  var approve = iconButton('check', record.status === 'approved' ? 'حفظ التعديل وإعادة الإرسال' : 'اعتماد النص وإرساله للصوت', 'accept', function () {
+  prepare.disabled = !canWrite || !!speechTextBusy[key];
+  var approve = iconButton('check', 'حفظ تعديلي (اختياري)', 'accept', function () {
     approveSpeechText(index, textarea, status, approve, localizedBlock.text);
   });
-  approve.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
+  approve.disabled = !canWrite || !!speechTextBusy[key];
   var actions = document.createElement('div');
   actions.className = 'kh-audio-actions';
   actions.append(prepare, approve);
@@ -1451,7 +1516,7 @@ function renderBlocks() {
   var banner = document.getElementById('kh-audio-review-gate');
   if (!banner) { banner = document.createElement('div'); banner.id = 'kh-audio-review-gate'; banner.className = 'kh-audio-review-gate'; var first = document.querySelector('#blocks'); if (first && first.parentNode) first.parentNode.insertBefore(banner, first); }
   banner.hidden = false;
-  var lang = document.documentElement.lang;
+  var lang = audioReviewLanguage();
   var host = $('blocks');
   if (!host) return;
   var importer = document.getElementById('kh-audio-asr-import');
@@ -1486,7 +1551,7 @@ function renderBlocks() {
       renderSpeechTextPanel(block, index, localizedBlock);
     });
   }
-  if (lang === 'ar' || lang === 'en') {
+  if (['ar', 'en', 'fr', 'it', 'de'].includes(lang)) {
     blocks.forEach(function (block, position) {
       var index = Number.isInteger(Number(block.dataset.blockIndex)) ? Number(block.dataset.blockIndex) : position;
       renderEnginePanel(block, index, story.i18n && story.i18n[lang] && story.i18n[lang].blocks && story.i18n[lang].blocks[index], lang);
@@ -1622,7 +1687,7 @@ function renderBlocks() {
     var note = document.createElement('textarea'); note.maxLength = 1000; note.placeholder = 'ملاحظتك على هذا المقطع (مطلوبة عند الرفض)';
     var suggestion = document.createElement('textarea'); suggestion.maxLength = 1000; suggestion.placeholder = 'صياغة مقترحة بديلة (اختياري — لا تُطبّق تلقائيًا)';
     if (saved) { note.value = saved.note || ''; suggestion.value = saved.suggestion || ''; issue.value = saved.issue || 'text'; }
-    var saveReject = iconButton('x', 'حفظ الملاحظة وإرسالها إلى Gemini', 'reject-save', async function () {
+    var saveReject = iconButton('x', 'اعتماد الملاحظة وإرسالها تلقائيًا إلى Gemini', 'reject-save', async function () {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الرفض.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       if (!note.value.trim()) { note.focus(); state.textContent = 'اكتب ملاحظة قبل حفظ الرفض.'; return; }
@@ -1738,7 +1803,7 @@ async function initialize(nextStory) {
     initialized = true;
     initializing = false;
     render();
-    try { await loadQueueStatus(document.documentElement.lang === 'en' ? 'en' : 'ar'); } catch (queueError) {}
+    try { await loadQueueStatus(audioReviewLanguage()); } catch (queueError) {}
     try {
       await loadManifests();
       try { await loadPublicAudioStatus(); } catch (statusError) { publishedAudioStatus = {}; }
@@ -1746,7 +1811,7 @@ async function initialize(nextStory) {
       schedulePoll();
     } catch (audioError) {
       manifestLoadFailure = true;
-      manifestErrors[document.documentElement.lang || 'ar'] =
+      manifestErrors[audioReviewLanguage()] =
         'تعذر تحميل معاينة الصوت: ' + (audioError && audioError.message || audioError);
       render();
     }
@@ -1765,8 +1830,8 @@ document.addEventListener('kh-story-audio-context', function () {
 });
 document.addEventListener('site-language-change', async function () {
   render();
-  var l = document.documentElement.lang;
-  if (story && (l === 'ar' || l === 'en')) { try { await loadQueueStatus(l); } catch (e) {} updateEnginePanels(); updateGenerationSummary(); schedulePoll(); }
+  var l = audioReviewLanguage();
+  if (story && ['ar', 'en', 'fr', 'it', 'de'].includes(l)) { try { await loadQueueStatus(l); } catch (e) {} try { await loadManifests(); } catch (e) {} render(); updateEnginePanels(); updateGenerationSummary(); schedulePoll(); }
 });
 if (window.__KH_STORY_PACKAGE) initialize(window.__KH_STORY_PACKAGE);
 })();

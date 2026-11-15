@@ -14,7 +14,7 @@ on:
       - "khaledoon/assets/ai-json-repair.js"
       - "khaledoon/tests/**"
       - "supabase/functions/publish-story-pr/index.ts"
-      - "supabase/functions/audio-review-assets/index.ts"
+      - "supabase/functions/audio-review-assets/**"
       - "tests/**"
       - "rebuild/**"
       - "scripts/e2e-story-preview.cjs"
@@ -49,6 +49,10 @@ jobs:
         run: node khaledoon/tests/audio-review-core.test.cjs
       - name: Type-check audio review and translation Edge Function
         run: deno check supabase/functions/audio-review-assets/index.ts
+      - name: Run reading-text auto-approve tests
+        run: node tests/reading-text-auto-approve.test.cjs
+      - name: Run rejection-cycle queue behaviour tests (mock Supabase)
+        run: deno test --allow-read tests/reject-cycle-queue.test.ts
       - name: Run per-block translation approval tests
         run: node tests/per-block-translation-approval.test.cjs
       - name: Run image resource validation tests
