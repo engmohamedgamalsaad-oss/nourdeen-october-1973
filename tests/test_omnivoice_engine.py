@@ -113,6 +113,15 @@ class EngineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             router.model_id_for("es")
 
+    def test_router_loads_only_the_selected_checkpoint_and_switches_by_language(self):
+        loaded = []
+        router = LanguageModelRouter(lambda model_id: loaded.append(model_id) or FakeModel())
+        fr_model = router.for_language("fr")
+        self.assertIs(fr_model, router.for_language("it"))
+        en_model = router.for_language("en")
+        self.assertIsNot(fr_model, en_model)
+        self.assertEqual(loaded, ["k2-fsa/OmniVoice", "masterofaudio2077/voicetut-egyptian-tashkeel"])
+
     def test_multilingual_provider_passes_target_language_to_official_model(self):
         model = FakeModel()
         self.karma().generate(model, "Bonjour tout le monde", "fr")
