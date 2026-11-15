@@ -388,7 +388,7 @@
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
-      var publishText = el('button', 'kh-translation-publish-text', 'تجهيز طلب نشر هذه اللغة وحدها');
+      var publishText = el('button', 'kh-translation-publish-text', 'نشر هذه اللغة (طلب مراجعة)');
       var audioPending = el('p', 'kh-translation-audio-pending', 'الصوت لم يكتمل بعد — هذه الصفحة تجهّز النص فقط، ولا يظهر مشغل للزائر دون manifest صوت صالح.');
       audioPending.id = 'kh-translation-audio-pending';
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
