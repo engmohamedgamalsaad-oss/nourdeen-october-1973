@@ -90,7 +90,7 @@
     var textarea = document.createElement("textarea");
     textarea.className = "kh-translation-editor";
     textarea.rows = 5;
-    textarea.value = record.translation_text || (currentBlock && currentBlock.text) || "";
+    textarea.value = record.translation_text || "";
     textarea.placeholder = "تظهر هنا الترجمة التي يجهزها Gemini وتُعتمد تلقائيًا. التعديل اليدوي اختياري.";
     var buttons = el("div", "kh-translation-actions");
     var generate = el("button", "kh-translation-generate", "إعادة الترجمة");
@@ -388,10 +388,10 @@
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
-      var publishText = el('button', 'kh-translation-publish-text', 'تعليمات طلب مراجعة النص');
+      var publishText = el('button', 'kh-translation-publish-text', 'تجهيز طلب نشر هذه اللغة وحدها');
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
       publishText.addEventListener('click', function () {
-        bulkStatus.textContent = 'الترجمات المعتمدة جاهزة. لم يتم نشر أي ملف من صفحة المعاينة. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)» لإنشاء PR بعد فحص جميع الترجمات؛ لا يبدأ أي توليد صوتي.';
+        try { localStorage.setItem('kh-text-publish-language', lang()); } catch (e) {}\n        bulkStatus.textContent = 'تم تحديد لغة ' + lang().toUpperCase() + ' لطلب النشر. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)»؛ سيُرسل طلب مراجعة لهذه اللغة وحدها. الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لم يبدأ أي توليد صوتي.';
       });
       bulkRow.appendChild(publishText);
       if (['ar', 'en'].includes(lang())) {
