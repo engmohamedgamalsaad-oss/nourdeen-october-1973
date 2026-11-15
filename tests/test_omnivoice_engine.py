@@ -118,7 +118,15 @@ class EngineTests(unittest.TestCase):
         self.karma().generate(model, "Bonjour tout le monde", "fr")
         self.assertEqual(model.calls[0]["language"], "fr")
         self.assertEqual(model.calls[0]["ref_text"], KARMA_TEXT)
-        self.assertEqual((model.calls[0]["num_step"], model.calls[0]["guidance_scale"], model.calls[0]["speed"]), (36, 3.0, 0.90))
+        self.assertEqual((model.calls[0]["num_step"], model.calls[0]["guidance_scale"], model.calls[0]["speed"]), (32, 2.0, 0.90))
+
+    def test_multilingual_narrator_uses_its_own_reference_and_pilot_settings(self):
+        model = FakeModel()
+        self.narrator().generate(model, "Bonjour.", "fr")
+        call = model.calls[0]
+        self.assertEqual(call["language"], "fr")
+        self.assertEqual(call["ref_text"], "نص مرجع الراوي")
+        self.assertEqual((call["num_step"], call["guidance_scale"], call["speed"]), (32, 2.0, 1.05))
 
     def test_narrator_is_independent_provider(self):
         model = FakeModel()
