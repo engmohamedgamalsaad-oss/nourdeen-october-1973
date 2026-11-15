@@ -390,29 +390,8 @@
       bulkRow.appendChild(bulkTranslate);
       var publishText = el('button', 'kh-translation-publish-text', 'نشر النص المعتمد لهذه اللغة');
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
-      publishText.addEventListener('click', async function () {
-        if (!window.confirm('سيتم نشر النص المعتمد لهذه اللغة مباشرة على الموقع، دون نشر أو توليد أي صوت. هل تريد المتابعة؟')) return;
-        publishText.disabled = true;
-        bulkStatus.textContent = 'جارٍ التحقق من اعتمادات المقاطع ونشر النص فقط…';
-        try {
-          var result = await audioReviewAction({ action: 'publish_translations' });
-          var st = story(), localized = st && st.i18n && st.i18n[lang()];
-          var arabic = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
-          if (localized && Array.isArray(localized.blocks)) {
-            arabic.forEach(function (block, index) {
-              var rec = translationRecords[lang() + ':' + index];
-              if (block && ['karma', 'narrator'].includes(block.speaker) && rec && rec.status === 'approved') {
-                localized.blocks[index].text = rec.translation_text;
-              }
-            });
-            try { localStorage.setItem('kh-story-review-package', JSON.stringify(st)); } catch (ignore) {}
-          }
-          bulkStatus.textContent = 'تم نشر نص ' + ({en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[lang()] || lang()) +
-            ' في ' + result.segments + ' مقطع. لم يتم نشر أو توليد أي صوت. رقم التحديث: ' + String(result.commit_sha || '').slice(0, 10);
-          document.dispatchEvent(new CustomEvent('kh-audio-review-updated'));
-        } catch (e) {
-          bulkStatus.textContent = e.message || 'تعذر نشر النص المعتمد.';
-        } finally { publishText.disabled = false; updateTranslationPublishButton(); }
+      publishText.addEventListener('click', function () {
+        bulkStatus.textContent = 'الترجمات المعتمدة جاهزة. لم يتم نشر أي ملف من صفحة المعاينة. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)» لإنشاء PR بعد فحص جميع الترجمات؛ لا يبدأ أي توليد صوتي.';
       });
       bulkRow.appendChild(publishText);
       if (['ar', 'en'].includes(lang())) {
