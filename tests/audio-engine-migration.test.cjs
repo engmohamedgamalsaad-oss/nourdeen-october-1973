@@ -6,7 +6,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const core = require('../khaledoon/assets/audio-review-core.js');
 
-test('Arabic and English default to the unified OmniVoice provider', () => {
+test('Arabic and English keep VoiceTut while FR IT DE use official multilingual OmniVoice', () => {
   for (const language of ['ar', 'en']) {
     assert.deepEqual(core.engineOf(language, 'karma'), {
       voice: 'omnivoice-karma-reference',
@@ -18,6 +18,10 @@ test('Arabic and English default to the unified OmniVoice provider', () => {
       provider: 'omnivoice',
       model: 'VoiceTut Egyptian Tashkeel'
     });
+  }
+  for (const language of ['fr', 'it', 'de']) {
+    assert.equal(core.engineOf(language, 'karma').model, 'k2-fsa/OmniVoice');
+    assert.equal(core.engineOf(language, 'narrator').model, 'k2-fsa/OmniVoice');
   }
 });
 
