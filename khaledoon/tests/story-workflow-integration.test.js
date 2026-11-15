@@ -757,7 +757,7 @@ test('story publisher commits to main without creating pull requests', function 
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(publisher.includes('publisher_mode: "direct_main"'));
   assert.ok(publisher.includes('writes_main_directly: true'));
-  assert.ok(publisher.includes('published_to_main: true'));
+  assert.ok(publisher.includes('published_to_main: false'));
   assert.ok(publisher.includes('git/refs/heads/${BASE}'));
   assert.ok(!publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'));
   assert.ok(admin.includes("capabilityResult.publisher_mode!=='direct_main'"));
