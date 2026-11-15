@@ -988,6 +988,8 @@ test('story publisher creates a review PR and admin verifies merge plus the actu
   assert.ok(admin.includes("fetch(verifyUrl.href,{cache:'no-store'})"));
   assert.ok(admin.includes('liveStoryPackage.i18n[lang]'));
   assert.ok(admin.includes("publication_mode:publicationMode==='text_only'?'text_only':'full'"));
+  assert.ok(admin.includes("text_languages:publicationMode==='text_only'?[selectedTextLanguage]:undefined"), 'text-only publisher must submit only the language selected in the preview');
+  assert.ok(admin.includes("localStorage.getItem('kh-text-publish-language')"), 'admin must require a selected preview language instead of silently publishing all four');
   assert.ok(admin.includes('نشر النص فقط (طلب مراجعة)'));
   assert.ok(admin.includes("if(review.publish_pr_number||review.publish_commit_sha||review.published_to_main_at)"));
 });
