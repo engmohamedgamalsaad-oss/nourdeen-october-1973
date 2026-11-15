@@ -813,7 +813,7 @@ Deno.serve(async (req: Request) => {
       try { source = await resolveStoryBlock(section, slug, lang === "en" ? "ar" : lang, 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
       let blocks = source.story?.i18n?.[lang]?.blocks;
-      if (lang === "en") {
+      if (lang !== "ar") {
         const arabicBlocks = source.story?.i18n?.ar?.blocks;
         if (!Array.isArray(arabicBlocks) || !arabicBlocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع عربية صالحة." });
         blocks = [];
@@ -821,10 +821,10 @@ Deno.serve(async (req: Request) => {
           const arabicBlock = arabicBlocks[index];
           if (!arabicBlock || !["karma", "narrator"].includes(arabicBlock.speaker)) continue;
           const sourceHash = await sha256Hex(new TextEncoder().encode(String(arabicBlock.text ?? "").trim()));
-          const translation = audioReview?.translations?.["en:" + index];
+          const translation = audioReview?.translations?.[lang + ":" + index];
           if (!translation || translation.status !== "approved" || translation.source_arabic_hash !== sourceHash ||
               typeof translation.translation_text !== "string" || !translation.translation_text.trim()) {
-            return reply(409, { error: "لا يمكن نشر الصوت الإنجليزي: ترجمة المقطع " + (index + 1) + " غير معتمدة أو أصبحت قديمة." });
+            return reply(409, { error: "لا يمكن نشر الصوت: ترجمة المقطع " + (index + 1) + " غير معتمدة أو أصبحت قديمة." });
           }
           blocks[index] = { ...arabicBlock, text: translation.translation_text.trim() };
         }
