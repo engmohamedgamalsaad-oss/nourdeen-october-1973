@@ -56,16 +56,14 @@ test('the single Colab notebook registers both voices and the admin preview repo
   assert.match(preview, /workerOnline === false/);
 });
 
-test('visitor-facing language text publishes only after every segment has a current human approval', () => {
-  assert.match(assets, /body\.action === "publish_translations"/);
-  assert.match(assets, /translation\.status !== "approved"/);
-  assert.match(assets, /translation\.source_arabic_hash !== currentHash/);
-  assert.match(assets, /branch: "main"/);
-  assert.match(preview, /action: 'publish_translations'/);
-  assert.match(preview, /نشر النص المعتمد لهذه اللغة/);
-  assert.match(preview, /لم يتم نشر أو توليد أي صوت/);
+test('legacy direct-to-main translation publishing is disabled in favor of the reviewed text-only PR path', () => {
+  assert.match(assets, /body\\.action === "publish_translations"/);
+  assert.match(assets, /تم إيقاف النشر المباشر إلى main/);
+  assert.doesNotMatch(assets, /branch: "main"/);
+  assert.doesNotMatch(preview, /action: 'publish_translations'/);
+  assert.match(preview, /نشر النص فقط/);
+  assert.match(preview, /لم يبدأ أي توليد صوتي/);
 });
-
 
 test('bulk language audio queue is all-or-nothing when any segment is unapproved or stale', () => {
   const preflight = assets.indexOf('const prepared: Array<');
