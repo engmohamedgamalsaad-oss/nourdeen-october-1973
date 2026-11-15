@@ -567,6 +567,82 @@ Deno.serve(async (req: Request) => {
         previousRoot = previousPath + '/';
       }
     }
+    let indexEntryForPublish: any = incomingEntry;
+    const textOnlyPublish = body.publication_mode === "text_only";
+    if (textOnlyPublish) {
+      if (existingIndex < 0 || previousRoot) {
+        throw new Error("نشر ترجمة لغة واحدة يتطلب حكاية منشورة في مسارها الحالي؛ أوقفت النشر دون إنشاء طلب مراجعة.");
+      }
+      const textLanguageOptions = ["en", "fr", "it", "de"];
+      let selectedTextLanguages = textLanguageOptions;
+      if (body.text_languages !== undefined) {
+        if (!Array.isArray(body.text_languages) || !body.text_languages.length ||
+            body.text_languages.some((lang: unknown) => typeof lang !== "string" || !textLanguageOptions.includes(lang))) {
+          throw new Error("text_languages غير صالحة؛ أوقفت النشر دون تغيير أي لغة.");
+        }
+        selectedTextLanguages = textLanguageOptions.filter((lang) => body.text_languages.includes(lang));
+      }
+      const currentStoryPath = storyRoot + "story.json";
+      const currentQuizPath = "stories/quizzes/" + storyId + ".json";
+      const decodeGithubText = (response: any) => new TextDecoder().decode(
+        Uint8Array.from(atob(String(response.content || "").replace(/\s/g, "")), (c) => c.charCodeAt(0))
+      );
+      const [currentStoryResponse, currentQuizResponse, currentPageResponse] = await Promise.all([
+        github("/repos/" + OWNER + "/" + REPO + "/contents/" + currentStoryPath + "?ref=" + baseSha, githubToken),
+        github("/repos/" + OWNER + "/" + REPO + "/contents/" + currentQuizPath + "?ref=" + baseSha, githubToken),
+        github("/repos/" + OWNER + "/" + REPO + "/contents/" + storyRoot + "index.html?ref=" + baseSha, githubToken),
+      ]);
+      const currentStory = JSON.parse(decodeGithubText(currentStoryResponse));
+      const incomingPackageFile = body.files.find((file: any) => file.path === currentStoryPath);
+      const incomingPackage = incomingPackageFile ? JSON.parse(contentForSafetyScan(incomingPackageFile)) : null;
+      if (!incomingPackage || currentStory.format !== "KHALEDOON_STORY" ||
+          incomingPackage.format !== "KHALEDOON_STORY" ||
+          currentStory.section !== storySection || incomingPackage.section !== storySection ||
+          currentStory.slug !== incomingPackage.slug ||
+          !Array.isArray(currentStory.i18n?.ar?.blocks) ||
+          stableJson(currentStory.i18n.ar.blocks) !== stableJson(incomingPackage.i18n?.ar?.blocks)) {
+        throw new Error("تعذر مطابقة حزمة الترجمة مع نسخة الحكاية المنشورة حاليًا على main؛ أوقفت النشر لحماية اللغات الأخرى.");
+      }
+      const currentArabicBlocks = currentStory.i18n.ar.blocks;
+      for (const lang of selectedTextLanguages) {
+        const translated = incomingPackage.i18n?.[lang];
+        if (!translated || !Array.isArray(translated.blocks) || translated.blocks.length !== currentArabicBlocks.length) {
+          throw new Error("ترجمة " + lang + " غير مكتملة أو لا تطابق عدد المقاطع المنشورة؛ أوقفت النشر.");
+        }
+        currentStory.i18n[lang] = translated;
+      }
+      incomingPackageFile.content = JSON.stringify(currentStory, null, 2) + "\n";
+      incomingPackageFile.encoding = "utf-8";
+
+      const existingEntry = currentIndex[existingIndex];
+      const mergedIndexEntry: any = { ...existingEntry, i18n: { ...(existingEntry.i18n || {}) } };
+      for (const lang of selectedTextLanguages) {
+        const localizedIndex = incomingEntry.i18n?.[lang];
+        if (!localizedIndex || typeof localizedIndex.title !== "string" || !localizedIndex.title.trim()) {
+          throw new Error("بيانات فهرس اللغة " + lang + " غير مكتملة؛ أوقفت النشر.");
+        }
+        mergedIndexEntry.i18n[lang] = localizedIndex;
+      }
+      indexEntryForPublish = mergedIndexEntry;
+
+      const incomingQuizFile = body.files.find((file: any) => file.path === currentQuizPath);
+      if (!incomingQuizFile) throw new Error("ملف بنك الأسئلة غير موجود؛ أوقفت نشر الترجمة.");
+      const currentQuizText = decodeGithubText(currentQuizResponse);
+      const currentQuiz = JSON.parse(currentQuizText);
+      if (!Array.isArray(currentQuiz.questions) || currentQuiz.questions.length < 5) {
+        throw new Error("بنك الأسئلة المنشور غير صالح؛ أوقفت نشر الترجمة دون تغييره.");
+      }
+      incomingQuizFile.content = currentQuizText;
+      incomingQuizFile.encoding = "utf-8";
+
+      const currentPageText = decodeGithubText(currentPageResponse);
+      if (!currentPageText.includes('data-story-path="story.json"') ||
+          !currentPageText.includes('data-story-slug="' + storyId + '"')) {
+        throw new Error("صفحة الحكاية المنشورة لا تطابق مسار الحكاية؛ أوقفت نشر الترجمة.");
+      }
+      storyPage.content = currentPageText;
+      storyPage.encoding = "utf-8";
+    }
     if (existingIndex < 0 || previousRoot) {
       let existingStoryPage: any = null;
       try {
@@ -581,7 +657,7 @@ Deno.serve(async (req: Request) => {
           : "Story page path already exists on main but is missing from stories/index.json; refusing to overwrite it.");
       }
     }
-    if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
+    if (existingIndex >= 0) currentIndex[existingIndex] = indexEntryForPublish; else currentIndex.push(indexEntryForPublish);
     // Keep the interactive map synchronized on every publish; merge into the latest main file.
     const incomingPlacesFile = body.files.find((file: any) => file.path === 'stories/places.json');
     if (!incomingPlacesFile) {
@@ -605,7 +681,10 @@ Deno.serve(async (req: Request) => {
       throw new Error('Current stories/places.json must be an object.');
     }
     let mapMarkerAdded = false;
-    if (hasStoryPlace && place === null) {
+    if (textOnlyPublish) {
+      // Translation-only publishing must not change map metadata.
+      mapMarkerAdded = !!currentPlaces[storyId];
+    } else if (hasStoryPlace && place === null) {
       // Explicit null means the story has no verified location; remove a stale marker.
       delete currentPlaces[storyId];
     } else if (hasStoryPlace) {
