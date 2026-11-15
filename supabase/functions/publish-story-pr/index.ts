@@ -376,7 +376,18 @@ Deno.serve(async (req: Request) => {
         if (!translations || typeof translations !== "object") return reply(409, { error: "لا توجد ترجمات معتمدة محفوظة لهذه الحكاية." });
         const arabicBlocks = packageData.i18n?.ar?.blocks;
         if (!Array.isArray(arabicBlocks) || !arabicBlocks.length) return reply(409, { error: "النص العربي الأصلي غير متاح للتحقق من الترجمات." });
-        for (const lang of ["en", "fr", "it", "de"]) {
+        // Optional text_languages publishes only the chosen translated languages (each language is independent).
+        // Omitted -> all four, exactly as before. Languages not listed are left untouched in the package.
+        const textLanguageOptions = ["en", "fr", "it", "de"];
+        let textLanguages = textLanguageOptions;
+        if (body.text_languages !== undefined) {
+          if (!Array.isArray(body.text_languages) || !body.text_languages.length ||
+              body.text_languages.some((lang: unknown) => typeof lang !== "string" || !textLanguageOptions.includes(lang))) {
+            return reply(400, { error: "text_languages يجب أن تكون قائمة غير فارغة من: en أو fr أو it أو de." });
+          }
+          textLanguages = textLanguageOptions.filter((lang) => body.text_languages.includes(lang));
+        }
+        for (const lang of textLanguages) {
           const localized = packageData.i18n?.[lang];
           if (!localized || !Array.isArray(localized.blocks) || localized.blocks.length !== arabicBlocks.length) {
             return reply(409, { error: "عدد مقاطع " + lang + " لا يطابق النص العربي؛ لم يتم إنشاء طلب مراجعة." });
