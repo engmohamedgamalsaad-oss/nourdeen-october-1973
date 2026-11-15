@@ -1065,8 +1065,7 @@ function engineView(language, index) {
 function engineBlockReason(language, index, opts) {
   if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة، لكن إرسال التوليد غير مفعّل لها في المحرك الحالي.';
   if (reconcileBlocked) return 'تغيّرت الحكاية وهناك مقاطع قيد التوليد؛ انتظر اكتمالها ثم أعد فتح المعاينة.';
-  var current = nextBlockIndexForLanguage(language);
-  if (!(opts && opts.regen) && current !== index) return current < 0 ? 'كل المقاطع معتمدة.' : 'يُفتح بعد اعتماد المقطع السابق (بترتيب الحكاية).';
+  /* No turn-order requirement: any block can be sent at any time. */
   if (language === 'ar') {
     var rec = speechTexts[speechTextKey(index)];
     if (!rec || rec.status !== 'approved' || !rec.approved_text) return 'اعتمد نص القراءة أولًا (الخطوة ٢).';

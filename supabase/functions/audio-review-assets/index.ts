@@ -825,13 +825,7 @@ Deno.serve(async (req: Request) => {
     const audioReview = reviewRow?.audio_review ?? {};
     const accepted = acceptedBlockIndexes(audioReview, language);
     const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
-    const targetPosition = ordered.indexOf(blockIndex);
-    const hasOpenRejection = Object.values(audioReview?.clips ?? {}).some((clip: any) =>
-      clip?.lang === language && Number(clip?.block_index) === blockIndex && clip?.status === "rejected" && !clip?.resolved);
-    if (targetPosition < 0) return reply(409, { error: "هذا المقطع غير منطوق أو غير موجود." });
-    if (!hasOpenRejection && ordered.slice(0, targetPosition).some((index) => !accepted.has(index))) {
-      return reply(409, { error: "يجب إكمال المقاطع السابقة واعتمادها أولًا، بترتيب الحكاية." });
-    }
+    // No turn-order requirement: any spoken block can be queued at any time.
     if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
     let spokenText = source.sourceText;
     if (language === "ar") {

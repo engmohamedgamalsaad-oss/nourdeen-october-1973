@@ -22,8 +22,7 @@ test('rejection note is sent to Gemini automatically and regenerates only that b
   assert.doesNotMatch(review, /focusGeminiFollowup/);
 });
 
-test('rejected block can be queued out of turn, and only its own public audio is withdrawn', () => {
-  assert.match(edge, /hasOpenRejection/);
+test('any block can be queued out of turn (no order gate), and only its own public audio is withdrawn', () => {
   assert.match(edge, /invalidatePublicClipAudio\(service, section, slug, language, blockIndex\)/);
   assert.doesNotMatch(edge, /invalidatePublicStoryAudio\(service, section, slug\);\n\s*}\n\s*catch|try \{ await invalidatePublicStoryAudio/);
 });
