@@ -62,7 +62,7 @@ test('legacy direct-to-main translation publishing is disabled in favor of the r
   assert.ok(!assets.includes('branch: "main"'));
   assert.ok(!preview.includes("action: 'publish_translations'"));
   assert.match(preview, /نشر النص فقط/);
-  assert.match(preview, /لم يبدأ أي توليد صوتي/);
+  assert.match(preview, /لا يبدأ أي توليد صوتي/);
 });
 
 test('bulk language audio queue is all-or-nothing when any segment is unapproved or stale', () => {
