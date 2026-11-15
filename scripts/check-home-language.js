@@ -135,7 +135,9 @@ if (shared) {
 }
 
 /* ---------- 3) كل صفحات HTML ---------- */
-const htmlFiles = walk('').filter((f) => f.endsWith('.html')).sort();
+/* Non-page HTML asset placeholder: this path contains the literal text "test", not a visitor page. */
+const NON_PAGE_HTML_ASSETS = new Set(['assets/video/karma/karma.html']);
+const htmlFiles = walk('').filter((f) => f.endsWith('.html') && !NON_PAGE_HTML_ASSETS.has(f)).sort();
 let visitorPages = 0, stubs = 0;
 for (const rel of htmlFiles) {
   const html = read(rel);
