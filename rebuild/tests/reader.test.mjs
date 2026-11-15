@@ -57,7 +57,7 @@ test('unified reader refuses to silently fall back to a legacy package', () => {
 });
 
 test('story text is inserted as text and source links are isolated', () => {
-  assert.match(js, /p\.textContent=b\.text/);
+  assert.match(js, /p\.textContent=sourceBlock\.text/);\n  assert.match(js, /previewMode&&current!=='ar'/);
   assert.match(js, /a\.rel='noopener noreferrer'/);
   assert.match(js, /img\.alt=d\.alt/);
 });
