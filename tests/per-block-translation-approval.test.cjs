@@ -12,18 +12,19 @@ const notebookCode = notebook.cells.filter(cell => cell.cell_type === 'code').ma
 const publicAudio = fs.readFileSync(path.join(root, 'assets/shared/story-audio.js'), 'utf8');
 const storyReader = fs.readFileSync(path.join(root, 'rebuild/reader.js'), 'utf8');
 
-test('translation generation is per block and stores drafts, never human approval', () => {
+test('translation generation is per block and a successful Gemini result is default-approved', () => {
   assert.match(assets, /body\.action === "translation_generate"/);
   assert.match(assets, /source_arabic_hash: sourceHash, translation_text: translationText/);
-  assert.match(assets, /status: "draft"/);
-  assert.match(assets, /Save as a draft only/);
+  assert.match(assets, /status: "approved", auto_approved: true/);
+  assert.doesNotMatch(assets, /Save as a draft only/);
 });
 
-test('human translation approval is explicit and tied to the current Arabic source hash', () => {
+test('optional manual translation edit stays tied to the current Arabic source hash', () => {
   assert.match(assets, /body\.action === "translation_save"/);
   assert.match(assets, /source\.sourceTextHash !== body\.source_arabic_hash/);
   assert.match(assets, /status: decision/);
-  assert.match(preview, /اعتماد الترجمة/);
+  assert.match(preview, /حفظ تعديلي \(اختياري\)/);
+  assert.doesNotMatch(preview, /kh-translation-approve/);
   assert.match(preview, /translation_save/);
 });
 

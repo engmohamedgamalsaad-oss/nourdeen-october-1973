@@ -21,7 +21,7 @@
 
   function $(id) { return document.getElementById(id); }
   function story() { return window.__KH_STORY_PACKAGE || null; }
-  function lang() { return document.documentElement.lang || 'ar'; }
+  function lang() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
   function direct(parent, selector) { return Array.prototype.filter.call(parent.children, function (n) { return n.matches(selector); }); }
   function blockIndexOf(block, position) { var n = Number(block.dataset.blockIndex); return Number.isInteger(n) && block.dataset.blockIndex !== '' ? n : position; }
@@ -91,29 +91,27 @@
     textarea.className = "kh-translation-editor";
     textarea.rows = 5;
     textarea.value = record.translation_text || (currentBlock && currentBlock.text) || "";
-    textarea.placeholder = "ستظهر هنا الترجمة التي يجهزها Gemini، ويمكنك تعديلها قبل الاعتماد.";
+    textarea.placeholder = "تظهر هنا الترجمة التي يجهزها Gemini وتُعتمد تلقائيًا. التعديل اليدوي اختياري.";
     var buttons = el("div", "kh-translation-actions");
-    var generate = el("button", "kh-translation-generate", "إعادة تجهيز الترجمة باستخدام Gemini");
-    var save = el("button", "kh-translation-save", "حفظ التعديل كمسودة");
-    var approve = el("button", "kh-translation-approve", "اعتماد الترجمة");
-    [generate, save, approve].forEach(function (b) { b.type = "button"; });
+    var generate = el("button", "kh-translation-generate", "إعادة الترجمة");
+    var save = el("button", "kh-translation-save", "حفظ تعديلي (اختياري)");
+    [generate, save].forEach(function (b2) { b2.type = "button"; });
     function paintStatus() {
       var r = translationRecords[key] || {};
-      status.textContent = r.status === "approved" ? "✓ الترجمة معتمدة بشريًا" :
-        r.status === "draft" ? "مسودة — تحتاج مراجعتك واعتمادك" :
-        r.status === "needs_revision" ? "تحتاج إلى تعديل" : "لم تُعتمد الترجمة بعد";
+      status.textContent = r.status === "approved" ? "✓ الترجمة جاهزة ومعتمدة" + (r.auto_approved ? " تلقائيًا" : "") :
+        r.status === "draft" ? "مسودة قديمة — اضغط «إعادة الترجمة»" :
+        r.status === "needs_revision" ? "تحتاج إلى إعادة ترجمة" : "لم تُجهَّز الترجمة بعد — اضغط «الترجمة»";
       status.dataset.state = r.status || "missing";
-      approve.disabled = !String(textarea.value || "").trim();
+      save.disabled = !String(textarea.value || "").trim();
     }
     textarea.addEventListener("input", paintStatus);
-    async function saveDecision(decision) {
+    async function saveManualEdit() {
       var st = story(), ar = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks && st.i18n.ar.blocks[index];
       if (!ar || !ar.text) throw new Error("النص العربي المقابل غير موجود.");
-      var hashBytes = new TextEncoder().encode(String(ar.text).trim());
-      var digest = await crypto.subtle.digest("SHA-256", hashBytes);
-      var hash = Array.from(new Uint8Array(digest), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+      var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(ar.text).trim()));
+      var hash = Array.from(new Uint8Array(digest), function (b3) { return b3.toString(16).padStart(2, "0"); }).join("");
       var result = await audioReviewAction({
-        action: "translation_save", block_index: index, decision: decision,
+        action: "translation_save", block_index: index, decision: "approved",
         translation_text: String(textarea.value || "").trim(), source_arabic_hash: hash,
       });
       translationRecords[key] = result.translation;
@@ -121,28 +119,23 @@
       document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
     }
     generate.addEventListener("click", async function () {
-      generate.disabled = true; status.textContent = "Gemini يجهّز ترجمة هذا المقطع من النص العربي والسياق…";
+      generate.disabled = true; status.textContent = "Gemini يعيد ترجمة هذا المقطع وحده من النص العربي والسياق وملاحظاتك السابقة…";
       try {
         var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
         translationRecords[key] = result.translation;
         textarea.value = result.translation.translation_text || "";
         paintStatus();
+        status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
-      } catch (e) { status.textContent = e.message || "تعذر تجهيز الترجمة."; }
+      } catch (e) { status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; }
       finally { generate.disabled = false; }
     });
     save.addEventListener("click", async function () {
       save.disabled = true;
-      try { await saveDecision("draft"); status.textContent = "تم حفظ المسودة. لم تُعتمد ولم يُرسل صوتها."; }
-      catch (e) { status.textContent = e.message || "تعذر حفظ المسودة."; }
-      finally { save.disabled = false; }
+      try { await saveManualEdit(); status.textContent = "تم حفظ تعديلك. أُبطل الصوت القديم لهذا المقطع فقط."; }
+      catch (e) { status.textContent = e.message || "تعذر حفظ التعديل."; paintStatus(); }
     });
-    approve.addEventListener("click", async function () {
-      approve.disabled = true;
-      try { await saveDecision("approved"); status.textContent = "تم اعتماد الترجمة لهذا المقطع فقط؛ أصبح مؤهلًا لإرسال الصوت للطابور."; }
-      catch (e) { status.textContent = e.message || "تعذر اعتماد الترجمة."; paintStatus(); }
-    });
-    buttons.append(generate, save, approve);
+    buttons.append(generate, save);
     wrap.append(source, textarea, buttons, status);
     paintStatus();
     return wrap;
@@ -185,7 +178,7 @@
 
   function fetchJobs() {
     var st = story(), t = token();
-    if (!st || !t || (lang() !== 'ar' && lang() !== 'en')) return Promise.resolve(false);
+    if (!st || !t || (!['ar', 'en', 'fr', 'it', 'de'].includes(lang()))) return Promise.resolve(false);
     return fetch(SUPA + '/functions/v1/audio-review-assets', {
       method: 'POST',
       headers: { apikey: KEY, Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
@@ -226,10 +219,10 @@
     if (L !== 'ar') {
       var translation = translationRecords[L + ':' + index];
       s2 = translation && translation.status === 'approved'
-        ? { s: 'done', t: 'الترجمة معتمدة' }
+        ? { s: 'done', t: 'الترجمة جاهزة' }
         : translation && translation.status === 'draft'
-          ? { s: 'warn', t: 'تحتاج مراجعتك' }
-          : { s: 'todo', t: 'لم تُعتمد' };
+          ? { s: 'warn', t: 'قديمة — أعد الترجمة' }
+          : { s: 'todo', t: 'لم تُجهَّز' };
     } else {
       var st = speech ? speech.dataset.status : '';
       s2 = st === 'approved' ? { s: 'done', t: 'معتمد' } : st === 'suggested' ? { s: 'warn', t: 'بانتظار اعتمادك' } : { s: 'todo', t: 'لم يُجهّز' };
@@ -330,7 +323,7 @@
     });
     button.hidden = lang() === 'ar';
     button.disabled = lang() === 'ar' || !translationLoaded || !allApproved;
-    button.title = allApproved ? 'كل المقاطع المنطوقة معتمدة؛ اضغط لنشر النص فقط.' : 'اعتمد ترجمة كل مقطع منطوق قبل نشر نص اللغة.';
+    button.title = allApproved ? 'كل المقاطع المنطوقة معتمدة؛ اضغط لنشر النص فقط.' : 'نفّذ «الترجمة» لكل مقطع منطوق قبل نشر نص اللغة.';
   }
   function refresh() {
     Array.prototype.forEach.call(document.querySelectorAll('.kh-flow-box'), paint);
@@ -363,25 +356,34 @@
       bulkStatus.id = 'kh-translation-bulk-status';
       tbody.appendChild(bulkStatus);
       var bulkRow = el('div', 'kh-translation-bulk-actions');
-      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'تجهيز ترجمات كل المقاطع باستخدام Gemini');
+      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'الترجمة');
       bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
       bulkTranslate.addEventListener('click', async function () {
         var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
-        if (lang() === 'ar' || !blocks.length) return;
+        if (!blocks.length) return;
         bulkTranslate.disabled = true;
-        var done = 0, skipped = 0, failed = 0;
-        for (var i = 0; i < blocks.length; i++) {
-          if (!blocks[i] || !['karma', 'narrator'].includes(blocks[i].speaker)) continue;
-          bulkStatus.textContent = 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + '…';
-          try {
-            var result = await audioReviewAction({ action: 'translation_generate', block_index: i });
-            translationRecords[lang() + ':' + i] = result.translation; done++;
-          } catch (e) {
-            if (/معتمدة بالفعل/.test(String(e.message || ''))) skipped++;
-            else failed++;
+        var done = 0, skipped = 0, failed = [];
+        try {
+          if (lang() === 'ar') {
+            if (!window.KHStoryAudioReview || typeof window.KHStoryAudioReview.prepareAllSpeechTexts !== 'function') throw new Error('مراجع الصوت لم يُحمَّل بعد.');
+            var r = await window.KHStoryAudioReview.prepareAllSpeechTexts(function (i, n) { bulkStatus.textContent = 'Gemini يجهّز نص المقطع ' + (i + 1) + ' من ' + n + '…'; });
+            done = r.done; skipped = r.skipped; failed = r.failed.map(function (f) { return f.index + 1; });
+          } else {
+            for (var i = 0; i < blocks.length; i++) {
+              if (!blocks[i] || !['karma', 'narrator'].includes(blocks[i].speaker)) continue;
+              bulkStatus.textContent = 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + '…';
+              try {
+                var result = await audioReviewAction({ action: 'translation_generate', block_index: i });
+                translationRecords[lang() + ':' + i] = result.translation; done++;
+              } catch (e) {
+                if (/معتمدة بالفعل/.test(String(e.message || ''))) skipped++; else failed.push(i + 1);
+              }
+            }
           }
-        }
-        bulkStatus.textContent = 'انتهى تجهيز الترجمات: ' + done + ' مسودة جديدة، ' + skipped + ' ترجمة معتمدة تم الحفاظ عليها، ' + failed + ' تعذر تجهيزها. راجع كل مقطع واعتمده منفردًا.';
+        } catch (e) { bulkStatus.textContent = e.message || 'تعذرت الترجمة.'; bulkTranslate.disabled = false; return; }
+        bulkStatus.textContent = 'انتهت الترجمة: ' + done + ' مقطع جاهز ومعتمد تلقائيًا، ' + skipped + ' كانت جاهزة وتُركت كما هي' +
+          (failed.length ? '، وفشل ' + failed.length + ' (مقاطع: ' + failed.join('، ') + ') — استخدم «إعادة الترجمة» بجوار كل منها.' : '.') +
+          ' لم يبدأ أي توليد صوتي.';
         bulkTranslate.disabled = false;
         onUpdated();
       });
@@ -414,14 +416,14 @@
       });
       bulkRow.appendChild(publishText);
       if (['ar', 'en'].includes(lang())) {
-        var queueAll = el('button', 'kh-translation-queue-all', 'إرسال كل المقاطع المعتمدة للطابور');
+        var queueAll = el('button', 'kh-translation-queue-all', 'توليد كل المقاطع');
         queueAll.id = 'kh-translation-queue-all'; queueAll.type = 'button';
         queueAll.addEventListener('click', async function () {
           queueAll.disabled = true;
-          bulkStatus.textContent = 'جارٍ إرسال المقاطع المعتمدة إلى طابور Colab…';
+          bulkStatus.textContent = 'جارٍ إرسال كل المقاطع المستحقة إلى طابور التوليد…';
           try {
             var result = await audioReviewAction({ action: 'enqueue_approved_language' });
-            bulkStatus.textContent = 'تم إرسال ' + result.queued_count + ' مقطع، وكان ' + result.already_queued + ' موجودًا بالطابور، وتُرك ' + result.skipped_unapproved + ' مقطعًا دون اعتماد بشري.';
+            bulkStatus.textContent = 'أُرسل ' + result.queued_count + ' مقطع للطابور (منها ' + (result.retried_failed || 0) + ' أُعيدت محاولتها بعد فشل)، و' + result.already_queued + ' موجودة أو مكتملة دون تكرار، وتُرك ' + result.skipped_unapproved + ' مقطعًا لم يُجهَّز نصه بعد.';
             poll();
           } catch (e) { bulkStatus.textContent = e.message || 'تعذر إرسال المقاطع إلى الطابور.'; }
           finally { queueAll.disabled = false; }
@@ -433,7 +435,9 @@
     var publishTextButton = $('kh-translation-publish-text');
     if (publishTextButton) publishTextButton.hidden = lang() === 'ar';
     var bulkTranslateButton = $('kh-translation-bulk-generate');
-    if (bulkTranslateButton) bulkTranslateButton.hidden = lang() === 'ar';
+    if (bulkTranslateButton) bulkTranslateButton.hidden = false;
+    var queueAllButton = $('kh-translation-queue-all');
+    if (queueAllButton) queueAllButton.hidden = ['ar', 'en'].indexOf(lang()) < 0;
     top.open = topOpen;
   }
   function updateTopSummary() {
@@ -507,7 +511,7 @@
     var currentTranslationStale = L !== 'ar' && (!currentTranslation || currentTranslation.status !== 'approved');
     var genButton = gp && gp.querySelector('button:not(.kh-audio-publish-button)');
     var genStatus = gp && gp.querySelector('.kh-audio-review-state');
-    if (currentTranslationStale && genButton) { genButton.disabled = true; genButton.title = 'اعتمد ترجمة هذا المقطع قبل توليد الصوت.'; }
+    if (currentTranslationStale && genButton) { genButton.disabled = true; genButton.title = 'نفّذ «الترجمة» لهذا المقطع قبل توليد الصوت.'; }
     else if (genButton) { genButton.disabled = false; genButton.removeAttribute('title'); }
     info.forEach(function (rec) {
       if (!rec.panels.length && (L !== 'ar' && L !== 'en')) return;
@@ -549,9 +553,9 @@
       body.appendChild(step2.d);
 
       /* ③ التوليد */
-      if (L === 'ar' || L === 'en') {
+      if (['ar', 'en', 'fr', 'it', 'de'].includes(L)) {
         var step3 = makeStep(box, 3, 'التوليد');
-        step3.body.appendChild(el('p', 'kh-gen-note', currentTranslationStale ? 'لا يمكن توليد الصوت قبل اعتماد ترجمة هذا المقطع بشريًا.' : ''));
+        step3.body.appendChild(el('p', 'kh-gen-note', currentTranslationStale ? 'لا يمكن توليد الصوت قبل نجاح «الترجمة» لهذا المقطع.' : ''));
         if (rec.index === current && genButton) {
           var row = el('div', 'kh-gen-row'); row.appendChild(genButton); if (genStatus) row.appendChild(genStatus); step3.body.appendChild(row);
         }
@@ -573,7 +577,7 @@
       }
       cards.forEach(function (p) { layerAudioCard(box, p); step4.body.appendChild(p); });
       other.forEach(function (p) { step4.body.appendChild(p); });
-      if (!cards.length && !other.length) step4.body.appendChild(el('p', 'kh-muted', 'لا يوجد صوت لهذا المقطع بعد. أرسله من خطوة التوليد، وسيظهر هنا بعد اكتماله.'));
+      if (!cards.length && !other.length) step4.body.appendChild(el('p', 'kh-muted', 'لا يوجد صوت لهذا المقطع باللغة المحددة بعد. أرسله من خطوة التوليد، وسيظهر هنا بعد اكتماله.'));
       body.appendChild(step4.d);
 
       box.appendChild(body);

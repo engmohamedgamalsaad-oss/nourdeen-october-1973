@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.0";
 import JSZip from "npm:jszip@3.10.1";
+import { buildIdempotencyKey, insertOrReuseJob, regenRevisionFor, rejectionNotesFor } from "./queue-logic.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 function envKey(name: string, dictionaryName: string): string {
@@ -407,17 +408,19 @@ Deno.serve(async (req: Request) => {
     const old = translations[key] && typeof translations[key] === "object" ? translations[key] : {};
     const forceRegenerate = body.force === true;
     if (old.status === "approved" && old.source_arabic_hash === sourceHash && !forceRegenerate) {
-      return reply(409, { error: "هذه الترجمة معتمدة بالفعل. استخدم زر إعادة التجهيز صراحةً لإلغاء اعتمادها وإعداد مسودة جديدة.", translation: old });
+      return reply(409, { error: "هذه الترجمة جاهزة ومعتمدة بالفعل. استخدم «إعادة الترجمة» لهذا المقطع إن أردت إعادة تجهيزه.", translation: old });
     }
     if ((old.source_arabic_hash && old.source_arabic_hash !== sourceHash) || forceRegenerate) {
       try { await invalidatePublicClipAudio(service, section, slug, language, index); }
       catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف صوت الترجمة القديمة." }); }
       if (review.clips && typeof review.clips === "object") {
         for (const [clipKey, clip] of Object.entries(review.clips) as [string, any][]) {
-          if (clip?.lang === language && Number(clip.block_index) === index) delete review.clips[clipKey];
+          // Rejected records carry the reviewer's correction note; only stale decisions are removed.
+          if (clip?.lang === language && Number(clip.block_index) === index && clip?.status !== "rejected") delete review.clips[clipKey];
         }
       }
     }
+    const reviewerNotes = rejectionNotesFor(review, language, index);
     const languageName = TRANSLATION_LANGUAGES[language];
     const prompt = [
       "Translate exactly one story segment from approved Egyptian Arabic into " + languageName + ".",
@@ -429,6 +432,10 @@ Deno.serve(async (req: Request) => {
       "Speaker: " + (source.block.speaker === "karma" ? "Karma" : "Narrator"),
       "Previous context (do not translate): " + previous,
       "Next context (do not translate): " + next,
+      ...(reviewerNotes.length ? [
+        "The project owner rejected an earlier audio version of this segment. Apply these corrections explicitly, while keeping every fact unchanged:",
+        ...reviewerNotes,
+      ] : []),
       "Arabic source segment to translate: " + source.sourceText,
     ].join("\n\n");
     const model = "gemini-3.8-flash";
@@ -466,12 +473,15 @@ Deno.serve(async (req: Request) => {
     if (!translationText || translationText.length > 12000 || !Array.isArray(generated?.review_notes)) {
       return reply(502, { error: "رد Gemini لا يطابق مخطط الترجمة؛ لم يتم حفظ أي ترجمة." });
     }
-    // Save as a draft only. Generation never grants human approval and never queues audio.
+    // A successful Gemini preparation is the default-approved text for audio generation.
+    // It never queues audio by itself; the queue starts only from the generate-all action.
+    const preparedAt = new Date().toISOString();
     translations[key] = {
       language, block_index: index, speaker: source.block.speaker,
       source_arabic_hash: sourceHash, translation_text: translationText,
-      status: "draft", model, review_notes: generated.review_notes.filter((v: any) => typeof v === "string").slice(0, 20),
-      updated_at: new Date().toISOString(), approved_at: null,
+      status: "approved", auto_approved: true, model,
+      review_notes: generated.review_notes.filter((v: any) => typeof v === "string").slice(0, 20),
+      updated_at: preparedAt, approved_at: preparedAt,
     };
     review.translations = translations;
     const { error: saveError } = await service.from("story_audio_reviews")
@@ -684,6 +694,19 @@ Deno.serve(async (req: Request) => {
       audio_hashes: incoming.audio_hashes,
       speech_texts: incoming.speech_texts ?? {},
     };
+    // The rejection counter only ever grows, so a stale browser copy can never reuse an old idempotency key.
+    const { data: storedRow } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    const storedRev = storedRow?.audio_review?.reject_rev;
+    const mergedRev: Record<string, number> = {};
+    for (const source of [storedRev, incoming.reject_rev]) {
+      if (!source || typeof source !== "object" || Array.isArray(source)) continue;
+      for (const [k, v] of Object.entries(source)) {
+        const n = Number(v);
+        if (Number.isInteger(n) && n > 0) mergedRev[k] = Math.max(mergedRev[k] ?? 0, n);
+      }
+    }
+    (audioReview as any).reject_rev = mergedRev;
     const { error } = await service.from("story_audio_reviews").upsert(
       { section, slug, audio_review: audioReview },
       { onConflict: "section,slug" },
@@ -746,7 +769,7 @@ Deno.serve(async (req: Request) => {
     const review = row?.audio_review ?? {};
     const blocks = arabicSource.story?.i18n?.ar?.blocks ?? [];
     const queued: any[] = [];
-    let alreadyQueued = 0, skippedUnapproved = 0;
+    let alreadyQueued = 0, skippedUnapproved = 0, retriedFailed = 0;
     for (const index of orderedStoryBlockIndexes(blocks)) {
       const block = blocks[index];
       const sourceText = String(block?.text ?? "").trim();
@@ -765,29 +788,27 @@ Deno.serve(async (req: Request) => {
       }
       if (!spokenText) { skippedUnapproved++; continue; }
       const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
-      const relatedBases = Object.values(review?.clips ?? {})
-        .filter((clip: any) => clip?.lang === language && Number(clip.block_index) === index)
-        .map((clip: any) => String(clip.base ?? "")).filter(Boolean);
-      const regenRevision = relatedBases.reduce((max, base) => Math.max(max, Number(review?.regen?.[base] ?? 0) || 0), 0);
-      const idempotencyKey = await sha256Hex(new TextEncoder().encode([section, slug, language, index, sourceHash, spokenHash, regenRevision].join(":")));
+      const idempotencyKey = await buildIdempotencyKey(review, section, slug, language, index, sourceHash, spokenHash);
+      const regenRevision = regenRevisionFor(review, language, index);
       const payload = {
         text: spokenText, speaker: block.speaker, source_text: sourceText,
         source_text_hash: sourceHash, spoken_text_hash: spokenHash,
         regeneration_revision: regenRevision, language_code: language === "ar" ? "arz" : "eng",
         reference_role: block.speaker, sample_rate: 24000,
       };
-      const { data: inserted, error: insertError } = await service.from("story_audio_generation_queue").insert({
+      const result = await insertOrReuseJob(service, {
         section, slug, language, block_index: index, speaker: block.speaker,
         engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
         idempotency_key: idempotencyKey, status: "pending",
-      }).select("id,status,block_index,speaker").maybeSingle();
-      if (insertError?.code === "23505") { alreadyQueued++; continue; }
-      if (insertError) return reply(500, { error: "تعذر إضافة المقطع " + (index + 1) + " إلى الطابور.", detail: insertError.message });
-      if (inserted) queued.push(inserted);
+      }, idempotencyKey);
+      if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع " + (index + 1) + " إلى الطابور.", detail: result.error?.message });
+      if (result.created) queued.push(result.job);
+      else if (result.retried) { retriedFailed++; queued.push(result.job); }
+      else alreadyQueued++;
     }
     return reply(200, {
       success: true, queued_count: queued.length, already_queued: alreadyQueued,
-      skipped_unapproved: skippedUnapproved, jobs: queued,
+      retried_failed: retriedFailed, skipped_unapproved: skippedUnapproved, jobs: queued,
     });
   }
 
@@ -805,7 +826,10 @@ Deno.serve(async (req: Request) => {
     const accepted = acceptedBlockIndexes(audioReview, language);
     const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
     const targetPosition = ordered.indexOf(blockIndex);
-    if (targetPosition < 0 || ordered.slice(0, targetPosition).some((index) => !accepted.has(index))) {
+    const hasOpenRejection = Object.values(audioReview?.clips ?? {}).some((clip: any) =>
+      clip?.lang === language && Number(clip?.block_index) === blockIndex && clip?.status === "rejected" && !clip?.resolved);
+    if (targetPosition < 0) return reply(409, { error: "هذا المقطع غير منطوق أو غير موجود." });
+    if (!hasOpenRejection && ordered.slice(0, targetPosition).some((index) => !accepted.has(index))) {
       return reply(409, { error: "يجب إكمال المقاطع السابقة واعتمادها أولًا، بترتيب الحكاية." });
     }
     if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
@@ -814,7 +838,7 @@ Deno.serve(async (req: Request) => {
       const speechRecord = audioReview?.speech_texts?.["ar:" + blockIndex];
       if (!speechRecord || speechRecord.status !== "approved" || typeof speechRecord.approved_text !== "string" ||
           !speechRecord.approved_text.trim() || speechRecord.source_text_hash !== source.sourceTextHash) {
-        return reply(409, { error: "اعتمد نص القراءة الصوتية لهذا المقطع أولًا." });
+        return reply(409, { error: "نص القراءة غير جاهز لهذا المقطع؛ اضغط «الترجمة» أو «إعادة الترجمة» أولًا." });
       }
       spokenText = speechRecord.approved_text.trim();
     } else {
@@ -822,7 +846,7 @@ Deno.serve(async (req: Request) => {
       if (!translation || translation.status !== "approved" ||
           typeof translation.translation_text !== "string" || !translation.translation_text.trim() ||
           translation.source_arabic_hash !== source.sourceTextHash) {
-        return reply(409, { error: "اعتمد ترجمة هذا المقطع بشريًا بعد مراجعة النص العربي المقابل أولًا." });
+        return reply(409, { error: "ترجمة هذا المقطع غير جاهزة أو قديمة؛ اضغط «الترجمة» أو «إعادة الترجمة» أولًا." });
       }
       spokenText = translation.translation_text.trim();
       const storyCopy = structuredClone(source.story);
@@ -836,14 +860,11 @@ Deno.serve(async (req: Request) => {
       };
       source = { ...source, story: storyCopy, block: storyCopy.i18n[language].blocks[blockIndex] };
     }
-    try { await invalidatePublicStoryAudio(service, section, slug); }
-    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
+    try { await invalidatePublicClipAudio(service, section, slug, language, blockIndex); }
+    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة لهذا المقطع." }); }
     const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
-    const relatedBases = Object.values(audioReview?.clips ?? {})
-      .filter((clip: any) => clip?.lang === language && Number(clip.block_index) === blockIndex)
-      .map((clip: any) => String(clip.base ?? "")).filter(Boolean);
-    const regenRevision = relatedBases.reduce((max, base) => Math.max(max, Number(audioReview?.regen?.[base] ?? 0) || 0), 0);
-    const idempotencyKey = await sha256Hex(new TextEncoder().encode([section, slug, language, blockIndex, source.sourceTextHash, spokenHash, regenRevision].join(":")));
+    const regenRevision = regenRevisionFor(audioReview, language, blockIndex);
+    const idempotencyKey = await buildIdempotencyKey(audioReview, section, slug, language, blockIndex, source.sourceTextHash, spokenHash);
     const payload = {
       text: spokenText,
       speaker: source.block.speaker,
@@ -855,20 +876,14 @@ Deno.serve(async (req: Request) => {
       reference_role: source.block.speaker,
       sample_rate: 24000,
     };
-    const { data: inserted, error: insertError } = await service.from("story_audio_generation_queue").insert({
+    const result = await insertOrReuseJob(service, {
       section, slug, language, block_index: blockIndex, speaker: source.block.speaker,
       engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
       idempotency_key: idempotencyKey, status: "pending",
-    }).select("id,status,section,slug,language,block_index,speaker,created_at").maybeSingle();
-    if (insertError && insertError.code !== "23505") return reply(500, { error: "تعذر إضافة المقطع إلى طابور التوليد.", detail: insertError.message });
-    if (!inserted) {
-      const { data: existing, error: existingError } = await service.from("story_audio_generation_queue")
-        .select("id,status,section,slug,language,block_index,speaker,created_at")
-        .eq("idempotency_key", idempotencyKey).maybeSingle();
-      if (existingError || !existing) return reply(500, { error: "تعذر استرجاع طلب التوليد الموجود." });
-      return reply(200, { success: true, already_queued: true, job: existing });
-    }
-    return reply(200, { success: true, queued: true, job: inserted });
+    }, idempotencyKey);
+    if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع إلى طابور التوليد.", detail: result.error?.message });
+    if (result.created) return reply(200, { success: true, queued: true, job: result.job });
+    return reply(200, { success: true, already_queued: !result.retried, retried_failed: result.retried, job: result.job });
   }
 
   if (body.action === "queue_status") {
@@ -993,12 +1008,7 @@ Deno.serve(async (req: Request) => {
     const { data: progressRow, error: progressError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (progressError) return reply(500, { error: "تعذر قراءة ترتيب مراجعة المقاطع.", detail: progressError.message });
-    const accepted = acceptedBlockIndexes(progressRow?.audio_review, "ar");
-    const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
-    const targetPosition = ordered.indexOf(index);
-    if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
-      return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد المقاطع بترتيب الحكاية." });
-    }
+    // No turn-order gate: "الترجمة" prepares every block, and a rejected block can be re-prepared at any time.
     // Apply the user's saved rejection correction to the exact block being prepared,
     // for every story (not only the historical Ibn Sina test block).
     const rejectedCorrections = Object.values(progressRow?.audio_review?.clips ?? {})
@@ -1369,12 +1379,7 @@ Deno.serve(async (req: Request) => {
     const { data: progressRow, error: progressError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (progressError) return reply(500, { error: "تعذر قراءة ترتيب اعتماد المقاطع.", detail: progressError.message });
-    const accepted = acceptedBlockIndexes(progressRow?.audio_review, "ar");
-    const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
-    const targetPosition = ordered.indexOf(index);
-    if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
-      return reply(409, { error: "لا يمكن اعتماد نص مقطع خارج دوره؛ الترتيب هو ترتيب مقاطع الحكاية." });
-    }
+    void progressRow;
     const { data: existing, error: readError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (readError) return reply(500, { error: "تعذر تحميل سجل نص القراءة.", detail: readError.message });
@@ -1387,7 +1392,8 @@ Deno.serve(async (req: Request) => {
     speechTexts[key] = decision === "approved"
       ? { ...old, language: "ar", block_index: index, speaker: source.block.speaker,
           source_text_hash: source.sourceTextHash, suggested_text: old.suggested_text || speechText,
-          approved_text: speechText, status: "approved", approved_at: new Date().toISOString() }
+          approved_text: speechText, status: "approved", approved_at: new Date().toISOString(),
+          auto_approved: body.origin === "gemini" }
       : { ...old, language: "ar", block_index: index, speaker: source.block.speaker,
           source_text_hash: source.sourceTextHash, suggested_text: speechText,
           approved_text: null, status: "suggested", model: String(body.model || "gemini-3.8-flash"),
@@ -1405,11 +1411,8 @@ Deno.serve(async (req: Request) => {
     }
     current.speech_texts = speechTexts;
     try {
-      if (section === "history" && slug === "ibn-sina" && index === 4) {
-        await invalidatePublicClipAudio(service, section, slug, "ar", index);
-      } else {
-        await invalidatePublicStoryAudio(service, section, slug);
-      }
+      // Only the affected block loses its published audio; healthy blocks stay untouched.
+      if (invalidatesAudioDecision) await invalidatePublicClipAudio(service, section, slug, "ar", index);
     } catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
     const { data: saved, error: saveError } = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: current }, { onConflict: "section,slug" })
