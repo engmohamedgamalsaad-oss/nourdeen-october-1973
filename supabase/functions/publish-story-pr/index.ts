@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.0";
 const OWNER = "engmohamedgamalsaad-oss";
 const REPO = "nourdeen-october-1973";
 const BASE = "main";
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const ALLOWED_ORIGIN = "https://engmohamedgamalsaad-oss.github.io";
 const headers = {
   "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
@@ -21,6 +22,11 @@ function contentForSafetyScan(file: { content: string; encoding?: string }): str
   const compact = file.content.replace(/\s/g, "");
   const bytes = Uint8Array.from(atob(compact), (character) => character.charCodeAt(0));
   return new TextDecoder().decode(bytes);
+}
+
+async function sha256Text(value: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value.trim()));
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 function stableJson(value: any): string {
@@ -242,7 +248,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "direct_main", version: "2026-11-02-direct-main-publisher-1", story_publish_version: "2026-11-02-canonical-story-publish-1", writes_main_directly: true, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: false });
+    return reply(200, { success: true, publisher_mode: "pull_request", version: "2026-11-15-text-only-translation-pr-1", story_publish_version: "2026-11-15-reviewed-story-pr-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: false, supports_text_only_translation_pr: true });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
@@ -359,8 +365,41 @@ Deno.serve(async (req: Request) => {
           pageHtml.includes('data-story-path="data.v2.json"')) {
         return reply(409, { error: "كل الأقسام، بما فيها أكتوبر، يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
       }
-      const audioGateError = validateAudioReviewGate(packageData, sourceMeta.audio_review, body.files, storySection, storyId);
-      if (audioGateError) return reply(409, { error: audioGateError });
+      const publicationMode = body.publication_mode === "text_only" ? "text_only" : "full";
+      if (publicationMode === "text_only") {
+        if (!SERVICE_ROLE_KEY) return reply(503, { error: "مفتاح الخدمة غير متاح للتحقق من اعتماد الترجمات؛ لم يتم إنشاء طلب مراجعة." });
+        const service = createClient(url, SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+        const { data: translationRow, error: translationReadError } = await service.from("story_audio_reviews")
+          .select("audio_review").eq("section", storySection).eq("slug", String(packageData.slug ?? "")).maybeSingle();
+        if (translationReadError) return reply(500, { error: "تعذر قراءة سجل اعتماد الترجمات.", detail: translationReadError.message });
+        const translations = translationRow?.audio_review?.translations;
+        if (!translations || typeof translations !== "object") return reply(409, { error: "لا توجد ترجمات معتمدة محفوظة لهذه الحكاية." });
+        const arabicBlocks = packageData.i18n?.ar?.blocks;
+        if (!Array.isArray(arabicBlocks) || !arabicBlocks.length) return reply(409, { error: "النص العربي الأصلي غير متاح للتحقق من الترجمات." });
+        for (const lang of ["en", "fr", "it", "de"]) {
+          const localized = packageData.i18n?.[lang];
+          if (!localized || !Array.isArray(localized.blocks) || localized.blocks.length !== arabicBlocks.length) {
+            return reply(409, { error: "عدد مقاطع " + lang + " لا يطابق النص العربي؛ لم يتم إنشاء طلب مراجعة." });
+          }
+          for (let index = 0; index < arabicBlocks.length; index++) {
+            const sourceBlock = arabicBlocks[index];
+            if (!sourceBlock || !["karma", "narrator"].includes(sourceBlock.speaker)) continue;
+            const record = translations[lang + ":" + index];
+            const sourceHash = await sha256Text(String(sourceBlock.text ?? ""));
+            const targetBlock = localized.blocks[index];
+            if (!record || record.status !== "approved" || record.source_arabic_hash !== sourceHash ||
+                record.speaker !== sourceBlock.speaker || typeof record.translation_text !== "string" || !record.translation_text.trim() ||
+                !targetBlock || targetBlock.speaker !== sourceBlock.speaker) {
+              return reply(409, { error: "ترجمة " + lang + " للمقطع " + (index + 1) + " غير معتمدة أو قديمة أو لا تطابق المتحدث؛ لم يبدأ النشر." });
+            }
+            targetBlock.text = record.translation_text.trim();
+          }
+        }
+        packageFile.content = JSON.stringify(packageData, null, 2) + "\n";
+      } else {
+        const audioGateError = validateAudioReviewGate(packageData, sourceMeta.audio_review, body.files, storySection, storyId);
+        if (audioGateError) return reply(409, { error: audioGateError });
+      }
 
       if (!storyRoot || packageData.section !== storySection ||
           !(pageHtml.includes("data-kh-story-reader") || pageHtml.includes("data-kh-v2-reader")) ||
@@ -442,6 +481,7 @@ Deno.serve(async (req: Request) => {
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
   let storyLockBranchForCleanup = "";
+  let publishBranchForCleanup = "";
   async function releaseStoryLock() {
     const lockBranch = storyLockBranchForCleanup;
     if (!lockBranch || !githubToken) return;
@@ -646,21 +686,35 @@ Deno.serve(async (req: Request) => {
     });
     const latestRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     if (latestRef.object.sha !== baseSha) throw new Error("تغير main أثناء تجهيز الحكاية؛ أوقفت النشر لتجنب استبدال تحديث أحدث. أعد المحاولة.");
-    await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
-      method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }),
+    const latestRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
+    if (latestRef.object.sha !== baseSha) throw new Error("تغير main أثناء تجهيز الحكاية؛ أوقفت العملية لتجنب إنشاء طلب مراجعة مبني على نسخة قديمة. أعد المحاولة.");
+    publishBranchForCleanup = "khaledoon/publish-" + storySection + "-" + storyId + "-" + crypto.randomUUID().slice(0, 8);
+    await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
+      method: "POST", body: JSON.stringify({ ref: "refs/heads/" + publishBranchForCleanup, sha: commit.sha }),
     });
+    const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({ title, head: publishBranchForCleanup, base: BASE, body: description + "\\n\\nهذا طلب مراجعة فقط؛ لم يتم تعديل main أو نشر الصفحة." }),
+    });
+    const publishedBranch = publishBranchForCleanup;
+    publishBranchForCleanup = "";
     await releaseStoryLock();
     return reply(200, {
-      success: true, published_to_main: true, commit_sha: commit.sha, story_id: storyId, story_path: normalizedRoot,
+      success: true, published_to_main: false, pull_request_number: pull.number, pull_request_url: pull.html_url,
+      branch: publishedBranch, head_sha: commit.sha, story_id: storyId, story_path: normalizedRoot,
+      publication_mode: body.publication_mode === "text_only" ? "text_only" : "full",
       map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
-      map_message: mapMarkerAdded ? "تم نشر الحكاية وتحديث علامة الخريطة مباشرة في main." : "تم نشر الحكاية مباشرة في main دون إضافة علامة خريطة لعدم توفر موقع موثق.",
-      message: "تم تسجيل الحكاية مباشرة في main؛ بدأ GitHub Pages عملية النشر تلقائيًا."
+      map_message: mapMarkerAdded ? "بيانات الخريطة ضمن طلب المراجعة." : "لا توجد علامة خريطة جديدة ضمن طلب المراجعة.",
+      message: "تم إنشاء طلب مراجعة على GitHub. لم يتم النشر؛ يلزم مراجعة الطلب ودمجه يدويًا."
     });
   } catch (error) {
+    if (publishBranchForCleanup) {
+      try { await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${publishBranchForCleanup}`, githubToken, { method: "DELETE" }); } catch { /* best-effort cleanup */ }
+    }
     await releaseStoryLock();
     const detail = error instanceof Error ? error.message : "Unknown error";
     return reply(502, {
-      error: "تعذر نشر الحكاية مباشرة إلى main؛ لم تُسجّل كحكاية منشورة.",
+      error: "تعذر إنشاء طلب مراجعة للحكاية؛ لم يتم تعديل main ولم تُسجّل كحكاية منشورة.",
       detail: detail.slice(0, 500),
     });
   }
