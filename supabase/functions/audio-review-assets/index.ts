@@ -636,7 +636,7 @@ Deno.serve(async (req: Request) => {
 
 
   if (body.action === "enqueue_approved_language") {
-    if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
+    if (!SUPPORTED_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "لغة الصوت غير مدعومة." });
     let arabicSource;
     try { arabicSource = await resolveStoryBlock(section, slug, "ar", 0, body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية العربية." }); }
@@ -691,12 +691,12 @@ Deno.serve(async (req: Request) => {
       const payload = {
         text: item.spokenText, speaker: item.block.speaker, source_text: item.sourceText,
         source_text_hash: item.sourceHash, spoken_text_hash: item.spokenHash,
-        regeneration_revision: regenRevision, language_code: language === "ar" ? "arz" : "eng",
+        regeneration_revision: regenRevision, language_code: ({ ar: "arz", en: "en", fr: "fr", it: "it", de: "de" } as Record<string, string>)[language],
         reference_role: item.block.speaker, sample_rate: 24000,
       };
       const result = await insertOrReuseJob(service, {
         section, slug, language, block_index: item.index, speaker: item.block.speaker,
-        engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
+        engine: ["fr", "it", "de"].includes(language) ? "omnivoice-multilingual" : "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
         idempotency_key: idempotencyKey, status: "pending",
       }, idempotencyKey);
       if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع " + (item.index + 1) + " إلى الطابور.", detail: result.error?.message });
