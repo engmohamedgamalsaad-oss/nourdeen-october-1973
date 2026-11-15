@@ -21,6 +21,9 @@ const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
 const BUCKET = "khaledoon-audio-review";
 const PUBLIC_AUDIO_BUCKET = "khaledoon-story-audio-public";
 const SUPPORTED_AUDIO_LANGUAGES = ["ar", "en", "fr", "it", "de"];
+function audioModelForLanguage(language: string): string {
+  return ["fr", "it", "de"].includes(language) ? "k2-fsa/OmniVoice" : "VoiceTut Egyptian Tashkeel";
+}
 const OWNER = "engmohamedgamalsaad-oss";
 const REPO = "nourdeen-october-1973";
 const ALLOWED_ORIGIN = "https://engmohamedgamalsaad-oss.github.io";
@@ -124,7 +127,7 @@ function acceptedBlockIndexes(audioReview: any, language: string): Set<number> {
     .map((clip: any) => Number(clip.block_index)));
 }
 async function invalidatePublicStoryAudio(service: any, section: string, slug: string) {
-  for (const language of ["ar", "en"]) {
+  for (const language of SUPPORTED_AUDIO_LANGUAGES) {
     const prefix = section + "/" + slug + "/" + language;
     const { data, error } = await service.storage.from(PUBLIC_AUDIO_BUCKET).list(prefix, { limit: 1000 });
     if (error) throw new Error("تعذر التحقق من ملفات الصوت المنشورة قبل تحديث المراجعة: " + error.message);
@@ -321,7 +324,7 @@ async function reconcilePlan(review: any, snap: any, manifests: Record<string, a
   }
 
   for (const [clipKey, clip] of Object.entries(current.clips) as [string, any][]) {
-    if (!clip || (clip.lang !== "ar" && clip.lang !== "en")) continue;
+    if (!clip || !SUPPORTED_AUDIO_LANGUAGES.includes(clip.lang)) continue;
     const index = Number(clip.block_index);
     const block = snap?.i18n?.[clip.lang]?.blocks?.[index];
     let keep = isSpeakableBlock(block) && block.speaker === clip.speaker;
@@ -842,7 +845,7 @@ Deno.serve(async (req: Request) => {
         const index = Number(segment?.block_index);
         const block = Number.isInteger(index) ? blocks[index] : null;
         if (!block || seen.has(index) || segment.speaker !== block.speaker ||
-            segment.provider !== "omnivoice" || segment.model !== "VoiceTut Egyptian Tashkeel" ||
+            segment.provider !== "omnivoice" || segment.model !== audioModelForLanguage(lang) ||
             segment.voice !== (block.speaker === "karma" ? "omnivoice-karma-reference" : "omnivoice-narrator-reference") ||
             typeof segment.src !== "string" || !/^[A-Za-z0-9_-]+\.mp3$/.test(segment.src) ||
             !/^[a-f0-9]{64}$/i.test(String(segment.audio_sha256 ?? ""))) {
@@ -876,7 +879,7 @@ Deno.serve(async (req: Request) => {
       }
       const publicManifest = {
         version: 1, section, story: slug, language: lang, provider: "omnivoice",
-        model: "VoiceTut Egyptian Tashkeel", published_at: new Date().toISOString(),
+        model: audioModelForLanguage(lang), published_at: new Date().toISOString(),
         segments: manifest.segments,
       };
       const { error: publicManifestError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).upload(
@@ -1406,7 +1409,7 @@ Deno.serve(async (req: Request) => {
     const seen = new Set<string>();
     for (const segment of manifest.segments) {
       const engineOk = segment?.provider === "omnivoice" &&
-        segment?.model === "VoiceTut Egyptian Tashkeel" &&
+        segment?.model === audioModelForLanguage(language) &&
         segment?.voice === (segment?.speaker === "karma"
           ? "omnivoice-karma-reference" : "omnivoice-narrator-reference");
       if (!segment || !["narrator", "karma"].includes(segment.speaker) || !engineOk ||
