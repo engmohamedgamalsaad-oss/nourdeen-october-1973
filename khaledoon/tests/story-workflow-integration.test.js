@@ -84,6 +84,8 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(audioFlow.includes("translationRecords[L + ':' + index]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment must have a current approved translation (default-approved after Gemini) before audio generation');
   assert.ok(audioFlow.includes('textarea.value = record.translation_text || "";'), 'translation editor must not preload the old published package translation');
   assert.ok(audioFlow.includes("localStorage.setItem('kh-text-publish-language', lang())"), 'preview must remember the selected language for the admin text-only PR');
+  assert.ok(audioFlow.includes("type: 'KH_TEXT_LANGUAGE_PUBLISH'") && audioFlow.includes("context.submission_id"), 'preview must hand the selected language and submission ID to its opener');
+  assert.ok(admin.includes("data.type!=='KH_TEXT_LANGUAGE_PUBLISH'"), 'admin must route the preview request to the matching submission only');
   assert.ok(audioFlow.includes('الصوت لم يكتمل بعد'), 'each translated-language preview must show the text-only audio readiness notice');
   assert.ok(readerHtml.includes('reader-audio-review.js?v=20261114-reject-counter-1') && readerHtml.includes('reader-audio-flow.js?v=20261115-text-only-pr-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
