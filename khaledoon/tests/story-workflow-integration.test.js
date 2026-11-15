@@ -42,7 +42,7 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded story markers must be decoded before the legacy artifact guard');
   assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
   assert.ok(publisher.includes('contentForSafetyScan(file)'), 'legacy-format rejection must scan decoded content, not only the submitted base64 string');
-  assert.ok(publisher.includes('2026-11-02-direct-main-publisher-1'), 'publisher capability version must identify the direct-main implementation');
+  assert.ok(publisher.includes('2026-11-15-text-only-translation-pr-1'), 'publisher capability version must identify the direct-main implementation');
   assert.ok(publisher.includes('supports_v2_publish: false'), 'V2 publishing must not be advertised as a current general capability');
   assert.ok(publisher.includes('submittedStorySection && submittedStorySection !== "october"'), 'legacy V1 publishing must be limited to October');
   assert.ok(publisher.includes("let previousRoot = ''"));
@@ -53,7 +53,7 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes("const oldIndexPath = previousRoot + 'index.html'"));
   assert.ok(publisher.includes("treeEntries.push({ path: entry.path, mode: '100644', type: 'blob', sha: null })"));
   assert.ok(publisher.includes("This story has moved."));
-  assert.ok(publisher.includes('published_to_main: true'), 'approved moves are committed directly to main');
+  assert.ok(publisher.includes('published_to_main: false'), 'approved moves are submitted for review and do not write main');
 });
 test('new stories in every section keep audio-text review separate from optional audio generation', function () {
   assert.ok(storyPublisher.includes("let audioTextReviewRequired = existingAt < 0"), 'new stories in every section receive the mandatory review flag');
@@ -75,8 +75,8 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("u.searchParams.set('draft','1')"), 'the live story iframe must enter authenticated draft audio-review mode');
   assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js')"), 'the preview must load the shared audio review core');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js')"), 'the preview must mount the audio generation and listening controls');
-  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261114-reject-counter-1')"), 'the preview must mount the current per-block translation and audio status flow');
-  assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261114-reject-counter-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261115-text-only-pr-1')"), 'the preview must mount the current per-block translation and audio status flow');
+  assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261115-text-only-pr-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
   var readerHtml = fs.readFileSync('rebuild/reader.html', 'utf8');
   assert.ok(readerHtml.includes('reject-counter-1'), 'reader must load the Arabic translation provenance validator');
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
@@ -251,14 +251,14 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(shared.includes('لا تخترع إحداثيات'), 'map coordinates must never be invented');
   assert.ok(shared.includes('map_location'), 'the canonical map field must be documented');
 });
-test('story publisher commits directly to main while deletion remains review-only', function () {
+test('story publisher creates reviewed PRs while deletion remains review-only', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
-  assert.ok(publisher.includes('publisher_mode: "direct_main"'));
+  assert.ok(publisher.includes('publisher_mode: "pull_request"'));
   assert.ok(publisher.includes('published_to_main: false'));
-  assert.ok(publisher.includes('writes_main_directly: true'));
+  assert.ok(publisher.includes('writes_main_directly: false'));
   assert.ok(publisher.includes('draft: true') === false);
-  assert.ok(publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'));
-  assert.ok(!publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'), 'story publishing must not create a PR');
+  assert.ok(publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'));
+  assert.ok(publisher.includes('published_to_main: false') && publisher.includes('هذا طلب مراجعة فقط'));
 
   var deletion = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts', 'utf8');
   assert.ok(deletion.includes('deletion_mode: "draft_pr"'));
@@ -739,7 +739,7 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
-test('story publisher serializes approved direct-main publishes with an atomic repository lock', function () {
+test('story publisher serializes reviewed publishes with an atomic repository lock', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var lockIndex = publisher.indexOf('const lockBranch = "khaledoon/publish-main-lock"');
   var blobLoopIndex = publisher.indexOf('for (const file of safeFiles)', lockIndex);
@@ -749,23 +749,23 @@ test('story publisher serializes approved direct-main publishes with an atomic r
   assert.ok(publisher.includes('await releaseStoryLock();'));
   assert.ok(publisher.includes('يوجد نشر آخر جارٍ الآن'));
   assert.ok(publisher.includes('latestRef.object.sha !== baseSha'), 'publisher must stop if main changes while the commit is prepared');
-  assert.ok(publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'));
+  assert.ok(publisher.includes('ref: "refs/heads/" + publishBranchForCleanup'));
 });
 
-test('story publisher commits to main without creating pull requests', function () {
+test('story publisher creates a review PR without writing main', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
-  assert.ok(publisher.includes('publisher_mode: "direct_main"'));
-  assert.ok(publisher.includes('writes_main_directly: true'));
+  assert.ok(publisher.includes('publisher_mode: "pull_request"'));
+  assert.ok(publisher.includes('writes_main_directly: false'));
   assert.ok(publisher.includes('published_to_main: false'));
-  assert.ok(publisher.includes('git/refs/heads/${BASE}'));
-  assert.ok(!publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'));
-  assert.ok(admin.includes("capabilityResult.publisher_mode!=='direct_main'"));
-  assert.ok(admin.includes('result.published_to_main!==true'));
+  assert.ok(publisher.includes('refs/heads/" + publishBranchForCleanup'));
+  assert.ok(publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'));
+  assert.ok(admin.includes("capabilityResult.publisher_mode!=='pull_request'"));
+  assert.ok(admin.includes('result.published_to_main!==false'));
   assert.ok(admin.includes('publish_commit_sha:result.commit_sha'));
   assert.ok(admin.includes('التحقق من النشر'));
-  assert.ok(admin.includes('if(review.publish_commit_sha||review.published_to_main_at)'));
-  assert.ok(!admin.includes("action:'verify_pr'"), 'the active admin flow must not verify a PR');
+  assert.ok(admin.includes('if(meta.preview_review&&meta.preview_review.publish_pr_number)'));
+  assert.ok(admin.includes("action:'verify_pr'"), 'the admin must verify PR merge before marking a story published');
 });
 
 test('story i18n lookup supports both dictionary shapes and the real SVG artwork dictionary', function () {
@@ -1030,7 +1030,7 @@ test('unified publisher requires an approved canonical package before creating a
   var lockWrite = publisher.indexOf('const lockBranch = "khaledoon/publish-main-lock"');
   var branchWrite = publisher.indexOf('refs/heads/" + publishBranchForCleanup');
   assert.ok(packageGuard >= 0 && lockWrite > packageGuard && branchWrite > lockWrite, 'canonical package checks must run before creating a review branch');
-  assert.ok(publisher.includes('published_to_main: true'));
+  assert.ok(publisher.includes('published_to_main: false'));
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
   assert.ok(admin.includes('capabilityResult.rejects_story_only_drafts!==true'));
