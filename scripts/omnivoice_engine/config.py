@@ -12,7 +12,12 @@ SAMPLE_RATE = 24000
 MODEL_ID = "masterofaudio2077/voicetut-egyptian-tashkeel"
 
 # Queue language code -> OmniVoice language code.
-LANGUAGE_CODES = {"ar": "arz", "en": "en"}
+LANGUAGE_CODES = {"ar": "arz", "en": "en", "fr": "fr", "it": "it", "de": "de"}
+
+# Keep the proven VoiceTut checkpoint for Arabic/English. The official multilingual
+# checkpoint is loaded separately and only for French, Italian and German.
+MULTILINGUAL_MODEL_ID = "k2-fsa/OmniVoice"
+MULTILINGUAL_LANGUAGES = frozenset({"fr", "it", "de"})
 
 
 @dataclass(frozen=True)
