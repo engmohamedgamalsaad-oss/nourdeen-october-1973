@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 const sourceUrl = new URL('../../supabase/functions/publish-story-pr/index.ts', import.meta.url);
 
-test('unified publisher accepts only the saved canonical package after approval and before direct-main publication', async () => {
+test('unified publisher creates a review PR and never writes directly to main', async () => {
   const source = await readFile(sourceUrl, 'utf8');
   const auth = source.indexOf('await supabase.auth.getUser()');
   const admin = source.indexOf('await supabase.rpc("is_admin")');
@@ -15,21 +15,25 @@ test('unified publisher accepts only the saved canonical package after approval 
   const approvalGuard = source.indexOf('review.decision !== "approved_waiting_for_github_upload"');
   const packageMatch = source.indexOf('stableJson(packageData) !== stableJson(savedStoryPackage)');
   const lockWrite = source.indexOf('const lockBranch = "khaledoon/publish-main-lock"');
-  const mainWrite = source.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {');
-  for (const [name, index] of Object.entries({auth,admin,submissionId,recordRead,savedPackage,packageGuard,approvalGuard,packageMatch,lockWrite,mainWrite})) assert.notEqual(index,-1,name+' safeguard/action is missing');
+  const branchCreate = source.indexOf('refs/heads/" + publishBranchForCleanup');
+  const pullCreate = source.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`');
+  for (const [name, index] of Object.entries({auth,admin,submissionId,recordRead,savedPackage,packageGuard,approvalGuard,packageMatch,lockWrite,branchCreate,pullCreate})) assert.notEqual(index,-1,name+' safeguard/action is missing');
   assert.ok(auth<admin && admin<submissionId && submissionId<recordRead,'authenticate and authorize before reading the authoritative submission');
   assert.ok(recordRead<savedPackage && savedPackage<packageGuard,'read the canonical package from the source record');
-  assert.ok(packageGuard<approvalGuard && approvalGuard<lockWrite && lockWrite<mainWrite,'validate and approve before acquiring the lock and updating main');
-  assert.ok(packageMatch<mainWrite,'submitted files must exactly match the approved saved package');
-  assert.match(source,/publisher_mode: "direct_main"/);
-  assert.match(source,/writes_main_directly: true/);
-  assert.match(source,/supports_story_package_publish:\s*true/);
-  assert.match(source,/supports_story_move:\s*true/);
-  assert.match(source,/published_to_main: true/);
-  assert.match(source,/method: "PATCH", body: JSON.stringify\(\{ sha: commit\.sha, force: false \}\)/);
-  assert.doesNotMatch(source,/No files were written to main by this function/);
+  assert.ok(packageGuard<approvalGuard && approvalGuard<lockWrite && lockWrite<branchCreate && branchCreate<pullCreate,'validate and approve before creating a review branch and PR');
+  assert.ok(packageMatch<branchCreate,'submitted files must exactly match the approved saved package');
+  assert.ok(source.includes('publisher_mode: "pull_request"'));
+  assert.ok(source.includes('writes_main_directly: false'));
+  assert.ok(source.includes('supports_text_only_translation_pr: true'));
+  assert.ok(source.includes('published_to_main: false'));
+  assert.ok(source.includes('publicationMode === "text_only"'));
+  assert.ok(source.includes('record.source_arabic_hash !== sourceHash'));
+  assert.ok(source.includes('record.speaker !== sourceBlock.speaker'));
+  assert.ok(source.includes('targetBlock.text = record.translation_text.trim()'));
+  assert.ok(source.includes('for (const lang of ["en", "fr", "it", "de"])'));
+  assert.ok(!source.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'));
 });
- 
+
 test('unified publisher validates safe unique paths, payload limits, and rejects non-POST requests', async () => {
   const source = await readFile(sourceUrl, 'utf8');
   assert.match(source, /if \(req\.method !== "POST"\) return reply\(405/);
