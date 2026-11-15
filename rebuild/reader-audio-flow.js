@@ -388,7 +388,7 @@
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
-      var publishText = el('button', 'kh-translation-publish-text', 'نشر النص المعتمد لهذه اللغة');
+      var publishText = el('button', 'kh-translation-publish-text', 'تعليمات طلب مراجعة النص');
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
       publishText.addEventListener('click', function () {
         bulkStatus.textContent = 'الترجمات المعتمدة جاهزة. لم يتم نشر أي ملف من صفحة المعاينة. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)» لإنشاء PR بعد فحص جميع الترجمات؛ لا يبدأ أي توليد صوتي.';
