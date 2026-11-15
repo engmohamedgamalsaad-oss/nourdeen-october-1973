@@ -768,47 +768,69 @@ Deno.serve(async (req: Request) => {
     if (readError) return reply(500, { error: "تعذر قراءة اعتمادات المقاطع.", detail: readError.message });
     const review = row?.audio_review ?? {};
     const blocks = arabicSource.story?.i18n?.ar?.blocks ?? [];
-    const queued: any[] = [];
-    let alreadyQueued = 0, skippedUnapproved = 0, retriedFailed = 0;
-    for (const index of orderedStoryBlockIndexes(blocks)) {
+    const indexes = orderedStoryBlockIndexes(blocks);
+    if (!indexes.length) return reply(409, { error: "لا توجد مقاطع منطوقة صالحة لتوليد الصوت." });
+
+    // Preflight the entire language before creating even the first queue job.
+    // A partial translation must never produce a partial language queue.
+    const prepared: Array<{ index: number; block: any; sourceText: string; sourceHash: string; spokenText: string; spokenHash: string }> = [];
+    for (const index of indexes) {
       const block = blocks[index];
       const sourceText = String(block?.text ?? "").trim();
-      if (!sourceText) { skippedUnapproved++; continue; }
+      if (!sourceText) return reply(409, { error: "النص العربي للمقطع " + (index + 1) + " غير صالح؛ لم يبدأ التوليد." });
       const sourceHash = await sha256Hex(new TextEncoder().encode(sourceText));
       let spokenText = "";
       if (language === "ar") {
         const speech = review?.speech_texts?.["ar:" + index];
-        if (speech?.status === "approved" && speech.source_text_hash === sourceHash && typeof speech.approved_text === "string") {
+        if (speech?.status === "approved" && speech.source_text_hash === sourceHash &&
+            speech.speaker === block.speaker && typeof speech.approved_text === "string") {
           spokenText = speech.approved_text.trim();
         }
       } else {
         const translation = review?.translations?.["en:" + index];
         if (translation?.status === "approved" && translation.source_arabic_hash === sourceHash &&
-            typeof translation.translation_text === "string") spokenText = translation.translation_text.trim();
+            translation.speaker === block.speaker && typeof translation.translation_text === "string") {
+          spokenText = translation.translation_text.trim();
+        }
       }
-      if (!spokenText) { skippedUnapproved++; continue; }
+      if (!spokenText) {
+        return reply(409, {
+          error: "لم يبدأ توليد الصوت. " + (language === "ar" ? "نص القراءة العربي" : "الترجمة الإنجليزية") +
+            " للمقطع " + (index + 1) + " غير معتمد أو لم يعد يطابق النص العربي الحالي.",
+          missing_block_index: index,
+          required_segments: indexes.length,
+          approved_segments: prepared.length,
+        });
+      }
       const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
-      const idempotencyKey = await buildIdempotencyKey(review, section, slug, language, index, sourceHash, spokenHash);
-      const regenRevision = regenRevisionFor(review, language, index);
+      prepared.push({ index, block, sourceText, sourceHash, spokenText, spokenHash });
+    }
+
+    const queued: any[] = [];
+    let alreadyQueued = 0, retriedFailed = 0;
+    for (const item of prepared) {
+      const idempotencyKey = await buildIdempotencyKey(review, section, slug, language, item.index, item.sourceHash, item.spokenHash);
+      const regenRevision = regenRevisionFor(review, language, item.index);
       const payload = {
-        text: spokenText, speaker: block.speaker, source_text: sourceText,
-        source_text_hash: sourceHash, spoken_text_hash: spokenHash,
+        text: item.spokenText, speaker: item.block.speaker, source_text: item.sourceText,
+        source_text_hash: item.sourceHash, spoken_text_hash: item.spokenHash,
         regeneration_revision: regenRevision, language_code: language === "ar" ? "arz" : "eng",
-        reference_role: block.speaker, sample_rate: 24000,
+        reference_role: item.block.speaker, sample_rate: 24000,
       };
       const result = await insertOrReuseJob(service, {
-        section, slug, language, block_index: index, speaker: block.speaker,
+        section, slug, language, block_index: item.index, speaker: item.block.speaker,
         engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
         idempotency_key: idempotencyKey, status: "pending",
       }, idempotencyKey);
-      if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع " + (index + 1) + " إلى الطابور.", detail: result.error?.message });
+      if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع " + (item.index + 1) + " إلى الطابور.", detail: result.error?.message });
       if (result.created) queued.push(result.job);
       else if (result.retried) { retriedFailed++; queued.push(result.job); }
       else alreadyQueued++;
     }
     return reply(200, {
       success: true, queued_count: queued.length, already_queued: alreadyQueued,
-      retried_failed: retriedFailed, skipped_unapproved: skippedUnapproved, jobs: queued,
+      retried_failed: retriedFailed, skipped_unapproved: 0,
+      required_segments: indexes.length, prepared_segments: prepared.length, jobs: queued,
     });
   }
 
