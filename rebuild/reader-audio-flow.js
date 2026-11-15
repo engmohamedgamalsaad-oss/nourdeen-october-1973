@@ -389,11 +389,14 @@
       });
       bulkRow.appendChild(bulkTranslate);
       var publishText = el('button', 'kh-translation-publish-text', 'تجهيز طلب نشر هذه اللغة وحدها');
+      var audioPending = el('p', 'kh-translation-audio-pending', 'الصوت لم يكتمل بعد — هذه الصفحة تجهّز النص فقط، ولا يظهر مشغل للزائر دون manifest صوت صالح.');
+      audioPending.id = 'kh-translation-audio-pending';
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
       publishText.addEventListener('click', function () {
         try { localStorage.setItem('kh-text-publish-language', lang()); } catch (e) {}\n        bulkStatus.textContent = 'تم تحديد لغة ' + lang().toUpperCase() + ' لطلب النشر. ارجع إلى لوحة الإدارة واضغط «نشر النص فقط (طلب مراجعة)»؛ سيُرسل طلب مراجعة لهذه اللغة وحدها. الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لم يبدأ أي توليد صوتي.';
       });
       bulkRow.appendChild(publishText);
+      bulkRow.appendChild(audioPending);
       if (['ar', 'en'].includes(lang())) {
         var queueAll = el('button', 'kh-translation-queue-all', 'توليد كل المقاطع');
         queueAll.id = 'kh-translation-queue-all'; queueAll.type = 'button';
@@ -413,6 +416,8 @@
     }
     var publishTextButton = $('kh-translation-publish-text');
     if (publishTextButton) publishTextButton.hidden = lang() === 'ar';
+    var audioPendingLabel = $('kh-translation-audio-pending');
+    if (audioPendingLabel) audioPendingLabel.hidden = lang() === 'ar';
     var bulkTranslateButton = $('kh-translation-bulk-generate');
     if (bulkTranslateButton) bulkTranslateButton.hidden = false;
     var queueAllButton = $('kh-translation-queue-all');
