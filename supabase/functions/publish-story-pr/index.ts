@@ -604,6 +604,13 @@ Deno.serve(async (req: Request) => {
         throw new Error("تعذر مطابقة حزمة الترجمة مع نسخة الحكاية المنشورة حاليًا على main؛ أوقفت النشر لحماية اللغات الأخرى.");
       }
       const currentArabicBlocks = currentStory.i18n.ar.blocks;
+      for (const lang of textLanguageOptions) {
+        const publishedLocale = currentStory.i18n?.[lang];
+        if (!publishedLocale || !Array.isArray(publishedLocale.blocks) ||
+            publishedLocale.blocks.length !== currentArabicBlocks.length) {
+          throw new Error("اللغة المنشورة " + lang + " غير مكتملة على main؛ أوقفت النشر حتى لا تضيع بياناتها.");
+        }
+      }
       for (const lang of selectedTextLanguages) {
         const translated = incomingPackage.i18n?.[lang];
         if (!translated || !Array.isArray(translated.blocks) || translated.blocks.length !== currentArabicBlocks.length) {
@@ -615,6 +622,9 @@ Deno.serve(async (req: Request) => {
       incomingPackageFile.encoding = "utf-8";
 
       const existingEntry = currentIndex[existingIndex];
+      if (!existingEntry.i18n || textLanguageOptions.some((lang) => !existingEntry.i18n[lang])) {
+        throw new Error("بيانات اللغات المنشورة في فهرس الحكاية غير مكتملة؛ أوقفت النشر لحمايتها.");
+      }
       const mergedIndexEntry: any = { ...existingEntry, i18n: { ...(existingEntry.i18n || {}) } };
       for (const lang of selectedTextLanguages) {
         const localizedIndex = incomingEntry.i18n?.[lang];
@@ -636,7 +646,8 @@ Deno.serve(async (req: Request) => {
       incomingQuizFile.encoding = "utf-8";
 
       const currentPageText = decodeGithubText(currentPageResponse);
-      if (!currentPageText.includes('data-story-path="story.json"') ||
+      if (!currentPageText.includes("data-kh-story-reader") ||
+          !currentPageText.includes('data-story-path="story.json"') ||
           !currentPageText.includes('data-story-slug="' + storyId + '"')) {
         throw new Error("صفحة الحكاية المنشورة لا تطابق مسار الحكاية؛ أوقفت نشر الترجمة.");
       }
