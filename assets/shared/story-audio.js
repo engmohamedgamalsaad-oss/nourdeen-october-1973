@@ -64,6 +64,33 @@
       segment.model === 'VoiceTut Egyptian Tashkeel' &&
       segment.voice === (segment.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference');
   }
+
+  // لا نُظهر مشغلًا عامًا لحزمة ناقصة أو بها مقاطع مكررة/منسوبة لمتحدث آخر.
+  // التحقق حسب فهارس القصة يمنع تشغيل جزء من الحكاية بعد إبطال مقطع قديم.
+  function completePublicManifest(manifest) {
+    var localized = story.i18n && story.i18n[lang];
+    var blocks = localized && Array.isArray(localized.blocks) ? localized.blocks : null;
+    if (!blocks || !Array.isArray(manifest && manifest.segments)) return false;
+    var expected = Object.create(null);
+    blocks.forEach(function (block, blockIndex) {
+      if (block && (block.speaker === 'karma' || block.speaker === 'narrator') &&
+          typeof block.text === 'string' && block.text.trim()) {
+        expected[String(blockIndex)] = block.speaker;
+      }
+    });
+    var required = Object.keys(expected);
+    if (!required.length || manifest.segments.length !== required.length) return false;
+    var seen = Object.create(null);
+    for (var i = 0; i < manifest.segments.length; i++) {
+      var segment = manifest.segments[i];
+      var key = String(Number(segment && segment.block_index));
+      if (!validPublicSegment(segment) || !Object.prototype.hasOwnProperty.call(expected, key) ||
+          seen[key] || segment.speaker !== expected[key] ||
+          !Number.isInteger(Number(segment.block_index))) return false;
+      seen[key] = true;
+    }
+    return required.every(function (key) { return seen[key] === true; });
+  }
   var queue = [];
   var index = 0;
   var audio = null;          // عنصر صوت واحد يُعاد استخدامه (أضمن على الموبايل)
@@ -331,7 +358,7 @@
       var manifest = loaded.manifest;
       manifestUrl = loaded.url;
       if (!manifest || manifest.version !== 1 || manifest.section !== story.section || manifest.story !== story.slug || manifest.language !== lang || !Array.isArray(manifest.segments)) throw new Error('Invalid audio manifest');
-      if (manifest.segments.some(function (segment) { return !validPublicSegment(segment) || !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src || '')); })) throw new Error('Audio manifest does not match the approved voices');
+      if (!completePublicManifest(manifest) || manifest.segments.some(function (segment) { return !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src || '')); })) throw new Error('Audio manifest is incomplete or does not match the approved story and voices');
       var nextQueue = manifest.segments.map(function (segment) {
         return {
           block_index: segment.block_index,

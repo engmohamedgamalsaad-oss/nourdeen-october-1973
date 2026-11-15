@@ -36,7 +36,7 @@ test('English audio cannot be queued or published from an unapproved or stale tr
 });
 
 test('bulk queue preserves each Arabic block speaker for the unified Colab worker', () => {
-  assert.match(assets, /speaker: block\.speaker/);
+  assert.match(assets, /speaker: item\.block\.speaker/);
   assert.match(engine, /registry\.get\(job\.get\("speaker"\)\)/);
   assert.match(engine, /provider\.generate\(model/);
 });
@@ -64,4 +64,16 @@ test('visitor-facing language text publishes only after every segment has a curr
   assert.match(preview, /action: 'publish_translations'/);
   assert.match(preview, /نشر النص المعتمد لهذه اللغة/);
   assert.match(preview, /لم يتم نشر أو توليد أي صوت/);
+});
+
+
+test('bulk language audio queue is all-or-nothing when any segment is unapproved or stale', () => {
+  const preflight = assets.indexOf('const prepared: Array<');
+  const enqueue = assets.indexOf('insertOrReuseJob(service,', preflight);
+  assert.ok(preflight >= 0 && enqueue > preflight, 'all segments must be preflighted before the first queue insert');
+  assert.match(assets, /لم يبدأ توليد الصوت/);
+  assert.match(assets, /required_segments: indexes\.length/);
+  assert.match(assets, /approved_segments: prepared\.length/);
+  assert.match(assets, /translation\.speaker === block\.speaker/);
+  assert.match(preview, /اكتمل فحص اللغة/);
 });
