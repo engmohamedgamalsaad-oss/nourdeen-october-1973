@@ -55,8 +55,9 @@ test('public player has no fallback to the legacy static audio tree', () => {
 test('Colab notebook loads the unified engine from the active migration branch', () => {
   const notebook = JSON.parse(fs.readFileSync(path.join(root, 'notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'utf8'));
   const source = notebook.cells.flatMap(cell => cell.source || []).join('');
-  assert.match(source, /ENGINE_BRANCH = 'main'/);
-  assert.doesNotMatch(source, /feat\/omnivoice-unified-audio|feat\/omnivoice-only-audio-cleanup/);
+  assert.match(source, /ENGINE_BRANCH = 'feat\/multilingual-omnivoice-fr-it-de'/);
+  assert.match(source, /git', '-C', '\/content\/khaledoon', 'fetch'/);
+  assert.match(source, /LanguageModelRouter/);
 });
 
 test('audio-only rejection advances the regeneration revision for that exact clip', () => {
