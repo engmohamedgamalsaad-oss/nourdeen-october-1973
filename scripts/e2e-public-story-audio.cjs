@@ -65,7 +65,7 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
               const expectedVoice = segment.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference';
               const checks = {
                 provider: segment.provider === 'omnivoice',
-                model: segment.model === 'VoiceTut Egyptian Tashkeel',
+                model: segment.model === (['fr', 'it', 'de'].includes(data.language) ? 'k2-fsa/OmniVoice' : 'VoiceTut Egyptian Tashkeel'),
                 voice: segment.voice === expectedVoice,
                 src: /^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src || '')),
                 speaker: ['karma', 'narrator'].includes(segment.speaker)
