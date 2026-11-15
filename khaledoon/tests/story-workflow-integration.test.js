@@ -762,7 +762,7 @@ test('story publisher creates a review PR without writing main', function () {
   assert.ok(publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'));
   assert.ok(admin.includes("capabilityResult.publisher_mode!=='pull_request'"));
   assert.ok(admin.includes('result.published_to_main!==false'));
-  assert.ok(admin.includes('publish_commit_sha:result.commit_sha'));
+  assert.ok(admin.includes('publish_pr_url:result.pull_request_url'));
   assert.ok(admin.includes('التحقق من النشر'));
   assert.ok(admin.includes('if(meta.preview_review&&meta.preview_review.publish_pr_number)'));
   assert.ok(admin.includes("action:'verify_pr'"), 'the admin must verify PR merge before marking a story published');
