@@ -740,7 +740,14 @@ Deno.serve(async (req: Request) => {
       mapMarkerAdded = !!currentPlaces[storyId];
     }
     const mergedPlacesContent = JSON.stringify(currentPlaces, null, 2) + '\n';
-    const safeFiles = body.files.map((file: any) => {
+    const textOnlyAllowedPaths = new Set([
+      storyRoot + "story.json", storyPage.path, "stories/index.json",
+      "stories/places.json", "stories/quizzes/" + storyId + ".json",
+    ]);
+    // Do not let a text-only request replace images or any other story assets from an old admin package.
+    const safeFiles = body.files.filter((file: any) =>
+      !textOnlyPublish || textOnlyAllowedPaths.has(file.path)
+    ).map((file: any) => {
       if (file.path === 'stories/index.json') return { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' };
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
       return file;
