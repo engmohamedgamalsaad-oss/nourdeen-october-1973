@@ -485,7 +485,7 @@
                 if (/معتمدة بالفعل/.test(String(e.message || ''))) {
                   skipped++;
                   translationStates[lang() + ':' + i] = translationConfirmed[lang() + ':' + i] ? 'approved' : 'stale';
-                  paintTranslationBlock(i, translationStates[lang() + ':' + i], translationStates[lang() + ':' + i] === 'approved' ? '✓ النص جاهز بالفعل.' : 'توجد ترجمة محفوظة؛ جارٍ استعادتها للتحقق منها.');
+                  paintTranslationBlock(i, translationStates[lang() + ':' + i], translationStates[lang() + ':' + i] === 'approved' ? '✓ النص جاهز بالفعل.' : 'توجد ترجمة محفوظة لا تطابق النص الحالي؛ أعد ترجمة هذا المقطع.');
                 } else {
                   failed.push(i + 1);
                   translationStates[lang() + ':' + i] = 'failed';
@@ -681,7 +681,13 @@
         jobSub.appendChild(el('div', 'kh-job-data'));
         step3.body.appendChild(jobSub);
         var reload = el('button', 'kh-gen-reload', 'حدّث الصفحة لتسمع المقطع'); reload.type = 'button'; reload.hidden = true;
-        reload.addEventListener('click', function () { location.reload(); });
+        reload.textContent = 'إعادة فحص الصوت';
+        reload.addEventListener('click', function () {
+          var api = window.KHStoryAudioReview;
+          if (!api || typeof api.refreshAudio !== 'function') return;
+          reload.disabled = true;
+          api.refreshAudio().then(function () { poll(); }).catch(function () {}).finally(function () { reload.disabled = false; });
+        });
         step3.body.appendChild(reload);
         body.appendChild(step3.d);
       }
