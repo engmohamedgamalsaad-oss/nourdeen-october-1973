@@ -11,6 +11,8 @@ const notebook = JSON.parse(fs.readFileSync(path.join(root, 'notebooks/Khaledoon
 const notebookCode = notebook.cells.filter(cell => cell.cell_type === 'code').map(cell => Array.isArray(cell.source) ? cell.source.join('') : String(cell.source || '')).join('\n');
 const publicAudio = fs.readFileSync(path.join(root, 'assets/shared/story-audio.js'), 'utf8');
 const storyReader = fs.readFileSync(path.join(root, 'rebuild/reader.js'), 'utf8');
+const worker = fs.readFileSync(path.join(root, 'supabase/functions/story-audio-worker/index.ts'), 'utf8');
+const audioEngine = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
 
 test('translation generation is per block and a successful Gemini result is default-approved', () => {
   assert.match(assets, /body\.action === "translation_generate"/);
@@ -109,4 +111,18 @@ test('admin preview switches the story body to the selected locale and displays 
   assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
   assert.match(preview, /site-language-change', function \(\) \{ loadTranslations\(\)\.then\(onUpdated\); \}/);
   assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261116-preview-localized-1/);
+});
+
+test('audio readiness waits for a manifest card and the worker verifies uploaded bytes before completing', () => {
+  assert.match(preview, /job\.status === 'completed'\) s3 = hasCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'fail'/);
+  assert.match(preview, /review\.refreshAudio\(\)/);
+  assert.match(worker, /storage\.from\(BUCKET\)\.download\(path\)/);
+  assert.match(worker, /uploadedDigest !== digest/);
+  assert.match(worker, /status: "completed"/);
+});
+
+test('failed audio generation and failed file verification can be retried for one block', () => {
+  assert.match(audioEngine, /job\.status === 'failed'\) view = \{ state: 'failed'[\s\S]*?canResend: true \}/);
+  assert.match(audioEngine, /state: 'failed', label: 'فشل التحقق'[\s\S]*?canResend: true/);
+  assert.match(audioEngine, /action: 'enqueue', section: story\.section, slug: story\.slug, language: language, block_index: index/);
 });
