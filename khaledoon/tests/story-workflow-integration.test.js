@@ -82,7 +82,7 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   assert.ok(audioFlow.includes('validateTranslationAlignment') && audioFlow.includes('genButton.disabled = true'), 'non-Arabic audio generation must be blocked when its paired Arabic source is stale or unverified');
   assert.ok(audioFlow.includes("translationRecords[L + ':' + index]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment must have a current approved translation (default-approved after Gemini) before audio generation');
-  assert.ok(audioFlow.includes('textarea.value = record.translation_text || "";'), 'translation editor must not preload the old published package translation');
+  assert.ok(audioFlow.includes('textarea.value = Object.prototype.hasOwnProperty.call(translationWorkingText, key) ? translationWorkingText[key] : "";') && !audioFlow.includes('textarea.value = record.translation_text'), 'translation editor must start blank and must not preload the old published package translation');
   assert.ok(audioFlow.includes("localStorage.setItem('kh-text-publish-language', lang())"), 'preview must remember the selected language for the admin text-only PR');
   assert.ok(audioFlow.includes("type: 'KH_TEXT_LANGUAGE_PUBLISH'") && audioFlow.includes("context.submission_id"), 'preview must hand the selected language and submission ID to its opener');
   assert.ok(admin.includes("data.type!=='KH_TEXT_LANGUAGE_PUBLISH'"), 'admin must route the preview request to the matching submission only');
