@@ -32,13 +32,13 @@ test('English audio cannot be queued or published from an unapproved or stale tr
   assert.match(assets, /translation\.status !== "approved"/);
   assert.match(assets, /translation\.source_arabic_hash !== source\.sourceTextHash/);
   assert.match(assets, /enqueue_approved_language/);
-  assert.match(assets, /لا يمكن نشر الصوت الإنجليزي/);
+  assert.match(assets, /ترجمة هذا المقطع غير جاهزة أو قديمة/);
 });
 
 test('bulk queue preserves each Arabic block speaker for the unified Colab worker', () => {
   assert.match(assets, /speaker: item\.block\.speaker/);
   assert.match(engine, /registry\.get\(job\.get\("speaker"\)\)/);
-  assert.match(engine, /provider\.generate\(model/);
+  assert.match(engine, /provider\.generate\(selected_model/);
 });
 
 test('public audio player accepts normal MP3 filenames and uses a fresh cache key', () => {

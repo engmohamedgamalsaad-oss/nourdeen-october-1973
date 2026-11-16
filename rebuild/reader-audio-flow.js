@@ -72,14 +72,46 @@
     if (!response.ok || !data.success) throw new Error(data.error || "تعذر تنفيذ إجراء الترجمة.");
     return data;
   }
+  async function sha256Trim(value) {
+    var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(value == null ? "" : value).trim()));
+    return Array.from(new Uint8Array(digest), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+  }
+  async function restoreSavedTranslations() {
+    var st = story(), L = lang();
+    var arabic = st && st.i18n && st.i18n.ar && Array.isArray(st.i18n.ar.blocks) ? st.i18n.ar.blocks : [];
+    var restored = 0, stale = 0;
+    translationWorkingText = Object.create(null);
+    translationConfirmed = Object.create(null);
+    if (L === "ar") return { restored: 0, stale: 0 };
+    for (var index = 0; index < arabic.length; index++) {
+      var source = arabic[index];
+      if (!source || !["karma", "narrator"].includes(source.speaker)) continue;
+      var key = L + ":" + index, record = translationRecords[key];
+      if (!record || record.status !== "approved" ||
+          typeof record.translation_text !== "string" || !record.translation_text.trim()) continue;
+      var hash = await sha256Trim(source.text);
+      if (record.source_arabic_hash !== hash || record.speaker !== source.speaker) {
+        stale++;
+        continue;
+      }
+      translationWorkingText[key] = record.translation_text;
+      translationConfirmed[key] = true;
+      restored++;
+    }
+    return { restored: restored, stale: stale };
+  }
   async function loadTranslations() {
     try {
       var data = await audioReviewAction({ action: "review_get" });
       translationRecords = data.audio_review && data.audio_review.translations || {};
+      var result = await restoreSavedTranslations();
+      translationLoaded = true;
+      if (result.stale) queueError = "تم تجاهل " + result.stale + " ترجمة قديمة لأن النص العربي أو المتحدث تغيّر.";
+    } catch (e) {
+      translationLoaded = false;
+      translationRecords = {};
       translationWorkingText = Object.create(null);
       translationConfirmed = Object.create(null);
-      translationLoaded = true;
-    } catch (e) {
       queueError = String(e && e.message || e);
     }
   }
@@ -231,9 +263,11 @@
     var s2;
     if (L !== 'ar') {
       var translation = translationRecords[L + ':' + index];
-      s2 = translation && translation.status === 'approved'
+      s2 = translation && translation.status === 'approved' && translationConfirmed[L + ':' + index] && String(translationWorkingText[L + ':' + index] || '').trim()
         ? { s: 'done', t: 'الترجمة جاهزة' }
-        : translation && translation.status === 'draft'
+        : translation && translation.status === 'approved'
+          ? { s: 'warn', t: 'قديمة — أعد الترجمة' }
+          : translation && translation.status === 'draft'
           ? { s: 'warn', t: 'قديمة — أعد الترجمة' }
           : { s: 'todo', t: 'لم تُجهَّز' };
     } else {
@@ -513,8 +547,13 @@
     sb.forEach(function (b, i) { if (b && b.speaker === 'karma') karma.push(i); else if (b && b.speaker === 'narrator') narrator.push(i); });
     var order = karma.concat(narrator).sort(function (a, b) { return a - b; }), current = -1;
     for (var k = 0; k < order.length; k++) { var rec = byIndex[order[k]]; if (!rec || !rec.accepted) { current = order[k]; break; } }
-    var currentTranslation = L !== 'ar' ? translationRecords[L + ':' + current] : null;
-    var currentTranslationStale = L !== 'ar' && (!currentTranslation || currentTranslation.status !== 'approved');
+    var currentTranslationKey = L + ':' + current;
+    var currentTranslation = L !== 'ar' ? translationRecords[currentTranslationKey] : null;
+    var currentTranslationStale = L !== 'ar' && (
+      !currentTranslation || currentTranslation.status !== 'approved' ||
+      !translationConfirmed[currentTranslationKey] ||
+      !String(translationWorkingText[currentTranslationKey] || '').trim()
+    );
     var genButton = gp && gp.querySelector('button:not(.kh-audio-publish-button)');
     var genStatus = gp && gp.querySelector('.kh-audio-review-state');
     if (currentTranslationStale && genButton) { genButton.disabled = true; genButton.title = 'نفّذ «الترجمة» لهذا المقطع قبل توليد الصوت.'; }

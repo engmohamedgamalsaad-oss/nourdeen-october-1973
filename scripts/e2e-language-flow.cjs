@@ -69,7 +69,7 @@ function walk(dir, acc = []) {
 function visitorPages() {
   return walk('').filter((f) => f.endsWith('.html') && f !== 'index.html' && !ADMIN.has(f)).filter((f) => {
     const h = fs.readFileSync(path.join(ROOT, f), 'utf8');
-    return !/<meta[^>]+http-equiv=["']refresh["']/i.test(h); /* skip pure redirect stubs */
+    return !/<meta[^>]+http-equiv=["']refresh["']/i.test(h) && !(f === "assets/video/karma/karma.html" && /^test\s*$/i.test(h.trim())); /* skip redirect stubs and this tracked placeholder only */
   }).sort();
 }
 
