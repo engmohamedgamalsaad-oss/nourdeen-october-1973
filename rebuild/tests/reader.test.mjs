@@ -58,7 +58,8 @@ test('unified reader refuses to silently fall back to a legacy package', () => {
 
 test('story text is inserted as text and source links are isolated', () => {
   assert.match(js, /p\.textContent=sourceBlock\.text/);
-  assert.match(js, /previewMode&&current!=='ar'/);
+  assert.match(js, /var sourceBlock=b;/, 'the selected page language must render its own localized story block');
+  assert.doesNotMatch(js, /previewMode&&current!=='ar'/, 'preview must not force Arabic source text into every selected locale');
   assert.match(js, /a\.rel='noopener noreferrer'/);
   assert.match(js, /img\.alt=d\.alt/);
 });
