@@ -12,7 +12,12 @@ SAMPLE_RATE = 24000
 MODEL_ID = "masterofaudio2077/voicetut-egyptian-tashkeel"
 
 # Queue language code -> OmniVoice language code.
-LANGUAGE_CODES = {"ar": "arz", "en": "en"}
+LANGUAGE_CODES = {"ar": "arz", "en": "en", "fr": "fr", "it": "it", "de": "de"}
+
+# Keep the proven VoiceTut checkpoint for Arabic/English. The official multilingual
+# checkpoint is loaded separately and only for French, Italian and German.
+MULTILINGUAL_MODEL_ID = "k2-fsa/OmniVoice"
+MULTILINGUAL_LANGUAGES = frozenset({"fr", "it", "de"})
 
 
 @dataclass(frozen=True)
@@ -28,6 +33,11 @@ KARMA_SETTINGS = VoiceSettings(num_step=36, guidance_scale=3.0, speed=0.90, vers
 
 # Narrator: values recorded in docs/KHALEDOON_CONTROL_TOWER.md (10-11-2026).
 NARRATOR_SETTINGS = VoiceSettings(num_step=48, guidance_scale=3.0, speed=1.05, version="narrator-control-tower-2026-11-10")
+
+# Separate starting settings for the official multilingual checkpoint. These use
+# its documented baseline sampler values; the proven AR/EN settings above stay untouched.
+MULTILINGUAL_KARMA_SETTINGS = VoiceSettings(num_step=32, guidance_scale=2.0, speed=0.90, version="omnivoice-multilingual-pilot-karma-v1")
+MULTILINGUAL_NARRATOR_SETTINGS = VoiceSettings(num_step=32, guidance_scale=2.0, speed=1.05, version="omnivoice-multilingual-pilot-narrator-v1")
 
 # The Karma reference transcript is locked: one wrong character ruins the clone.
 KARMA_REF_TEXT_SHA256 = "50cce1612e8f55127d729c355b964e9d5335b21382572da3d96245ca37013346"
