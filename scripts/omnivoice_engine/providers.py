@@ -81,76 +81,83 @@ class KarmaProvider(ReferenceVoiceProvider):
         super().__init__(ref_audio_path, ref_text, settings, **kwargs)
 
 
-_NAME_KEYS = ("name", "id", "speaker", "voice", "label", "title", "speaker_id", "speaker_name")
+_NAME_KEYS = ("name", "speaker", "voice", "label", "title", "speaker_name")
+_ID_KEYS = ("id", "speaker_id")
 _AUDIO_KEYS = ("audio", "audio_path", "ref_audio", "path", "file", "filename", "audio_file", "wav")
 _TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text", "reference_text")
 
 
-def _walk_dicts(node, parent_key=None):
-    """Yield nested dictionaries together with the key used by their parent."""
-    if isinstance(node, dict):
-        yield node, parent_key
-        for key, value in node.items():
-            if isinstance(value, (dict, list)):
-                yield from _walk_dicts(value, str(key))
-    elif isinstance(node, list):
-        for value in node:
-            if isinstance(value, (dict, list)):
-                yield from _walk_dicts(value, parent_key)
-
-
-def _flatten_fields(node):
-    """Return scalar (key, value) pairs from a nested metadata record."""
-    fields = []
-    if isinstance(node, dict):
-        for key, value in node.items():
-            if isinstance(value, (dict, list)):
-                fields.extend(_flatten_fields(value))
-            elif isinstance(value, (str, int, float)):
-                fields.append((str(key), str(value)))
-    elif isinstance(node, list):
-        for value in node:
-            fields.extend(_flatten_fields(value))
-    return fields
-
-
 def load_library_reference(refs_dir: str, name: str, alt_names=(), speaker_id=None):
-    """Find a built-in VoiceTut voice in references.json, including nested schemas."""
+    """Resolve a named built-in VoiceTut speaker from its published flat JSON index."""
     index_path = os.path.join(refs_dir, "references.json")
     if not os.path.isfile(index_path):
         raise ProviderError(f"references.json not found in {refs_dir!r}")
     with open(index_path, encoding="utf-8") as handle:
         data = json.load(handle)
+    items = data if isinstance(data, list) else list(data.values()) if isinstance(data, dict) else []
 
-    wanted = {str(n).strip().lower() for n in (name, *alt_names, speaker_id) if n}
-    name_keys = {key.lower() for key in _NAME_KEYS}
-    audio_keys = {key.lower() for key in _AUDIO_KEYS}
-    text_keys = {key.lower() for key in _TEXT_KEYS}
+    wanted_names = {
+        str(value).strip().lower()
+        for value in (name, *alt_names)
+        if value and (speaker_id is None or str(value).strip().lower() != str(speaker_id).strip().lower())
+    }
+    found = next(
+        (
+            item for item in items
+            if isinstance(item, dict)
+            and any(
+                str(item.get(key, "")).strip().lower() in wanted_names
+                for key in _NAME_KEYS
+                if item.get(key) is not None
+            )
+        ),
+        None,
+    )
 
-    matches = []
-    for record, parent_key in _walk_dicts(data):
-        fields = _flatten_fields(record)
-        identity = (parent_key or "").strip().lower() in wanted
-        identity = identity or any(
-            key.lower() in name_keys and value.strip().lower() in wanted
-            for key, value in fields
+    # The human-readable speaker name is authoritative. Use the ID only as a
+    # fallback, and reject a name/ID pair that points to different speakers.
+    if found is None and speaker_id:
+        wanted_id = str(speaker_id).strip().lower()
+        found = next(
+            (
+                item for item in items
+                if isinstance(item, dict)
+                and any(
+                    str(item.get(key, "")).strip().lower() == wanted_id
+                    for key in _ID_KEYS
+                    if item.get(key) is not None
+                )
+            ),
+            None,
         )
-        if not identity:
-            continue
-        audio = next((value for key, value in fields if key.lower() in audio_keys and value.strip()), None)
-        text = next((value for key, value in fields if key.lower() in text_keys and value.strip()), None)
-        if audio and text:
-            matches.append((len(fields), audio, text))
+    if found is None:
+        available = [
+            str(item.get("speaker_name") or item.get("name") or item.get("speaker_id") or "")
+            for item in items if isinstance(item, dict)
+        ]
+        raise ProviderError(f"VoiceTut library voice {name!r} not found. Available: {available}")
 
-    if not matches:
-        top_keys = sorted(data.keys()) if isinstance(data, dict) else []
-        sample_keys = [sorted(item.keys()) for item, _ in list(_walk_dicts(data))[:5]]
+    if speaker_id:
+        actual_id = next((str(found[key]).strip() for key in _ID_KEYS if found.get(key)), None)
+        if actual_id and actual_id.lower() != str(speaker_id).strip().lower():
+            raise ProviderError(
+                f"VoiceTut name/ID mismatch for {name!r}: expected {speaker_id!r}, found {actual_id!r}."
+            )
+
+    audio = next(
+        (found[key] for key in _AUDIO_KEYS if isinstance(found.get(key), str) and found[key].strip()),
+        None,
+    )
+    text = next(
+        (found[key] for key in _TEXT_KEYS if isinstance(found.get(key), str) and found[key].strip()),
+        None,
+    )
+    if not audio or not text:
         raise ProviderError(
-            f"VoiceTut voice {name!r} / {speaker_id!r} not resolved in references.json. "
-            f"Top-level keys: {top_keys}; sample record keys: {sample_keys}"
+            f"VoiceTut library voice {name!r} is missing audio_path or reference_text; "
+            f"record keys: {sorted(found)}"
         )
 
-    _, audio, text = min(matches, key=lambda item: item[0])
     candidates = [
         audio,
         os.path.join(refs_dir, audio),
@@ -161,7 +168,6 @@ def load_library_reference(refs_dir: str, name: str, alt_names=(), speaker_id=No
     if path is None:
         raise ProviderError(f"VoiceTut voice {name!r}: audio file {audio!r} not found under {refs_dir!r}")
     return path, text
-
 
 class NarratorProvider(ReferenceVoiceProvider):
     speaker = "narrator"
