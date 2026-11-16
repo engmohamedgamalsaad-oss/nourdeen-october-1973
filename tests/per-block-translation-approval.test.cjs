@@ -118,7 +118,7 @@ test('admin preview switches the story body to the selected locale and displays 
 test('audio readiness waits for a manifest card and the worker verifies uploaded bytes before completing', () => {
   assert.match(preview, /job\.status === 'completed'\) s3 = hasCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'busy'/);
   assert.match(audioEngine, /function audioEntryForBlock\(language, index\)/);
-  assert.match(audioEngine, /label: 'الصوت جاهز'[\s\S]*?audioEntry/);
+  assert.match(audioEngine, /var audioEntry = audioEntryForBlock\(language, index\)/);\n  assert.match(audioEngine, /job\.status === 'completed'\) view = audioEntry/);
   assert.match(preview, /review\.refreshAudio\(\)/);
   assert.match(worker, /storage\.from\(BUCKET\)\.download\(path\)/);
   assert.match(worker, /uploadedDigest !== digest/);
@@ -127,6 +127,6 @@ test('audio readiness waits for a manifest card and the worker verifies uploaded
 
 test('failed audio generation and failed file verification can be retried for one block', () => {
   assert.match(audioEngine, /job\.status === 'failed'\) view = \{ state: 'failed'[\s\S]*?canResend: true \}/);
-  assert.match(audioEngine, /job\.status === 'failed'\) view = \{ state: 'failed'[\s\S]*?canResend: true/);
+
   assert.match(audioEngine, /action: 'enqueue', section: story\.section, slug: story\.slug, language: language, block_index: index/);
 });
