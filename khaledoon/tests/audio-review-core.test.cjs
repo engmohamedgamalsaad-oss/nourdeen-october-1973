@@ -289,6 +289,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(!fs.existsSync(path.join(__dirname, '../../scripts/generate_story_audio.py')), 'the retired Fish Audio generator must not remain in the active repository');
   const worker = fs.readFileSync(path.join(__dirname, '../../supabase/functions/story-audio-worker/index.ts'), 'utf8');
   assert.ok(worker.includes('sha256(bytes)') && worker.includes('provider: "omnivoice"'), 'the active VoiceTut worker must hash uploaded audio and write OmniVoice manifests');
+  assert.ok(worker.includes('storage.from(BUCKET).download(path)') && worker.includes('uploadedDigest !== digest'), 'the worker must read back the uploaded MP3 and verify its SHA-256 before completing the job');
   assert.ok(adminHtml.includes('var requireUnifiedStoryPackage=!isOctoberLegacyRecord(it)'), 'October editorial and story-content workflow must remain distinct');
   assert.ok(adminHtml.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October audio text review must use the shared review UI without changing its story editor');
   assert.ok(adminHtml.includes('var storyReviewPackage=await audioReviewPackageOf(it)'), 'October preview must open its extracted package in the shared audio review preview');
@@ -298,12 +299,12 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewActions.includes('النص قابل للنشر دون صوت') && reviewActions.includes('حالة الصوت اختيارية'), 'the preview decision panel must clearly separate text publication from optional audio review');
   assert.ok(reviewActions.includes('delete pendingMeta.audio_review') && reviewActions.includes('delete meta.pending_draft.story_meta.audio_review'), 'approval must not duplicate audio_review inside pending_draft metadata');
 
-  /* In admin preview, the page locale stays Arabic while the audio-review language is independently selected. */
+  /* In admin preview, the visible story locale and audio-review language follow the same selected language. */
   const adminReaderSource = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.js'), 'utf8');
   const adminFlowSource = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-flow.js'), 'utf8');
   assert.ok(adminReaderSource.includes("var previewMode=new URLSearchParams(location.search).get('draft')==='1',previewAudioLanguage='ar'"), 'admin preview must initialize its visible page in Arabic');
-  assert.ok(adminReaderSource.includes("window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage"), 'selected audio language must be separate from page locale');
-  assert.ok(adminReaderSource.includes("if(previewMode){previewAudioLanguage=b.dataset.lang;window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;"), 'admin language selection must not switch the story page language');
+  assert.ok(adminReaderSource.includes("window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage"), 'selected language must stay synchronized with audio review');
+  assert.ok(adminReaderSource.includes("if(previewMode){previewAudioLanguage=b.dataset.lang;window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;current=previewAudioLanguage;show();"), 'admin language selection must switch the visible story and its audio-review language together');
   assert.ok(adminReviewSource.includes("function audioReviewLanguage() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }"), 'review UI must use independent audio language');
   assert.ok(adminReviewSource.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang))"), 'review controls must follow all five selected languages');
   assert.ok(adminReviewSource.includes("if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة"), 'unsupported generation must be visibly disabled rather than falsely offered');

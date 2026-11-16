@@ -77,6 +77,32 @@
     var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(value == null ? "" : value).trim()));
     return Array.from(new Uint8Array(digest), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
   }
+  function renderTranslationOnPage(index, text) {
+    var st = story(), L = lang();
+    if (!st || L === "ar" || !st.i18n || !st.i18n[L] || !Array.isArray(st.i18n[L].blocks)) return;
+    var localized = st.i18n[L].blocks[index];
+    if (localized) localized.text = String(text || "");
+    var pageBlock = document.querySelector('#blocks .block[data-block-index="' + index + '"]');
+    if (!pageBlock) return;
+    var value = String(text || "");
+    if (pageBlock.dataset.type === "timeline") {
+      var list = pageBlock.querySelector("ol");
+      if (!list) return;
+      list.replaceChildren();
+      value.split("\n").forEach(function (line) {
+        var cut = line.indexOf(" — "), item = document.createElement("li");
+        var year = document.createElement("b"), event = document.createElement("span");
+        year.textContent = cut > 0 ? line.slice(0, cut) : "";
+        event.textContent = cut > 0 ? line.slice(cut + 3) : line;
+        item.append(year, event);
+        list.appendChild(item);
+      });
+    } else {
+      var paragraph = pageBlock.querySelector("p");
+      if (paragraph) paragraph.textContent = value;
+    }
+  }
+
   async function restoreSavedTranslations() {
     var st = story(), L = lang();
     var arabic = st && st.i18n && st.i18n.ar && Array.isArray(st.i18n.ar.blocks) ? st.i18n.ar.blocks : [];
@@ -97,6 +123,7 @@
       }
       translationWorkingText[key] = record.translation_text;
       translationConfirmed[key] = true;
+      renderTranslationOnPage(index, record.translation_text);
       restored++;
     }
     return { restored: restored, stale: stale };
@@ -126,6 +153,7 @@
       translationRecords[key] = record;
       translationWorkingText[key] = String(record.translation_text || "");
       translationConfirmed[key] = !!translationWorkingText[key].trim() && record.status === "approved";
+      if (translationConfirmed[key]) renderTranslationOnPage(index, translationWorkingText[key]);
     }
     var box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
     var review = box && box.querySelector(".kh-translation-review");
@@ -141,16 +169,28 @@
     if (box) paint(box);
     updateTranslationPublishButton();
   }
+  function verifiedAudioCard(box, job) {
+    var card = box && box.querySelector(".kh-audio-card[data-clip-key]");
+    if (!card || !String(card.dataset.audioSha256 || "").trim()) return false;
+    var expected = String(job && job.result && job.result.sha256 || "").toLowerCase();
+    var actual = String(card.dataset.audioSha256 || "").toLowerCase();
+    return !expected || actual === expected;
+  }
   function refreshCompletedAudio() {
-    var hasCompletedWithoutCard = Object.keys(jobs).some(function (index) {
+    var hasCompletedWithoutVerifiedCard = Object.keys(jobs).some(function (index) {
       var job = jobs[index];
       var box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
-      return job && job.status === "completed" && !(box && box.querySelector(".kh-audio-card[data-clip-key]"));
+      return job && job.status === "completed" && !verifiedAudioCard(box, job);
     });
-    if (!hasCompletedWithoutCard) return Promise.resolve(false);
+    if (!hasCompletedWithoutVerifiedCard) return Promise.resolve(false);
     var review = window.KHStoryAudioReview;
     if (!review || typeof review.refreshAudio !== "function") return Promise.resolve(false);
-    return review.refreshAudio().then(function () { return true; }).catch(function () { return false; });
+    return review.refreshAudio().then(function () {
+      return Object.keys(jobs).some(function (index) {
+        var job = jobs[index], box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
+        return job && job.status === "completed" && verifiedAudioCard(box, job);
+      });
+    }).catch(function () { return false; });
   }
 
   function makeTranslationReview(box, index, arabicBlock, currentBlock) {
@@ -172,6 +212,18 @@
     [generate, save].forEach(function (b2) { b2.type = "button"; });
     function paintStatus() {
       var r = translationRecords[key] || {};
+      if (translationStates[key] === "processing") {
+        status.textContent = "Gemini يترجم هذا المقطع الآن…";
+        status.dataset.state = "processing";
+        save.disabled = !String(textarea.value || "").trim();
+        return;
+      }
+      if (translationStates[key] === "failed") {
+        status.textContent = "فشلت ترجمة هذا المقطع؛ يمكنك إعادة ترجمته وحده.";
+        status.dataset.state = "failed";
+        save.disabled = !String(textarea.value || "").trim();
+        return;
+      }
       status.textContent = r.status === "approved" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة الجديدة جاهزة ومعتمدة" + (r.auto_approved ? " تلقائيًا" : "") : "توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة» لتجهيز ترجمة جديدة في هذه المعاينة.") :
         r.status === "draft" ? "مسودة قديمة — اضغط «إعادة الترجمة»" :
         r.status === "needs_revision" ? "تحتاج إلى إعادة ترجمة" : "لم تُجهَّز الترجمة بعد — اضغط «الترجمة»";
@@ -197,22 +249,27 @@
       translationStates[key] = "approved";
       translationWorkingText[key] = String(textarea.value || "").trim();
       translationConfirmed[key] = true;
+      renderTranslationOnPage(index, translationWorkingText[key]);
       paintStatus();
       document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
     }
     generate.addEventListener("click", async function () {
       generate.disabled = true; translationStates[key] = "processing"; status.textContent = "Gemini يعيد ترجمة هذا المقطع وحده من النص العربي والسياق وملاحظاتك السابقة…"; status.dataset.state = "processing";
+      paint(box); updateTranslationPublishButton();
       try {
         var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
+        var generatedText = String(result.translation && result.translation.translation_text || "").trim();
+        if (!generatedText || !result.translation || result.translation.status !== "approved") throw new Error("لم تُحفظ ترجمة معتمدة وصالحة لهذا المقطع.");
         translationRecords[key] = result.translation;
         translationStates[key] = "approved";
-        textarea.value = result.translation.translation_text || "";
-        translationWorkingText[key] = String(textarea.value || "");
-        translationConfirmed[key] = !!String(textarea.value || "").trim();
-        paintStatus();
+        textarea.value = generatedText;
+        translationWorkingText[key] = generatedText;
+        translationConfirmed[key] = true;
+        renderTranslationOnPage(index, generatedText);
+        paintStatus(); paint(box); updateTranslationPublishButton();
         status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
-      } catch (e) { translationStates[key] = "failed"; status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; status.dataset.state = "failed"; }
+      } catch (e) { translationStates[key] = "failed"; status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; status.dataset.state = "failed"; paint(box); updateTranslationPublishButton(); }
       finally { generate.disabled = false; }
     });
     save.addEventListener("click", async function () {
@@ -300,6 +357,7 @@
     var speech = box.querySelector('.kh-speech-text-controls');
     var cards = box.querySelectorAll('.kh-audio-card[data-review]');
     var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card[data-clip-key]').length > 0;
+    var hasVerifiedCard = verifiedAudioCard(box, job);
     var s1, s2;
     if (L !== 'ar') {
       var translationKey = L + ':' + index;
@@ -329,7 +387,7 @@
     if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
     else if (job.status === 'pending') s3 = { s: 'wait', t: 'في الطابور' };
     else if (job.status === 'processing') s3 = { s: 'busy', t: 'بيتم الآن' };
-    else if (job.status === 'completed') s3 = { s: 'done', t: hasCard ? 'تم' : 'تم — حدّث الصفحة' };
+    else if (job.status === 'completed') s3 = hasVerifiedCard ? { s: 'done', t: 'الصوت جاهز' } : { s: 'busy', t: 'جارٍ التحقق من ملف الصوت وبصمته وظهوره في المعاينة' };
     else if (job.status === 'failed') s3 = { s: 'fail', t: 'فشل' };
     else s3 = { s: 'todo', t: String(job.status || '—') };
     var s4;
@@ -405,7 +463,7 @@
     fillJobData(box);
     var reload = box.querySelector('.kh-gen-reload');
     var job = jobOf(Number(box.dataset.index));
-    if (reload) reload.hidden = !(job && job.status === 'completed' && !box.querySelector('.kh-audio-card'));
+    if (reload) reload.hidden = !(job && job.status === 'completed' && !verifiedAudioCard(box, job));
   }
   function updateTranslationPublishButton() {
     var button = $('kh-translation-publish-text');
@@ -418,7 +476,7 @@
     var allApproved = targetIndexes.length > 0 && targetIndexes.every(function (index) {
       var key = lang() + ':' + index;
       var record = translationRecords[key];
-      return !!record && record.status === 'approved' && translationConfirmed[key] === true && !!String(translationWorkingText[key] || '').trim();
+      return !!record && record.status === 'approved' && translationStates[key] !== 'processing' && translationStates[key] !== 'failed' && translationConfirmed[key] === true && !!String(translationWorkingText[key] || '').trim();
     });
     button.hidden = lang() === 'ar';
     button.disabled = lang() === 'ar' || !translationLoaded || !allApproved;
@@ -616,6 +674,8 @@
     var currentTranslationKey = L + ':' + current;
     var currentTranslation = L !== 'ar' ? translationRecords[currentTranslationKey] : null;
     var currentTranslationStale = L !== 'ar' && (
+      translationStates[currentTranslationKey] === 'processing' ||
+      translationStates[currentTranslationKey] === 'failed' ||
       !currentTranslation || currentTranslation.status !== 'approved' ||
       !translationConfirmed[currentTranslationKey] ||
       !String(translationWorkingText[currentTranslationKey] || '').trim()
@@ -744,6 +804,7 @@
     });
   }
   document.addEventListener('kh-audio-review-updated', onUpdated);
+  document.addEventListener('site-language-change', function () { loadTranslations().then(onUpdated); });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { clearTimeout(timer); poll(); } });
   if ($('kh-audio-review-gate')) {
     loadTranslations().then(function () { onUpdated(); });

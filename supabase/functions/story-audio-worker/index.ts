@@ -192,6 +192,20 @@ Deno.serve(async (req: Request) => {
   });
   if (uploadError) return reply(500, { error: "Unable to store generated audio privately.", detail: uploadError.message });
 
+  // Do not publish a manifest or mark the queue job completed until the stored
+  // object has been read back and its bytes match the SHA-256 calculated above.
+  const { data: uploadedFile, error: verifyError } = await service.storage.from(BUCKET).download(path);
+  if (verifyError || !uploadedFile) {
+    await service.storage.from(BUCKET).remove([path]);
+    return reply(500, { error: "Generated audio was uploaded but could not be read back for verification.", detail: verifyError?.message });
+  }
+  const uploadedBytes = new Uint8Array(await uploadedFile.arrayBuffer());
+  const uploadedDigest = await sha256(uploadedBytes);
+  if (uploadedBytes.length !== bytes.length || uploadedDigest !== digest) {
+    await service.storage.from(BUCKET).remove([path]);
+    return reply(422, { error: "Stored audio failed SHA-256 read-back verification; the segment was not marked complete." });
+  }
+
   const manifestPath = [job.section, job.slug, job.language, "manifest.json"].join("/");
   let manifest: any = { version: 1, section: job.section, story: job.slug, language: job.language, provider: "omnivoice", model: "VoiceTut Egyptian Tashkeel", segments: [] };
   const { data: oldManifestFile } = await service.storage.from(BUCKET).download(manifestPath);
