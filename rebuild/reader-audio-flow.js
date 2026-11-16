@@ -77,6 +77,32 @@
     var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(value == null ? "" : value).trim()));
     return Array.from(new Uint8Array(digest), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
   }
+  function renderTranslationOnPage(index, text) {
+    var st = story(), L = lang();
+    if (!st || L === "ar" || !st.i18n || !st.i18n[L] || !Array.isArray(st.i18n[L].blocks)) return;
+    var localized = st.i18n[L].blocks[index];
+    if (localized) localized.text = String(text || "");
+    var pageBlock = document.querySelector('#blocks .block[data-block-index="' + index + '"]');
+    if (!pageBlock) return;
+    var value = String(text || "");
+    if (pageBlock.dataset.type === "timeline") {
+      var list = pageBlock.querySelector("ol");
+      if (!list) return;
+      list.replaceChildren();
+      value.split("\n").forEach(function (line) {
+        var cut = line.indexOf(" — "), item = document.createElement("li");
+        var year = document.createElement("b"), event = document.createElement("span");
+        year.textContent = cut > 0 ? line.slice(0, cut) : "";
+        event.textContent = cut > 0 ? line.slice(cut + 3) : line;
+        item.append(year, event);
+        list.appendChild(item);
+      });
+    } else {
+      var paragraph = pageBlock.querySelector("p");
+      if (paragraph) paragraph.textContent = value;
+    }
+  }
+
   async function restoreSavedTranslations() {
     var st = story(), L = lang();
     var arabic = st && st.i18n && st.i18n.ar && Array.isArray(st.i18n.ar.blocks) ? st.i18n.ar.blocks : [];
@@ -97,6 +123,7 @@
       }
       translationWorkingText[key] = record.translation_text;
       translationConfirmed[key] = true;
+      renderTranslationOnPage(index, record.translation_text);
       restored++;
     }
     return { restored: restored, stale: stale };
@@ -126,6 +153,7 @@
       translationRecords[key] = record;
       translationWorkingText[key] = String(record.translation_text || "");
       translationConfirmed[key] = !!translationWorkingText[key].trim() && record.status === "approved";
+      if (translationConfirmed[key]) renderTranslationOnPage(index, translationWorkingText[key]);
     }
     var box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
     var review = box && box.querySelector(".kh-translation-review");
@@ -197,6 +225,7 @@
       translationStates[key] = "approved";
       translationWorkingText[key] = String(textarea.value || "").trim();
       translationConfirmed[key] = true;
+      renderTranslationOnPage(index, translationWorkingText[key]);
       paintStatus();
       document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
     }
