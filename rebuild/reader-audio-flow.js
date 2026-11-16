@@ -54,6 +54,7 @@
   var translationRecords = {};
   var translationWorkingText = Object.create(null);
   var translationConfirmed = Object.create(null);
+  var translationStates = Object.create(null);
   var translationLoaded = false;
   function storyIdentity(st) {
     return { section: st && st.section, slug: st && st.slug };
@@ -105,6 +106,10 @@
       var data = await audioReviewAction({ action: "review_get" });
       translationRecords = data.audio_review && data.audio_review.translations || {};
       var result = await restoreSavedTranslations();
+      translationStates = Object.create(null);
+      Object.keys(translationRecords).forEach(function (key) {
+        translationStates[key] = translationConfirmed[key] ? "approved" : (translationRecords[key] && translationRecords[key].status === "approved" ? "stale" : (translationRecords[key] && translationRecords[key].status || "missing"));
+      });
       translationLoaded = true;
       if (result.stale) queueError = "تم تجاهل " + result.stale + " ترجمة قديمة لأن النص العربي أو المتحدث تغيّر.";
     } catch (e) {
@@ -115,6 +120,39 @@
       queueError = String(e && e.message || e);
     }
   }
+  function paintTranslationBlock(index, state, message, record) {
+    var key = lang() + ":" + index;
+    if (record) {
+      translationRecords[key] = record;
+      translationWorkingText[key] = String(record.translation_text || "");
+      translationConfirmed[key] = !!translationWorkingText[key].trim() && record.status === "approved";
+    }
+    var box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
+    var review = box && box.querySelector(".kh-translation-review");
+    if (review) {
+      var textarea = review.querySelector(".kh-translation-editor");
+      var status = review.querySelector(".kh-translation-status");
+      if (record && textarea) textarea.value = String(record.translation_text || "");
+      if (status) {
+        status.textContent = message || (state === "processing" ? "Gemini يجهّز ترجمة هذا المقطع…" : state === "failed" ? "فشلت ترجمة هذا المقطع؛ يمكنك إعادة المحاولة." : "✓ النص جاهز ومعتمد تلقائيًا.");
+        status.dataset.state = state || "missing";
+      }
+    }
+    if (box) paint(box);
+    updateTranslationPublishButton();
+  }
+  function refreshCompletedAudio() {
+    var hasCompletedWithoutCard = Object.keys(jobs).some(function (index) {
+      var job = jobs[index];
+      var box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
+      return job && job.status === "completed" && !(box && box.querySelector(".kh-audio-card[data-clip-key]"));
+    });
+    if (!hasCompletedWithoutCard) return Promise.resolve(false);
+    var review = window.KHStoryAudioReview;
+    if (!review || typeof review.refreshAudio !== "function") return Promise.resolve(false);
+    return review.refreshAudio().then(function () { return true; }).catch(function () { return false; });
+  }
+
   function makeTranslationReview(box, index, arabicBlock, currentBlock) {
     var L = lang(), key = L + ":" + index;
     var record = translationRecords[key] || {};
@@ -156,23 +194,25 @@
         translation_text: String(textarea.value || "").trim(), source_arabic_hash: hash,
       });
       translationRecords[key] = result.translation;
+      translationStates[key] = "approved";
       translationWorkingText[key] = String(textarea.value || "").trim();
       translationConfirmed[key] = true;
       paintStatus();
       document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
     }
     generate.addEventListener("click", async function () {
-      generate.disabled = true; status.textContent = "Gemini يعيد ترجمة هذا المقطع وحده من النص العربي والسياق وملاحظاتك السابقة…";
+      generate.disabled = true; translationStates[key] = "processing"; status.textContent = "Gemini يعيد ترجمة هذا المقطع وحده من النص العربي والسياق وملاحظاتك السابقة…"; status.dataset.state = "processing";
       try {
         var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
         translationRecords[key] = result.translation;
+        translationStates[key] = "approved";
         textarea.value = result.translation.translation_text || "";
         translationWorkingText[key] = String(textarea.value || "");
         translationConfirmed[key] = !!String(textarea.value || "").trim();
         paintStatus();
         status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
-      } catch (e) { status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; }
+      } catch (e) { translationStates[key] = "failed"; status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; status.dataset.state = "failed"; }
       finally { generate.disabled = false; }
     });
     save.addEventListener("click", async function () {
@@ -262,9 +302,15 @@
     var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card[data-clip-key]').length > 0;
     var s2;
     if (L !== 'ar') {
-      var translation = translationRecords[L + ':' + index];
-      s2 = translation && translation.status === 'approved' && translationConfirmed[L + ':' + index] && String(translationWorkingText[L + ':' + index] || '').trim()
-        ? { s: 'done', t: 'الترجمة جاهزة' }
+      var translationKey = L + ':' + index;
+      var translation = translationRecords[translationKey];
+      var translationState = translationStates[translationKey];
+      s2 = translationState === 'processing'
+        ? { s: 'busy', t: 'Gemini يترجم الآن' }
+        : translationState === 'failed'
+          ? { s: 'fail', t: 'فشلت الترجمة' }
+          : translation && translation.status === 'approved' && translationConfirmed[translationKey] && String(translationWorkingText[translationKey] || '').trim()
+        ? { s: 'done', t: 'النص جاهز' }
         : translation && translation.status === 'approved'
           ? { s: 'warn', t: 'قديمة — أعد الترجمة' }
           : translation && translation.status === 'draft'
@@ -420,11 +466,26 @@
             for (var i = 0; i < blocks.length; i++) {
               if (!blocks[i] || !['karma', 'narrator'].includes(blocks[i].speaker)) continue;
               bulkStatus.textContent = 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + '…';
+              translationStates[lang() + ':' + i] = 'processing';
+              paintTranslationBlock(i, 'processing', 'Gemini يترجم هذا المقطع الآن…');
               try {
                 var result = await audioReviewAction({ action: 'translation_generate', block_index: i });
-                translationRecords[lang() + ':' + i] = result.translation; done++;
+                translationRecords[lang() + ':' + i] = result.translation;
+                translationWorkingText[lang() + ':' + i] = String(result.translation.translation_text || '');
+                translationConfirmed[lang() + ':' + i] = !!translationWorkingText[lang() + ':' + i].trim();
+                translationStates[lang() + ':' + i] = 'approved';
+                paintTranslationBlock(i, 'approved', '✓ النص جاهز ومعتمد تلقائيًا.', result.translation);
+                done++;
               } catch (e) {
-                if (/معتمدة بالفعل/.test(String(e.message || ''))) skipped++; else failed.push(i + 1);
+                if (/معتمدة بالفعل/.test(String(e.message || ''))) {
+                  skipped++;
+                  translationStates[lang() + ':' + i] = translationConfirmed[lang() + ':' + i] ? 'approved' : 'stale';
+                  paintTranslationBlock(i, translationStates[lang() + ':' + i], translationStates[lang() + ':' + i] === 'approved' ? '✓ النص جاهز بالفعل.' : 'توجد ترجمة محفوظة؛ جارٍ استعادتها للتحقق منها.');
+                } else {
+                  failed.push(i + 1);
+                  translationStates[lang() + ':' + i] = 'failed';
+                  paintTranslationBlock(i, 'failed', (e.message || 'تعذرت ترجمة هذا المقطع.') + ' — يمكنك إعادة ترجمته وحده.');
+                }
               }
             }
           }
@@ -657,7 +718,7 @@
   function poll() {
     if (polling) return;
     polling = true;
-    Promise.all([fetchJobs(), fetchWorkerStatus()]).then(function () { refresh(); }).then(function () { polling = false; schedule(); }, function () { polling = false; schedule(); });
+    Promise.all([fetchJobs(), fetchWorkerStatus()]).then(function () { return refreshCompletedAudio(); }).then(function () { refresh(); }).then(function () { polling = false; schedule(); }, function () { polling = false; schedule(); });
   }
   var rebuildQueued = false;
   function onUpdated() {
