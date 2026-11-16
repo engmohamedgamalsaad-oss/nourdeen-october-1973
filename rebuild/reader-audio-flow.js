@@ -468,7 +468,7 @@
     var allApproved = targetIndexes.length > 0 && targetIndexes.every(function (index) {
       var key = lang() + ':' + index;
       var record = translationRecords[key];
-      return !!record && record.status === 'approved' && translationConfirmed[key] === true && !!String(translationWorkingText[key] || '').trim();
+      return !!record && record.status === 'approved' && translationStates[key] !== 'processing' && translationStates[key] !== 'failed' && translationConfirmed[key] === true && !!String(translationWorkingText[key] || '').trim();
     });
     button.hidden = lang() === 'ar';
     button.disabled = lang() === 'ar' || !translationLoaded || !allApproved;
@@ -666,6 +666,8 @@
     var currentTranslationKey = L + ':' + current;
     var currentTranslation = L !== 'ar' ? translationRecords[currentTranslationKey] : null;
     var currentTranslationStale = L !== 'ar' && (
+      translationStates[currentTranslationKey] === 'processing' ||
+      translationStates[currentTranslationKey] === 'failed' ||
       !currentTranslation || currentTranslation.status !== 'approved' ||
       !translationConfirmed[currentTranslationKey] ||
       !String(translationWorkingText[currentTranslationKey] || '').trim()
