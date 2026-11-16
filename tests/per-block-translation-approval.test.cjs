@@ -92,3 +92,11 @@ test('completed audio jobs refresh the review manifest and insert the playable c
   assert.match(preview, /refreshCompletedAudio\(\)/);
   assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); render\(\); return true; \}/);
 });
+
+test('translation belongs to step 1 while Gemini reading text remains a separate step 2', () => {
+  assert.match(preview, /var step1 = makeStep\(box, 1, 'النص'\)/);
+  assert.match(preview, /step1\.body\.appendChild\(makeTranslationReview\(box, rec\.index, arabicBlock, local\)\)/);
+  assert.match(preview, /var step2 = makeStep\(box, 2, 'نص القراءة \(Gemini\)'\)/);
+  assert.match(preview, /لم يُجهّز نص القراءة الصوتية لهذا المقطع بعد/);
+  assert.match(preview, /return \[\{ n: 1, label: 'النص', s: s1\.s, t: s1\.t \}, \{ n: 2, label: 'نص القراءة', s: s2\.s, t: s2\.t \}/);
+});
