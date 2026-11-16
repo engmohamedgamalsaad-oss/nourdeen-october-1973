@@ -178,7 +178,12 @@
     if (!hasCompletedWithoutCard) return Promise.resolve(false);
     var review = window.KHStoryAudioReview;
     if (!review || typeof review.refreshAudio !== "function") return Promise.resolve(false);
-    return review.refreshAudio().then(function () { return true; }).catch(function () { return false; });
+    return review.refreshAudio().then(function () {
+      return Object.keys(jobs).some(function (index) {
+        var job = jobs[index], box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
+        return job && job.status === "completed" && box && box.querySelector(".kh-audio-card[data-clip-key]");
+      });
+    }).catch(function () { return false; });
   }
 
   function makeTranslationReview(box, index, arabicBlock, currentBlock) {
@@ -200,6 +205,18 @@
     [generate, save].forEach(function (b2) { b2.type = "button"; });
     function paintStatus() {
       var r = translationRecords[key] || {};
+      if (translationStates[key] === "processing") {
+        status.textContent = "Gemini يترجم هذا المقطع الآن…";
+        status.dataset.state = "processing";
+        save.disabled = !String(textarea.value || "").trim();
+        return;
+      }
+      if (translationStates[key] === "failed") {
+        status.textContent = "فشلت ترجمة هذا المقطع؛ يمكنك إعادة ترجمته وحده.";
+        status.dataset.state = "failed";
+        save.disabled = !String(textarea.value || "").trim();
+        return;
+      }
       status.textContent = r.status === "approved" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة الجديدة جاهزة ومعتمدة" + (r.auto_approved ? " تلقائيًا" : "") : "توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة» لتجهيز ترجمة جديدة في هذه المعاينة.") :
         r.status === "draft" ? "مسودة قديمة — اضغط «إعادة الترجمة»" :
         r.status === "needs_revision" ? "تحتاج إلى إعادة ترجمة" : "لم تُجهَّز الترجمة بعد — اضغط «الترجمة»";
@@ -231,18 +248,21 @@
     }
     generate.addEventListener("click", async function () {
       generate.disabled = true; translationStates[key] = "processing"; status.textContent = "Gemini يعيد ترجمة هذا المقطع وحده من النص العربي والسياق وملاحظاتك السابقة…"; status.dataset.state = "processing";
+      paint(box); updateTranslationPublishButton();
       try {
         var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
+        var generatedText = String(result.translation && result.translation.translation_text || "").trim();
+        if (!generatedText || !result.translation || result.translation.status !== "approved") throw new Error("لم تُحفظ ترجمة معتمدة وصالحة لهذا المقطع.");
         translationRecords[key] = result.translation;
         translationStates[key] = "approved";
-        textarea.value = result.translation.translation_text || "";
-        translationWorkingText[key] = String(textarea.value || "");
-        translationConfirmed[key] = !!String(textarea.value || "").trim();
-        renderTranslationOnPage(index, textarea.value);
-        paintStatus();
+        textarea.value = generatedText;
+        translationWorkingText[key] = generatedText;
+        translationConfirmed[key] = true;
+        renderTranslationOnPage(index, generatedText);
+        paintStatus(); paint(box); updateTranslationPublishButton();
         status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
-      } catch (e) { translationStates[key] = "failed"; status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; status.dataset.state = "failed"; }
+      } catch (e) { translationStates[key] = "failed"; status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; status.dataset.state = "failed"; paint(box); updateTranslationPublishButton(); }
       finally { generate.disabled = false; }
     });
     save.addEventListener("click", async function () {
@@ -359,7 +379,7 @@
     if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
     else if (job.status === 'pending') s3 = { s: 'wait', t: 'في الطابور' };
     else if (job.status === 'processing') s3 = { s: 'busy', t: 'بيتم الآن' };
-    else if (job.status === 'completed') s3 = { s: 'done', t: hasCard ? 'تم' : 'تم — حدّث الصفحة' };
+    else if (job.status === 'completed') s3 = hasCard ? { s: 'done', t: 'الصوت جاهز' } : { s: 'fail', t: 'اكتمل الطلب لكن ملف الصوت لم يظهر أو لم يُتحقق منه' };
     else if (job.status === 'failed') s3 = { s: 'fail', t: 'فشل' };
     else s3 = { s: 'todo', t: String(job.status || '—') };
     var s4;
