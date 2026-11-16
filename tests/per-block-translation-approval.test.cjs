@@ -11,6 +11,8 @@ const notebook = JSON.parse(fs.readFileSync(path.join(root, 'notebooks/Khaledoon
 const notebookCode = notebook.cells.filter(cell => cell.cell_type === 'code').map(cell => Array.isArray(cell.source) ? cell.source.join('') : String(cell.source || '')).join('\n');
 const publicAudio = fs.readFileSync(path.join(root, 'assets/shared/story-audio.js'), 'utf8');
 const storyReader = fs.readFileSync(path.join(root, 'rebuild/reader.js'), 'utf8');
+const worker = fs.readFileSync(path.join(root, 'supabase/functions/story-audio-worker/index.ts'), 'utf8');
+const audioEngine = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
 
 test('translation generation is per block and a successful Gemini result is default-approved', () => {
   assert.match(assets, /body\.action === "translation_generate"/);
@@ -38,7 +40,7 @@ test('English audio cannot be queued or published from an unapproved or stale tr
 test('bulk queue preserves each Arabic block speaker for the unified Colab worker', () => {
   assert.match(assets, /speaker: item\.block\.speaker/);
   assert.match(engine, /registry\.get\(job\.get\("speaker"\)\)/);
-  assert.match(engine, /provider\.generate\(selected_model/);
+  assert.match(engine, /provider\.generate\(model/);
 });
 
 test('public audio player accepts normal MP3 filenames and uses a fresh cache key', () => {
@@ -74,4 +76,61 @@ test('bulk language audio queue is all-or-nothing when any segment is unapproved
   assert.match(assets, /approved_segments: prepared\.length/);
   assert.match(assets, /translation\.speaker === block\.speaker/);
   assert.match(preview, /اكتمل فحص اللغة/);
+});
+
+const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
+
+test('bulk translation paints each segment immediately and preserves the result in its own editor', () => {
+  assert.match(preview, /function paintTranslationBlock\(index, state, message, record\)/);
+  assert.match(preview, /translationWorkingText\[lang\(\) \+ ':' \+ i\] = String\(result\.translation\.translation_text \|\| ''\)/);
+  assert.match(preview, /paintTranslationBlock\(i, 'approved'/);
+  assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
+  assert.match(preview, /translationStates\[currentTranslationKey\] === 'processing'/);
+  assert.match(preview, /translationStates\[key\] !== 'failed'/);
+  assert.match(preview, /translationStates\[lang\(\) \+ ':' \+ i\] = 'processing'/);
+});
+
+test('completed audio jobs refresh the review manifest and insert the playable clip without a manual page reload', () => {
+  assert.match(preview, /function refreshCompletedAudio\(\)/);
+  assert.match(preview, /review\.refreshAudio\(\)/);
+  assert.match(preview, /refreshCompletedAudio\(\)/);
+  assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); render\(\); return true; \}/);
+});
+
+test('translation belongs to step 1 while Gemini reading text remains a separate step 2', () => {
+  assert.match(preview, /var step1 = makeStep\(box, 1, 'النص'\)/);
+  assert.match(preview, /step1\.body\.appendChild\(makeTranslationReview\(box, rec\.index, arabicBlock, local\)\)/);
+  assert.match(preview, /var step2 = makeStep\(box, 2, 'نص القراءة \(Gemini\)'\)/);
+  assert.match(preview, /لم يُجهّز نص القراءة الصوتية لهذا المقطع بعد/);
+  assert.match(preview, /return \[\{ n: 1, label: 'النص', s: s1\.s, t: s1\.t \}, \{ n: 2, label: 'نص القراءة', s: s2\.s, t: s2\.t \}/);
+});
+
+test('admin preview switches the story body to the selected locale and displays saved/generated translation text', () => {
+  assert.match(storyReader, /if\(previewMode\)\{previewAudioLanguage=b\.dataset\.lang;window\.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;current=previewAudioLanguage;show\(\);/);
+  assert.match(storyReader, /var sourceBlock=b;/);
+  assert.match(preview, /function renderTranslationOnPage\(index, text\)/);
+  assert.match(preview, /renderTranslationOnPage\(index, record\.translation_text\)/);
+  assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
+  assert.match(preview, /site-language-change', function \(\) \{ loadTranslations\(\)\.then\(onUpdated\); \}/);
+  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261116-preview-localized-1/);
+});
+
+test('audio readiness waits for a manifest card and the worker verifies uploaded bytes before completing', () => {
+  assert.match(preview, /job\.status === 'completed'\) s3 = hasVerifiedCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'busy'/);
+  assert.match(audioEngine, /function audioEntryForBlock\(language, index\)/);
+  assert.match(audioEngine, /var audioEntry = audioEntryForBlock\(language, index\)/);
+  assert.match(audioEngine, /job\.status === 'completed'\) view = audioVerified/);
+  assert.match(audioEngine, /panel\.dataset\.audioSha256 = entry\.audio_sha256/);
+  assert.match(preview, /function verifiedAudioCard\(box, job\)/);
+  assert.match(preview, /actual === expected/);
+  assert.match(preview, /review\.refreshAudio\(\)/);
+  assert.match(worker, /storage\.from\(BUCKET\)\.download\(path\)/);
+  assert.match(worker, /uploadedDigest !== digest/);
+  assert.match(worker, /status: "completed"/);
+});
+
+test('failed audio generation and failed file verification can be retried for one block', () => {
+  assert.match(audioEngine, /job\.status === 'failed'\) view = \{ state: 'failed'[\s\S]*?canResend: true \}/);
+
+  assert.match(audioEngine, /action: 'enqueue', section: story\.section, slug: story\.slug, language: language, block_index: index/);
 });

@@ -12,7 +12,6 @@ from omnivoice_engine import (  # noqa: E402
     KARMA_SETTINGS,
     NARRATOR_SETTINGS,
     KarmaProvider,
-    LanguageModelRouter,
     NarratorProvider,
     ProviderError,
     ProviderRegistry,
@@ -102,41 +101,6 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(call["ref_text"], KARMA_TEXT)
         self.assertTrue(call["ref_audio"].endswith("karma_ref_24k.wav"))
 
-
-    def test_multilingual_languages_use_official_model_and_existing_languages_stay_unchanged(self):
-        from omnivoice_engine.config import MODEL_ID, MULTILINGUAL_MODEL_ID
-        router = LanguageModelRouter(lambda model_id: (model_id, FakeModel()))
-        self.assertEqual(router.model_id_for("ar"), MODEL_ID)
-        self.assertEqual(router.model_id_for("en"), MODEL_ID)
-        for language in ("fr", "it", "de"):
-            self.assertEqual(router.model_id_for(language), MULTILINGUAL_MODEL_ID)
-        with self.assertRaises(ValueError):
-            router.model_id_for("es")
-
-    def test_router_loads_only_the_selected_checkpoint_and_switches_by_language(self):
-        loaded = []
-        router = LanguageModelRouter(lambda model_id: loaded.append(model_id) or FakeModel())
-        fr_model = router.for_language("fr")
-        self.assertIs(fr_model, router.for_language("it"))
-        en_model = router.for_language("en")
-        self.assertIsNot(fr_model, en_model)
-        self.assertEqual(loaded, ["k2-fsa/OmniVoice", "masterofaudio2077/voicetut-egyptian-tashkeel"])
-
-    def test_multilingual_provider_passes_target_language_to_official_model(self):
-        model = FakeModel()
-        self.karma().generate(model, "Bonjour tout le monde", "fr")
-        self.assertEqual(model.calls[0]["language"], "fr")
-        self.assertEqual(model.calls[0]["ref_text"], KARMA_TEXT)
-        self.assertEqual((model.calls[0]["num_step"], model.calls[0]["guidance_scale"], model.calls[0]["speed"]), (32, 2.0, 0.90))
-
-    def test_multilingual_narrator_uses_its_own_reference_and_pilot_settings(self):
-        model = FakeModel()
-        self.narrator().generate(model, "Bonjour.", "fr")
-        call = model.calls[0]
-        self.assertEqual(call["language"], "fr")
-        self.assertEqual(call["ref_text"], "نص مرجع الراوي")
-        self.assertEqual((call["num_step"], call["guidance_scale"], call["speed"]), (32, 2.0, 1.05))
-
     def test_narrator_is_independent_provider(self):
         model = FakeModel()
         self.narrator().generate(model, "hello", "en")
@@ -165,7 +129,7 @@ class EngineTests(unittest.TestCase):
 
     def test_empty_text_and_bad_language_release_job(self):
         registry = ProviderRegistry({"karma": self.karma()})
-        for job in (make_job(text="  "), make_job(language="es")):
+        for job in (make_job(text="  "), make_job(language="fr")):
             client = FakeClient()
             with self.assertRaises(ProviderError):
                 process_job(job, FakeModel(), registry, client, encoder=lambda *a: b"x")
@@ -198,8 +162,8 @@ class EngineTests(unittest.TestCase):
         with open(os.path.join(refs, "karim.wav"), "wb") as handle:
             handle.write(b"x")
         with open(os.path.join(refs, "references.json"), "w", encoding="utf-8") as handle:
-            json.dump([{"speaker_id": "spk_04_male", "speaker_name": "Karim",
-                       "audio_path": "reference_speakers/karim.wav", "reference_text": "نص كريم"}], handle)
+            json.dump([{"name": "Aly", "audio": "aly.wav", "text": "x"},
+                       {"name": "Karim", "speaker_id": "spk_04_male", "audio": "reference_speakers/karim.wav", "text": "نص كريم"}], handle)
         provider = NarratorProvider.from_library(refs, "karim", workdir=self.tmp.name, converter=fake_convert)
         self.assertEqual(provider.ref_text, "نص كريم")
         with self.assertRaises(ProviderError):

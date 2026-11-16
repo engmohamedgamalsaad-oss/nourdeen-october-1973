@@ -58,7 +58,8 @@ test('unified reader refuses to silently fall back to a legacy package', () => {
 
 test('story text is inserted as text and source links are isolated', () => {
   assert.match(js, /p\.textContent=sourceBlock\.text/);
-  assert.match(js, /previewMode&&current!=='ar'/);
+  assert.match(js, /var sourceBlock=b;/, 'the selected page language must render its own localized story block');
+  assert.doesNotMatch(js, /previewMode&&current!=='ar'/, 'preview must not force Arabic source text into every selected locale');
   assert.match(js, /a\.rel='noopener noreferrer'/);
   assert.match(js, /img\.alt=d\.alt/);
 });
@@ -70,5 +71,5 @@ test('static builder validates story packages and will not overwrite existing st
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /story\.json/);
   assert.match(builder, /reader\.js\?v=20261102-canonical-preview-reader-3/);
-  assert.match(html, /reader\.js\?v=20261115-preview-ar-source-1/);
+  assert.match(html, /reader\.js\?v=20261116-preview-localized-1/);
 });
