@@ -727,7 +727,8 @@ function renderGateBanner(banner) {
 }
 function canApprove() { return gate().ok; }
 window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate, languageGate: languageGate,
-  prepareAllSpeechTexts: function (onProgress) { return prepareAllSpeechTexts(onProgress); } };
+  prepareAllSpeechTexts: function (onProgress) { return prepareAllSpeechTexts(onProgress); },
+  refreshAudio: async function () { await loadManifests(); render(); return true; } };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
 async function play(entry, button, forceRestart) {
   if (!entry || !entry.src) return;
