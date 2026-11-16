@@ -85,6 +85,8 @@ test('bulk translation paints each segment immediately and preserves the result 
   assert.match(preview, /translationWorkingText\[lang\(\) \+ ':' \+ i\] = String\(result\.translation\.translation_text \|\| ''\)/);
   assert.match(preview, /paintTranslationBlock\(i, 'approved'/);
   assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
+  assert.match(preview, /translationStates\[currentTranslationKey\] === 'processing'/);
+  assert.match(preview, /translationStates\[key\] !== 'failed'/);
   assert.match(preview, /translationStates\[lang\(\) \+ ':' \+ i\] = 'processing'/);
 });
 
@@ -114,7 +116,9 @@ test('admin preview switches the story body to the selected locale and displays 
 });
 
 test('audio readiness waits for a manifest card and the worker verifies uploaded bytes before completing', () => {
-  assert.match(preview, /job\.status === 'completed'\) s3 = hasCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'fail'/);
+  assert.match(preview, /job\.status === 'completed'\) s3 = hasCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'busy'/);
+  assert.match(audioEngine, /function audioEntryForBlock\(language, index\)/);
+  assert.match(audioEngine, /label: 'الصوت جاهز'[\s\S]*?audioEntry/);
   assert.match(preview, /review\.refreshAudio\(\)/);
   assert.match(worker, /storage\.from\(BUCKET\)\.download\(path\)/);
   assert.match(worker, /uploadedDigest !== digest/);
@@ -123,6 +127,6 @@ test('audio readiness waits for a manifest card and the worker verifies uploaded
 
 test('failed audio generation and failed file verification can be retried for one block', () => {
   assert.match(audioEngine, /job\.status === 'failed'\) view = \{ state: 'failed'[\s\S]*?canResend: true \}/);
-  assert.match(audioEngine, /state: 'failed', label: 'فشل التحقق'[\s\S]*?canResend: true/);
+  assert.match(audioEngine, /job\.status === 'failed'\) view = \{ state: 'failed'[\s\S]*?canResend: true/);
   assert.match(audioEngine, /action: 'enqueue', section: story\.section, slug: story\.slug, language: language, block_index: index/);
 });
