@@ -169,19 +169,26 @@
     if (box) paint(box);
     updateTranslationPublishButton();
   }
+  function verifiedAudioCard(box, job) {
+    var card = box && box.querySelector(".kh-audio-card[data-clip-key]");
+    if (!card || !String(card.dataset.audioSha256 || "").trim()) return false;
+    var expected = String(job && job.result && job.result.sha256 || "").toLowerCase();
+    var actual = String(card.dataset.audioSha256 || "").toLowerCase();
+    return !expected || actual === expected;
+  }
   function refreshCompletedAudio() {
-    var hasCompletedWithoutCard = Object.keys(jobs).some(function (index) {
+    var hasCompletedWithoutVerifiedCard = Object.keys(jobs).some(function (index) {
       var job = jobs[index];
       var box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
-      return job && job.status === "completed" && !(box && box.querySelector(".kh-audio-card[data-clip-key]"));
+      return job && job.status === "completed" && !verifiedAudioCard(box, job);
     });
-    if (!hasCompletedWithoutCard) return Promise.resolve(false);
+    if (!hasCompletedWithoutVerifiedCard) return Promise.resolve(false);
     var review = window.KHStoryAudioReview;
     if (!review || typeof review.refreshAudio !== "function") return Promise.resolve(false);
     return review.refreshAudio().then(function () {
       return Object.keys(jobs).some(function (index) {
         var job = jobs[index], box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
-        return job && job.status === "completed" && box && box.querySelector(".kh-audio-card[data-clip-key]");
+        return job && job.status === "completed" && verifiedAudioCard(box, job);
       });
     }).catch(function () { return false; });
   }
@@ -350,6 +357,7 @@
     var speech = box.querySelector('.kh-speech-text-controls');
     var cards = box.querySelectorAll('.kh-audio-card[data-review]');
     var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card[data-clip-key]').length > 0;
+    var hasVerifiedCard = verifiedAudioCard(box, job);
     var s1, s2;
     if (L !== 'ar') {
       var translationKey = L + ':' + index;
@@ -379,7 +387,7 @@
     if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
     else if (job.status === 'pending') s3 = { s: 'wait', t: 'في الطابور' };
     else if (job.status === 'processing') s3 = { s: 'busy', t: 'بيتم الآن' };
-    else if (job.status === 'completed') s3 = hasCard ? { s: 'done', t: 'الصوت جاهز' } : { s: 'busy', t: 'جارٍ التحقق من ملف الصوت وظهوره في المعاينة' };
+    else if (job.status === 'completed') s3 = hasVerifiedCard ? { s: 'done', t: 'الصوت جاهز' } : { s: 'busy', t: 'جارٍ التحقق من ملف الصوت وبصمته وظهوره في المعاينة' };
     else if (job.status === 'failed') s3 = { s: 'fail', t: 'فشل' };
     else s3 = { s: 'todo', t: String(job.status || '—') };
     var s4;
@@ -455,7 +463,7 @@
     fillJobData(box);
     var reload = box.querySelector('.kh-gen-reload');
     var job = jobOf(Number(box.dataset.index));
-    if (reload) reload.hidden = !(job && job.status === 'completed' && !box.querySelector('.kh-audio-card'));
+    if (reload) reload.hidden = !(job && job.status === 'completed' && !verifiedAudioCard(box, job));
   }
   function updateTranslationPublishButton() {
     var button = $('kh-translation-publish-text');
