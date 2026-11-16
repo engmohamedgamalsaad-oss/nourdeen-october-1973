@@ -76,9 +76,9 @@ test('generateNextQueuedBlock is defined, not only called', () => {
 
 test('public player refuses partial, duplicate, or wrong-speaker story manifests', () => {
   const source = fs.readFileSync(path.join(root, 'assets/shared/story-audio.js'), 'utf8');
-  assert.match(source, /function completePublicManifest\\(manifest\\)/);
-  assert.match(source, /manifest\\.segments\\.length !== required\\.length/);
-  assert.match(source, /seen\\[key\\]/);
-  assert.match(source, /segment\\.speaker !== expected\\[key\\]/);
-  assert.match(source, /!completePublicManifest\\(manifest\\)/);
+  assert.match(source, /function completePublicManifest\(manifest\)/);
+  assert.match(source, /manifest\.segments\.length !== required\.length/);
+  assert.match(source, /seen\[key\]/);
+  assert.match(source, /segment\.speaker !== expected\[key\]/);
+  assert.match(source, /!completePublicManifest\(manifest\)/);
 });
