@@ -116,7 +116,7 @@ test('admin preview switches the story body to the selected locale and displays 
 });
 
 test('audio readiness waits for a manifest card and the worker verifies uploaded bytes before completing', () => {
-  assert.match(preview, /job\.status === 'completed'\) s3 = hasCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'busy'/);
+  assert.match(preview, /job\.status === 'completed'\) s3 = hasVerifiedCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'busy'/);
   assert.match(audioEngine, /function audioEntryForBlock\(language, index\)/);
   assert.match(audioEngine, /var audioEntry = audioEntryForBlock\(language, index\)/);
   assert.match(audioEngine, /job\.status === 'completed'\) view = audioVerified/);
