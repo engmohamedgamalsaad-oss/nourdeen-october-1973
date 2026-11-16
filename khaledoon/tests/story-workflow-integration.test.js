@@ -76,7 +76,7 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js')"), 'the preview must load the shared audio review core');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js')"), 'the preview must mount the audio generation and listening controls');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261116-live-per-block-verified-1')"), 'the preview must mount the current per-block translation and audio status flow');
-  assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261115-text-only-pr-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
+  assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261116-live-per-block-verified-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
   var readerHtml = fs.readFileSync('rebuild/reader.html', 'utf8');
   assert.ok(readerHtml.includes('reject-counter-1'), 'reader must load the Arabic translation provenance validator');
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
