@@ -300,26 +300,31 @@
     var speech = box.querySelector('.kh-speech-text-controls');
     var cards = box.querySelectorAll('.kh-audio-card[data-review]');
     var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card[data-clip-key]').length > 0;
-    var s2;
+    var s1, s2;
     if (L !== 'ar') {
       var translationKey = L + ':' + index;
       var translation = translationRecords[translationKey];
       var translationState = translationStates[translationKey];
-      s2 = translationState === 'processing'
+      s1 = translationState === 'processing'
         ? { s: 'busy', t: 'Gemini يترجم الآن' }
         : translationState === 'failed'
           ? { s: 'fail', t: 'فشلت الترجمة' }
           : translation && translation.status === 'approved' && translationConfirmed[translationKey] && String(translationWorkingText[translationKey] || '').trim()
-        ? { s: 'done', t: 'النص جاهز' }
-        : translation && translation.status === 'approved'
-          ? { s: 'warn', t: 'قديمة — أعد الترجمة' }
-          : translation && translation.status === 'draft'
-          ? { s: 'warn', t: 'قديمة — أعد الترجمة' }
-          : { s: 'todo', t: 'لم تُجهَّز' };
+            ? { s: 'done', t: 'النص جاهز' }
+            : translation && translation.status === 'approved'
+              ? { s: 'warn', t: 'ترجمة محفوظة تحتاج تحققًا' }
+              : translation && translation.status === 'draft'
+                ? { s: 'warn', t: 'مسودة — أعد الترجمة' }
+                : { s: 'todo', t: 'لم يُجهَّز' };
     } else {
-      var st = speech ? speech.dataset.status : '';
-      s2 = st === 'approved' ? { s: 'done', t: 'معتمد' } : st === 'suggested' ? { s: 'warn', t: 'بانتظار اعتمادك' } : { s: 'todo', t: 'لم يُجهّز' };
+      s1 = { s: 'done', t: 'جاهز' };
     }
+    var readingStatus = speech ? speech.dataset.status : '';
+    s2 = readingStatus === 'approved'
+      ? { s: 'done', t: 'نص القراءة جاهز' }
+      : readingStatus === 'suggested'
+        ? { s: 'warn', t: 'بانتظار المراجعة' }
+        : { s: 'todo', t: 'لم يُجهَّز بعد' };
     var s3;
     if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
     else if (job.status === 'pending') s3 = { s: 'wait', t: 'في الطابور' };
@@ -333,7 +338,7 @@
       var vals = Array.prototype.map.call(cards, function (c) { return c.dataset.review; });
       s4 = vals.indexOf('rejected') >= 0 ? { s: 'fail', t: 'مرفوض' } : vals.every(function (v) { return v === 'accepted'; }) ? { s: 'done', t: 'معتمد' } : { s: 'warn', t: 'استمع واعتمد' };
     }
-    return [{ n: 1, label: 'النص', s: 'done', t: 'جاهز' }, { n: 2, label: 'نص القراءة', s: s2.s, t: s2.t }, { n: 3, label: 'التوليد', s: s3.s, t: s3.t }, { n: 4, label: 'المعاينة', s: s4.s, t: s4.t }];
+    return [{ n: 1, label: 'النص', s: s1.s, t: s1.t }, { n: 2, label: 'نص القراءة', s: s2.s, t: s2.t }, { n: 3, label: 'التوليد', s: s3.s, t: s3.t }, { n: 4, label: 'المعاينة', s: s4.s, t: s4.t }];
   }
   function genNote(box) {
     var job = jobOf(Number(box.dataset.index));
@@ -638,14 +643,17 @@
       speech.forEach(function (sp) { var ta = sp.querySelector('textarea'); if (!followText && ta && String(ta.value || '').trim()) followText = String(ta.value).trim(); });
 
       /* ① النص */
-      var step1 = makeStep(box, 1, L === 'ar' ? 'النص' : 'مصدر الترجمة');
+      var step1 = makeStep(box, 1, 'النص');
       var original = L === 'ar' && local && typeof local.text === 'string' ? local.text : '';
       step1.body.appendChild(kv('المتحدث', SPEAKERS[speaker] || '—'));
       if (L === 'ar') {
         step1.body.appendChild(kv('عدد الحروف', String(original.length)));
         step1.body.appendChild(el('p', 'kh-orig-text', original || 'لا يوجد نص لهذا المقطع.'));
       } else {
-        step1.body.appendChild(el('p', 'kh-muted', 'النص العربي المعتمد معروض في خطوة الترجمة التالية؛ مساحة الترجمة تبدأ فارغة.'));
+        step1.body.appendChild(el('p', 'kh-muted', 'النص العربي المعتمد للمقارنة:'));
+        var arabicBlock = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks && st.i18n.ar.blocks[rec.index];
+        step1.body.appendChild(el('p', 'kh-orig-text', arabicBlock && arabicBlock.text || 'لا يوجد نص عربي لهذا المقطع.'));
+        step1.body.appendChild(makeTranslationReview(box, rec.index, arabicBlock, local));
       }
       body.appendChild(step1.d);
 
@@ -656,9 +664,8 @@
       } else if (L === 'ar') {
         step2.body.appendChild(el('p', 'kh-muted', 'هذا المقطع لا يحتاج نص قراءة منفصلًا.'));
       }
-      if (L !== 'ar') {
-        var arabicBlock = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks && st.i18n.ar.blocks[rec.index];
-        step2.body.appendChild(makeTranslationReview(box, rec.index, arabicBlock, local));
+      if (L !== 'ar' && !speech.length) {
+        step2.body.appendChild(el('p', 'kh-muted', 'لم يُجهّز نص القراءة الصوتية لهذا المقطع بعد. الترجمة الظاهرة في الخطوة الأولى هي نص الحكاية، وتجهيز نص القراءة مرحلة منفصلة.'));
       }
       body.appendChild(step2.d);
 
