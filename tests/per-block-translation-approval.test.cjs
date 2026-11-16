@@ -28,11 +28,13 @@ test('optional manual translation edit stays tied to the current Arabic source h
   assert.match(preview, /translation_save/);
 });
 
-test('English audio cannot be queued or published from an unapproved or stale translation', () => {
+test('translated audio (en/fr/it/de) cannot be queued or published from an unapproved or stale translation', () => {
   assert.match(assets, /translation\.status !== "approved"/);
   assert.match(assets, /translation\.source_arabic_hash !== source\.sourceTextHash/);
   assert.match(assets, /enqueue_approved_language/);
-  assert.match(assets, /لا يمكن نشر الصوت الإنجليزي/);
+  // The publish message is language-neutral since fr/it/de were added to publish_audio.
+  assert.match(assets, /لا يمكن نشر الصوت: ترجمة المقطع/);
+  assert.match(assets, /if \(lang !== "ar"\)/);
 });
 
 test('bulk queue preserves each Arabic block speaker for the unified Colab worker', () => {
