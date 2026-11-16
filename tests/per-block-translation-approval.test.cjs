@@ -75,3 +75,28 @@ test('bulk language audio queue is all-or-nothing when any segment is unapproved
   assert.match(assets, /translation\.speaker === block\.speaker/);
   assert.match(preview, /اكتمل فحص اللغة/);
 });
+
+const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
+
+test('bulk translation paints each segment immediately and preserves the result in its own editor', () => {
+  assert.match(preview, /function paintTranslationBlock\(index, state, message, record\)/);
+  assert.match(preview, /translationWorkingText\[lang\(\) \+ ':' \+ i\] = String\(result\.translation\.translation_text \|\| ''\)/);
+  assert.match(preview, /paintTranslationBlock\(i, 'approved'/);
+  assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
+  assert.match(preview, /translationStates\[lang\(\) \+ ':' \+ i\] = 'processing'/);
+});
+
+test('completed audio jobs refresh the review manifest and insert the playable clip without a manual page reload', () => {
+  assert.match(preview, /function refreshCompletedAudio\(\)/);
+  assert.match(preview, /review\.refreshAudio\(\)/);
+  assert.match(preview, /refreshCompletedAudio\(\)/);
+  assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); render\(\); return true; \}/);
+});
+
+test('translation belongs to step 1 while Gemini reading text remains a separate step 2', () => {
+  assert.match(preview, /var step1 = makeStep\(box, 1, 'النص'\)/);
+  assert.match(preview, /step1\.body\.appendChild\(makeTranslationReview\(box, rec\.index, arabicBlock, local\)\)/);
+  assert.match(preview, /var step2 = makeStep\(box, 2, 'نص القراءة \(Gemini\)'\)/);
+  assert.match(preview, /لم يُجهّز نص القراءة الصوتية لهذا المقطع بعد/);
+  assert.match(preview, /return \[\{ n: 1, label: 'النص', s: s1\.s, t: s1\.t \}, \{ n: 2, label: 'نص القراءة', s: s2\.s, t: s2\.t \}/);
+});

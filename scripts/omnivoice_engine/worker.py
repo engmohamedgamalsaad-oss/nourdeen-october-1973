@@ -25,9 +25,7 @@ def process_job(job: dict, model, registry: ProviderRegistry, client, encoder: C
     try:
         provider = registry.get(job.get("speaker"))
         payload = job.get("payload") or {}
-        language = job.get("language")
-        selected_model = model.for_language(language) if hasattr(model, "for_language") else model
-        audio, sample_rate = provider.generate(selected_model, str(payload.get("text") or ""), language)
+        audio, sample_rate = provider.generate(model, str(payload.get("text") or ""), job.get("language"))
         mp3 = encoder(audio, sample_rate, _stem(job))
         return client.complete(job, mp3)
     except Exception as error:  # noqa: BLE001 - every failure must release the lease

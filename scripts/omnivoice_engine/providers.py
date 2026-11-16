@@ -15,9 +15,6 @@ from .audio import as_numpy_audio, convert_reference
 from .config import (
     KARMA_REF_TEXT_SHA256,
     KARMA_SETTINGS,
-    MULTILINGUAL_KARMA_SETTINGS,
-    MULTILINGUAL_LANGUAGES,
-    MULTILINGUAL_NARRATOR_SETTINGS,
     LANGUAGE_CODES,
     NARRATOR_SETTINGS,
     VoiceSettings,
@@ -56,17 +53,14 @@ class ReferenceVoiceProvider:
         text = (text or "").strip()
         if not text:
             raise ProviderError("Queue job has empty speech text.")
-        settings = self.settings
-        if language in MULTILINGUAL_LANGUAGES:
-            settings = MULTILINGUAL_KARMA_SETTINGS if self.speaker == "karma" else MULTILINGUAL_NARRATOR_SETTINGS
         generated = model.generate(
             text=text,
             language=code,
             ref_audio=self.ref_wav,
             ref_text=self.ref_text,
-            num_step=settings.num_step,
-            guidance_scale=settings.guidance_scale,
-            speed=settings.speed,
+            num_step=self.settings.num_step,
+            guidance_scale=self.settings.guidance_scale,
+            speed=self.settings.speed,
         )[0]
         return as_numpy_audio(generated)
 
@@ -81,9 +75,9 @@ class KarmaProvider(ReferenceVoiceProvider):
         super().__init__(ref_audio_path, ref_text, settings, **kwargs)
 
 
-_NAME_KEYS = ("name", "id", "speaker", "voice", "label", "title", "speaker_id", "speaker_name")
+_NAME_KEYS = ("name", "id", "speaker", "voice", "label", "title")
 _AUDIO_KEYS = ("audio", "audio_path", "ref_audio", "path", "file", "filename", "audio_file", "wav")
-_TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text", "reference_text")
+_TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text")
 
 
 def load_library_reference(refs_dir: str, name: str, alt_names=()):
