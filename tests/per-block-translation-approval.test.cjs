@@ -100,3 +100,12 @@ test('translation belongs to step 1 while Gemini reading text remains a separate
   assert.match(preview, /لم يُجهّز نص القراءة الصوتية لهذا المقطع بعد/);
   assert.match(preview, /return \[\{ n: 1, label: 'النص', s: s1\.s, t: s1\.t \}, \{ n: 2, label: 'نص القراءة', s: s2\.s, t: s2\.t \}/);
 });
+
+test('admin preview switches the story body to the selected locale and displays saved/generated translation text', () => {
+  assert.match(storyReader, /if\(previewMode\)\{previewAudioLanguage=b\.dataset\.lang;window\.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;current=previewAudioLanguage;show\(\);/);
+  assert.match(storyReader, /var sourceBlock=b;/);
+  assert.match(preview, /function renderTranslationOnPage\(index, text\)/);
+  assert.match(preview, /renderTranslationOnPage\(index, record\.translation_text\)/);
+  assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
+  assert.match(hHtml = fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261116-preview-localized-1/);
+});
