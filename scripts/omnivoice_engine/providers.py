@@ -86,40 +86,80 @@ _AUDIO_KEYS = ("audio", "audio_path", "ref_audio", "path", "file", "filename", "
 _TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text", "reference_text")
 
 
-def load_library_reference(refs_dir: str, name: str, alt_names=()):
-    """Find a built-in library voice (e.g. 'kareem') in ``references.json``.
+def _walk_dicts(node, parent_key=None):
+    """Yield nested dictionaries together with the key used by their parent."""
+    if isinstance(node, dict):
+        yield node, parent_key
+        for key, value in node.items():
+            if isinstance(value, (dict, list)):
+                yield from _walk_dicts(value, str(key))
+    elif isinstance(node, list):
+        for value in node:
+            if isinstance(value, (dict, list)):
+                yield from _walk_dicts(value, parent_key)
 
-    ``refs_dir`` is the ``reference_speakers`` folder of the VoiceTut-TTS snapshot.
-    Returns (audio_path, ref_text). Raises ProviderError listing what exists if the
-    voice or its audio/text fields cannot be resolved.
-    """
+
+def _flatten_fields(node):
+    """Return scalar (key, value) pairs from a nested metadata record."""
+    fields = []
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if isinstance(value, (dict, list)):
+                fields.extend(_flatten_fields(value))
+            elif isinstance(value, (str, int, float)):
+                fields.append((str(key), str(value)))
+    elif isinstance(node, list):
+        for value in node:
+            fields.extend(_flatten_fields(value))
+    return fields
+
+
+def load_library_reference(refs_dir: str, name: str, alt_names=(), speaker_id=None):
+    """Find a built-in VoiceTut voice in references.json, including nested schemas."""
     index_path = os.path.join(refs_dir, "references.json")
     if not os.path.isfile(index_path):
         raise ProviderError(f"references.json not found in {refs_dir!r}")
     with open(index_path, encoding="utf-8") as handle:
         data = json.load(handle)
-    items = data if isinstance(data, list) else list(data.values()) if isinstance(data, dict) else []
-    wanted_all = [n.strip().lower() for n in (name, *alt_names) if n]
 
-    def labels(item):
-        return [str(item[k]).strip().lower() for k in _NAME_KEYS if isinstance(item, dict) and item.get(k)]
+    wanted = {str(n).strip().lower() for n in (name, *alt_names, speaker_id) if n}
+    name_keys = {key.lower() for key in _NAME_KEYS}
+    audio_keys = {key.lower() for key in _AUDIO_KEYS}
+    text_keys = {key.lower() for key in _TEXT_KEYS}
 
-    found = next((i for i in items if isinstance(i, dict) and any(w in labels(i) for w in wanted_all)), None)
-    if found is None and isinstance(data, dict) and isinstance(data.get(name), dict):
-        found = data[name]
-    if found is None:
-        known = [labels(i)[:1] for i in items if isinstance(i, dict)]
-        raise ProviderError(f"Library voice {name!r} not found. Available: {known}")
-    audio = next((found[k] for k in _AUDIO_KEYS if isinstance(found.get(k), str) and found[k].strip()), None)
-    text = next((found[k] for k in _TEXT_KEYS if isinstance(found.get(k), str) and found[k].strip()), None)
-    if not text:
-        raise ProviderError(f"Library voice {name!r} has no reference text field: {sorted(found)}")
-    audio = audio or f"{wanted_all[-1]}.wav"
-    candidates = [audio, os.path.join(refs_dir, audio), os.path.join(os.path.dirname(refs_dir), audio),
-                  os.path.join(refs_dir, os.path.basename(audio))]
-    path = next((c for c in candidates if os.path.isfile(c)), None)
+    matches = []
+    for record, parent_key in _walk_dicts(data):
+        fields = _flatten_fields(record)
+        identity = (parent_key or "").strip().lower() in wanted
+        identity = identity or any(
+            key.lower() in name_keys and value.strip().lower() in wanted
+            for key, value in fields
+        )
+        if not identity:
+            continue
+        audio = next((value for key, value in fields if key.lower() in audio_keys and value.strip()), None)
+        text = next((value for key, value in fields if key.lower() in text_keys and value.strip()), None)
+        if audio and text:
+            matches.append((len(fields), audio, text))
+
+    if not matches:
+        top_keys = sorted(data.keys()) if isinstance(data, dict) else []
+        sample_keys = [sorted(item.keys()) for item, _ in list(_walk_dicts(data))[:5]]
+        raise ProviderError(
+            f"VoiceTut voice {name!r} / {speaker_id!r} not resolved in references.json. "
+            f"Top-level keys: {top_keys}; sample record keys: {sample_keys}"
+        )
+
+    _, audio, text = min(matches, key=lambda item: item[0])
+    candidates = [
+        audio,
+        os.path.join(refs_dir, audio),
+        os.path.join(os.path.dirname(refs_dir), audio),
+        os.path.join(refs_dir, os.path.basename(audio)),
+    ]
+    path = next((candidate for candidate in candidates if os.path.isfile(candidate)), None)
     if path is None:
-        raise ProviderError(f"Library voice {name!r}: audio file {audio!r} not found under {refs_dir!r}")
+        raise ProviderError(f"VoiceTut voice {name!r}: audio file {audio!r} not found under {refs_dir!r}")
     return path, text
 
 
@@ -132,7 +172,7 @@ class NarratorProvider(ReferenceVoiceProvider):
     @classmethod
     def from_library(cls, refs_dir, name="karim", speaker_id="spk_04_male", **kwargs):
         """Narrator = library voice Karim (spk_04_male, reference_speakers/karim.wav); no Drive or secret."""
-        path, text = load_library_reference(refs_dir, speaker_id, (name,))
+        path, text = load_library_reference(refs_dir, name, (speaker_id,), speaker_id=speaker_id)
         return cls(path, text, **kwargs)
 
 
