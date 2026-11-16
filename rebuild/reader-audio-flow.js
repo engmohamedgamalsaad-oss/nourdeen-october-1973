@@ -238,6 +238,7 @@
         textarea.value = result.translation.translation_text || "";
         translationWorkingText[key] = String(textarea.value || "");
         translationConfirmed[key] = !!String(textarea.value || "").trim();
+        renderTranslationOnPage(index, textarea.value);
         paintStatus();
         status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
@@ -773,6 +774,7 @@
     });
   }
   document.addEventListener('kh-audio-review-updated', onUpdated);
+  document.addEventListener('site-language-change', function () { loadTranslations().then(onUpdated); });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { clearTimeout(timer); poll(); } });
   if ($('kh-audio-review-gate')) {
     loadTranslations().then(function () { onUpdated(); });
