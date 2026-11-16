@@ -197,19 +197,35 @@ class EngineTests(unittest.TestCase):
         os.makedirs(refs)
         with open(os.path.join(refs, "karim.wav"), "wb") as handle:
             handle.write(b"x")
+        karim_text = "بص، يعني انا شايف انك متستعجلش في القرار، خد وقتك و فكر فيه بهدوء الأول."
         with open(os.path.join(refs, "references.json"), "w", encoding="utf-8") as handle:
-            json.dump({"speakers": [
-                {"metadata": {"speaker_id": "spk_04_male", "speaker_name": "Karim"},
-                 "assets": {"audio_path": "reference_speakers/karim.wav"},
-                 "transcription": {"reference_text": "نص كريم"}},
-                {"metadata": {"speaker_id": "spk_05_female", "speaker_name": "Other"},
-                 "assets": {"audio_path": "other.wav"},
-                 "transcription": {"reference_text": "نص آخر"}}
-            ]}, handle)
-        provider = NarratorProvider.from_library(refs, "karim", workdir=self.tmp.name, converter=fake_convert)
-        self.assertEqual(provider.ref_text, "نص كريم")
+            json.dump([
+                {"speaker_id": "spk_01_male", "speaker_name": "Ahmed",
+                 "audio_path": "reference_speakers/ahmed.wav",
+                 "reference_text": "يعني كل ما تيجي تفكر ان الدنيا بايظة و ان الحياة مش قد كدة."},
+                {"speaker_id": "spk_04_male", "speaker_name": "Karim",
+                 "audio_path": "reference_speakers/karim.wav",
+                 "reference_text": karim_text}
+            ], handle)
+        resolved = []
+        def capture_convert(src, dst):
+            resolved.append(src)
+            return dst
+        provider = NarratorProvider.from_library(
+            refs, "Karim", workdir=self.tmp.name, converter=capture_convert
+        )
+        self.assertEqual(provider.ref_text, karim_text)
+        self.assertEqual(resolved, [os.path.join(os.path.dirname(refs), "reference_speakers", "karim.wav")])
         with self.assertRaises(ProviderError):
-            NarratorProvider.from_library(refs, "nobody", speaker_id="spk_99_x", workdir=self.tmp.name, converter=fake_convert)
+            NarratorProvider.from_library(
+                refs, "Karim", speaker_id="spk_05_male",
+                workdir=self.tmp.name, converter=fake_convert
+            )
+        with self.assertRaises(ProviderError):
+            NarratorProvider.from_library(
+                refs, "nobody", speaker_id="spk_99_x",
+                workdir=self.tmp.name, converter=fake_convert
+            )
 
     def test_client_requires_credentials(self):
         with self.assertRaises(ValueError):
