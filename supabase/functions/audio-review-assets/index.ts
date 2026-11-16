@@ -467,7 +467,7 @@ Deno.serve(async (req: Request) => {
       if (!shouldRetry) break;
       if (upstream?.body) await upstream.body.cancel().catch(() => {});
       const retryAfter = upstream?.headers.get("retry-after");
-      const retryAfterMs = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter)
+      const retryAfterMs = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter)
         ? Math.min(5000, Number(retryAfter) * 1000) : 0;
       const backoffMs = Math.min(3000, 700 * (2 ** attempt));
       await new Promise((resolve) => setTimeout(resolve, Math.max(backoffMs, retryAfterMs)));
