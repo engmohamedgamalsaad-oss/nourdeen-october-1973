@@ -134,3 +134,13 @@ test('failed audio generation and failed file verification can be retried for on
 
   assert.match(audioEngine, /action: 'enqueue', section: story\.section, slug: story\.slug, language: language, block_index: index/);
 });
+
+
+test('French translation preview shows the Arabic reference only once and retries temporary Gemini failures', () => {
+  assert.match(preview, /النص العربي المرجعي:/);
+  assert.equal(preview.includes('source.appendChild(el("p", "", arabicBlock'), false);
+  assert.ok(preview.includes('wrap.append(textarea, buttons, status)'));
+  assert.ok(assets.includes('const retryableStatuses = new Set([429, 500, 502, 503, 504])'));
+  assert.match(assets, /attempt < 3/);
+  assert.match(assets, /بعد 3 محاولات/);
+});
