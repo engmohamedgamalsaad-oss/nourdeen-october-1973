@@ -75,3 +75,20 @@ test('bulk language audio queue is all-or-nothing when any segment is unapproved
   assert.match(assets, /translation\.speaker === block\.speaker/);
   assert.match(preview, /اكتمل فحص اللغة/);
 });
+
+const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
+
+test('bulk translation paints each segment immediately and preserves the result in its own editor', () => {
+  assert.match(preview, /function paintTranslationBlock\(index, state, message, record\)/);
+  assert.match(preview, /translationWorkingText\[lang\(\) \+ ':' \+ i\] = String\(result\.translation\.translation_text \|\| ''\)/);
+  assert.match(preview, /paintTranslationBlock\(i, 'approved'/);
+  assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
+  assert.match(preview, /translationStates\[lang\(\) \+ ':' \+ i\] = 'processing'/);
+});
+
+test('completed audio jobs refresh the review manifest and insert the playable clip without a manual page reload', () => {
+  assert.match(preview, /function refreshCompletedAudio\(\)/);
+  assert.match(preview, /review\.refreshAudio\(\)/);
+  assert.match(preview, /refreshCompletedAudio\(\)/);
+  assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); render\(\); return true; \}/);
+});
