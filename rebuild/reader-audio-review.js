@@ -1060,15 +1060,19 @@ function engineView(language, index) {
   var job = jobsByBlock[jobKey(language, index)];
   var clip = clipForBlock(language, index);
   var audioEntry = audioEntryForBlock(language, index);
+  var expectedHash = String(job && job.result && job.result.sha256 || '').toLowerCase();
+  var audioVerified = !!audioEntry && (!expectedHash || String(audioEntry.audio_sha256 || '').toLowerCase() === expectedHash);
   var view = { state: 'none', label: 'لم يُرسل بعد', detail: '', canResend: false };
   if (clip && clip.status === 'accepted') return { state: 'accepted', label: 'معتمد ✓', detail: 'تم اعتماد صوت هذا المقطع.', canResend: false };
   if (job) {
     if (job.status === 'pending') view = { state: 'pending', label: 'في الطابور', detail: job.attempts > 0 ? 'أُعيد للطابور (محاولة ' + job.attempts + ') — ' + (job.last_error || 'بانتظار Colab') : 'بانتظار اتصال Colab…', canResend: false };
     else if (job.status === 'processing') view = { state: 'processing', label: 'قيد التوليد الآن', detail: 'Colab يعمل على هذا المقطع.', canResend: false };
-    else if (job.status === 'completed') view = audioEntry
+    else if (job.status === 'completed') view = audioVerified
       ? { state: 'completed', label: 'الصوت جاهز', detail: clip && clip.status === 'rejected' ? 'رُفض هذا الملف؛ يمكنك إعادة توليد هذا المقطع وحده.' : 'تم رفع الملف والتحقق من بصمته وظهوره في manifest؛ استمع إليه في الخطوة ٤.', canResend: !!(clip && clip.status === 'rejected') }
-      : { state: 'verifying', label: 'جارٍ التحقق', detail: 'اكتمل طلب التوليد؛ جارٍ التأكد من ظهور ملف MP3 في manifest.', canResend: false };
+      : { state: 'verifying', label: 'جارٍ التحقق', detail: 'اكتمل طلب التوليد؛ جارٍ التأكد من ظهور ملف MP3 المطابق لبصمة الطلب في manifest.', canResend: false };
     else if (job.status === 'failed') view = { state: 'failed', label: 'فشل', detail: String(job.last_error || 'فشل توليد المقطع.') + ' — يمكنك إعادة إرسال هذا المقطع وحده.', canResend: true };
+  } else if (audioVerified) {
+    view = { state: 'completed', label: 'الصوت جاهز', detail: 'ملف الصوت موجود في manifest وتم التحقق من بصمته.', canResend: false };
   }
   return view;
 }
@@ -1620,12 +1624,12 @@ function renderBlocks() {
   }).forEach(function (entry) {
     var block = blockByIndex[entry.block_index];
     if (!block) return;
-    var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls kh-audio-card'; panel.dataset.clipKey = entry.key;
+    var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls kh-audio-card'; panel.dataset.clipKey = entry.key; panel.dataset.audioSha256 = entry.audio_sha256 || '';
     var saved = review.clips[entry.key];
     if (saved && saved.status === 'rejected' && story.section === 'history' && story.slug === 'ibn-sina' && entry.lang === 'ar' && Number(entry.block_index) === 4) {
       var rejectedPanel = document.createElement('div');
       rejectedPanel.className = 'kh-audio-review-controls kh-audio-card';
-      rejectedPanel.dataset.clipKey = entry.key;
+      rejectedPanel.dataset.clipKey = entry.key; rejectedPanel.dataset.audioSha256 = entry.audio_sha256 || '';
       rejectedPanel.dataset.review = 'rejected';
       rejectedPanel.dataset.player = 'unavailable';
       rejectedPanel.dataset.speaker = entry.speaker;
