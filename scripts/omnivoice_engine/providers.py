@@ -81,47 +81,93 @@ class KarmaProvider(ReferenceVoiceProvider):
         super().__init__(ref_audio_path, ref_text, settings, **kwargs)
 
 
-_NAME_KEYS = ("name", "id", "speaker", "voice", "label", "title")
+_NAME_KEYS = ("name", "speaker", "voice", "label", "title", "speaker_name")
+_ID_KEYS = ("id", "speaker_id")
 _AUDIO_KEYS = ("audio", "audio_path", "ref_audio", "path", "file", "filename", "audio_file", "wav")
-_TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text")
+_TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text", "reference_text")
 
 
-def load_library_reference(refs_dir: str, name: str, alt_names=()):
-    """Find a built-in library voice (e.g. 'kareem') in ``references.json``.
-
-    ``refs_dir`` is the ``reference_speakers`` folder of the VoiceTut-TTS snapshot.
-    Returns (audio_path, ref_text). Raises ProviderError listing what exists if the
-    voice or its audio/text fields cannot be resolved.
-    """
+def load_library_reference(refs_dir: str, name: str, alt_names=(), speaker_id=None):
+    """Resolve a named built-in VoiceTut speaker from its published flat JSON index."""
     index_path = os.path.join(refs_dir, "references.json")
     if not os.path.isfile(index_path):
         raise ProviderError(f"references.json not found in {refs_dir!r}")
     with open(index_path, encoding="utf-8") as handle:
         data = json.load(handle)
     items = data if isinstance(data, list) else list(data.values()) if isinstance(data, dict) else []
-    wanted_all = [n.strip().lower() for n in (name, *alt_names) if n]
 
-    def labels(item):
-        return [str(item[k]).strip().lower() for k in _NAME_KEYS if isinstance(item, dict) and item.get(k)]
+    wanted_names = {
+        str(value).strip().lower()
+        for value in (name, *alt_names)
+        if value and (speaker_id is None or str(value).strip().lower() != str(speaker_id).strip().lower())
+    }
+    found = next(
+        (
+            item for item in items
+            if isinstance(item, dict)
+            and any(
+                str(item.get(key, "")).strip().lower() in wanted_names
+                for key in _NAME_KEYS
+                if item.get(key) is not None
+            )
+        ),
+        None,
+    )
 
-    found = next((i for i in items if isinstance(i, dict) and any(w in labels(i) for w in wanted_all)), None)
-    if found is None and isinstance(data, dict) and isinstance(data.get(name), dict):
-        found = data[name]
+    # The human-readable speaker name is authoritative. Use the ID only as a
+    # fallback, and reject a name/ID pair that points to different speakers.
+    if found is None and speaker_id:
+        wanted_id = str(speaker_id).strip().lower()
+        found = next(
+            (
+                item for item in items
+                if isinstance(item, dict)
+                and any(
+                    str(item.get(key, "")).strip().lower() == wanted_id
+                    for key in _ID_KEYS
+                    if item.get(key) is not None
+                )
+            ),
+            None,
+        )
     if found is None:
-        known = [labels(i)[:1] for i in items if isinstance(i, dict)]
-        raise ProviderError(f"Library voice {name!r} not found. Available: {known}")
-    audio = next((found[k] for k in _AUDIO_KEYS if isinstance(found.get(k), str) and found[k].strip()), None)
-    text = next((found[k] for k in _TEXT_KEYS if isinstance(found.get(k), str) and found[k].strip()), None)
-    if not text:
-        raise ProviderError(f"Library voice {name!r} has no reference text field: {sorted(found)}")
-    audio = audio or f"{wanted_all[-1]}.wav"
-    candidates = [audio, os.path.join(refs_dir, audio), os.path.join(os.path.dirname(refs_dir), audio),
-                  os.path.join(refs_dir, os.path.basename(audio))]
-    path = next((c for c in candidates if os.path.isfile(c)), None)
-    if path is None:
-        raise ProviderError(f"Library voice {name!r}: audio file {audio!r} not found under {refs_dir!r}")
-    return path, text
+        available = [
+            str(item.get("speaker_name") or item.get("name") or item.get("speaker_id") or "")
+            for item in items if isinstance(item, dict)
+        ]
+        raise ProviderError(f"VoiceTut library voice {name!r} not found. Available: {available}")
 
+    if speaker_id:
+        actual_id = next((str(found[key]).strip() for key in _ID_KEYS if found.get(key)), None)
+        if actual_id and actual_id.lower() != str(speaker_id).strip().lower():
+            raise ProviderError(
+                f"VoiceTut name/ID mismatch for {name!r}: expected {speaker_id!r}, found {actual_id!r}."
+            )
+
+    audio = next(
+        (found[key] for key in _AUDIO_KEYS if isinstance(found.get(key), str) and found[key].strip()),
+        None,
+    )
+    text = next(
+        (found[key] for key in _TEXT_KEYS if isinstance(found.get(key), str) and found[key].strip()),
+        None,
+    )
+    if not audio or not text:
+        raise ProviderError(
+            f"VoiceTut library voice {name!r} is missing audio_path or reference_text; "
+            f"record keys: {sorted(found)}"
+        )
+
+    candidates = [
+        audio,
+        os.path.join(refs_dir, audio),
+        os.path.join(os.path.dirname(refs_dir), audio),
+        os.path.join(refs_dir, os.path.basename(audio)),
+    ]
+    path = next((candidate for candidate in candidates if os.path.isfile(candidate)), None)
+    if path is None:
+        raise ProviderError(f"VoiceTut voice {name!r}: audio file {audio!r} not found under {refs_dir!r}")
+    return path, text
 
 class NarratorProvider(ReferenceVoiceProvider):
     speaker = "narrator"
@@ -132,7 +178,7 @@ class NarratorProvider(ReferenceVoiceProvider):
     @classmethod
     def from_library(cls, refs_dir, name="karim", speaker_id="spk_04_male", **kwargs):
         """Narrator = library voice Karim (spk_04_male, reference_speakers/karim.wav); no Drive or secret."""
-        path, text = load_library_reference(refs_dir, speaker_id, (name,))
+        path, text = load_library_reference(refs_dir, name, (speaker_id,), speaker_id=speaker_id)
         return cls(path, text, **kwargs)
 
 
