@@ -15,6 +15,9 @@ from .audio import as_numpy_audio, convert_reference
 from .config import (
     KARMA_REF_TEXT_SHA256,
     KARMA_SETTINGS,
+    MULTILINGUAL_KARMA_SETTINGS,
+    MULTILINGUAL_LANGUAGES,
+    MULTILINGUAL_NARRATOR_SETTINGS,
     LANGUAGE_CODES,
     NARRATOR_SETTINGS,
     VoiceSettings,
@@ -53,14 +56,17 @@ class ReferenceVoiceProvider:
         text = (text or "").strip()
         if not text:
             raise ProviderError("Queue job has empty speech text.")
+        settings = self.settings
+        if language in MULTILINGUAL_LANGUAGES:
+            settings = MULTILINGUAL_KARMA_SETTINGS if self.speaker == "karma" else MULTILINGUAL_NARRATOR_SETTINGS
         generated = model.generate(
             text=text,
             language=code,
             ref_audio=self.ref_wav,
             ref_text=self.ref_text,
-            num_step=self.settings.num_step,
-            guidance_scale=self.settings.guidance_scale,
-            speed=self.settings.speed,
+            num_step=settings.num_step,
+            guidance_scale=settings.guidance_scale,
+            speed=settings.speed,
         )[0]
         return as_numpy_audio(generated)
 

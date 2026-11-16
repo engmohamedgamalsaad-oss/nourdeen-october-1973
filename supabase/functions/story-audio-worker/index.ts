@@ -11,6 +11,9 @@ function secretKey(): string {
 }
 const SERVICE_KEY = secretKey();
 const BUCKET = "khaledoon-audio-review";
+function audioModelForLanguage(language: string): string {
+  return ["fr", "it", "de"].includes(language) ? "k2-fsa/OmniVoice" : "VoiceTut Egyptian Tashkeel";
+}
 const headers = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "apikey, authorization, content-type, x-client-info, x-khaledoon-worker-token",
@@ -166,7 +169,7 @@ Deno.serve(async (req: Request) => {
     return reply(200, { success: true, status: data.status });
   }
 
-  if (!["ar", "en"].includes(job.language)) return reply(422, { error: "Only Arabic and English are enabled in this rollout." });
+  if (!["ar", "en", "fr", "it", "de"].includes(job.language)) return reply(422, { error: "Unsupported audio language." });
   if (!["narrator", "karma"].includes(job.speaker)) return reply(422, { error: "Unknown speaker." });
   const audioBase64 = body.audio_base64;
   if (typeof audioBase64 !== "string" || audioBase64.length < 100 || audioBase64.length > 18_000_000) {
@@ -206,8 +209,9 @@ Deno.serve(async (req: Request) => {
     return reply(422, { error: "Stored audio failed SHA-256 read-back verification; the segment was not marked complete." });
   }
 
+  const modelName = audioModelForLanguage(job.language);
   const manifestPath = [job.section, job.slug, job.language, "manifest.json"].join("/");
-  let manifest: any = { version: 1, section: job.section, story: job.slug, language: job.language, provider: "omnivoice", model: "VoiceTut Egyptian Tashkeel", segments: [] };
+  let manifest: any = { version: 1, section: job.section, story: job.slug, language: job.language, provider: "omnivoice", model: modelName, segments: [] };
   const { data: oldManifestFile } = await service.storage.from(BUCKET).download(manifestPath);
   if (oldManifestFile) {
     try {
@@ -225,7 +229,7 @@ Deno.serve(async (req: Request) => {
     speaker: job.speaker,
     text: String(job.payload?.text ?? ""),
     provider: "omnivoice",
-    model: "VoiceTut Egyptian Tashkeel",
+    model: modelName,
     voice: voiceName,
     audio_sha256: digest,
   };
@@ -233,7 +237,7 @@ Deno.serve(async (req: Request) => {
   manifest.segments.push(segment);
   manifest.segments.sort((a: any, b: any) => Number(a.block_index) - Number(b.block_index));
   manifest.provider = "omnivoice";
-  manifest.model = "VoiceTut Egyptian Tashkeel";
+  manifest.model = modelName;
   const manifestUpload = await service.storage.from(BUCKET).upload(manifestPath, new TextEncoder().encode(JSON.stringify(manifest)), {
     contentType: "application/json", upsert: true, cacheControl: "60",
   });

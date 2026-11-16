@@ -15,7 +15,8 @@ function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim()
 function strip(s) { return norm(s).replace(/[\u064B-\u065F\u0670\u0640]/g, ''); }
 
 function engineOf(lang, speaker) {
-  return { voice: speaker === 'karma' ? 'omnivoice-karma-reference' : speaker === 'narrator' ? 'omnivoice-narrator-reference' : '', provider: 'omnivoice', model: 'VoiceTut Egyptian Tashkeel' };
+  var model = ['fr', 'it', 'de'].indexOf(lang) >= 0 ? 'k2-fsa/OmniVoice' : 'VoiceTut Egyptian Tashkeel';
+  return { voice: speaker === 'karma' ? 'omnivoice-karma-reference' : speaker === 'narrator' ? 'omnivoice-narrator-reference' : '', provider: 'omnivoice', model: model };
 }
 
 async function sha256(str) {
