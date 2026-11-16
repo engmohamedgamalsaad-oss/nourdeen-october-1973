@@ -1058,8 +1058,10 @@ function engineView(language, index) {
   if (job) {
     if (job.status === 'pending') view = { state: 'pending', label: 'في الطابور', detail: job.attempts > 0 ? 'أُعيد للطابور (محاولة ' + job.attempts + ') — ' + (job.last_error || 'بانتظار Colab') : 'بانتظار اتصال Colab…', canResend: false };
     else if (job.status === 'processing') view = { state: 'processing', label: 'قيد التوليد الآن', detail: 'Colab يعمل على هذا المقطع.', canResend: false };
-    else if (job.status === 'completed') view = { state: 'completed', label: 'تم التوليد', detail: 'اكتمل — استمع إليه في الخطوة ٤.', canResend: !!(clip && clip.status === 'rejected') };
-    else if (job.status === 'failed') view = { state: 'failed', label: 'فشل', detail: String(job.last_error || 'فشل توليد المقطع.') + ' — استُنفدت المحاولات؛ إعادة الإرسال تحتاج إعادة ضبط من الخادم.', canResend: false };
+    else if (job.status === 'completed') view = clip
+      ? { state: 'completed', label: 'تم التوليد', detail: clip.status === 'rejected' ? 'رُفض هذا الملف؛ يمكنك إعادة توليد هذا المقطع وحده.' : 'اكتمل رفع الملف والتحقق منه؛ استمع إليه في الخطوة ٤.', canResend: !!(clip && clip.status === 'rejected') }
+      : { state: 'failed', label: 'فشل التحقق', detail: 'اكتمل طلب التوليد لكن ملف الصوت لم يظهر في manifest؛ يمكنك إعادة توليد هذا المقطع وحده.', canResend: true };
+    else if (job.status === 'failed') view = { state: 'failed', label: 'فشل', detail: String(job.last_error || 'فشل توليد المقطع.') + ' — يمكنك إعادة إرسال هذا المقطع وحده.', canResend: true };
   }
   return view;
 }
