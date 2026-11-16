@@ -1050,17 +1050,24 @@ function clipForBlock(language, index) {
   });
   return found;
 }
+function audioEntryForBlock(language, index) {
+  return entries.find(function (entry) {
+    return entry && entry.lang === language && Number(entry.block_index) === index &&
+      !!entry.audio_sha256 && !!entry.signed_src;
+  }) || null;
+}
 function engineView(language, index) {
   var job = jobsByBlock[jobKey(language, index)];
   var clip = clipForBlock(language, index);
+  var audioEntry = audioEntryForBlock(language, index);
   var view = { state: 'none', label: 'لم يُرسل بعد', detail: '', canResend: false };
   if (clip && clip.status === 'accepted') return { state: 'accepted', label: 'معتمد ✓', detail: 'تم اعتماد صوت هذا المقطع.', canResend: false };
   if (job) {
     if (job.status === 'pending') view = { state: 'pending', label: 'في الطابور', detail: job.attempts > 0 ? 'أُعيد للطابور (محاولة ' + job.attempts + ') — ' + (job.last_error || 'بانتظار Colab') : 'بانتظار اتصال Colab…', canResend: false };
     else if (job.status === 'processing') view = { state: 'processing', label: 'قيد التوليد الآن', detail: 'Colab يعمل على هذا المقطع.', canResend: false };
-    else if (job.status === 'completed') view = clip
-      ? { state: 'completed', label: 'تم التوليد', detail: clip.status === 'rejected' ? 'رُفض هذا الملف؛ يمكنك إعادة توليد هذا المقطع وحده.' : 'اكتمل رفع الملف والتحقق منه؛ استمع إليه في الخطوة ٤.', canResend: !!(clip && clip.status === 'rejected') }
-      : { state: 'failed', label: 'فشل التحقق', detail: 'اكتمل طلب التوليد لكن ملف الصوت لم يظهر في manifest؛ يمكنك إعادة توليد هذا المقطع وحده.', canResend: true };
+    else if (job.status === 'completed') view = audioEntry
+      ? { state: 'completed', label: 'الصوت جاهز', detail: clip && clip.status === 'rejected' ? 'رُفض هذا الملف؛ يمكنك إعادة توليد هذا المقطع وحده.' : 'تم رفع الملف والتحقق من بصمته وظهوره في manifest؛ استمع إليه في الخطوة ٤.', canResend: !!(clip && clip.status === 'rejected') }
+      : { state: 'verifying', label: 'جارٍ التحقق', detail: 'اكتمل طلب التوليد؛ جارٍ التأكد من ظهور ملف MP3 في manifest.', canResend: false };
     else if (job.status === 'failed') view = { state: 'failed', label: 'فشل', detail: String(job.last_error || 'فشل توليد المقطع.') + ' — يمكنك إعادة إرسال هذا المقطع وحده.', canResend: true };
   }
   return view;
