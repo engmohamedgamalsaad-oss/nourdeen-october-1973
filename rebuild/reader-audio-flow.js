@@ -379,7 +379,7 @@
     if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
     else if (job.status === 'pending') s3 = { s: 'wait', t: 'في الطابور' };
     else if (job.status === 'processing') s3 = { s: 'busy', t: 'بيتم الآن' };
-    else if (job.status === 'completed') s3 = hasCard ? { s: 'done', t: 'الصوت جاهز' } : { s: 'fail', t: 'اكتمل الطلب لكن ملف الصوت لم يظهر أو لم يُتحقق منه' };
+    else if (job.status === 'completed') s3 = hasCard ? { s: 'done', t: 'الصوت جاهز' } : { s: 'busy', t: 'جارٍ التحقق من ملف الصوت وظهوره في المعاينة' };
     else if (job.status === 'failed') s3 = { s: 'fail', t: 'فشل' };
     else s3 = { s: 'todo', t: String(job.status || '—') };
     var s4;
