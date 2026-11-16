@@ -16,9 +16,12 @@ test('approved translations are restored only when source hash and speaker still
 test('translation generation stays blocked until a current approved translation is restored or prepared', () => {
   assert.match(flow, /!translationConfirmed\[currentTranslationKey\]/);
   assert.match(flow, /!String\(translationWorkingText\[currentTranslationKey\] \|\| ''\)\.trim\(\)/);
-  assert.match(flow, /translation && translation\.status === 'approved' && translationConfirmed\[L \+ ':' \+ index\]/);
+  assert.match(flow, /translation && translation\.status === 'approved' && translationConfirmed\[translationKey\]/);
+  assert.match(flow, /s1 = translationState === 'processing'/);
+  assert.match(flow, /label: 'النص', s: s1\.s, t: s1\.t/);
+  assert.match(flow, /label: 'نص القراءة', s: s2\.s, t: s2\.t/);
 });
 
 test('translation restore runs immediately after loading review records', () => {
-  assert.match(flow, /translationRecords = data\.audio_review && data\.audio_review\.translations \|\| \{\};\s*var result = await restoreSavedTranslations\(\);\s*translationLoaded = true;/);
+  assert.match(flow, /translationRecords = data\.audio_review && data\.audio_review\.translations \|\| \{\};\s*var result = await restoreSavedTranslations\(\);\s*translationStates = Object\.create\(null\);[\s\S]*?translationLoaded = true;/);
 });
