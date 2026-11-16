@@ -181,9 +181,10 @@ async function main() {
   for (const lang of ['en', 'fr', 'it', 'de']) {
     await reviewer.locator('[data-lang="' + lang + '"]').click();
     await reviewer.waitForFunction(expected => window.__KH_AUDIO_REVIEW_LANGUAGE === expected, lang);
-    assert.equal(await reviewer.locator('html').getAttribute('lang'), 'ar', 'admin preview page locale must remain Arabic while audio language changes');
-    assert.equal(await reviewer.locator('#title').textContent(), story.i18n.ar.title, 'admin preview story text must remain Arabic while audio language changes');
-    assert.equal(await reviewer.locator('html').getAttribute('dir'), 'rtl', 'admin preview direction must remain RTL');
+    assert.equal(await reviewer.locator('html').getAttribute('lang'), lang, 'admin preview page locale must follow the selected story language');
+    assert.equal(await reviewer.locator('#title').textContent(), story.i18n[lang].title, 'admin preview story title must follow the selected story language');
+    assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', 'admin preview direction must follow the selected non-Arabic language');
+    assert.equal(await reviewer.locator('#blocks .block p').first().textContent(), story.i18n[lang].blocks[0].text, 'story body must show the selected language translation');
   }
   await reviewer.locator('[data-lang="en"]').click();
   await reviewer.screenshot({ path: path.join(artifactDir, 'story-package-review-en.png'), fullPage: true, animations: 'disabled' });

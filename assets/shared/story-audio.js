@@ -60,9 +60,8 @@
   var ui = copy[lang] || copy.ar;
   var PUBLIC_AUDIO_ROOT = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object/public/khaledoon-story-audio-public/';
   function validPublicSegment(segment) {
-    var expectedModel = ['fr', 'it', 'de'].indexOf(lang) >= 0 ? 'k2-fsa/OmniVoice' : 'VoiceTut Egyptian Tashkeel';
     return !!segment && segment.provider === 'omnivoice' &&
-      segment.model === expectedModel &&
+      segment.model === 'VoiceTut Egyptian Tashkeel' &&
       segment.voice === (segment.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference');
   }
 

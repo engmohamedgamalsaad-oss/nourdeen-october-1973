@@ -21,9 +21,6 @@ const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
 const BUCKET = "khaledoon-audio-review";
 const PUBLIC_AUDIO_BUCKET = "khaledoon-story-audio-public";
 const SUPPORTED_AUDIO_LANGUAGES = ["ar", "en", "fr", "it", "de"];
-function audioModelForLanguage(language: string): string {
-  return ["fr", "it", "de"].includes(language) ? "k2-fsa/OmniVoice" : "VoiceTut Egyptian Tashkeel";
-}
 const OWNER = "engmohamedgamalsaad-oss";
 const REPO = "nourdeen-october-1973";
 const ALLOWED_ORIGIN = "https://engmohamedgamalsaad-oss.github.io";
@@ -127,7 +124,7 @@ function acceptedBlockIndexes(audioReview: any, language: string): Set<number> {
     .map((clip: any) => Number(clip.block_index)));
 }
 async function invalidatePublicStoryAudio(service: any, section: string, slug: string) {
-  for (const language of SUPPORTED_AUDIO_LANGUAGES) {
+  for (const language of ["ar", "en"]) {
     const prefix = section + "/" + slug + "/" + language;
     const { data, error } = await service.storage.from(PUBLIC_AUDIO_BUCKET).list(prefix, { limit: 1000 });
     if (error) throw new Error("تعذر التحقق من ملفات الصوت المنشورة قبل تحديث المراجعة: " + error.message);
@@ -324,7 +321,7 @@ async function reconcilePlan(review: any, snap: any, manifests: Record<string, a
   }
 
   for (const [clipKey, clip] of Object.entries(current.clips) as [string, any][]) {
-    if (!clip || !SUPPORTED_AUDIO_LANGUAGES.includes(clip.lang)) continue;
+    if (!clip || (clip.lang !== "ar" && clip.lang !== "en")) continue;
     const index = Number(clip.block_index);
     const block = snap?.i18n?.[clip.lang]?.blocks?.[index];
     let keep = isSpeakableBlock(block) && block.speaker === clip.speaker;
@@ -636,7 +633,7 @@ Deno.serve(async (req: Request) => {
 
 
   if (body.action === "enqueue_approved_language") {
-    if (!SUPPORTED_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "لغة الصوت غير مدعومة." });
+    if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
     let arabicSource;
     try { arabicSource = await resolveStoryBlock(section, slug, "ar", 0, body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية العربية." }); }
@@ -664,7 +661,7 @@ Deno.serve(async (req: Request) => {
           spokenText = speech.approved_text.trim();
         }
       } else {
-        const translation = review?.translations?.[language + ":" + index];
+        const translation = review?.translations?.["en:" + index];
         if (translation?.status === "approved" && translation.source_arabic_hash === sourceHash &&
             translation.speaker === block.speaker && typeof translation.translation_text === "string") {
           spokenText = translation.translation_text.trim();
@@ -672,7 +669,7 @@ Deno.serve(async (req: Request) => {
       }
       if (!spokenText) {
         return reply(409, {
-          error: "لم يبدأ توليد الصوت. " + (language === "ar" ? "نص القراءة العربي" : "ترجمة " + (TRANSLATION_LANGUAGES[language] ?? language)) +
+          error: "لم يبدأ توليد الصوت. " + (language === "ar" ? "نص القراءة العربي" : "الترجمة الإنجليزية") +
             " للمقطع " + (index + 1) + " غير معتمد أو لم يعد يطابق النص العربي الحالي.",
           missing_block_index: index,
           required_segments: indexes.length,
@@ -691,12 +688,12 @@ Deno.serve(async (req: Request) => {
       const payload = {
         text: item.spokenText, speaker: item.block.speaker, source_text: item.sourceText,
         source_text_hash: item.sourceHash, spoken_text_hash: item.spokenHash,
-        regeneration_revision: regenRevision, language_code: ({ ar: "arz", en: "en", fr: "fr", it: "it", de: "de" } as Record<string, string>)[language],
+        regeneration_revision: regenRevision, language_code: language === "ar" ? "arz" : "eng",
         reference_role: item.block.speaker, sample_rate: 24000,
       };
       const result = await insertOrReuseJob(service, {
         section, slug, language, block_index: item.index, speaker: item.block.speaker,
-        engine: ["fr", "it", "de"].includes(language) ? "omnivoice-multilingual" : "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
+        engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
         idempotency_key: idempotencyKey, status: "pending",
       }, idempotencyKey);
       if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع " + (item.index + 1) + " إلى الطابور.", detail: result.error?.message });
@@ -714,7 +711,7 @@ Deno.serve(async (req: Request) => {
   if (body.action === "enqueue") {
     const blockIndex = Number(body.block_index);
     if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
-    if (!SUPPORTED_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "لغة الصوت غير مدعومة." });
+    if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
     let source;
     try { source = await resolveStoryBlock(section, slug, "ar", blockIndex, body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع العربي." }); }
@@ -766,13 +763,13 @@ Deno.serve(async (req: Request) => {
       source_text_hash: source.sourceTextHash,
       spoken_text_hash: spokenHash,
       regeneration_revision: regenRevision,
-      language_code: ({ ar: "arz", en: "en", fr: "fr", it: "it", de: "de" } as Record<string, string>)[language],
+      language_code: language === "ar" ? "arz" : "eng",
       reference_role: source.block.speaker,
       sample_rate: 24000,
     };
     const result = await insertOrReuseJob(service, {
       section, slug, language, block_index: blockIndex, speaker: source.block.speaker,
-      engine: ["fr", "it", "de"].includes(language) ? "omnivoice-multilingual" : "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
+      engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
       idempotency_key: idempotencyKey, status: "pending",
     }, idempotencyKey);
     if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع إلى طابور التوليد.", detail: result.error?.message });
@@ -813,7 +810,7 @@ Deno.serve(async (req: Request) => {
       try { source = await resolveStoryBlock(section, slug, lang === "en" ? "ar" : lang, 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
       let blocks = source.story?.i18n?.[lang]?.blocks;
-      if (lang !== "ar") {
+      if (lang === "en") {
         const arabicBlocks = source.story?.i18n?.ar?.blocks;
         if (!Array.isArray(arabicBlocks) || !arabicBlocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع عربية صالحة." });
         blocks = [];
@@ -821,10 +818,10 @@ Deno.serve(async (req: Request) => {
           const arabicBlock = arabicBlocks[index];
           if (!arabicBlock || !["karma", "narrator"].includes(arabicBlock.speaker)) continue;
           const sourceHash = await sha256Hex(new TextEncoder().encode(String(arabicBlock.text ?? "").trim()));
-          const translation = audioReview?.translations?.[lang + ":" + index];
+          const translation = audioReview?.translations?.["en:" + index];
           if (!translation || translation.status !== "approved" || translation.source_arabic_hash !== sourceHash ||
               typeof translation.translation_text !== "string" || !translation.translation_text.trim()) {
-            return reply(409, { error: "لا يمكن نشر الصوت: ترجمة المقطع " + (index + 1) + " غير معتمدة أو أصبحت قديمة." });
+            return reply(409, { error: "لا يمكن نشر الصوت الإنجليزي: ترجمة المقطع " + (index + 1) + " غير معتمدة أو أصبحت قديمة." });
           }
           blocks[index] = { ...arabicBlock, text: translation.translation_text.trim() };
         }
@@ -845,7 +842,7 @@ Deno.serve(async (req: Request) => {
         const index = Number(segment?.block_index);
         const block = Number.isInteger(index) ? blocks[index] : null;
         if (!block || seen.has(index) || segment.speaker !== block.speaker ||
-            segment.provider !== "omnivoice" || segment.model !== audioModelForLanguage(lang) ||
+            segment.provider !== "omnivoice" || segment.model !== "VoiceTut Egyptian Tashkeel" ||
             segment.voice !== (block.speaker === "karma" ? "omnivoice-karma-reference" : "omnivoice-narrator-reference") ||
             typeof segment.src !== "string" || !/^[A-Za-z0-9_-]+\.mp3$/.test(segment.src) ||
             !/^[a-f0-9]{64}$/i.test(String(segment.audio_sha256 ?? ""))) {
@@ -879,7 +876,7 @@ Deno.serve(async (req: Request) => {
       }
       const publicManifest = {
         version: 1, section, story: slug, language: lang, provider: "omnivoice",
-        model: audioModelForLanguage(lang), published_at: new Date().toISOString(),
+        model: "VoiceTut Egyptian Tashkeel", published_at: new Date().toISOString(),
         segments: manifest.segments,
       };
       const { error: publicManifestError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).upload(
@@ -1409,7 +1406,7 @@ Deno.serve(async (req: Request) => {
     const seen = new Set<string>();
     for (const segment of manifest.segments) {
       const engineOk = segment?.provider === "omnivoice" &&
-        segment?.model === audioModelForLanguage(language) &&
+        segment?.model === "VoiceTut Egyptian Tashkeel" &&
         segment?.voice === (segment?.speaker === "karma"
           ? "omnivoice-karma-reference" : "omnivoice-narrator-reference");
       if (!segment || !["narrator", "karma"].includes(segment.speaker) || !engineOk ||
