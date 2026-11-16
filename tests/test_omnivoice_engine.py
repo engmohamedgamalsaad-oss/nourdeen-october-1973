@@ -198,8 +198,14 @@ class EngineTests(unittest.TestCase):
         with open(os.path.join(refs, "karim.wav"), "wb") as handle:
             handle.write(b"x")
         with open(os.path.join(refs, "references.json"), "w", encoding="utf-8") as handle:
-            json.dump([{"name": "Aly", "audio": "aly.wav", "text": "x"},
-                       {"speaker_id": "spk_04_male", "speaker_name": "Karim", "audio_path": "reference_speakers/karim.wav", "reference_text": "نص كريم"}], handle)
+            json.dump({"speakers": [
+                {"metadata": {"speaker_id": "spk_04_male", "speaker_name": "Karim"},
+                 "assets": {"audio_path": "reference_speakers/karim.wav"},
+                 "transcription": {"reference_text": "نص كريم"}},
+                {"metadata": {"speaker_id": "spk_05_female", "speaker_name": "Other"},
+                 "assets": {"audio_path": "other.wav"},
+                 "transcription": {"reference_text": "نص آخر"}}
+            ]}, handle)
         provider = NarratorProvider.from_library(refs, "karim", workdir=self.tmp.name, converter=fake_convert)
         self.assertEqual(provider.ref_text, "نص كريم")
         with self.assertRaises(ProviderError):
