@@ -199,7 +199,7 @@ class EngineTests(unittest.TestCase):
             handle.write(b"x")
         with open(os.path.join(refs, "references.json"), "w", encoding="utf-8") as handle:
             json.dump([{"name": "Aly", "audio": "aly.wav", "text": "x"},
-                       {"name": "Karim", "speaker_id": "spk_04_male", "audio": "reference_speakers/karim.wav", "text": "نص كريم"}], handle)
+                       {"speaker_id": "spk_04_male", "speaker_name": "Karim", "audio_path": "reference_speakers/karim.wav", "reference_text": "نص كريم"}], handle)
         provider = NarratorProvider.from_library(refs, "karim", workdir=self.tmp.name, converter=fake_convert)
         self.assertEqual(provider.ref_text, "نص كريم")
         with self.assertRaises(ProviderError):
