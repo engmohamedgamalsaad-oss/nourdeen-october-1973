@@ -197,9 +197,6 @@
     var L = lang(), key = L + ":" + index;
     var record = translationRecords[key] || {};
     var wrap = el("section", "kh-translation-review");
-    var source = el("div", "kh-translation-source");
-    source.appendChild(el("b", "", "النص العربي المعتمد للمقارنة"));
-    source.appendChild(el("p", "", arabicBlock && arabicBlock.text || "لا يوجد نص عربي لهذا المقطع."));
     var status = el("p", "kh-translation-status");
     var textarea = document.createElement("textarea");
     textarea.className = "kh-translation-editor";
@@ -278,7 +275,7 @@
       catch (e) { status.textContent = e.message || "تعذر حفظ التعديل."; paintStatus(); }
     });
     buttons.append(generate, save);
-    wrap.append(source, textarea, buttons, status);
+    wrap.append(textarea, buttons, status);
     paintStatus();
     return wrap;
   }
@@ -710,7 +707,7 @@
         step1.body.appendChild(kv('عدد الحروف', String(original.length)));
         step1.body.appendChild(el('p', 'kh-orig-text', original || 'لا يوجد نص لهذا المقطع.'));
       } else {
-        step1.body.appendChild(el('p', 'kh-muted', 'النص العربي المعتمد للمقارنة:'));
+        step1.body.appendChild(el('p', 'kh-muted', 'النص العربي المرجعي:'));
         var arabicBlock = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks && st.i18n.ar.blocks[rec.index];
         step1.body.appendChild(el('p', 'kh-orig-text', arabicBlock && arabicBlock.text || 'لا يوجد نص عربي لهذا المقطع.'));
         step1.body.appendChild(makeTranslationReview(box, rec.index, arabicBlock, local));
