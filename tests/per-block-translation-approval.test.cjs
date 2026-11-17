@@ -161,8 +161,9 @@ test('bulk translation retries failed clips in rounds and stops on lost session'
 });
 
 
-test('queue-all button is offered for every audio language', () => {
+test('audio queue-all is enabled only for Arabic and English while other translations remain supported', () => {
   const src = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
-  assert.ok(src.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang())) {\n        var queueAll"));
-  assert.ok(src.includes("queueAllButton.hidden = ['ar', 'en', 'fr', 'it', 'de'].indexOf(lang()) < 0"));
+  assert.ok(src.includes("if (['ar', 'en'].includes(lang())) {\n        var queueAll"));
+  assert.ok(src.includes("queueAllButton.hidden = ['ar', 'en'].indexOf(lang()) < 0"));
+  assert.ok(src.includes("!['ar', 'en', 'fr', 'it', 'de'].includes(lang())"), 'translation content remains available in all five languages');
 });
