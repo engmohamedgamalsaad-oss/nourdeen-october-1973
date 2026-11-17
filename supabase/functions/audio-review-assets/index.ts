@@ -126,19 +126,6 @@ function acceptedBlockIndexes(audioReview: any, language: string): Set<number> {
     .filter((clip: any) => clip?.lang === language && clip?.status === "accepted")
     .map((clip: any) => Number(clip.block_index)));
 }
-async function invalidatePublicStoryAudio(service: any, section: string, slug: string) {
-  for (const language of SUPPORTED_AUDIO_LANGUAGES) {
-    const prefix = section + "/" + slug + "/" + language;
-    const { data, error } = await service.storage.from(PUBLIC_AUDIO_BUCKET).list(prefix, { limit: 1000 });
-    if (error) throw new Error("تعذر التحقق من ملفات الصوت المنشورة قبل تحديث المراجعة: " + error.message);
-    const paths = (data ?? []).filter((item: any) => item?.name).map((item: any) => prefix + "/" + item.name);
-    if (paths.length) {
-      const { error: removeError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).remove(paths);
-      if (removeError) throw new Error("تعذر إلغاء نشر نسخة الصوت السابقة: " + removeError.message);
-    }
-  }
-}
-
 async function invalidatePublicClipAudio(service: any, section: string, slug: string, language: string, blockIndex: number, chunkIndex?: number) {
   const prefix = section + "/" + slug + "/" + language;
   const manifestPath = prefix + "/manifest.json";
