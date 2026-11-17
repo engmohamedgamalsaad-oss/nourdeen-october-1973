@@ -87,7 +87,7 @@ test('bulk translation paints each segment immediately and preserves the result 
   assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
   assert.match(preview, /translationStates\[key\] = 'processing'/);
   assert.match(preview, /translationStates\[key\] !== 'failed'/);
-  assert.match(preview, /translationStates\\[key\\] = 'processing'/);
+  assert.match(preview, /translationStates\[key\] = 'processing'/);
 });
 
 test('completed audio jobs refresh the review manifest and insert the playable clip without a manual page reload', () => {
