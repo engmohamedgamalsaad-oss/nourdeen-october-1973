@@ -205,6 +205,21 @@ class EngineTests(unittest.TestCase):
         with self.assertRaises(ProviderError):
             NarratorProvider.from_library(refs, "nobody", speaker_id="spk_99_x", workdir=self.tmp.name, converter=fake_convert)
 
+    def test_narrator_from_library_voice_karim_real_voicetut_schema(self):
+        """VoiceTut's real references.json uses speaker_id/speaker_name/audio_path/reference_text."""
+        import json
+        refs = os.path.join(self.tmp.name, "reference_speakers")
+        os.makedirs(refs)
+        with open(os.path.join(refs, "karim.wav"), "wb") as handle:
+            handle.write(b"x")
+        with open(os.path.join(refs, "references.json"), "w", encoding="utf-8") as handle:
+            json.dump([{"speaker_id": "spk_01_male", "speaker_name": "Aly", "audio_path": "reference_speakers/aly.wav", "reference_text": "x"},
+                       {"speaker_id": "spk_04_male", "speaker_name": "Karim", "audio_path": "reference_speakers/karim.wav", "reference_text": "نص كريم"}], handle)
+        provider = NarratorProvider.from_library(refs, "karim", workdir=self.tmp.name, converter=fake_convert)
+        self.assertEqual(provider.ref_text, "نص كريم")
+        with self.assertRaises(ProviderError):
+            NarratorProvider.from_library(refs, "nobody", speaker_id="spk_99_x", workdir=self.tmp.name, converter=fake_convert)
+
     def test_client_requires_credentials(self):
         with self.assertRaises(ValueError):
             WorkerClient("", "", "w")
