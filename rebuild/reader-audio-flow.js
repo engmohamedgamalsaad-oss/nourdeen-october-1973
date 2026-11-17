@@ -147,6 +147,24 @@
       queueError = String(e && e.message || e);
     }
   }
+  async function runTranslationRounds(indices, translateOne, opts) {
+    var maxRounds = opts.maxRounds, waitSeconds = opts.waitSeconds, sleep = opts.sleep, onWait = opts.onWait;
+    var done = 0, skipped = 0, pending = indices.slice(), round = 0, stopped = false;
+    while (pending.length) {
+      var failedNow = [];
+      for (var p = 0; p < pending.length; p++) {
+        var outcome = await translateOne(pending[p], round);
+        if (outcome === 'done') done++;
+        else if (outcome === 'skipped') skipped++;
+        else { failedNow.push(pending[p]); if (outcome === 'auth') { failedNow = failedNow.concat(pending.slice(p + 1)); stopped = true; break; } }
+      }
+      pending = failedNow;
+      if (!pending.length || stopped || round >= maxRounds) break;
+      round++;
+      for (var left = waitSeconds; left > 0; left--) { onWait(pending, round, left); await sleep(1000); }
+    }
+    return { done: done, skipped: skipped, failed: pending, sessionLost: stopped, rounds: round };
+  }
   function paintTranslationBlock(index, state, message, record) {
     var key = lang() + ":" + index;
     if (record) {
@@ -516,42 +534,48 @@
         var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
         if (!blocks.length) return;
         bulkTranslate.disabled = true;
-        var done = 0, skipped = 0, failed = [];
+        var done = 0, skipped = 0, failed = [], sessionLost = false;
         try {
           if (lang() === 'ar') {
             if (!window.KHStoryAudioReview || typeof window.KHStoryAudioReview.prepareAllSpeechTexts !== 'function') throw new Error('مراجع الصوت لم يُحمَّل بعد.');
             var r = await window.KHStoryAudioReview.prepareAllSpeechTexts(function (i, n) { bulkStatus.textContent = 'Gemini يجهّز نص المقطع ' + (i + 1) + ' من ' + n + '…'; });
             done = r.done; skipped = r.skipped; failed = r.failed.map(function (f) { return f.index + 1; });
           } else {
-            for (var i = 0; i < blocks.length; i++) {
-              if (!blocks[i] || !['karma', 'narrator'].includes(blocks[i].speaker)) continue;
-              bulkStatus.textContent = 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + '…';
-              translationStates[lang() + ':' + i] = 'processing';
-              paintTranslationBlock(i, 'processing', 'Gemini يترجم هذا المقطع الآن…');
+            var todo = [];
+            for (var i = 0; i < blocks.length; i++) { if (blocks[i] && ['karma', 'narrator'].includes(blocks[i].speaker)) todo.push(i); }
+            var translateOne = async function (i, round) {
+              var key = lang() + ':' + i;
+              bulkStatus.textContent = (round ? 'إعادة المحاولة ' + round + ' من 3 — ' : '') + 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + '…';
+              translationStates[key] = 'processing'; paintTranslationBlock(i, 'processing', 'Gemini يترجم هذا المقطع الآن…');
               try {
                 var result = await audioReviewAction({ action: 'translation_generate', block_index: i });
-                translationRecords[lang() + ':' + i] = result.translation;
-                translationWorkingText[lang() + ':' + i] = String(result.translation.translation_text || '');
-                translationConfirmed[lang() + ':' + i] = !!translationWorkingText[lang() + ':' + i].trim();
-                translationStates[lang() + ':' + i] = 'approved';
-                paintTranslationBlock(i, 'approved', '✓ النص جاهز ومعتمد تلقائيًا.', result.translation);
-                done++;
+                translationRecords[key] = result.translation; translationWorkingText[key] = String(result.translation.translation_text || '');
+                translationConfirmed[key] = !!translationWorkingText[key].trim(); translationStates[key] = 'approved';
+                paintTranslationBlock(i, 'approved', '✓ النص جاهز ومعتمد تلقائيًا.', result.translation); return 'done';
               } catch (e) {
-                if (/معتمدة بالفعل/.test(String(e.message || ''))) {
-                  skipped++;
-                  translationStates[lang() + ':' + i] = translationConfirmed[lang() + ':' + i] ? 'approved' : 'stale';
-                  paintTranslationBlock(i, translationStates[lang() + ':' + i], translationStates[lang() + ':' + i] === 'approved' ? '✓ النص جاهز بالفعل.' : 'توجد ترجمة محفوظة لا تطابق النص الحالي؛ أعد ترجمة هذا المقطع.');
-                } else {
-                  failed.push(i + 1);
-                  translationStates[lang() + ':' + i] = 'failed';
-                  paintTranslationBlock(i, 'failed', (e.message || 'تعذرت ترجمة هذا المقطع.') + ' — يمكنك إعادة ترجمته وحده.');
+                var message = String(e && e.message || '');
+                if (/معتمدة بالفعل/.test(message)) {
+                  translationStates[key] = translationConfirmed[key] ? 'approved' : 'stale';
+                  paintTranslationBlock(i, translationStates[key], translationStates[key] === 'approved' ? '✓ النص جاهز بالفعل.' : 'توجد ترجمة محفوظة لا تطابق النص الحالي؛ أعد ترجمة هذا المقطع.');
+                  return 'skipped';
                 }
+                translationStates[key] = 'failed'; paintTranslationBlock(i, 'failed', (message || 'تعذرت ترجمة هذا المقطع.') + ' — يمكنك إعادة ترجمته وحده.');
+                return /سجّل الدخول|سجل الدخول/.test(message) ? 'auth' : 'failed';
               }
-            }
+            };
+            var rounds = await runTranslationRounds(todo, translateOne, {
+              maxRounds: 3, waitSeconds: 20,
+              sleep: function (ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); },
+              onWait: function (pending, round, left) {
+                bulkStatus.textContent = 'تعذر ' + pending.length + ' مقطع (' + pending.map(function (x) { return x + 1; }).join('، ') + ') بسبب ضغط Gemini. إعادة محاولة تلقائية ' + round + ' من 3 بعد ' + left + ' ثانية — ابقَ في هذه الصفحة.';
+              }
+            });
+            done = rounds.done; skipped = rounds.skipped; sessionLost = rounds.sessionLost; failed = rounds.failed.map(function (x) { return x + 1; });
           }
         } catch (e) { bulkStatus.textContent = e.message || 'تعذرت الترجمة.'; bulkTranslate.disabled = false; return; }
         bulkStatus.textContent = 'انتهت الترجمة: ' + done + ' مقطع جاهز ومعتمد تلقائيًا، ' + skipped + ' كانت جاهزة وتُركت كما هي' +
-          (failed.length ? '، وفشل ' + failed.length + ' (مقاطع: ' + failed.join('، ') + ') — استخدم «إعادة الترجمة» بجوار كل منها.' : '.') +
+          (failed.length ? '، وبقي ' + failed.length + ' بلا ترجمة (مقاطع: ' + failed.join('، ') + ') — اضغط «الترجمة» مرة أخرى بعد دقيقة، أو استخدم «إعادة الترجمة» بجوار كل منها.' : '.') +
+          (sessionLost ? ' انتهت جلسة الدخول: سجّل الدخول من جديد ثم اضغط «الترجمة».' : '') +
           ' لم يبدأ أي توليد صوتي.';
         bulkTranslate.disabled = false;
         onUpdated();
