@@ -97,6 +97,11 @@ test('completed audio jobs refresh the review manifest and insert the playable c
   assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); render\(\); return true; \}/);
 });
 
+test('translated languages mark step 2 as not required when no separate speech text exists', () => {
+  const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-flow.js'), 'utf8');
+  assert.match(source, /s2 = L !== 'ar' && !speech[\\s\\S]*?t: 'لا يلزم — يُقرأ النص المترجم'/);
+});
+
 test('translation belongs to step 1 while Gemini reading text remains a separate step 2', () => {
   assert.match(preview, /var step1 = makeStep\(box, 1, 'النص'\)/);
   assert.match(preview, /step1\.body\.appendChild\(makeTranslationReview\(box, rec\.index, arabicBlock, local\)\)/);
