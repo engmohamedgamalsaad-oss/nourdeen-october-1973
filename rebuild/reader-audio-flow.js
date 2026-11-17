@@ -17,7 +17,7 @@
   var ICONS = { done: '✅', wait: '⏳', busy: '🔄', fail: '❌', warn: '✋', todo: '⬜', na: '—' };
   var JOB_STATUS = { pending: 'في الطابور', processing: 'قيد التوليد', completed: 'مكتمل', failed: 'فشل' };
 
-  var jobs = {}, previousJobs = {}, openMemo = {}, stepMemo = {}, subMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false, workerOnline = null, workerLastSeen = null, workerError = '';
+  var jobs = {}, previousJobs = {}, openMemo = {}, stepMemo = {}, subMemo = {}, topOpen = true, timer = null, polling = false, queueError = '', queueKnown = false, workerOnline = null, workerLastSeen = null, workerError = '';
 
   function $(id) { return document.getElementById(id); }
   function story() { return window.__KH_STORY_PACKAGE || null; }
@@ -518,7 +518,7 @@
       var err = el('p', 'kh-flow-error'); err.id = 'kh-flow-queue-error'; err.hidden = true; body.appendChild(err);
       var worker = el('p', 'kh-colab-worker-status', 'جارٍ التحقق من اتصال Colab…'); worker.id = 'kh-colab-worker-status'; worker.dataset.state = 'unknown'; body.appendChild(worker);
       sum.addEventListener('click', function () { setTimeout(function () { topOpen = top.open; }, 0); });
-      host.insertAdjacentElement('afterend', top);
+      host.insertAdjacentElement('beforebegin', top);
     }
     var tbody = top.querySelector('.kh-top-body');
     if (banner && banner.parentNode !== tbody) tbody.appendChild(banner);
