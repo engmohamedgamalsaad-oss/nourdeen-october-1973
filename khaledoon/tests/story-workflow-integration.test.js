@@ -42,7 +42,7 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded story markers must be decoded before the legacy artifact guard');
   assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
   assert.ok(publisher.includes('contentForSafetyScan(file)'), 'legacy-format rejection must scan decoded content, not only the submitted base64 string');
-  assert.ok(publisher.includes('2026-11-15-text-only-translation-pr-1'), 'publisher capability version must identify the direct-main implementation');
+  assert.ok(publisher.includes('2026-11-17-published-text-only-translation-pr-1'), 'publisher capability version must identify the direct-main implementation');
   assert.ok(publisher.includes('supports_v2_publish: false'), 'V2 publishing must not be advertised as a current general capability');
   assert.ok(publisher.includes('submittedStorySection && submittedStorySection !== "october"'), 'legacy V1 publishing must be limited to October');
   assert.ok(publisher.includes("let previousRoot = ''"));
@@ -995,7 +995,10 @@ test('story publisher creates a review PR and admin verifies merge plus the actu
   assert.ok(admin.includes("text_languages:publicationMode==='text_only'?[selectedTextLanguage]:undefined"), 'text-only publisher must submit only the language selected in the preview');
   assert.ok(admin.includes("localStorage.getItem('kh-text-publish-language')"), 'admin must require a selected preview language instead of silently publishing all four');
   assert.ok(admin.includes('نشر النص فقط (طلب مراجعة)'));
-  assert.ok(admin.includes("if(review.publish_pr_number||review.publish_commit_sha||review.published_to_main_at)"));
+  assert.ok(admin.includes("if(publicationMode!=='text_only'&&(review.publish_pr_number||review.publish_commit_sha||review.published_to_main_at))"));
+  assert.ok(admin.includes("var publishedTextOnlyUpdate=publicationMode==='text_only'&&it.status==='published'"));
+  assert.ok(admin.includes("capabilityResult.supports_published_text_only_translation_pr!==true"));
+  assert.ok(admin.includes("var publishedTextReady=it.status==='published'"));
 });
 
 test('story generation uses a stable shared theme asset and fails closed when it cannot load', function () {
@@ -1030,10 +1033,17 @@ test('unified publisher requires an approved canonical package before creating a
   assert.ok(publisher.includes('supports_story_package_publish: true'));
   assert.ok(publisher.includes('body.submission_table'));
   assert.ok(publisher.includes('body.submission_id'));
-  assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
+  assert.ok(publisher.includes('.from(submissionTable).select("id,status,story_meta").eq("id", submissionId).maybeSingle()'));
   assert.ok(publisher.includes('sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true'));
   assert.ok(publisher.includes('const savedStoryPackageRaw: any ='));
-  assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
+  assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload" && !isPublishedTextOnlyUpdate'));
+  assert.ok(publisher.includes('sourceRecord.status === "published" && sourceMeta.story_only_draft === true'));
+  assert.ok(publisher.includes('review.decision === "published"'));
+  assert.equal((publisher.match(/body\.text_languages\.length !== 1/g) || []).length, 2, 'both translation validation gates must require exactly one explicitly selected language');
+  assert.ok(publisher.includes('if (!["karma", "narrator"].includes(currentArabicBlocks[index]?.speaker)) continue;'), 'only speech blocks may be copied into the published locale');
+  assert.ok(publisher.includes('publishedBlock.text = incomingBlock.text'), 'only approved translated block text may be copied into the live locale');
+  assert.ok(!publisher.includes('currentStory.i18n[lang] = translated'), 'translation-only publication must preserve the rest of each published locale');
+  assert.ok(publisher.includes('indexEntryForPublish = existingEntry'), 'translation-only publication must preserve published index metadata');
   assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedStoryPackage)'));
   var packageGuard = publisher.indexOf('if (isStoryOnlyDraft) {');
   var lockWrite = publisher.indexOf('const lockBranch = "khaledoon/publish-main-lock"');
