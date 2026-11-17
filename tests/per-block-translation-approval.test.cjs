@@ -101,7 +101,7 @@ test('translation belongs to step 1 while Gemini reading text remains a separate
   assert.match(preview, /var step1 = makeStep\(box, 1, 'النص'\)/);
   assert.match(preview, /step1\.body\.appendChild\(makeTranslationReview\(box, rec\.index, arabicBlock, local\)\)/);
   assert.match(preview, /var step2 = makeStep\(box, 2, 'نص القراءة \(Gemini\)'\)/);
-  assert.match(preview, /لم يُجهّز نص القراءة الصوتية لهذا المقطع بعد/);
+  assert.match(preview, /لا يلزم نص قراءة منفصل لهذه اللغة/);
   assert.match(preview, /return \[\{ n: 1, label: 'النص', s: s1\.s, t: s1\.t \}, \{ n: 2, label: 'نص القراءة', s: s2\.s, t: s2\.t \}/);
 });
 
@@ -158,4 +158,11 @@ test('bulk translation retries failed clips in rounds and stops on lost session'
   assert.ok(src.includes('إعادة محاولة تلقائية'));
   assert.ok(src.includes('لم يبدأ أي توليد صوتي'));
   assert.ok(!/translation_generate[\s\S]{0,400}generate_audio/.test(src.slice(src.indexOf('runTranslationRounds(todo'))));
+});
+
+
+test('queue-all button is offered for every audio language', () => {
+  const src = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
+  assert.ok(src.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang())) {\n        var queueAll"));
+  assert.ok(src.includes("queueAllButton.hidden = ['ar', 'en', 'fr', 'it', 'de'].indexOf(lang()) < 0"));
 });
