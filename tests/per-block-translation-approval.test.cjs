@@ -161,9 +161,10 @@ test('bulk translation retries failed clips in rounds and stops on lost session'
 });
 
 
-test('audio queue-all is enabled only for Arabic and English while other translations remain supported', () => {
+test('audio queue-all is enabled for the four translated languages without changing Arabic audio flow', () => {
   const src = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
-  assert.ok(src.includes("if (['ar', 'en'].includes(lang())) {\n        var queueAll"));
-  assert.ok(src.includes("queueAllButton.hidden = ['ar', 'en'].indexOf(lang()) < 0"));
-  assert.ok(src.includes("!['ar', 'en', 'fr', 'it', 'de'].includes(lang())"), 'translation content remains available in all five languages');
+  assert.ok(src.includes("if (['en', 'fr', 'it', 'de'].includes(lang())) {\\n        var queueAll"));
+  assert.ok(src.includes("queueAllButton.hidden = ['en', 'fr', 'it', 'de'].indexOf(lang()) < 0"));
+  assert.ok(src.includes('if (!st || L === "ar" || !st.i18n'));
+  assert.ok(src.includes("var original = L === 'ar' && local && typeof local.text === 'string' ? local.text : ''"));
 });
