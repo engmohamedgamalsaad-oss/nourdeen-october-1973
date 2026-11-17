@@ -14,7 +14,9 @@ function loadPure() {
   assert.ok(a > 0 && b > a, 'reconcile-pure markers');
   const js = ts.transpileModule(source.slice(a, b), { compilerOptions: { target: 'ES2022' } }).outputText;
   const sha256Hex = (bytes) => Promise.resolve(crypto.createHash('sha256').update(bytes).digest('hex'));
-  return new Function('sha256Hex', js + '; return { reconcilePlan, storyFromSnapshot, isSpeakableBlock };')(sha256Hex);
+  const langs = /const SUPPORTED_AUDIO_LANGUAGES = (\[[^\]]*\]);/.exec(source);
+  assert.ok(langs, 'SUPPORTED_AUDIO_LANGUAGES must be declared in index.ts');
+  return new Function('sha256Hex', 'SUPPORTED_AUDIO_LANGUAGES', js + '; return { reconcilePlan, storyFromSnapshot, isSpeakableBlock };')(sha256Hex, JSON.parse(langs[1]));
 }
 const h = (t) => crypto.createHash('sha256').update(String(t).trim()).digest('hex');
 const blk = (speaker, text) => ({ speaker, text });
