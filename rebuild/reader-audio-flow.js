@@ -598,7 +598,7 @@
       });
       bulkRow.appendChild(publishText);
       bulkRow.appendChild(audioPending);
-      if (['ar', 'en'].includes(lang())) {
+      if (['ar', 'en', 'fr', 'it', 'de'].includes(lang())) {
         var queueAll = el('button', 'kh-translation-queue-all', 'توليد كل المقاطع');
         queueAll.id = 'kh-translation-queue-all'; queueAll.type = 'button';
         queueAll.addEventListener('click', async function () {
@@ -622,7 +622,7 @@
     var bulkTranslateButton = $('kh-translation-bulk-generate');
     if (bulkTranslateButton) bulkTranslateButton.hidden = false;
     var queueAllButton = $('kh-translation-queue-all');
-    if (queueAllButton) queueAllButton.hidden = ['ar', 'en'].indexOf(lang()) < 0;
+    if (queueAllButton) queueAllButton.hidden = ['ar', 'en', 'fr', 'it', 'de'].indexOf(lang()) < 0;
     top.open = topOpen;
   }
   function updateTopSummary() {
@@ -746,7 +746,7 @@
         step2.body.appendChild(el('p', 'kh-muted', 'هذا المقطع لا يحتاج نص قراءة منفصلًا.'));
       }
       if (L !== 'ar' && !speech.length) {
-        step2.body.appendChild(el('p', 'kh-muted', 'لم يُجهّز نص القراءة الصوتية لهذا المقطع بعد. الترجمة الظاهرة في الخطوة الأولى هي نص الحكاية، وتجهيز نص القراءة مرحلة منفصلة.'));
+        step2.body.appendChild(el('p', 'kh-muted', 'لا يلزم نص قراءة منفصل لهذه اللغة: يُقرأ النص المترجم المعتمد في الخطوة الأولى مباشرة عند التوليد.'));
       }
       body.appendChild(step2.d);
 
