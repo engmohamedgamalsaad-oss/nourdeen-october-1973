@@ -393,10 +393,8 @@ Deno.serve(async (req: Request) => {
         const textLanguages = [body.text_languages[0]];
         for (const lang of textLanguages) {
           const localized = packageData.i18n?.[lang];
-          const publishedLocale = currentStory.i18n?.[lang];
-          if (!localized || !Array.isArray(localized.blocks) || localized.blocks.length !== arabicBlocks.length ||
-              !publishedLocale || !Array.isArray(publishedLocale.blocks) || publishedLocale.blocks.length !== arabicBlocks.length) {
-            return reply(409, { error: "عدد مقاطع " + lang + " لا يطابق النص العربي أو النسخة المنشورة؛ لم يتم إنشاء طلب مراجعة." });
+          if (!localized || !Array.isArray(localized.blocks) || localized.blocks.length !== arabicBlocks.length) {
+            return reply(409, { error: "عدد مقاطع " + lang + " لا يطابق النص العربي؛ لم يتم إنشاء طلب مراجعة." });
           }
           for (let index = 0; index < arabicBlocks.length; index++) {
             const sourceBlock = arabicBlocks[index];
@@ -404,15 +402,12 @@ Deno.serve(async (req: Request) => {
             const record = translations[lang + ":" + index];
             const sourceHash = await sha256Text(String(sourceBlock.text ?? ""));
             const targetBlock = localized.blocks[index];
-            const publishedBlock = publishedLocale.blocks[index];
             if (!record || record.status !== "approved" || record.source_arabic_hash !== sourceHash ||
                 record.speaker !== sourceBlock.speaker || typeof record.translation_text !== "string" || !record.translation_text.trim() ||
-                !targetBlock || targetBlock.speaker !== sourceBlock.speaker ||
-                !publishedBlock || publishedBlock.speaker !== sourceBlock.speaker) {
+                !targetBlock || targetBlock.speaker !== sourceBlock.speaker) {
               return reply(409, { error: "ترجمة " + lang + " للمقطع " + (index + 1) + " غير معتمدة أو قديمة أو لا تطابق المتحدث؛ لم يبدأ النشر." });
             }
-            // Change only the approved block text; retain all other published locale metadata and blocks.
-            publishedBlock.text = record.translation_text.trim();
+            targetBlock.text = record.translation_text.trim();
           }
         }
         packageFile.content = JSON.stringify(packageData, null, 2) + "\n";
@@ -622,10 +617,20 @@ Deno.serve(async (req: Request) => {
       }
       for (const lang of selectedTextLanguages) {
         const translated = incomingPackage.i18n?.[lang];
-        if (!translated || !Array.isArray(translated.blocks) || translated.blocks.length !== currentArabicBlocks.length) {
+        const publishedLocale = currentStory.i18n?.[lang];
+        if (!translated || !Array.isArray(translated.blocks) || translated.blocks.length !== currentArabicBlocks.length ||
+            !publishedLocale || !Array.isArray(publishedLocale.blocks) || publishedLocale.blocks.length !== currentArabicBlocks.length) {
           throw new Error("ترجمة " + lang + " غير مكتملة أو لا تطابق عدد المقاطع المنشورة؛ أوقفت النشر.");
         }
-        currentStory.i18n[lang] = translated;
+        for (let index = 0; index < currentArabicBlocks.length; index++) {
+          const incomingBlock = translated.blocks[index];
+          const publishedBlock = publishedLocale.blocks[index];
+          if (!incomingBlock || !publishedBlock || incomingBlock.speaker !== publishedBlock.speaker) {
+            throw new Error("المتحدث أو ترتيب المقاطع في " + lang + " لا يطابق النسخة المنشورة؛ أوقفت النشر.");
+          }
+          // Preserve the published locale object and update only the approved text field.
+          publishedBlock.text = incomingBlock.text;
+        }
       }
       incomingPackageFile.content = JSON.stringify(currentStory, null, 2) + "\n";
       incomingPackageFile.encoding = "utf-8";
