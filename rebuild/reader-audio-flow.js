@@ -706,7 +706,7 @@
     if (currentTranslationStale && genButton) { genButton.disabled = true; genButton.title = 'نفّذ «الترجمة» لهذا المقطع قبل توليد الصوت.'; }
     else if (genButton) { genButton.disabled = false; genButton.removeAttribute('title'); }
     info.forEach(function (rec) {
-      if (!rec.panels.length && (L !== 'ar' && L !== 'en')) return;
+      /* كل مقاطع اللغة المترجمة يجب أن تعرض خطواتها حتى قبل وجود أي صوت أو بطاقة مراجعة. */
       var local = sb[rec.index], speaker = local && local.speaker;
       var box = el('details', 'kh-flow-box'); box.dataset.index = String(rec.index);
       var sum = el('summary', 'kh-flow-summary');
