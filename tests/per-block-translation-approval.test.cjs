@@ -82,10 +82,10 @@ const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review
 
 test('bulk translation paints each segment immediately and preserves the result in its own editor', () => {
   assert.match(preview, /function paintTranslationBlock\(index, state, message, record\)/);
-  assert.match(preview, /translationWorkingText\\[key\\] = String\\(result\\.translation\\.translation_text \\|\\| ''\\)/);
+  assert.match(preview, /translationWorkingText\[key\] = String\(result\.translation\.translation_text \|\| ''\)/);
   assert.match(preview, /paintTranslationBlock\(i, 'approved'/);
   assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
-  assert.match(preview, /translationStates\\[key\\] = 'processing'/);
+  assert.match(preview, /translationStates\[key\] = 'processing'/);
   assert.match(preview, /translationStates\[key\] !== 'failed'/);
   assert.match(preview, /translationStates\\[key\\] = 'processing'/);
 });
