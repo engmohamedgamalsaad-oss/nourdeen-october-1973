@@ -598,7 +598,7 @@
       });
       bulkRow.appendChild(publishText);
       bulkRow.appendChild(audioPending);
-      if (['ar', 'en', 'fr', 'it', 'de'].includes(lang())) {
+      if (['en', 'fr', 'it', 'de'].includes(lang())) {
         var queueAll = el('button', 'kh-translation-queue-all', 'توليد كل المقاطع');
         queueAll.id = 'kh-translation-queue-all'; queueAll.type = 'button';
         queueAll.addEventListener('click', async function () {
@@ -622,7 +622,7 @@
     var bulkTranslateButton = $('kh-translation-bulk-generate');
     if (bulkTranslateButton) bulkTranslateButton.hidden = false;
     var queueAllButton = $('kh-translation-queue-all');
-    if (queueAllButton) queueAllButton.hidden = ['ar', 'en', 'fr', 'it', 'de'].indexOf(lang()) < 0;
+    if (queueAllButton) queueAllButton.hidden = ['en', 'fr', 'it', 'de'].indexOf(lang()) < 0;
     top.open = topOpen;
   }
   function updateTopSummary() {

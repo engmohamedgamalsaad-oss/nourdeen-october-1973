@@ -161,8 +161,11 @@ test('bulk translation retries failed clips in rounds and stops on lost session'
 });
 
 
-test('queue-all button is offered for every audio language', () => {
+test('audio queue-all is enabled for the four translated languages without changing Arabic audio flow', () => {
   const src = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
-  assert.ok(src.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang())) {\n        var queueAll"));
-  assert.ok(src.includes("queueAllButton.hidden = ['ar', 'en', 'fr', 'it', 'de'].indexOf(lang()) < 0"));
+  assert.ok(src.includes("if (['en', 'fr', 'it', 'de'].includes(lang()))"));
+  assert.ok(src.includes("var queueAll = el('button', 'kh-translation-queue-all'"));
+  assert.ok(src.includes("queueAllButton.hidden = ['en', 'fr', 'it', 'de'].indexOf(lang()) < 0"));
+  assert.ok(src.includes('if (!st || L === "ar" || !st.i18n'));
+  assert.ok(src.includes("var original = L === 'ar' && local && typeof local.text === 'string' ? local.text : ''"));
 });
