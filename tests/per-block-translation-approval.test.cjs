@@ -82,12 +82,12 @@ const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review
 
 test('bulk translation paints each segment immediately and preserves the result in its own editor', () => {
   assert.match(preview, /function paintTranslationBlock\(index, state, message, record\)/);
-  assert.match(preview, /translationWorkingText\[lang\(\) \+ ':' \+ i\] = String\(result\.translation\.translation_text \|\| ''\)/);
+  assert.match(preview, /translationWorkingText\\[key\\] = String\\(result\\.translation\\.translation_text \\|\\| ''\\)/);
   assert.match(preview, /paintTranslationBlock\(i, 'approved'/);
   assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
-  assert.match(preview, /translationStates\[currentTranslationKey\] === 'processing'/);
+  assert.match(preview, /translationStates\\[key\\] = 'processing'/);
   assert.match(preview, /translationStates\[key\] !== 'failed'/);
-  assert.match(preview, /translationStates\[lang\(\) \+ ':' \+ i\] = 'processing'/);
+  assert.match(preview, /translationStates\\[key\\] = 'processing'/);
 });
 
 test('completed audio jobs refresh the review manifest and insert the playable clip without a manual page reload', () => {
@@ -140,7 +140,22 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.match(preview, /النص العربي المرجعي:/);
   assert.equal(preview.includes('source.appendChild(el("p", "", arabicBlock'), false);
   assert.ok(preview.includes('wrap.append(textarea, buttons, status)'));
-  assert.ok(assets.includes('const retryableStatuses = new Set([429, 500, 502, 503, 504])'));
-  assert.match(assets, /attempt < 3/);
-  assert.match(assets, /بعد 3 محاولات/);
+  assert.ok(assets.includes('const translationModels = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"];'));
+  assert.equal(/translationModels = \[[^\]]*flash-lite/.test(assets), false);
+  assert.ok(assets.includes('const retryableStatuses = new Set([408, 429, 500, 502, 503, 504]);'));
+  assert.match(assets, /const translationDeadlineAt = Date\.now\(\) \+ 75000;/);
+  assert.match(assets, /const delayMs = Math\.min\(6000, Math\.max\(retryAfterMs, 2000 \* attempt\)\);/);
+  assert.match(assets, /AbortController\(\)[\s\S]{0,120}perAttemptTimeoutMs/);
+  assert.match(assets, /بعد " \+ attemptsMade \+ " محاولات على عدة نماذج/);
+  assert.match(assets, /status: "approved", auto_approved: true, model,/);
+});
+
+test('bulk translation retries failed clips in rounds and stops on lost session', () => {
+  const src = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
+  assert.ok(src.includes('async function runTranslationRounds('));
+  assert.ok(src.includes('maxRounds: 3, waitSeconds: 20'));
+  assert.ok(src.includes("outcome === 'auth'"));
+  assert.ok(src.includes('إعادة محاولة تلقائية'));
+  assert.ok(src.includes('لم يبدأ أي توليد صوتي'));
+  assert.ok(!/translation_generate[\s\S]{0,400}generate_audio/.test(src.slice(src.indexOf('runTranslationRounds(todo'))));
 });
