@@ -1040,7 +1040,7 @@ test('unified publisher requires an approved canonical package before creating a
   assert.ok(publisher.includes('sourceRecord.status === "published" && sourceMeta.story_only_draft === true'));
   assert.ok(publisher.includes('review.decision === "published"'));
   assert.ok(publisher.includes('body.text_languages.length !== 1'), 'text-only publication must require exactly one explicitly selected language');
-  assert.ok(publisher.includes('publishedBlock.text = record.translation_text.trim()'));
+  assert.ok(publisher.includes('publishedBlock.text = incomingBlock.text'), 'only approved translated block text may be copied into the live locale');
   assert.ok(!publisher.includes('currentStory.i18n[lang] = translated'), 'translation-only publication must preserve the rest of each published locale');
   assert.ok(publisher.includes('indexEntryForPublish = existingEntry'), 'translation-only publication must preserve published index metadata');
   assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedStoryPackage)'));
