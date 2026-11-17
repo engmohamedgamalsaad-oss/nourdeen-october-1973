@@ -578,14 +578,11 @@ Deno.serve(async (req: Request) => {
         throw new Error("نشر ترجمة لغة واحدة يتطلب حكاية منشورة في مسارها الحالي؛ أوقفت النشر دون إنشاء طلب مراجعة.");
       }
       const textLanguageOptions = ["en", "fr", "it", "de"];
-      let selectedTextLanguages = textLanguageOptions;
-      if (body.text_languages !== undefined) {
-        if (!Array.isArray(body.text_languages) || !body.text_languages.length ||
-            body.text_languages.some((lang: unknown) => typeof lang !== "string" || !textLanguageOptions.includes(lang))) {
-          throw new Error("text_languages غير صالحة؛ أوقفت النشر دون تغيير أي لغة.");
-        }
-        selectedTextLanguages = textLanguageOptions.filter((lang) => body.text_languages.includes(lang));
+      if (!Array.isArray(body.text_languages) || body.text_languages.length !== 1 ||
+          typeof body.text_languages[0] !== "string" || !textLanguageOptions.includes(body.text_languages[0])) {
+        throw new Error("اختر لغة واحدة فقط للنشر: en أو fr أو it أو de.");
       }
+      const selectedTextLanguages = [body.text_languages[0]];
       const currentStoryPath = storyRoot + "story.json";
       const currentQuizPath = "stories/quizzes/" + storyId + ".json";
       const decodeGithubText = (response: any) => new TextDecoder().decode(
@@ -628,7 +625,8 @@ Deno.serve(async (req: Request) => {
           if (!incomingBlock || !publishedBlock || incomingBlock.speaker !== publishedBlock.speaker) {
             throw new Error("المتحدث أو ترتيب المقاطع في " + lang + " لا يطابق النسخة المنشورة؛ أوقفت النشر.");
           }
-          // Preserve the published locale object and update only the approved text field.
+          if (!["karma", "narrator"].includes(currentArabicBlocks[index]?.speaker)) continue;
+          // Preserve the published locale object and update only the approved speech text field.
           publishedBlock.text = incomingBlock.text;
         }
       }
