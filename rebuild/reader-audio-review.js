@@ -1078,7 +1078,7 @@ function engineView(language, index) {
   return view;
 }
 function engineBlockReason(language, index, opts) {
-  if (!['ar', 'en'].includes(language)) return 'حالة الطابور ظاهرة لهذه اللغة، لكن إرسال التوليد غير مفعّل لها في المحرك الحالي.';
+  if (LANGS.indexOf(language) < 0) return 'لغة الصوت غير مدعومة في المحرك.';
   if (reconcileBlocked) return 'تغيّرت الحكاية وهناك مقاطع قيد التوليد؛ انتظر اكتمالها ثم أعد فتح المعاينة.';
   /* No turn-order requirement: any block can be sent at any time. */
   if (language === 'ar') {
@@ -1097,9 +1097,9 @@ function fillEnginePanel(panel) {
   var reason = view.state === 'none' || view.canResend ? engineBlockReason(language, index) : '';
   var busy = !!jobSendBusy[jobKey(language, index)];
   text(msg, busy ? 'جارٍ الإرسال…' : (reason || view.detail || 'جاهز للإرسال إلى المحرك.'));
-  var sendable = ['ar', 'en'].includes(language) && (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
+  var sendable = LANGS.indexOf(language) >= 0 && (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
   btn.disabled = !sendable;
-  setButtonFace(btn, 'spark', !['ar', 'en'].includes(language) ? 'غير مفعّل لهذه اللغة' : (view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك'));
+  setButtonFace(btn, 'spark', LANGS.indexOf(language) < 0 ? 'غير مفعّل لهذه اللغة' : (view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك'));
 }
 function updateEnginePanels() {
   Array.prototype.forEach.call(document.querySelectorAll('.kh-engine-controls'), fillEnginePanel);
