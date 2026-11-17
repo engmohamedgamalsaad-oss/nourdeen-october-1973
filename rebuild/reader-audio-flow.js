@@ -393,11 +393,13 @@
       s1 = { s: 'done', t: 'جاهز' };
     }
     var readingStatus = speech ? speech.dataset.status : '';
-    s2 = readingStatus === 'approved'
-      ? { s: 'done', t: 'نص القراءة جاهز' }
-      : readingStatus === 'suggested'
-        ? { s: 'warn', t: 'بانتظار المراجعة' }
-        : { s: 'todo', t: 'لم يُجهَّز بعد' };
+    s2 = L !== 'ar' && !speech
+      ? { s: 'na', t: 'لا يلزم — يُقرأ النص المترجم' }
+      : readingStatus === 'approved'
+        ? { s: 'done', t: 'نص القراءة جاهز' }
+        : readingStatus === 'suggested'
+          ? { s: 'warn', t: 'بانتظار المراجعة' }
+          : { s: 'todo', t: 'لم يُجهَّز بعد' };
     var s3;
     if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
     else if (job.status === 'pending') s3 = { s: 'wait', t: 'في الطابور' };
