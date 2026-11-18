@@ -1331,6 +1331,11 @@ function nextArabicBlockIndex() {
   }
   return -1;
 }
+function orderedStoryBlockIndexes(blocks) {
+  return (Array.isArray(blocks) ? blocks : []).map(function (block, index) { return { block: block, index: index }; })
+    .filter(function (item) { return item.block && ['karma', 'narrator'].includes(item.block.speaker) && String(item.block.text || '').trim(); })
+    .map(function (item) { return item.index; });
+}
 function speechTextKey(index) { return 'ar:' + String(index); }
 async function prepareSpeechText(index, statusNode, button, opts) {
   var key = speechTextKey(index);
