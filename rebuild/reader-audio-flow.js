@@ -696,8 +696,6 @@
     if (audioPendingLabel) audioPendingLabel.hidden = lang() === 'ar';
     var bulkTranslateButton = $('kh-translation-bulk-generate');
     if (bulkTranslateButton) bulkTranslateButton.hidden = false;
-    var queueAllButton = $('kh-translation-queue-all');
-    if (queueAllButton) queueAllButton.hidden = ['en', 'fr', 'it', 'de'].indexOf(lang()) < 0;
     top.open = topOpen;
   }
   function updateTopSummary() {
