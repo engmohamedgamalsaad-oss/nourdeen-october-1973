@@ -89,7 +89,7 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(audioFlow.includes('الصوت لم يكتمل بعد'), 'each translated-language preview must show the text-only audio readiness notice');
   assert.ok(!audioFlow.includes("if (!rec.panels.length && (L !== 'ar' && L !== 'en')) return;"), 'all translated-language blocks must retain their four workflow steps even before audio panels exist');
   assert.ok(!admin.includes('popup.opener=null;'), 'admin preview must retain its opener so the text-only publish request reaches the matching submission');
-  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261117-step2-not-needed-1') && readerHtml.includes('reader-audio-flow.js?v=20261117-step2-not-needed-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
+  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261118-speaker-from-arabic-1') && readerHtml.includes('reader-audio-flow.js?v=20261118-speaker-from-arabic-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
   assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
   assert.ok(!preview.includes('Khaledoon_VoiceTut_Colab_Worker.ipynb'), 'the obsolete single-clip worker link must not remain');
