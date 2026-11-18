@@ -11,7 +11,7 @@ var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
 if (!core) return;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
-var manifestStale = {}, manifestGaps = {}, manifestMissing = {};
+var manifestStale = {}, manifestGaps = {}, manifestMissing = {}, manifestDropped = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
@@ -502,8 +502,23 @@ async function loadArabicExpectedTexts(blocks) {
     return approved[index] ? data.blocks[String(index)] : fallback[index];
   });
 }
+/* Arabic is the reference page: its speaker for a block is the speaker for the same block in every other
+   language (the queue and the saved clips already use it). Aligning here means a stale speaker in a
+   translation can never hide a finished clip or show the wrong label. */
+function alignSpeakersWithArabic() {
+  var arBlocks = story && story.i18n && story.i18n.ar && Array.isArray(story.i18n.ar.blocks) ? story.i18n.ar.blocks : [];
+  LANGS.forEach(function (lang) {
+    if (lang === 'ar') return;
+    var blocks = story.i18n && story.i18n[lang] && Array.isArray(story.i18n[lang].blocks) ? story.i18n[lang].blocks : [];
+    blocks.forEach(function (block, index) {
+      var ref = arBlocks[index] && arBlocks[index].speaker;
+      if (block && (ref === 'karma' || ref === 'narrator') && block.speaker !== ref) block.speaker = ref;
+    });
+  });
+}
 async function loadManifests() {
-  manifests = {}; manifestErrors = {}; manifestStale = {}; manifestGaps = {}; manifestMissing = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
+  alignSpeakersWithArabic();
+  manifests = {}; manifestErrors = {}; manifestStale = {}; manifestGaps = {}; manifestMissing = {}; manifestDropped = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
   loadedAudio = {};
   var expectedTexts = {};
   LANGS.forEach(function (lang) {
@@ -551,7 +566,9 @@ async function loadManifests() {
           seg.speaker = expectedSpeaker;
           return true;
         }
-        // Keep a bad-speaker clip from hiding every other valid segment in this language.
+        // Keep a bad-speaker clip from hiding every other valid segment in this language,
+        // but remember it so the block explains why its finished audio is not shown.
+        (manifestDropped[lang] = manifestDropped[lang] || []).push({ index: blockIndex, expected: expectedSpeaker, actual: seg.speaker });
         return false;
       });
       data.segments.forEach(function (seg) {
@@ -1660,6 +1677,18 @@ function renderBlocks() {
     return;
   }
   if (activeLang !== lang) activeLang = lang;
+  (manifestDropped[lang] || []).forEach(function (drop) {
+    var dropBlock = blockByIndex[drop.index];
+    if (!dropBlock) return;
+    var dropPanel = document.createElement('div');
+    dropPanel.className = 'kh-audio-review-controls kh-audio-card';
+    dropPanel.dataset.audioState = 'speaker-mismatch'; dropPanel.dataset.player = 'unavailable'; dropPanel.dataset.speaker = drop.expected;
+    var dropNote = document.createElement('span');
+    dropNote.className = 'kh-audio-ready-state failed';
+    text(dropNote, 'مقطع ' + (drop.index + 1) + ': الصوت المولّد موجود لكنه مسجّل بمتحدث (' + speakerLabel(drop.actual) + ') بينما متحدث هذا المقطع في الحكاية (' + speakerLabel(drop.expected) + '). وحّد المتحدث بين اللغات في ملف الحكاية ثم أعد فحص الصوت.');
+    dropPanel.appendChild(dropNote);
+    dropBlock.appendChild(dropPanel);
+  });
   (manifestStale[lang] || []).forEach(function (index) {
     var staleBlock = blockByIndex[index], staleLocal = story.i18n && story.i18n[lang] && story.i18n[lang].blocks && story.i18n[lang].blocks[index];
     if (!staleBlock || !staleLocal) return;
