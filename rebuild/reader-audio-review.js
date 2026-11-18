@@ -743,6 +743,38 @@ function renderGateBanner(banner) {
 }
 function canApprove() { return gate().ok; }
 window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate, languageGate: languageGate,
+  canQueueLanguage: async function (language) {
+    if (!story || !LANGS.includes(language)) return false;
+    var blocks = story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
+    var indexes = orderedStoryBlockIndexes(blocks);
+    if (!indexes.length) return false;
+    for (var i = 0; i < indexes.length; i++) {
+      var index = indexes[i], source = String(blocks[index] && blocks[index].text || '').trim();
+      if (!source) return false;
+      var hash = await speechSourceHash(source);
+      if (language === 'ar') {
+        var speech = speechTexts[speechTextKey(index)];
+        if (!speech || speech.status !== 'approved' || speech.source_text_hash !== hash ||
+            speech.speaker !== blocks[index].speaker || !String(speech.approved_text || '').trim()) return false;
+      } else {
+        var translation = review.translations && review.translations[language + ':' + index];
+        if (!translation || translation.status !== 'approved' || translation.source_arabic_hash !== hash ||
+            translation.speaker !== blocks[index].speaker || !String(translation.translation_text || '').trim()) return false;
+      }
+    }
+    return true;
+  },
+  canReviewLanguage: function (language) {
+    if (!story || !LANGS.includes(language) || !manifests[language] || manifestErrors[language] ||
+        (manifestStale[language] || []).length || (manifestGaps[language] || []).length) return false;
+    var blocks = story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
+    var indexes = orderedStoryBlockIndexes(blocks);
+    if (!indexes.length) return false;
+    return indexes.every(function (index) {
+      var clips = entries.filter(function (entry) { return entry.lang === language && Number(entry.block_index) === index; });
+      return clips.length > 0 && clips.every(function (entry) { return readyByKey[entry.key] === 'ready'; });
+    });
+  },
   prepareAllSpeechTexts: function (onProgress) { return prepareAllSpeechTexts(onProgress); },
   refreshAudio: async function () { await loadManifests(); render(); return true; } };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
@@ -1298,6 +1330,11 @@ function nextArabicBlockIndex() {
     })) return blockIndex;
   }
   return -1;
+}
+function orderedStoryBlockIndexes(blocks) {
+  return (Array.isArray(blocks) ? blocks : []).map(function (block, index) { return { block: block, index: index }; })
+    .filter(function (item) { return item.block && ['karma', 'narrator'].includes(item.block.speaker) && String(item.block.text || '').trim(); })
+    .map(function (item) { return item.index; });
 }
 function speechTextKey(index) { return 'ar:' + String(index); }
 async function prepareSpeechText(index, statusNode, button, opts) {
