@@ -143,6 +143,28 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }, restored).ok, true);
   const changedAudioEntries = [{ key: 'k1-new', lang: 'ar', block_index: 0, chunk_index: 0 }];
   assert.deepEqual({ ...core.restoreListenedFromDecisions(changedAudioEntries, rev, {}) }, {}, 'a changed clip key must not inherit old playback evidence');
+  const digest = 'a'.repeat(64);
+  const oldSpeakerDecision = { clips: {
+    'old-speaker-key': { lang: 'fr', block_index: 14, chunk_index: 0, speaker: 'karma',
+      status: 'accepted', audio_sha256: digest, decided_at: '2026-11-18T10:00:00.000Z',
+      text: 'same French audio' }
+  } };
+  const alignedEntry = { key: 'arabic-aligned-key', story_id: 'history/ibn-sina', lang: 'fr',
+    block_index: 14, chunk_index: 0, speaker: 'narrator', base: 'new-base',
+    source_base: 'new-source', src: 'clip-15.mp3', audio_sha256: digest, text: 'same French audio' };
+  const reconciled = core.reconcileDecisionsForExactAudio([alignedEntry], oldSpeakerDecision);
+  assert.equal(reconciled.clips['arabic-aligned-key'].status, 'accepted',
+    'an accepted decision follows the same exact MP3 when its speaker-derived key changes');
+  assert.equal(reconciled.clips['arabic-aligned-key'].speaker, 'narrator',
+    'the restored decision adopts the Arabic source speaker');
+  assert.ok(reconciled.clips['old-speaker-key'], 'the historical decision remains preserved');
+  assert.equal(core.restoreListenedFromDecisions([alignedEntry], reconciled, {})['arabic-aligned-key'], true,
+    'the unchanged MP3 retains its full-listen evidence after key reconciliation');
+  const changedDigestEntry = { ...alignedEntry, key: 'different-mp3-key', audio_sha256: 'b'.repeat(64) };
+  const changedDigestReview = core.reconcileDecisionsForExactAudio([changedDigestEntry], oldSpeakerDecision);
+  assert.equal(changedDigestReview.clips['different-mp3-key'], undefined,
+    'a different MP3 hash must never inherit a previous acceptance');
+
   assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'pending' }, listened).ok, false);
   assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'error' }, listened).ok, false);
   assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' } } }, { k1: 'ready', k2: 'ready' }, listened).unreviewed, 1);
