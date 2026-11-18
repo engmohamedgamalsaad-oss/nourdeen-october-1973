@@ -41,9 +41,15 @@ test('manual reading-text edit is optional and never queues audio by itself', ()
   assert.doesNotMatch(fn, /generateNextQueuedBlock|sendBlockToEngine/);
 });
 
-test('buttons: «الترجمة», per-block «إعادة الترجمة», «توليد كل المقاطع»', () => {
+test('language-specific audio controls are shown in the story preview and gated per language', () => {
   assert.match(flow, /'kh-translation-bulk-generate', 'الترجمة'/);
-  assert.match(flow, /'kh-translation-queue-all', 'توليد كل المقاطع'/);
+  assert.match(flow, /kh-language-audio-batch/);
+  assert.match(flow, /kh-language-audio-generate/);
+  assert.match(flow, /kh-language-audio-review/);
+  assert.match(flow, /action: 'enqueue_approved_language'/);
+  assert.match(review, /canQueueLanguage: async function/);
+  assert.match(review, /canReviewLanguage: function/);
+  assert.doesNotMatch(flow, /kh-translation-queue-all/);
   assert.match(flow, /"kh-translation-generate", "إعادة الترجمة"/);
   assert.match(review, /iconButton\('spark', 'إعادة الترجمة'/);
   assert.match(flow, /prepareAllSpeechTexts/);
