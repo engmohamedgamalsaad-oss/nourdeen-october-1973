@@ -16,6 +16,7 @@ on:
       - "supabase/functions/publish-story-pr/index.ts"
       - "supabase/functions/audio-review-assets/**"
       - "tests/**"
+      - "stories/**/story.json"
       - "rebuild/**"
       - "scripts/e2e-story-preview.cjs"
       - ".github/workflows/story-workflow-tests.yml"
@@ -49,6 +50,8 @@ jobs:
         run: node khaledoon/tests/audio-review-core.test.cjs
       - name: Type-check audio review and translation Edge Function
         run: deno check supabase/functions/audio-review-assets/index.ts
+      - name: Run story speaker consistency test
+        run: node tests/story-speaker-consistency.test.cjs
       - name: Run reading-text auto-approve tests
         run: node tests/reading-text-auto-approve.test.cjs
       - name: Run rejection-cycle queue behaviour tests (mock Supabase)
