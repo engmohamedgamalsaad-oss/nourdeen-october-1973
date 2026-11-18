@@ -267,6 +267,49 @@ function applyDecision(review, entry, decision, now) {
 /* شرط اعتماد المعاينة: كل مقطع (في اللغات الخمس) جاهز ومقبول، ولا مرفوض ولا غير مراجَع. */
 /* A saved decision could only be recorded after the full clip was heard. Restore that proof across preview reloads,
    but only for the exact clip key (which includes its text/audio revision); changed audio gets a new key. */
+
+/* Restore a prior decision only when the current MP3 bytes are proven identical.
+   This safely carries approvals across metadata/key changes (such as Arabic speaker alignment). */
+function reconcileDecisionsForExactAudio(entries, review) {
+  var r = cloneReview(review);
+  (Array.isArray(entries) ? entries : []).forEach(function (entry) {
+    if (!entry || !entry.key || !entry.audio_sha256) return;
+    var digest = String(entry.audio_sha256).toLowerCase();
+    if (!/^[a-f0-9]{64}$/.test(digest)) return;
+    var candidates = Object.keys(r.clips).map(function (key) {
+      return { key: key, clip: r.clips[key] };
+    }).filter(function (item) {
+      var clip = item.clip;
+      return item.key !== entry.key && clip &&
+        (clip.status === 'accepted' || clip.status === 'rejected') &&
+        clip.lang === entry.lang &&
+        Number(clip.block_index) === Number(entry.block_index) &&
+        Number(clip.chunk_index || 0) === Number(entry.chunk_index || 0) &&
+        String(clip.audio_sha256 || '').toLowerCase() === digest;
+    });
+    if (!candidates.length) return;
+    candidates.sort(function (a, b) {
+      var at = Date.parse(a.clip.decided_at || '') || 0;
+      var bt = Date.parse(b.clip.decided_at || '') || 0;
+      return bt - at;
+    });
+    var prior = candidates[0].clip;
+    r.clips[entry.key] = Object.assign({}, prior, {
+      story_id: entry.story_id || prior.story_id,
+      lang: entry.lang,
+      block_index: Number(entry.block_index),
+      chunk_index: Number(entry.chunk_index || 0),
+      speaker: entry.speaker || prior.speaker,
+      base: entry.base || prior.base,
+      source_base: entry.source_base || prior.source_base || '',
+      src: entry.src || prior.src || '',
+      audio_sha256: digest,
+      text: entry.text || prior.text
+    });
+  });
+  return r;
+}
+
 function restoreListenedFromDecisions(entries, review, listenedByKey) {
   var listened = Object.assign(Object.create(null), listenedByKey || {});
   var r = cloneReview(review);
@@ -406,7 +449,7 @@ var api = {
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
-  restoreListenedFromDecisions: restoreListenedFromDecisions,
+  restoreListenedFromDecisions: restoreListenedFromDecisions, reconcileDecisionsForExactAudio: reconcileDecisionsForExactAudio,
   evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, validateTranslationAlignment: validateTranslationAlignment, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
