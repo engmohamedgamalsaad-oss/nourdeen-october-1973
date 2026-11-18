@@ -75,7 +75,7 @@ test('bulk language audio queue is all-or-nothing when any segment is unapproved
   assert.match(assets, /required_segments: indexes\.length/);
   assert.match(assets, /approved_segments: prepared\.length/);
   assert.match(assets, /translation\.speaker === block\.speaker/);
-  assert.match(preview, /اكتمل فحص اللغة/);
+  assert.match(preview, /تم فحص اللغة كاملة/);
 });
 
 const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
@@ -166,11 +166,16 @@ test('bulk translation retries failed clips in rounds and stops on lost session'
 });
 
 
-test('audio queue-all is enabled for the four translated languages without changing Arabic audio flow', () => {
+test('audio generation and review controls follow the selected language without changing Arabic text flow', () => {
   const src = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
-  assert.ok(src.includes("if (['en', 'fr', 'it', 'de'].includes(lang()))"));
-  assert.ok(src.includes("var queueAll = el('button', 'kh-translation-queue-all'"));
-  assert.ok(src.includes("queueAllButton.hidden = ['en', 'fr', 'it', 'de'].indexOf(lang()) < 0"));
+  const audioReview = fs.readFileSync('rebuild/reader-audio-review.js', 'utf8');
+  assert.ok(src.includes('kh-language-audio-batch'));
+  assert.ok(src.includes('kh-language-audio-generate'));
+  assert.ok(src.includes('kh-language-audio-review'));
+  assert.ok(src.includes("action: 'enqueue_approved_language'"));
+  assert.ok(audioReview.includes('canQueueLanguage: async function'));
+  assert.ok(audioReview.includes('canReviewLanguage: function'));
+  assert.ok(!src.includes('kh-translation-queue-all'));
   assert.ok(src.includes('if (!st || L === "ar" || !st.i18n'));
   assert.ok(src.includes("var original = L === 'ar' && local && typeof local.text === 'string' ? local.text : ''"));
 });
