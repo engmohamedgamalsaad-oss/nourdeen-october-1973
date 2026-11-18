@@ -642,8 +642,32 @@ async function loadManifests() {
   });
   entries = await Promise.all(pendingEntries);
 
-  // Preserve historical decisions. Reattach an old decision to a changed key only
-  // when the current MP3 SHA-256 exactly matches the audio that was accepted/rejected.
+  // Approval recovery: manifests may predate embedded audio hashes. Hash the currently
+  // selected language's actual MP3 bytes before reconciling old decisions; never infer
+  // approval from text, filename, speaker, or timestamps alone.
+  var recoveryEntries = entries.filter(function (entry) { return entry.lang === activeLang; });
+  for (var recoveryIndex = 0; recoveryIndex < recoveryEntries.length; recoveryIndex++) {
+    var recoveryEntry = recoveryEntries[recoveryIndex];
+    if (/^[a-f0-9]{64}$/i.test(String(recoveryEntry.audio_sha256 || ''))) continue;
+    try {
+      var recoveryUrl = new URL(recoveryEntry.signed_src || recoveryEntry.src, manifestUrl(recoveryEntry.lang));
+      recoveryUrl.searchParams.set('v', String(recoveryEntry.segment.audio_sha256 || recoveryEntry.segment.hash || recoveryEntry.manifest.generated_at || recoveryEntry.manifest.version));
+      var recoveryBlob = await fetchBlobWithProgress(recoveryUrl.href, function () {});
+      var recoveryDigest = await core.sha256Bytes(await recoveryBlob.arrayBuffer());
+      recoveryEntry.audio_sha256 = recoveryDigest;
+      recoveryEntry.segment.audio_sha256 = recoveryDigest;
+      recoveryEntry.base = await core.baseKey(recoveryEntry.story_id, recoveryEntry.lang, recoveryEntry.speaker, recoveryEntry.text, {
+        voice: recoveryEntry.segment.voice, provider: recoveryEntry.segment.provider, model: recoveryEntry.segment.model, audio_revision: recoveryDigest
+      });
+      recoveryEntry.key = await core.clipKey(recoveryEntry.base, Number(review.regen[recoveryEntry.base] || 0));
+      readyByKey[recoveryEntry.key] = 'ready';
+    } catch (recoveryError) {
+      // Leave this entry un-reconciled if its bytes cannot be proven identical.
+    }
+  }
+
+  // Preserve historical decisions only when the current MP3 bytes exactly match
+  // the digest saved with the previous accept/reject decision.
   review = core.reconcileDecisionsForExactAudio(entries, review);
   // A saved accept/reject decision proves full playback for this exact, unchanged clip.
   played = core.restoreListenedFromDecisions(entries, review, played);
