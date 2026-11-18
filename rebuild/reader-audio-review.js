@@ -538,15 +538,30 @@ async function loadManifests() {
       if (!data || data.version !== 1 || data.story !== story.slug || data.section !== story.section || data.language !== lang || !Array.isArray(data.segments) || !data.segments.length) {
         throw new Error('بيانات manifest غير متوافقة مع الحكاية أو اللغة.');
       }
+      var localized = story.i18n && story.i18n[lang];
+      var localizedBlocks = localized && Array.isArray(localized.blocks) ? localized.blocks : [];
+      data.segments = data.segments.filter(function (seg) {
+        var blockIndex = Number(seg.block_index);
+        var expectedSpeaker = Number.isInteger(blockIndex) && localizedBlocks[blockIndex] ? localizedBlocks[blockIndex].speaker : '';
+        if (expectedSpeaker !== 'karma' && expectedSpeaker !== 'narrator') return true;
+        if (seg.speaker === expectedSpeaker) return true;
+        var expectedVoice = expectedSpeaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference';
+        if (seg.voice === expectedVoice) {
+          // Repair metadata only when the stored voice ID independently proves the story speaker.
+          seg.speaker = expectedSpeaker;
+          return true;
+        }
+        // Keep a bad-speaker clip from hiding every other valid segment in this language.
+        return false;
+      });
       data.segments.forEach(function (seg) {
         var expectedModel = ['fr', 'it', 'de'].indexOf(lang) >= 0 ? 'k2-fsa/OmniVoice' : 'VoiceTut Egyptian Tashkeel';
         var engineOk = seg.provider === 'omnivoice' && seg.model === expectedModel &&
           seg.voice === (seg.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference');
-        if (!engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
+        if (!engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
           throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
         }
       });
-      var localized = story.i18n && story.i18n[lang];
       var split = core.splitStaleSegments(localized && localized.blocks, data.segments, expectedTexts[lang]);
       manifestStale[lang] = split.stale;
       data.segments = split.fresh;
