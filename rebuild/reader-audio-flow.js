@@ -239,7 +239,7 @@
         save.disabled = !String(textarea.value || "").trim();
         return;
       }
-      status.textContent = r.status === "approved" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة الجديدة جاهزة ومعتمدة" + (r.auto_approved ? " تلقائيًا" : "") : "توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة» لتجهيز ترجمة جديدة في هذه المعاينة.") :
+      status.textContent = r.status === "approved" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة الجديدة جاهزة ومطابقة للمصدر العربي" + (r.auto_approved ? " تلقائيًا" : "") : "توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة» لتجهيز ترجمة جديدة في هذه المعاينة.") :
         r.status === "draft" ? "مسودة قديمة — اضغط «إعادة الترجمة»" :
         r.status === "needs_revision" ? "تحتاج إلى إعادة ترجمة" : "لم تُجهَّز الترجمة بعد — اضغط «الترجمة»";
       status.dataset.state = translationConfirmed[key] ? (r.status || "missing") : (r.status === "approved" ? "saved-not-loaded" : (r.status || "missing"));
@@ -497,7 +497,7 @@
     });
     button.hidden = lang() === 'ar';
     button.disabled = lang() === 'ar' || !translationLoaded || !allApproved;
-    button.title = allApproved ? 'كل المقاطع المنطوقة أُعيد تجهيز ترجمتها واعتمادها في هذه المعاينة؛ اضغط لنشر النص فقط.' : 'أعد ترجمة كل المقاطع المنطوقة واعتمدها في هذه المعاينة قبل النشر.';
+    button.title = allApproved ? 'كل المقاطع المنطوقة لها ترجمة جاهزة ومطابقة للمصدر العربي في هذه المعاينة؛ اضغط لنشر النص فقط.' : 'أكمل ترجمة كل المقاطع المنطوقة وتأكد من مطابقتها للمصدر العربي قبل النشر.';
   }
   function refresh() {
     Array.prototype.forEach.call(document.querySelectorAll('.kh-flow-box'), paint);
@@ -545,8 +545,8 @@
       generate.disabled = !queueReady;
       reviewButton.disabled = !reviewReady;
       status.textContent = queueReady
-        ? (reviewReady ? 'الترجمة معتمدة، وكل ملفات الصوت جاهزة للمراجعة.' : 'النصوص معتمدة. يمكنك توليد صوت هذه اللغة؛ زر المعاينة سيتاح بعد اكتمال كل المقاطع.')
-        : (L === 'ar' ? 'اعتمد نص القراءة الصوتية لكل المقاطع أولًا.' : 'أكمل واعتمد ترجمة كل المقاطع المنطوقة لهذه اللغة أولًا.');
+        ? (reviewReady ? 'الترجمة مكتملة ومطابقة للمصدر العربي، وكل ملفات الصوت جاهزة للمراجعة.' : 'ترجمة هذه اللغة مكتملة ومطابقة للمصدر. يمكنك توليد صوتها؛ زر المعاينة سيتاح بعد اكتمال كل المقاطع.')
+        : (L === 'ar' ? 'جهّز نص القراءة الصوتية لكل المقاطع أولًا.' : 'أكمل ترجمة كل المقاطع المنطوقة لهذه اللغة وتأكد من مطابقتها للمصدر العربي أولًا.');
       if (reviewReady) status.textContent = 'اكتمل توليد كل المقاطع. افتح المعاينة واستمع لكل مقطع قبل اعتماده.';
     } catch (e) {
       status.textContent = 'تعذر التحقق من جاهزية اللغة: ' + (e.message || e);
