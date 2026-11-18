@@ -167,27 +167,50 @@ function settleControl(ctrl) {
   var btn = ctrl.querySelector('.kh-audio-review-btn.play');
   if (btn) setPlayButton(btn, 'play');
 }
+function isMp3Payload(bytes) {
+  if (!bytes || bytes.length < 4) return false;
+  // Accept an ID3 tag or an MPEG audio frame sync. Reject HTML/JSON/error bodies.
+  if (bytes[0] === 0x49 && bytes[1] === 0x44 && bytes[2] === 0x33) return true;
+  for (var i = 0; i < Math.min(bytes.length - 1, 4096); i++) {
+    if (bytes[i] === 0xff && (bytes[i + 1] & 0xe0) === 0xe0) return true;
+  }
+  return false;
+}
 async function fetchBlobWithProgress(href, onProgress) {
   var response = await fetch(href, { cache: 'no-store' });
   if (!response.ok) throw new Error('تعذر تحميل ملف الصوت (' + response.status + ').');
   var total = Number(response.headers.get('content-length')) || 0;
-  var type = response.headers.get('content-type') || '';
-  if (type.indexOf('audio/') !== 0) type = 'audio/mpeg';
+  var type = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  var chunks = [], received = 0;
   if (!response.body || typeof response.body.getReader !== 'function') {
     onProgress(null);
-    return await response.blob();
+    var fallback = await response.arrayBuffer();
+    chunks.push(new Uint8Array(fallback));
+    received = fallback.byteLength;
+  } else {
+    var reader = response.body.getReader();
+    onProgress(total ? 0 : null);
+    for (;;) {
+      var step = await reader.read();
+      if (step.done) break;
+      chunks.push(step.value);
+      received += step.value.length;
+      onProgress(total ? Math.min(1, received / total) : null);
+    }
   }
-  var reader = response.body.getReader(), chunks = [], received = 0;
-  onProgress(total ? 0 : null);
-  for (;;) {
-    var step = await reader.read();
-    if (step.done) break;
-    chunks.push(step.value);
-    received += step.value.length;
-    onProgress(total ? Math.min(1, received / total) : null);
+  if (!received) throw new Error('استجابة ملف الصوت فارغة.');
+  var head = new Uint8Array(Math.min(received, 4096)), offset = 0;
+  for (var c = 0; c < chunks.length && offset < head.length; c++) {
+    var take = Math.min(chunks[c].length, head.length - offset);
+    head.set(chunks[c].subarray(0, take), offset);
+    offset += take;
   }
+  if (type.indexOf('audio/') !== 0 && type !== 'application/octet-stream' && type !== 'binary/octet-stream') {
+    throw new Error('نوع استجابة الصوت غير صالح: ' + (type || 'غير محدد') + '.');
+  }
+  if (!isMp3Payload(head)) throw new Error('الملف المستلم ليس MP3 صالحًا؛ نوع الاستجابة: ' + (type || 'غير محدد') + '، الحجم: ' + received + ' بايت.');
   onProgress(1);
-  return new Blob(chunks, { type: type });
+  return new Blob(chunks, { type: type.indexOf('audio/') === 0 ? type : 'audio/mpeg' });
 }
 function getContext() {
   try { ctx = JSON.parse(localStorage.getItem('kh-story-review-context') || 'null'); } catch (e) { ctx = null; }
@@ -906,8 +929,11 @@ async function play(entry, button, forceRestart) {
       activePlayButton = null;
       played[entry.key] = false;
       if (acceptButtons[entry.key]) setAcceptState(acceptButtons[entry.key], false, false);
+      var mediaError = audio && audio.error ? audio.error : null;
+      var mediaCode = mediaError ? Number(mediaError.code) : 0;
+      var mediaReason = ({ 1: 'تم إلغاء التحميل', 2: 'تعذر الوصول إلى بيانات الصوت', 3: 'فشل فك ترميز الملف الصوتي', 4: 'صيغة الصوت أو مصدره غير مدعوم' })[mediaCode] || 'سبب غير محدد';
       setAudioStatus(control, 'failed', 'فشل تجهيز الصوت للتشغيل');
-      if (stateNode) stateNode.textContent = 'تعذر تشغيل المقطع؛ لم يتم تسجيل الاستماع.';
+      if (stateNode) stateNode.textContent = 'تعذر تشغيل المقطع: ' + mediaReason + ' (رمز ' + (mediaCode || 'غير متاح') + ')؛ لم يتم تسجيل الاستماع.';
       if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     };
     var playback = audio.play();
