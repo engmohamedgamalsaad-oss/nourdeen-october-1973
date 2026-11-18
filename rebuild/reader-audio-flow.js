@@ -555,11 +555,11 @@
   function ensureLanguageBatch(host) {
     var panel = $('kh-language-audio-batch');
     if (!panel) {
-      panel = el('section', 'kh-language-audio-batch');
+      panel = el('section', 'kh-audio-review-gate kh-language-audio-batch');
       panel.id = 'kh-language-audio-batch';
-      var title = el('strong', 'kh-language-audio-title', 'الصوت — اللغة الحالية');
-      var actions = el('div', 'kh-language-audio-actions');
-      var generate = el('button', 'kh-language-audio-generate', 'توليد صوت اللغة');
+      var title = el('strong', 'kh-language-audio-title kh-gate-title', 'الصوت — اللغة الحالية');
+      var actions = el('div', 'kh-audio-actions kh-language-audio-actions');
+      var generate = el('button', 'kh-audio-review-btn kh-language-audio-generate', 'توليد صوت اللغة');
       generate.type = 'button';
       generate.addEventListener('click', async function () {
         if (generate.disabled || languageBatchBusy) return;
@@ -574,7 +574,7 @@
           if (status) status.textContent = e.message || 'تعذر إرسال مقاطع هذه اللغة إلى الطابور.';
         } finally { languageBatchBusy = false; updateLanguageBatchPanel(); }
       });
-      var reviewButton = el('button', 'kh-language-audio-review', 'معاينة ومراجعة المقاطع');
+      var reviewButton = el('button', 'kh-audio-review-btn kh-language-audio-review', 'معاينة ومراجعة المقاطع');
       reviewButton.type = 'button';
       reviewButton.addEventListener('click', function () {
         if (reviewButton.disabled) return;
@@ -587,7 +587,7 @@
         var first = host.querySelector('.kh-flow-box');
         if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
-      var status = el('p', 'kh-language-audio-status', '');
+      var status = el('p', 'kh-audio-review-state kh-language-audio-status', '');
       actions.append(generate, reviewButton);
       panel.append(title, actions, status);
       host.parentNode.insertBefore(panel, host);
