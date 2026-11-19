@@ -182,3 +182,14 @@ test('audio generation and review controls follow the selected language without 
   assert.ok(src.includes('if (!st || L === "ar" || !st.i18n'));
   assert.ok(src.includes("var original = L === 'ar' && local && typeof local.text === 'string' ? local.text : ''"));
 });
+
+
+test('language preview offers a separate approved-audio publish action before the text-only review PR', () => {
+  assert.match(audioReview, /publishLanguageAudio: async function \(language\)/);
+  assert.match(audioReview, /action: 'publish_audio', section: story\.section, slug: story\.slug, language: language/);
+  assert.match(preview, /kh-translation-publish-audio/);
+  assert.match(preview, /api\.publishLanguageAudio\(language\)/);
+  assert.match(preview, /نشر صوت هذه اللغة للزوار/);
+  assert.match(preview, /نشر نص هذه اللغة \(طلب مراجعة\)/);
+  assert.match(preview, /هذا الزر ينشر النص فقط/);
+});
