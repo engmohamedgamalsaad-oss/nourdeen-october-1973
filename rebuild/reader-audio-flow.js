@@ -688,8 +688,28 @@
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
-      var publishText = el('button', 'kh-translation-publish-text', 'نشر هذه اللغة (طلب مراجعة)');
-      var audioPending = el('p', 'kh-translation-audio-pending', 'الصوت لم يكتمل بعد — هذه الصفحة تجهّز النص فقط، ولا يظهر مشغل للزائر دون manifest صوت صالح.');
+      var publishAudio = el('button', 'kh-translation-publish-audio', 'نشر صوت هذه اللغة للزوار');
+      publishAudio.type = 'button';
+      var audioPublishStatus = el('p', 'kh-translation-audio-publish-status', 'بعد اعتماد كل المقاطع، انشر الصوت هنا أولًا. بعد نجاح النشر أرسل النص للمراجعة من الزر التالي.');
+      audioPublishStatus.id = 'kh-translation-audio-publish-status';
+      publishAudio.addEventListener('click', async function () {
+        var api = window.KHStoryAudioReview, language = lang();
+        if (!api || typeof api.publishLanguageAudio !== 'function') {
+          bulkStatus.textContent = 'أدوات نشر الصوت غير جاهزة؛ حدّث المعاينة وحاول مرة أخرى.';
+          return;
+        }
+        publishAudio.disabled = true;
+        audioPublishStatus.textContent = 'جارٍ التحقق من الاعتمادات ونشر صوت ' + language.toUpperCase() + '…';
+        try {
+          await api.publishLanguageAudio(language);
+          audioPublishStatus.textContent = 'تم نشر صوت ' + language.toUpperCase() + ' بنجاح. يمكنك الآن إرسال نص اللغة للمراجعة والنشر.';
+          publishAudio.textContent = 'تحديث الصوت المنشور';
+        } catch (error) {
+          audioPublishStatus.textContent = 'تعذر نشر الصوت: ' + (error && error.message || error);
+        } finally { publishAudio.disabled = false; }
+      });
+      var publishText = el('button', 'kh-translation-publish-text', 'نشر نص هذه اللغة (طلب مراجعة)');
+      var audioPending = el('p', 'kh-translation-audio-pending', 'هذا الزر ينشر النص فقط. يجب نشر الصوت من الزر السابق أولًا حتى يظهر مشغل للزائر.');
       audioPending.id = 'kh-translation-audio-pending';
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
       publishText.addEventListener('click', function () {
@@ -703,12 +723,18 @@
           bulkStatus.textContent = 'تم تحديد لغة ' + lang().toUpperCase() + '. افتح لوحة الإدارة من نفس الحكاية واضغط «نشر النص فقط (طلب مراجعة)». الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لا يبدأ أي توليد صوتي تلقائيًا.';
         }
       });
+      bulkRow.appendChild(publishAudio);
+      bulkRow.appendChild(audioPublishStatus);
       bulkRow.appendChild(publishText);
       bulkRow.appendChild(audioPending);
       tbody.appendChild(bulkRow);
     }
     var publishTextButton = $('kh-translation-publish-text');
     if (publishTextButton) publishTextButton.hidden = lang() === 'ar';
+    var publishAudioButton = $('kh-translation-publish-audio');
+    var audioPublishStatus = $('kh-translation-audio-publish-status');
+    if (publishAudioButton) publishAudioButton.hidden = lang() === 'ar';
+    if (audioPublishStatus) audioPublishStatus.hidden = lang() === 'ar';
     var audioPendingLabel = $('kh-translation-audio-pending');
     if (audioPendingLabel) audioPendingLabel.hidden = lang() === 'ar';
     var bulkTranslateButton = $('kh-translation-bulk-generate');
