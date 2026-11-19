@@ -508,18 +508,32 @@ Deno.serve(async (req: Request) => {
     // A successful Gemini preparation is the default-approved text for audio generation.
     // It never queues audio by itself; the queue starts only from the generate-all action.
     const preparedAt = new Date().toISOString();
-    translations[key] = {
+    const preparedTranslation = {
       language, block_index: index, speaker: source.block.speaker,
       source_arabic_hash: sourceHash, translation_text: translationText,
       status: "approved", auto_approved: true, model,
       review_notes: generated.review_notes.filter((v: any) => typeof v === "string").slice(0, 20),
       updated_at: preparedAt, approved_at: preparedAt,
     };
-    review.translations = translations;
+    // Re-read immediately before writing: never let a translation request overwrite
+    // audio decisions saved while Gemini was generating this translation.
+    const { data: latestRow, error: latestReadError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (latestReadError) return reply(500, { error: "تعذر دمج الترجمة مع أحدث سجل مراجعة.", detail: latestReadError.message });
+    const latest = latestRow?.audio_review && typeof latestRow.audio_review === "object" ? latestRow.audio_review : {};
+    const latestTranslations = latest.translations && typeof latest.translations === "object" ? latest.translations : {};
+    const mergedTranslations = { ...latestTranslations, [key]: preparedTranslation };
+    const mergedClips = { ...(latest.clips && typeof latest.clips === "object" ? latest.clips : {}) };
+    if ((old.source_arabic_hash && old.source_arabic_hash !== sourceHash) || forceRegenerate) {
+      for (const [clipKey, clip] of Object.entries(mergedClips) as [string, any][]) {
+        if (clip?.lang === language && Number(clip.block_index) === index && clip?.status !== "rejected") delete mergedClips[clipKey];
+      }
+    }
+    const mergedReview = { ...review, ...latest, translations: mergedTranslations, clips: mergedClips };
     const { error: saveError } = await service.from("story_audio_reviews")
-      .upsert({ section, slug, audio_review: review }, { onConflict: "section,slug" });
+      .upsert({ section, slug, audio_review: mergedReview }, { onConflict: "section,slug" });
     if (saveError) return reply(500, { error: "تعذر حفظ مسودة الترجمة.", detail: saveError.message });
-    return reply(200, { success: true, translation: translations[key] });
+    return reply(200, { success: true, translation: preparedTranslation });
   }
 
   if (body.action === "translation_save") {
@@ -566,10 +580,25 @@ Deno.serve(async (req: Request) => {
         }
       }
     }
+    // Merge with the latest row before saving. Translation edits must never
+    // replace audio decisions written by the separate review workflow.
+    const { data: latestRow, error: latestReadError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (latestReadError) return reply(500, { error: "تعذر دمج قرار الترجمة مع أحدث سجل مراجعة.", detail: latestReadError.message });
+    const latest = latestRow?.audio_review && typeof latestRow.audio_review === "object" ? latestRow.audio_review : {};
+    const latestTranslations = latest.translations && typeof latest.translations === "object" ? latest.translations : {};
+    const mergedTranslations = { ...latestTranslations, [key]: translations[key] };
+    const mergedClips = { ...(latest.clips && typeof latest.clips === "object" ? latest.clips : {}) };
+    if (decision !== "approved" || translationChanged) {
+      for (const [clipKey, clip] of Object.entries(mergedClips) as [string, any][]) {
+        if (clip?.lang === language && Number(clip.block_index) === index) delete mergedClips[clipKey];
+      }
+    }
+    const mergedReview = { ...latest, translations: mergedTranslations, clips: mergedClips };
     const { error: saveError } = await service.from("story_audio_reviews")
-      .upsert({ section, slug, audio_review: review }, { onConflict: "section,slug" });
+      .upsert({ section, slug, audio_review: mergedReview }, { onConflict: "section,slug" });
     if (saveError) return reply(500, { error: "تعذر حفظ قرار الترجمة.", detail: saveError.message });
-    return reply(200, { success: true, translation: translations[key] });
+    return reply(200, { success: true, translation: mergedTranslations[key] });
   }
 
 
@@ -592,18 +621,38 @@ Deno.serve(async (req: Request) => {
     if (serialized.length > 2_000_000) {
       return reply(413, { error: "سجل مراجعة الصوت أكبر من الحد المسموح." });
     }
+    // The rejection counter only ever grows, so a stale browser copy can never reuse an old idempotency key.
+    const { data: storedRow, error: storedReadError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (storedReadError) return reply(500, { error: "تعذر قراءة سجل المراجعة الحالي قبل الحفظ.", detail: storedReadError.message });
+    const storedReview = storedRow?.audio_review && typeof storedRow.audio_review === "object" ? storedRow.audio_review : {};
+    // review_save receives a browser snapshot. Merge clip decisions rather than
+    // replacing the whole map, so a stale client cannot erase another saved decision.
+    const mergedClips: Record<string, any> = { ...(storedReview.clips && typeof storedReview.clips === "object" ? storedReview.clips : {}) };
+    for (const [clipKey, clip] of Object.entries(incoming.clips) as [string, any][]) {
+      const sameSegment = Object.entries(mergedClips).filter(([, storedClip]) =>
+        storedClip?.lang === clip?.lang &&
+        Number(storedClip?.block_index) === Number(clip?.block_index) &&
+        Number(storedClip?.chunk_index || 0) === Number(clip?.chunk_index || 0));
+      const incomingAt = Date.parse(String(clip?.decided_at ?? "")) || 0;
+      const newestStoredAt = sameSegment.reduce((max, [, storedClip]) =>
+        Math.max(max, Date.parse(String(storedClip?.decided_at ?? "")) || 0), 0);
+      if (newestStoredAt > incomingAt) continue;
+      for (const [storedKey] of sameSegment) if (storedKey !== clipKey) delete mergedClips[storedKey];
+      mergedClips[clipKey] = clip;
+    }
     const audioReview = {
+      ...storedReview,
       ...incoming,
       version: 1,
-      regen: incoming.regen,
-      clips: incoming.clips,
-      audio_hashes: incoming.audio_hashes,
-      speech_texts: incoming.speech_texts ?? {},
+      regen: { ...(storedReview.regen && typeof storedReview.regen === "object" ? storedReview.regen : {}), ...incoming.regen },
+      clips: mergedClips,
+      audio_hashes: { ...(storedReview.audio_hashes && typeof storedReview.audio_hashes === "object" ? storedReview.audio_hashes : {}), ...incoming.audio_hashes },
+      speech_texts: { ...(storedReview.speech_texts && typeof storedReview.speech_texts === "object" ? storedReview.speech_texts : {}), ...(incoming.speech_texts ?? {}) },
+      // Audio decisions never own translation state; keep the latest server copy.
+      translations: storedReview.translations && typeof storedReview.translations === "object" ? storedReview.translations : (incoming.translations ?? {}),
     };
-    // The rejection counter only ever grows, so a stale browser copy can never reuse an old idempotency key.
-    const { data: storedRow } = await service.from("story_audio_reviews")
-      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
-    const storedRev = storedRow?.audio_review?.reject_rev;
+    const storedRev = storedReview.reject_rev;
     const mergedRev: Record<string, number> = {};
     for (const source of [storedRev, incoming.reject_rev]) {
       if (!source || typeof source !== "object" || Array.isArray(source)) continue;
