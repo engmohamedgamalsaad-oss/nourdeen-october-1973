@@ -634,11 +634,11 @@
     if (banner && banner.parentNode !== tbody) tbody.appendChild(banner);
     if (importer && importer.parentNode !== tbody) tbody.appendChild(importer);
     if (!$('kh-translation-bulk-status')) {
-      var bulkStatus = el('p', 'kh-translation-bulk-status', '');
+      var bulkStatus = el('p', 'kh-translation-bulk-status', 'اضغط «الترجمة» لترجمة كل المقاطع دفعة واحدة من المصدر العربي إلى اللغات الأربع.');
       bulkStatus.id = 'kh-translation-bulk-status';
       tbody.appendChild(bulkStatus);
       var bulkRow = el('div', 'kh-translation-bulk-actions');
-      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'ترجمة كل المقاطع دفعة واحدة');
+      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'الترجمة');
       bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
       bulkTranslate.addEventListener('click', async function () {
         if (translationBatchBusy) return;
