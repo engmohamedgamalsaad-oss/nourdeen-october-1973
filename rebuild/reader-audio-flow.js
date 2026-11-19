@@ -683,7 +683,7 @@
             done = rounds.done; skipped = rounds.skipped; sessionLost = rounds.sessionLost; failed = rounds.failed.map(function (x) { return x + 1; });
           }
         } catch (e) { translationBatchBusy = false; bulkStatus.textContent = e.message || 'تعذرت الترجمة.'; bulkTranslate.disabled = !token(); return; }
-        bulkStatus.textContent = 'انتهت الترجمة: ' + done + ' مقطع جاهز ومعتمد تلقائيًا، ' + skipped + ' كانت جاهزة وتُركت كما هي' +
+        bulkStatus.textContent = 'انتهت ترجمة ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[batchLanguage] || batchLanguage) + ': ' + done + ' مقطع جاهز ومعتمد تلقائيًا، ' + skipped + ' كانت جاهزة وتُركت كما هي' +
           (failed.length ? '، وبقي ' + failed.length + ' بلا ترجمة (مقاطع: ' + failed.join('، ') + ') — اضغط «الترجمة» مرة أخرى بعد دقيقة، أو استخدم «إعادة الترجمة» بجوار كل منها.' : '.') +
           (sessionLost ? ' انتهت جلسة الدخول: سجّل الدخول من جديد ثم اضغط «الترجمة».' : '') +
           ' لم يبدأ أي توليد صوتي.';
