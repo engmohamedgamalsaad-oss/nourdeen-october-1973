@@ -703,6 +703,7 @@
         try {
           await api.publishLanguageAudio(language);
           audioPublishStatus.textContent = 'تم نشر صوت ' + language.toUpperCase() + ' بنجاح. يمكنك الآن إرسال نص اللغة للمراجعة والنشر.';
+          if (audioPending) audioPending.hidden = true;
           publishAudio.textContent = 'تحديث الصوت المنشور';
         } catch (error) {
           audioPublishStatus.textContent = 'تعذر نشر الصوت: ' + (error && error.message || error);
@@ -712,15 +713,24 @@
       var audioPending = el('p', 'kh-translation-audio-pending', 'هذا الزر ينشر النص فقط. يجب نشر الصوت من الزر السابق أولًا حتى يظهر مشغل للزائر.');
       audioPending.id = 'kh-translation-audio-pending';
       publishText.id = 'kh-translation-publish-text'; publishText.type = 'button';
-      publishText.addEventListener('click', function () {
-        var context = {};
+      publishText.addEventListener('click', async function () {
+        var context = {}, language = lang(), audioPublished = false;
+        var api = window.KHStoryAudioReview;
         try { context = JSON.parse(localStorage.getItem('kh-story-review-context') || '{}'); } catch (e) {}
-        try { localStorage.setItem('kh-text-publish-language', lang()); } catch (e) {}
+        if (api && typeof api.refreshAudio === 'function') {
+          try { await api.refreshAudio(); } catch (statusError) {}
+        }
+        audioPublished = !!(api && typeof api.isLanguageAudioPublished === 'function' && api.isLanguageAudioPublished(language));
+        audioPending.hidden = audioPublished;
+        try { localStorage.setItem('kh-text-publish-language', language); } catch (e) {}
+        var audioNote = audioPublished
+          ? ' صوت ' + language.toUpperCase() + ' منشور بالفعل للزوار.'
+          : ' هذا الطلب ينشر النص فقط؛ صوت ' + language.toUpperCase() + ' لم يُنشر بعد. استخدم زر «نشر صوت هذه اللغة للزوار» لنشره.';
         if (window.opener && !window.opener.closed && context.submission_id != null) {
-          window.opener.postMessage({ type: 'KH_TEXT_LANGUAGE_PUBLISH', submission_id: String(context.submission_id), language: lang() }, location.origin);
-          bulkStatus.textContent = 'أُرسل طلب النشر من هذه المعاينة إلى لوحة الإدارة للغة ' + lang().toUpperCase() + '. راجع رسالة التأكيد هناك. الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لا يبدأ أي توليد صوتي تلقائيًا.';
+          window.opener.postMessage({ type: 'KH_TEXT_LANGUAGE_PUBLISH', submission_id: String(context.submission_id), language: language }, location.origin);
+          bulkStatus.textContent = 'أُرسل طلب نشر النص للغة ' + language.toUpperCase() + ' إلى لوحة الإدارة. راجع رسالة التأكيد هناك.' + audioNote + ' لا يبدأ أي توليد صوتي تلقائيًا.';
         } else {
-          bulkStatus.textContent = 'تم تحديد لغة ' + lang().toUpperCase() + '. افتح لوحة الإدارة من نفس الحكاية واضغط «نشر النص فقط (طلب مراجعة)». الصوت لم يكتمل بعد، ولن يظهر مشغل للزائر دون manifest صالح. لا يبدأ أي توليد صوتي تلقائيًا.';
+          bulkStatus.textContent = 'تم تحديد نشر النص للغة ' + language.toUpperCase() + '. افتح لوحة الإدارة من نفس الحكاية واضغط «نشر النص فقط (طلب مراجعة)». ' + audioNote + ' لا يبدأ أي توليد صوتي تلقائيًا.';
         }
       });
       bulkRow.appendChild(publishAudio);
