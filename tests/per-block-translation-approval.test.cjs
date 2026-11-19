@@ -94,7 +94,7 @@ test('completed audio jobs refresh the review manifest and insert the playable c
   assert.match(preview, /function refreshCompletedAudio\(\)/);
   assert.match(preview, /review\.refreshAudio\(\)/);
   assert.match(preview, /refreshCompletedAudio\(\)/);
-  assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); render\(\); return true; \}/);
+  assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); await loadPublicAudioStatus\(\); render\(\); return true; \}/);
 });
 
 test('translated languages mark step 2 as not required when no separate speech text exists', () => {
