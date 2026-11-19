@@ -638,7 +638,7 @@
       bulkStatus.id = 'kh-translation-bulk-status';
       tbody.appendChild(bulkStatus);
       var bulkRow = el('div', 'kh-translation-bulk-actions');
-      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'ترجمة كل اللغات من العربية');
+      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'ترجمة كل المقاطع دفعة واحدة');
       bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
       bulkTranslate.addEventListener('click', async function () {
         if (translationBatchBusy) return;
@@ -742,7 +742,7 @@
               sleep: function (ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); },
               onWait: function (pending, round, left) {
                 bulkStatus.textContent = 'تعذر مؤقتًا ' + pending.length + ' مقطع باللغة ' + languageLabel +
-                  '. إعادة المحاولة ' + round + ' من 3 بعد ' + left + ' ثانية.';
+                  '. إعادة محاولة تلقائية ' + round + ' من 3 بعد ' + left + ' ثانية.';
               }
             });
             skippedByLanguage[targetLanguage] += rounds.skipped;
