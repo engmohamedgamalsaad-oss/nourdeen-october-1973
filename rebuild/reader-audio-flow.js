@@ -165,15 +165,16 @@
     }
     return { done: done, skipped: skipped, failed: pending, sessionLost: stopped, rounds: round };
   }
-  function paintTranslationBlock(index, state, message, record) {
-    var key = lang() + ":" + index;
+  function paintTranslationBlock(index, state, message, record, language) {
+    var targetLanguage = language || lang();
+    var key = targetLanguage + ":" + index;
     if (record) {
       translationRecords[key] = record;
       translationWorkingText[key] = String(record.translation_text || "");
       translationConfirmed[key] = !!translationWorkingText[key].trim() && record.status === "approved";
-      if (translationConfirmed[key]) renderTranslationOnPage(index, translationWorkingText[key]);
+      if (translationConfirmed[key] && targetLanguage === lang()) renderTranslationOnPage(index, translationWorkingText[key]);
     }
-    var box = document.querySelector('.kh-flow-box[data-index="' + index + '"]');
+    var box = targetLanguage === lang() ? document.querySelector('.kh-flow-box[data-index="' + index + '"]') : null;
     var review = box && box.querySelector(".kh-translation-review");
     if (review) {
       var textarea = review.querySelector(".kh-translation-editor");
@@ -638,12 +639,13 @@
       var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'الترجمة');
       bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
       bulkTranslate.addEventListener('click', async function () {
+        var batchLanguage = lang();
         var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
         if (!blocks.length) return;
         translationBatchBusy = true; bulkTranslate.disabled = true;
         var done = 0, skipped = 0, failed = [], sessionLost = false;
         try {
-          if (lang() === 'ar') {
+          if (batchLanguage === 'ar') {
             if (!window.KHStoryAudioReview || typeof window.KHStoryAudioReview.prepareAllSpeechTexts !== 'function') throw new Error('مراجع الصوت لم يُحمَّل بعد.');
             var r = await window.KHStoryAudioReview.prepareAllSpeechTexts(function (i, n) { bulkStatus.textContent = 'Gemini يجهّز نص المقطع ' + (i + 1) + ' من ' + n + '…'; });
             done = r.done; skipped = r.skipped; failed = r.failed.map(function (f) { return f.index + 1; });
@@ -651,22 +653,23 @@
             var todo = [];
             for (var i = 0; i < blocks.length; i++) { if (blocks[i] && ['karma', 'narrator'].includes(blocks[i].speaker)) todo.push(i); }
             var translateOne = async function (i, round) {
-              var key = lang() + ':' + i;
-              bulkStatus.textContent = (round ? 'إعادة المحاولة ' + round + ' من 3 — ' : '') + 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + '…';
-              translationStates[key] = 'processing'; paintTranslationBlock(i, 'processing', 'Gemini يترجم هذا المقطع الآن…');
+              var key = batchLanguage + ':' + i;
+              var languageLabel = ({en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[batchLanguage] || batchLanguage);
+              bulkStatus.textContent = (round ? 'إعادة المحاولة ' + round + ' من 3 — ' : '') + 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + ' باللغة ' + languageLabel + '…';
+              translationStates[key] = 'processing'; paintTranslationBlock(i, 'processing', 'Gemini يترجم هذا المقطع الآن باللغة ' + languageLabel + '…', null, batchLanguage);
               try {
-                var result = await audioReviewAction({ action: 'translation_generate', block_index: i });
+                var result = await audioReviewAction({ action: 'translation_generate', language: batchLanguage, block_index: i });
                 translationRecords[key] = result.translation; translationWorkingText[key] = String(result.translation.translation_text || '');
                 translationConfirmed[key] = !!translationWorkingText[key].trim(); translationStates[key] = 'approved';
-                paintTranslationBlock(i, 'approved', '✓ النص جاهز ومعتمد تلقائيًا.', result.translation); return 'done';
+                paintTranslationBlock(i, 'approved', '✓ الترجمة جاهزة ومعتمدة تلقائيًا باللغة ' + languageLabel + '.', result.translation, batchLanguage); return 'done';
               } catch (e) {
                 var message = String(e && e.message || '');
                 if (/معتمدة بالفعل/.test(message)) {
                   translationStates[key] = translationConfirmed[key] ? 'approved' : 'stale';
-                  paintTranslationBlock(i, translationStates[key], translationStates[key] === 'approved' ? '✓ النص جاهز بالفعل.' : 'توجد ترجمة محفوظة لا تطابق النص الحالي؛ أعد ترجمة هذا المقطع.');
+                  paintTranslationBlock(i, translationStates[key], translationStates[key] === 'approved' ? '✓ الترجمة جاهزة بالفعل باللغة ' + languageLabel + '.' : 'توجد ترجمة محفوظة لا تطابق النص الحالي؛ أعد ترجمة هذا المقطع.', null, batchLanguage);
                   return 'skipped';
                 }
-                translationStates[key] = 'failed'; paintTranslationBlock(i, 'failed', (message || 'تعذرت ترجمة هذا المقطع.') + ' — يمكنك إعادة ترجمته وحده.');
+                translationStates[key] = 'failed'; paintTranslationBlock(i, 'failed', (message || 'تعذرت ترجمة هذا المقطع.') + ' — يمكنك إعادة ترجمته وحده.', null, batchLanguage);
                 return /سجّل الدخول|سجل الدخول/.test(message) ? 'auth' : 'failed';
               }
             };
