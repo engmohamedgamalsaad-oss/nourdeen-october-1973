@@ -519,9 +519,18 @@
     var generate = panel.querySelector('.kh-language-audio-generate');
     var reviewButton = panel.querySelector('.kh-language-audio-review');
     var status = panel.querySelector('.kh-language-audio-status');
-    if (title) title.textContent = 'الصوت — ' + ({ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'}[L] || L);
+    var bulkTranslate = panel.querySelector('#kh-translation-bulk-generate');
+    if (title) title.textContent = 'أدوات اللغة — ' + ({ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'}[L] || L);
     if (!generate || !reviewButton || !status) return;
-    generate.textContent = 'توليد صوت ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[L] || L);
+    generate.textContent = 'توليد كل مقاطع الصوت';
+    generate.title = 'إرسال جميع المقاطع الجاهزة في هذه اللغة إلى طابور التوليد دفعة واحدة.';
+    if (bulkTranslate) {
+      bulkTranslate.textContent = L === 'ar' ? 'تجهيز نصوص القراءة لكل المقاطع' : 'ترجمة كل المقاطع دفعة واحدة';
+      bulkTranslate.title = L === 'ar'
+        ? 'يجهّز نص القراءة الصوتية لكل المقاطع العربية دفعة واحدة.'
+        : 'يترجم كل المقاطع بالاعتماد على ترتيب ونصوص المتحدثين في الصفحة العربية.';
+      bulkTranslate.disabled = !token() || languageBatchBusy;
+    }
     reviewButton.textContent = 'معاينة ومراجعة مقاطع ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[L] || L);
     generate.disabled = true; reviewButton.disabled = true;
     if (languageBatchBusy) { status.textContent = 'جارٍ تنفيذ طلب هذه اللغة…'; return; }
@@ -557,9 +566,12 @@
     if (!panel) {
       panel = el('section', 'kh-audio-review-gate kh-language-audio-batch');
       panel.id = 'kh-language-audio-batch';
-      var title = el('strong', 'kh-language-audio-title kh-gate-title', 'الصوت — اللغة الحالية');
+      var title = el('strong', 'kh-language-audio-title kh-gate-title', 'أدوات اللغة — اللغة الحالية');
       var actions = el('div', 'kh-audio-actions kh-language-audio-actions');
-      var generate = el('button', 'kh-audio-review-btn kh-language-audio-generate', 'توليد صوت اللغة');
+      var translationStatus = $('kh-translation-bulk-status');
+      var bulkTranslate = $('kh-translation-bulk-generate');
+      if (bulkTranslate) actions.appendChild(bulkTranslate);
+      var generate = el('button', 'kh-audio-review-btn kh-language-audio-generate', 'توليد كل مقاطع الصوت');
       generate.type = 'button';
       generate.addEventListener('click', async function () {
         if (generate.disabled || languageBatchBusy) return;
@@ -589,7 +601,12 @@
       });
       var status = el('p', 'kh-audio-review-state kh-language-audio-status', '');
       actions.append(generate, reviewButton);
-      panel.append(title, actions, status);
+      panel.append(title);
+      if (translationStatus) {
+        translationStatus.classList.add('kh-language-translation-status');
+        panel.appendChild(translationStatus);
+      }
+      panel.append(actions, status);
       host.parentNode.insertBefore(panel, host);
     }
     updateLanguageBatchPanel();
