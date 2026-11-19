@@ -843,7 +843,8 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
       return result;
     } finally { generationBusy = false; }
   },
-  refreshAudio: async function () { await loadManifests(); render(); return true; } };
+  isLanguageAudioPublished: function (language) { return !!(LANGS.includes(language) && publishedAudioStatus[language] && publishedAudioStatus[language].published === true); },
+  refreshAudio: async function () { await loadManifests(); await loadPublicAudioStatus(); render(); return true; } };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
 async function play(entry, button, forceRestart) {
   if (!entry || !entry.src) return;
