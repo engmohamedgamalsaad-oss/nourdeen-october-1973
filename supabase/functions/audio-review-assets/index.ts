@@ -634,19 +634,23 @@ Deno.serve(async (req: Request) => {
     // replacing the whole map, so a stale client cannot erase another saved decision.
     const mergedClips: Record<string, any> = { ...(storedReview.clips && typeof storedReview.clips === "object" ? storedReview.clips : {}) };
     for (const [clipKey, clip] of Object.entries(incoming.clips) as [string, any][]) {
-      for (const [storedKey, storedClip] of Object.entries(mergedClips)) {
-        if (storedKey !== clipKey && storedClip?.lang === clip?.lang &&
-            Number(storedClip?.block_index) === Number(clip?.block_index) &&
-            Number(storedClip?.chunk_index || 0) === Number(clip?.chunk_index || 0)) delete mergedClips[storedKey];
-      }
+      const sameSegment = Object.entries(mergedClips).filter(([, storedClip]) =>
+        storedClip?.lang === clip?.lang &&
+        Number(storedClip?.block_index) === Number(clip?.block_index) &&
+        Number(storedClip?.chunk_index || 0) === Number(clip?.chunk_index || 0));
+      const incomingAt = Date.parse(String(clip?.decided_at ?? "")) || 0;
+      const newestStoredAt = sameSegment.reduce((max, [, storedClip]) =>
+        Math.max(max, Date.parse(String(storedClip?.decided_at ?? "")) || 0), 0);
+      if (newestStoredAt > incomingAt) continue;
+      for (const [storedKey] of sameSegment) if (storedKey !== clipKey) delete mergedClips[storedKey];
       mergedClips[clipKey] = clip;
     }
     const audioReview = {
       ...storedReview,
       ...incoming,
       clips: mergedClips,
-      translations: { ...(storedReview.translations && typeof storedReview.translations === "object" ? storedReview.translations : {}),
-        ...(incoming.translations && typeof incoming.translations === "object" ? incoming.translations : {}) },
+      // Audio decisions never own translation state; keep the latest server copy.
+      translations: storedReview.translations && typeof storedReview.translations === "object" ? storedReview.translations : (incoming.translations ?? {}),
     };
     const storedRev = storedReview.reject_rev;
     const mergedRev: Record<string, number> = {};
