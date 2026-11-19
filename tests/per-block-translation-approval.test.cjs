@@ -170,6 +170,9 @@ test('audio generation and review controls follow the selected language without 
   const src = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   const audioReview = fs.readFileSync('rebuild/reader-audio-review.js', 'utf8');
   assert.ok(src.includes('kh-language-audio-batch'));
+  assert.ok(src.includes('actions.appendChild(bulkTranslate)'));
+  assert.ok(src.includes("panel.appendChild(translationStatus)"));
+  assert.ok(src.includes('ترجمة كل المقاطع دفعة واحدة'));
   assert.ok(src.includes('kh-language-audio-generate'));
   assert.ok(src.includes('kh-language-audio-review'));
   assert.ok(src.includes("action: 'enqueue_approved_language'"));
