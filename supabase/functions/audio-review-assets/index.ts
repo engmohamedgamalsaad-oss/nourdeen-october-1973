@@ -251,6 +251,17 @@ async function reconcilePlan(review: any, snap: any, manifests: Record<string, a
       const rec = newSpeech["ar:" + i];
       return rec && rec.status === "approved" && typeof rec.approved_text === "string" ? normSpoken(rec.approved_text) : "";
     }
+    // Translation audio is generated from the approved translation record before that
+    // translation is necessarily published into story.json. Reconcile against that exact
+    // approved text (only while its Arabic source hash and speaker still match), otherwise
+    // a normal preview reopen would delete every accepted translated-language clip.
+    const translation = current.translations && current.translations[lang + ":" + i];
+    if (translation && translation.status === "approved" &&
+        translation.source_arabic_hash === hashes[i] &&
+        translation.speaker === block.speaker &&
+        typeof translation.translation_text === "string" && translation.translation_text.trim()) {
+      return normSpoken(translation.translation_text);
+    }
     return normSpoken(block.text);
   };
 
