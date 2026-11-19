@@ -78,7 +78,7 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261119-language-audio-status-1')"), 'the preview must mount the current per-language translation and audio status flow');
   assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261119-language-audio-status-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
   var readerHtml = fs.readFileSync('rebuild/reader.html', 'utf8');
-  assert.ok(readerHtml.includes('audio-hash-restore-1'), 'reader must load the current shared audio review core');
+  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261119-language-audio-status-1'), 'reader must load the current shared audio review core');
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   assert.ok(audioFlow.includes('validateTranslationAlignment') && audioFlow.includes('genButton.disabled = true'), 'non-Arabic audio generation must be blocked when its paired Arabic source is stale or unverified');
   assert.ok(audioFlow.includes("translationRecords[translationKey]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment must have a current approved translation (default-approved after Gemini) before audio generation');

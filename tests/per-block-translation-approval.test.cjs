@@ -82,9 +82,9 @@ const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review
 
 test('bulk translation paints each segment immediately and preserves the result in its own editor', () => {
   assert.match(preview, /function paintTranslationBlock\(index, state, message, record\)/);
-  assert.match(preview, /translationWorkingText\[key\] = String\(result\.translation\.translation_text \|\| ''\)/);
-  assert.match(preview, /paintTranslationBlock\(i, 'approved'/);
-  assert.match(preview, /paintTranslationBlock\(i, 'failed'/);
+  assert.match(preview, /translationWorkingText\[key\] = String\(translated\.translation_text\)/);
+  assert.match(preview, /paintTranslationBlock\(blockIndex, 'approved'/);
+  assert.match(preview, /paintTranslationBlock\(blockIndex, 'failed'/);
   assert.match(preview, /translationStates\[key\] = 'processing'/);
   assert.match(preview, /translationStates\[key\] !== 'failed'/);
   assert.match(preview, /translationStates\[key\] = 'processing'/);
@@ -94,7 +94,7 @@ test('completed audio jobs refresh the review manifest and insert the playable c
   assert.match(preview, /function refreshCompletedAudio\(\)/);
   assert.match(preview, /review\.refreshAudio\(\)/);
   assert.match(preview, /refreshCompletedAudio\(\)/);
-  assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); render\(\); return true; \}/);
+  assert.match(audioReview, /refreshAudio: async function \(\) \{ await loadManifests\(\); await loadPublicAudioStatus\(\); render\(\); return true; \}/);
 });
 
 test('translated languages mark step 2 as not required when no separate speech text exists', () => {
@@ -192,4 +192,17 @@ test('language preview offers a separate approved-audio publish action before th
   assert.match(preview, /نشر صوت هذه اللغة للزوار/);
   assert.match(preview, /نشر نص هذه اللغة \(طلب مراجعة\)/);
   assert.match(preview, /هذا الزر ينشر النص فقط/);
+});
+
+
+test('one bulk translation run fans out from canonical Arabic to all four target languages', () => {
+  const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-flow.js'), 'utf8');
+  assert.match(source, /var batchLanguages = \['en', 'fr', 'it', 'de'\]/);
+  assert.match(source, /action: 'translation_generate',[\s\S]{0,100}language: targetLanguage,[\s\S]{0,60}block_index: blockIndex/);
+  assert.match(source, /var sourceBlock = blocks\[blockIndex\]/);
+  assert.match(source, /existing\.source_arabic_hash === sourceHash/);
+  assert.match(source, /force: !!\(translationRecords\[key\] && translationRecords\[key\]\.status === 'approved'\)/);
+  assert.match(source, /translationWorkingText\[key\] = String\(existing\.translation_text\)/);
+  assert.match(source, /translation_generate/);
+  assert.match(assets, /resolveStoryBlock\(section, slug, "ar", index, body\.story_snapshot\)/);
 });
