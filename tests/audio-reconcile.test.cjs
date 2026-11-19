@@ -88,6 +88,37 @@ test('English follows block text; a removed last block drops its manifest segmen
   assert.equal(plan.summary.segments_dropped, 1);
 });
 
+test('approved translated text keeps its accepted audio before the translation is published to story.json', { skip }, async () => {
+  const { reconcilePlan, storyFromSnapshot } = loadPure();
+  const ar = [blk('karma', 'Arabic source')];
+  const fr = [blk('karma', 'Older published French text')];
+  const review = {
+    version: 1, regen: {}, audio_hashes: {},
+    translations: {
+      'fr:0': {
+        language: 'fr', block_index: 0, speaker: 'karma',
+        source_arabic_hash: h('Arabic source'),
+        translation_text: 'Approved French text used to generate this audio',
+        status: 'approved'
+      }
+    },
+    clips: {
+      fr0: {
+        lang: 'fr', block_index: 0, chunk_index: 0, speaker: 'karma',
+        text: 'Approved French text used to generate this audio',
+        status: 'accepted'
+      }
+    }
+  };
+  const snapshot = storyFromSnapshot({
+    section: 's', slug: 'x', blocks: { ar, fr }
+  }, 's', 'x');
+  const plan = await reconcilePlan(review, snapshot, {});
+  assert.equal(plan.review.clips.fr0.status, 'accepted');
+  assert.equal(plan.summary.clips_dropped, 0);
+  assert.equal(plan.changed, false);
+});
+
 test('snapshot validation rejects a mismatched story identity', { skip }, () => {
   const { storyFromSnapshot } = loadPure();
   assert.equal(storyFromSnapshot({ section: 'a', slug: 'b', blocks: { ar: [] } }, 'a', 'c'), null);
