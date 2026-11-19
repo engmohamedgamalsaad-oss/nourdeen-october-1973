@@ -529,7 +529,7 @@ Deno.serve(async (req: Request) => {
         if (clip?.lang === language && Number(clip.block_index) === index && clip?.status !== "rejected") delete mergedClips[clipKey];
       }
     }
-    const mergedReview = { ...latest, ...review, translations: mergedTranslations, clips: mergedClips };
+    const mergedReview = { ...review, ...latest, translations: mergedTranslations, clips: mergedClips };
     const { error: saveError } = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: mergedReview }, { onConflict: "section,slug" });
     if (saveError) return reply(500, { error: "تعذر حفظ مسودة الترجمة.", detail: saveError.message });
