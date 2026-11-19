@@ -621,10 +621,6 @@ Deno.serve(async (req: Request) => {
     if (serialized.length > 2_000_000) {
       return reply(413, { error: "سجل مراجعة الصوت أكبر من الحد المسموح." });
     }
-    audioReview.version = 1;
-    audioReview.regen = { ...(storedReview.regen && typeof storedReview.regen === "object" ? storedReview.regen : {}), ...incoming.regen };
-    audioReview.audio_hashes = { ...(storedReview.audio_hashes && typeof storedReview.audio_hashes === "object" ? storedReview.audio_hashes : {}), ...incoming.audio_hashes };
-    audioReview.speech_texts = { ...(storedReview.speech_texts && typeof storedReview.speech_texts === "object" ? storedReview.speech_texts : {}), ...(incoming.speech_texts ?? {}) };
     // The rejection counter only ever grows, so a stale browser copy can never reuse an old idempotency key.
     const { data: storedRow, error: storedReadError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
@@ -648,7 +644,11 @@ Deno.serve(async (req: Request) => {
     const audioReview = {
       ...storedReview,
       ...incoming,
+      version: 1,
+      regen: { ...(storedReview.regen && typeof storedReview.regen === "object" ? storedReview.regen : {}), ...incoming.regen },
       clips: mergedClips,
+      audio_hashes: { ...(storedReview.audio_hashes && typeof storedReview.audio_hashes === "object" ? storedReview.audio_hashes : {}), ...incoming.audio_hashes },
+      speech_texts: { ...(storedReview.speech_texts && typeof storedReview.speech_texts === "object" ? storedReview.speech_texts : {}), ...(incoming.speech_texts ?? {}) },
       // Audio decisions never own translation state; keep the latest server copy.
       translations: storedReview.translations && typeof storedReview.translations === "object" ? storedReview.translations : (incoming.translations ?? {}),
     };
