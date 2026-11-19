@@ -193,3 +193,15 @@ test('language preview offers a separate approved-audio publish action before th
   assert.match(preview, /نشر نص هذه اللغة \(طلب مراجعة\)/);
   assert.match(preview, /هذا الزر ينشر النص فقط/);
 });
+
+
+test('one bulk translation run fans out from canonical Arabic to all four target languages', () => {
+  const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-flow.js'), 'utf8');
+  assert.match(source, /var batchLanguages = \['en', 'fr', 'it', 'de'\]/);
+  assert.match(source, /action: 'translation_generate',[\s\S]{0,100}language: targetLanguage,[\s\S]{0,60}block_index: blockIndex/);
+  assert.match(source, /var sourceBlock = blocks\[blockIndex\]/);
+  assert.match(source, /existing\.source_arabic_hash === sourceHash/);
+  assert.match(source, /translationWorkingText\[key\] = String\(existing\.translation_text\)/);
+  assert.match(source, /translation_generate/);
+  assert.match(assets, /resolveStoryBlock\(section, slug, "ar", index, body\.story_snapshot\)/);
+});
