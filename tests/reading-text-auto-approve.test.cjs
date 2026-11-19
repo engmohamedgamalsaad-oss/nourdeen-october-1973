@@ -43,6 +43,10 @@ test('manual reading-text edit is optional and never queues audio by itself', ()
 
 test('language-specific audio controls are shown in the story preview and gated per language', () => {
   assert.match(flow, /'kh-translation-bulk-generate', 'الترجمة'/);
+  assert.match(flow, /actions\.appendChild\(bulkTranslate\)/);
+  assert.match(flow, /panel\.appendChild\(translationStatus\)/);
+  assert.match(flow, /ترجمة كل المقاطع دفعة واحدة/);
+  assert.match(flow, /إرسال جميع المقاطع الجاهزة في هذه اللغة إلى طابور التوليد دفعة واحدة/);
   assert.match(flow, /kh-language-audio-batch/);
   assert.match(flow, /kh-language-audio-generate/);
   assert.match(flow, /kh-language-audio-review/);
