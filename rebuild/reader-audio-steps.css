@@ -49,3 +49,15 @@
  .kh-step-body{padding-inline:10px}
 }
 @media (prefers-reduced-motion:reduce){.kh-flow-box button.kh-chip,.kh-step>summary::after{transition:none}}
+
+/* أزرار الترجمة والتوليد الجماعي ظاهرة دائمًا أعلى مقاطع اللغة في المعاينة. */
+.kh-language-audio-batch{display:grid;gap:10px;margin:16px 0;padding:16px;border:1px solid rgba(194,157,93,.5);border-radius:15px;background:rgba(16,36,44,.94);box-shadow:0 8px 22px rgba(0,0,0,.16)}
+.kh-language-audio-title{display:block;font-weight:900;color:#d8b878}
+.kh-language-audio-actions{display:flex;flex-wrap:wrap;gap:9px}
+.kh-language-audio-actions .kh-audio-review-btn,
+.kh-language-audio-actions .kh-translation-bulk-generate{min-height:44px;padding:9px 15px;border:1px solid rgba(216,184,120,.65);border-radius:10px;background:rgba(194,157,93,.16);color:inherit;font:inherit;font-weight:800;cursor:pointer}
+.kh-language-audio-actions .kh-language-audio-generate{background:rgba(90,190,135,.14);border-color:rgba(90,190,135,.55)}
+.kh-language-audio-actions button:disabled{opacity:.48;cursor:not-allowed}
+.kh-language-translation-status,.kh-language-audio-status{margin:0;line-height:1.7;font-size:.9rem}
+.kh-language-translation-status:empty{display:none}
+@media(max-width:600px){.kh-language-audio-actions{display:grid;grid-template-columns:1fr}.kh-language-audio-actions button{width:100%}}
