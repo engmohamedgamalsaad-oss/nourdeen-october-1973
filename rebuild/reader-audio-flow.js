@@ -710,7 +710,8 @@
                 var result = await audioReviewAction({
                   action: 'translation_generate',
                   language: targetLanguage,
-                  block_index: blockIndex
+                  block_index: blockIndex,
+                  force: !!(translationRecords[key] && translationRecords[key].status === 'approved')
                 });
                 var translated = result.translation;
                 if (!translated || translated.status !== 'approved' || !String(translated.translation_text || '').trim()) {
