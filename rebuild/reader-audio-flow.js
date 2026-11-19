@@ -509,7 +509,7 @@
   }
 
   /* أدوات الصوت تخص اللغة المفتوحة حاليًا داخل صفحة الحكاية، لا ملخصًا عامًا لكل اللغات. */
-  var languageBatchBusy = false;
+  var languageBatchBusy = false, translationBatchBusy = false;
   async function updateLanguageBatchPanel() {
     var panel = $('kh-language-audio-batch'), st = story();
     if (!panel || !st) return;
@@ -529,7 +529,7 @@
       bulkTranslate.title = L === 'ar'
         ? 'يجهّز نص القراءة الصوتية لكل المقاطع العربية دفعة واحدة.'
         : 'يترجم كل المقاطع بالاعتماد على ترتيب ونصوص المتحدثين في الصفحة العربية.';
-      bulkTranslate.disabled = !token() || languageBatchBusy;
+      bulkTranslate.disabled = !token() || languageBatchBusy || translationBatchBusy;
     }
     reviewButton.textContent = 'معاينة ومراجعة مقاطع ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[L] || L);
     generate.disabled = true; reviewButton.disabled = true;
@@ -640,7 +640,7 @@
       bulkTranslate.addEventListener('click', async function () {
         var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
         if (!blocks.length) return;
-        bulkTranslate.disabled = true;
+        translationBatchBusy = true; bulkTranslate.disabled = true;
         var done = 0, skipped = 0, failed = [], sessionLost = false;
         try {
           if (lang() === 'ar') {
@@ -679,12 +679,12 @@
             });
             done = rounds.done; skipped = rounds.skipped; sessionLost = rounds.sessionLost; failed = rounds.failed.map(function (x) { return x + 1; });
           }
-        } catch (e) { bulkStatus.textContent = e.message || 'تعذرت الترجمة.'; bulkTranslate.disabled = false; return; }
+        } catch (e) { translationBatchBusy = false; bulkStatus.textContent = e.message || 'تعذرت الترجمة.'; bulkTranslate.disabled = !token(); return; }
         bulkStatus.textContent = 'انتهت الترجمة: ' + done + ' مقطع جاهز ومعتمد تلقائيًا، ' + skipped + ' كانت جاهزة وتُركت كما هي' +
           (failed.length ? '، وبقي ' + failed.length + ' بلا ترجمة (مقاطع: ' + failed.join('، ') + ') — اضغط «الترجمة» مرة أخرى بعد دقيقة، أو استخدم «إعادة الترجمة» بجوار كل منها.' : '.') +
           (sessionLost ? ' انتهت جلسة الدخول: سجّل الدخول من جديد ثم اضغط «الترجمة».' : '') +
           ' لم يبدأ أي توليد صوتي.';
-        bulkTranslate.disabled = false;
+        translationBatchBusy = false; bulkTranslate.disabled = !token();
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
