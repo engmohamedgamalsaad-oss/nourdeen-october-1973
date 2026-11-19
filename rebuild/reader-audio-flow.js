@@ -165,14 +165,16 @@
     }
     return { done: done, skipped: skipped, failed: pending, sessionLost: stopped, rounds: round };
   }
-  function paintTranslationBlock(index, state, message, record, language) {
-    var targetLanguage = language || lang();
+  function paintTranslationBlock(index, state, message, record) {
+    var targetLanguage = arguments.length > 4 && arguments[4] || lang();
     var key = targetLanguage + ":" + index;
     if (record) {
       translationRecords[key] = record;
       translationWorkingText[key] = String(record.translation_text || "");
       translationConfirmed[key] = !!translationWorkingText[key].trim() && record.status === "approved";
-      if (translationConfirmed[key] && targetLanguage === lang()) renderTranslationOnPage(index, translationWorkingText[key]);
+      if (targetLanguage === lang()) {
+        if (translationConfirmed[key]) renderTranslationOnPage(index, translationWorkingText[key]);
+      }
     }
     var box = targetLanguage === lang() ? document.querySelector('.kh-flow-box[data-index="' + index + '"]') : null;
     var review = box && box.querySelector(".kh-translation-review");
