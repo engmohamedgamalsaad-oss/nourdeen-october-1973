@@ -688,7 +688,7 @@
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
-      var publishAudio = el('button', 'kh-translation-publish-audio', 'نشر صوت هذه اللغة للزوار');
+      var publishAudio = el('button', 'kh-translation-publish-text kh-translation-publish-audio', 'نشر صوت هذه اللغة للزوار');
       publishAudio.type = 'button';
       var audioPublishStatus = el('p', 'kh-translation-audio-publish-status', 'بعد اعتماد كل المقاطع، انشر الصوت هنا أولًا. بعد نجاح النشر أرسل النص للمراجعة من الزر التالي.');
       audioPublishStatus.id = 'kh-translation-audio-publish-status';
