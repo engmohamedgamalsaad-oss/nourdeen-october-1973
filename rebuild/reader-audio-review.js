@@ -826,6 +826,23 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
     });
   },
   prepareAllSpeechTexts: function (onProgress) { return prepareAllSpeechTexts(onProgress); },
+  publishLanguageAudio: async function (language) {
+    if (!story || !LANGS.includes(language)) throw new Error('اختر لغة صحيحة لنشر الصوت.');
+    var gate = languageGate(language);
+    if (!gate || !gate.ok) throw new Error('لا يمكن نشر الصوت: راجع جاهزية كل مقاطع اللغة واعتماداتها أولًا.');
+    if (generationBusy) throw new Error('هناك عملية صوتية أخرى قيد التنفيذ.');
+    generationBusy = true;
+    try {
+      var result = await audioAssetsRequest({ action: 'publish_audio', section: story.section, slug: story.slug, language: language });
+      if (!result || result.success !== true || result.published !== true ||
+          !Array.isArray(result.languages) || !result.languages.some(function (item) { return item.language === language; })) {
+        throw new Error('لم يؤكد الخادم نشر صوت هذه اللغة.');
+      }
+      await loadPublicAudioStatus();
+      await render();
+      return result;
+    } finally { generationBusy = false; }
+  },
   refreshAudio: async function () { await loadManifests(); render(); return true; } };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
 async function play(entry, button, forceRestart) {
