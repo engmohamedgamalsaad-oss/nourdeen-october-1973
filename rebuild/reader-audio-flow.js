@@ -638,56 +638,129 @@
       bulkStatus.id = 'kh-translation-bulk-status';
       tbody.appendChild(bulkStatus);
       var bulkRow = el('div', 'kh-translation-bulk-actions');
-      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'الترجمة');
+      var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'ترجمة كل اللغات من العربية');
       bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
       bulkTranslate.addEventListener('click', async function () {
-        var batchLanguage = lang();
+        if (translationBatchBusy) return;
         var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
         if (!blocks.length) return;
+        var batchLanguages = ['en', 'fr', 'it', 'de'];
+        var labels = {en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'};
+        var todo = [];
+        for (var i = 0; i < blocks.length; i++) {
+          if (blocks[i] && ['karma', 'narrator'].includes(blocks[i].speaker) && String(blocks[i].text || '').trim()) todo.push(i);
+        }
         translationBatchBusy = true; bulkTranslate.disabled = true;
-        var done = 0, skipped = 0, failed = [], sessionLost = false;
+        var doneByLanguage = {en:0,fr:0,it:0,de:0};
+        var skippedByLanguage = {en:0,fr:0,it:0,de:0};
+        var failed = [];
+        var sessionLost = false;
         try {
-          if (batchLanguage === 'ar') {
-            if (!window.KHStoryAudioReview || typeof window.KHStoryAudioReview.prepareAllSpeechTexts !== 'function') throw new Error('مراجع الصوت لم يُحمَّل بعد.');
-            var r = await window.KHStoryAudioReview.prepareAllSpeechTexts(function (i, n) { bulkStatus.textContent = 'Gemini يجهّز نص المقطع ' + (i + 1) + ' من ' + n + '…'; });
-            done = r.done; skipped = r.skipped; failed = r.failed.map(function (f) { return f.index + 1; });
-          } else {
-            var todo = [];
-            for (var i = 0; i < blocks.length; i++) { if (blocks[i] && ['karma', 'narrator'].includes(blocks[i].speaker)) todo.push(i); }
-            var translateOne = async function (i, round) {
-              var key = batchLanguage + ':' + i;
-              var languageLabel = ({en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[batchLanguage] || batchLanguage);
-              bulkStatus.textContent = (round ? 'إعادة المحاولة ' + round + ' من 3 — ' : '') + 'Gemini يجهّز المقطع ' + (i + 1) + ' من ' + blocks.length + ' باللغة ' + languageLabel + '…';
-              translationStates[key] = 'processing'; paintTranslationBlock(i, 'processing', 'Gemini يترجم هذا المقطع الآن باللغة ' + languageLabel + '…', null, batchLanguage);
+          // Refresh the complete translation ledger before deciding which target segments are already current.
+          var reviewData = await audioReviewAction({ action: 'review_get' });
+          translationRecords = reviewData.audio_review && reviewData.audio_review.translations || translationRecords || {};
+
+          // Arabic remains the canonical source. Its speech-text preparation is a separate step,
+          // and never substitutes for translating the four target languages.
+          if (lang() === 'ar' && window.KHStoryAudioReview &&
+              typeof window.KHStoryAudioReview.prepareAllSpeechTexts === 'function') {
+            var speechResult = await window.KHStoryAudioReview.prepareAllSpeechTexts(function (i, n) {
+              bulkStatus.textContent = 'اللغة العربية هي المصدر: تجهيز نص القراءة للمقطع ' + (i + 1) + ' من ' + n + '، ثم ترجمة اللغات الأربع…';
+            });
+            if (speechResult && Array.isArray(speechResult.failed)) {
+              speechResult.failed.forEach(function (item) {
+                failed.push('نص القراءة العربي — المقطع ' + (Number(item.index) + 1));
+              });
+            }
+          }
+
+          for (var li = 0; li < batchLanguages.length; li++) {
+            var targetLanguage = batchLanguages[li];
+            var languageLabel = labels[targetLanguage];
+            var languageTodo = [];
+            for (var ti = 0; ti < todo.length; ti++) {
+              var blockIndex = todo[ti];
+              var sourceBlock = blocks[blockIndex];
+              var key = targetLanguage + ':' + blockIndex;
+              var existing = translationRecords[key];
+              var sourceHash = await sha256Trim(sourceBlock.text);
+              if (existing && existing.status === 'approved' &&
+                  existing.source_arabic_hash === sourceHash &&
+                  existing.speaker === sourceBlock.speaker &&
+                  String(existing.translation_text || '').trim()) {
+                translationWorkingText[key] = String(existing.translation_text);
+                translationConfirmed[key] = true;
+                translationStates[key] = 'approved';
+                skippedByLanguage[targetLanguage]++;
+              } else {
+                languageTodo.push(blockIndex);
+              }
+            }
+            if (!languageTodo.length) {
+              bulkStatus.textContent = 'اللغة ' + languageLabel + ' جاهزة بالفعل؛ أنتقل إلى اللغة التالية…';
+              continue;
+            }
+            var translateOne = async function (blockIndex, round) {
+              var key = targetLanguage + ':' + blockIndex;
+              bulkStatus.textContent = (round ? 'إعادة المحاولة ' + round + ' من 3 — ' : '') +
+                'ترجمة المقطع ' + (blockIndex + 1) + ' من ' + blocks.length + ' إلى ' + languageLabel + ' من النص العربي…';
+              translationStates[key] = 'processing';
+              paintTranslationBlock(blockIndex, 'processing', 'Gemini يترجم هذا المقطع إلى ' + languageLabel + ' من المصدر العربي…', null, targetLanguage);
               try {
-                var result = await audioReviewAction({ action: 'translation_generate', language: batchLanguage, block_index: i });
-                translationRecords[key] = result.translation; translationWorkingText[key] = String(result.translation.translation_text || '');
-                translationConfirmed[key] = !!translationWorkingText[key].trim(); translationStates[key] = 'approved';
-                paintTranslationBlock(i, 'approved', '✓ الترجمة جاهزة ومعتمدة تلقائيًا باللغة ' + languageLabel + '.', result.translation, batchLanguage); return 'done';
+                var result = await audioReviewAction({
+                  action: 'translation_generate',
+                  language: targetLanguage,
+                  block_index: blockIndex
+                });
+                var translated = result.translation;
+                if (!translated || translated.status !== 'approved' || !String(translated.translation_text || '').trim()) {
+                  throw new Error('لم يُرجع الخادم ترجمة معتمدة للغة ' + languageLabel + '.');
+                }
+                translationRecords[key] = translated;
+                translationWorkingText[key] = String(translated.translation_text);
+                translationConfirmed[key] = true;
+                translationStates[key] = 'approved';
+                doneByLanguage[targetLanguage]++;
+                paintTranslationBlock(blockIndex, 'approved', '✓ الترجمة العربية المصدر جاهزة ومعتمدة باللغة ' + languageLabel + '.', translated, targetLanguage);
+                return 'done';
               } catch (e) {
-                var message = String(e && e.message || '');
-                if (/معتمدة بالفعل/.test(message)) {
-                  translationStates[key] = translationConfirmed[key] ? 'approved' : 'stale';
-                  paintTranslationBlock(i, translationStates[key], translationStates[key] === 'approved' ? '✓ الترجمة جاهزة بالفعل باللغة ' + languageLabel + '.' : 'توجد ترجمة محفوظة لا تطابق النص الحالي؛ أعد ترجمة هذا المقطع.', null, batchLanguage);
+                var message = String(e && e.message || 'تعذرت ترجمة هذا المقطع.');
+                var latest = translationRecords[key];
+                if (/معتمدة بالفعل/.test(message) && latest && latest.status === 'approved') {
+                  translationStates[key] = 'stale';
+                  paintTranslationBlock(blockIndex, 'stale', 'توجد ترجمة محفوظة؛ لم أستبدلها دون التحقق من تطابقها مع المصدر العربي.', latest, targetLanguage);
                   return 'skipped';
                 }
-                translationStates[key] = 'failed'; paintTranslationBlock(i, 'failed', (message || 'تعذرت ترجمة هذا المقطع.') + ' — يمكنك إعادة ترجمته وحده.', null, batchLanguage);
-                return /سجّل الدخول|سجل الدخول/.test(message) ? 'auth' : 'failed';
+                translationStates[key] = 'failed';
+                paintTranslationBlock(blockIndex, 'failed', message + ' — يمكنك إعادة المحاولة.', null, targetLanguage);
+                if (/سجّل الدخول|سجل الدخول/.test(message)) return 'auth';
+                return 'failed';
               }
             };
-            var rounds = await runTranslationRounds(todo, translateOne, {
+            var rounds = await runTranslationRounds(languageTodo, translateOne, {
               maxRounds: 3, waitSeconds: 20,
               sleep: function (ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); },
               onWait: function (pending, round, left) {
-                bulkStatus.textContent = 'تعذر ' + pending.length + ' مقطع (' + pending.map(function (x) { return x + 1; }).join('، ') + ') بسبب ضغط Gemini. إعادة محاولة تلقائية ' + round + ' من 3 بعد ' + left + ' ثانية — ابقَ في هذه الصفحة.';
+                bulkStatus.textContent = 'تعذر مؤقتًا ' + pending.length + ' مقطع باللغة ' + languageLabel +
+                  '. إعادة المحاولة ' + round + ' من 3 بعد ' + left + ' ثانية.';
               }
             });
-            done = rounds.done; skipped = rounds.skipped; sessionLost = rounds.sessionLost; failed = rounds.failed.map(function (x) { return x + 1; });
+            skippedByLanguage[targetLanguage] += rounds.skipped;
+            rounds.failed.forEach(function (index) { failed.push(languageLabel + ' — المقطع ' + (index + 1)); });
+            if (rounds.sessionLost) { sessionLost = true; break; }
           }
-        } catch (e) { translationBatchBusy = false; bulkStatus.textContent = e.message || 'تعذرت الترجمة.'; bulkTranslate.disabled = !token(); return; }
-        bulkStatus.textContent = 'انتهت ترجمة ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[batchLanguage] || batchLanguage) + ': ' + done + ' مقطع جاهز ومعتمد تلقائيًا، ' + skipped + ' كانت جاهزة وتُركت كما هي' +
-          (failed.length ? '، وبقي ' + failed.length + ' بلا ترجمة (مقاطع: ' + failed.join('، ') + ') — اضغط «الترجمة» مرة أخرى بعد دقيقة، أو استخدم «إعادة الترجمة» بجوار كل منها.' : '.') +
-          (sessionLost ? ' انتهت جلسة الدخول: سجّل الدخول من جديد ثم اضغط «الترجمة».' : '') +
+        } catch (e) {
+          translationBatchBusy = false;
+          bulkStatus.textContent = e.message || 'تعذرت ترجمة اللغات الأربع من المصدر العربي.';
+          bulkTranslate.disabled = !token();
+          return;
+        }
+        var summary = batchLanguages.map(function (language) {
+          return labels[language] + ': ' + doneByLanguage[language] + ' جديدة، ' + skippedByLanguage[language] + ' مطابقة للمصدر';
+        }).join(' | ');
+        bulkStatus.textContent = 'اكتملت دورة الترجمة من العربية. ' + summary +
+          (failed.length ? ' | تعذر تجهيز: ' + failed.join('؛ ') : '') +
+          (sessionLost ? ' | انتهت جلسة الدخول؛ سجّل الدخول ثم أعد تشغيل العملية لإكمال اللغات المتبقية.' : '') +
           ' لم يبدأ أي توليد صوتي.';
         translationBatchBusy = false; bulkTranslate.disabled = !token();
         onUpdated();
