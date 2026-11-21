@@ -33,7 +33,7 @@ test('optional manual translation edit stays tied to the current Arabic source h
 test('English audio cannot be queued or published from an unapproved or stale translation', () => {
   assert.match(assets, /translation\.status !== "approved"/);
   assert.match(assets, /translation\.source_arabic_hash !== source\.sourceTextHash/);
-  assert.match(assets, /enqueue_approved_language/);
+  assert.match(assets, /التوليد الجماعي معطل/);
   assert.match(assets, /ترجمة هذا المقطع غير جاهزة أو قديمة/);
 });
 
@@ -173,9 +173,9 @@ test('audio generation and review controls follow the selected language without 
   assert.ok(src.includes('actions.appendChild(bulkTranslate)'));
   assert.ok(src.includes("panel.appendChild(translationStatus)"));
   assert.ok(src.includes('ترجمة كل المقاطع دفعة واحدة'));
-  assert.ok(src.includes('kh-language-audio-generate'));
+  assert.ok(!src.includes('kh-language-audio-generate'));
   assert.ok(src.includes('kh-language-audio-review'));
-  assert.ok(src.includes("action: 'enqueue_approved_language'"));
+  assert.ok(!src.includes('enqueue_approved_language'));
   assert.ok(audioReview.includes('canQueueLanguage: async function'));
   assert.ok(audioReview.includes('canReviewLanguage: function'));
   assert.ok(!src.includes('kh-translation-queue-all'));
