@@ -737,10 +737,10 @@ Deno.serve(async (req: Request) => {
     if (nextIndex === undefined) return reply(409, { error: "كل المقاطع الصوتية في هذه اللغة معتمدة بالفعل." });
     if (nextIndex !== blockIndex) return reply(409, { error: "يجب اعتماد المقطع " + (nextIndex + 1) + " قبل بدء أي مقطع لاحق." });
     const { data: activeJobs, error: activeJobsError } = await service.from("story_audio_generation_queue")
-      .select("block_index,status").eq("section", section).eq("slug", slug)
+      .select("block_index,status,language").eq("section", section).eq("slug", slug)
       .in("status", ["pending", "processing"]).limit(10);
     if (activeJobsError) return reply(500, { error: "تعذر التحقق من المقطع الجاري توليده.", detail: activeJobsError.message });
-    if ((activeJobs ?? []).some((job: any) => Number(job.block_index) !== blockIndex)) {
+    if ((activeJobs ?? []).some((job: any) => Number(job.block_index) !== blockIndex || String(job.language) !== language)) {
       return reply(409, { error: "يوجد مقطع آخر قيد التوليد؛ انتظر اكتماله ثم استمع إليه واعتمده قبل المتابعة." });
     }
     let spokenText = source.sourceText;
