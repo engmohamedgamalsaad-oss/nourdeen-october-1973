@@ -349,7 +349,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(adminReaderSource.includes("if(previewMode){previewAudioLanguage=b.dataset.lang;window.__KH_AUDIO_REVIEW_LANGUAGE=previewAudioLanguage;current=previewAudioLanguage;show();"), 'admin language selection must switch the visible story and its audio-review language together');
   assert.ok(adminReviewSource.includes("function audioReviewLanguage() { return window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'; }"), 'review UI must use independent audio language');
   assert.ok(adminReviewSource.includes("if (['ar', 'en', 'fr', 'it', 'de'].includes(lang))"), 'review controls must follow all five selected languages');
-  assert.ok(adminReviewSource.includes("if (LANGS.indexOf(language) < 0) return 'لغة الصوت غير مدعومة في المحرك.'"), 'unsupported generation must be visibly disabled rather than falsely offered');
+  assert.ok(adminReviewSource.includes("if (AUDIO_LANGS.indexOf(language) < 0) return 'توليد الصوت لهذه اللغة مؤجل؛ المرحلة الحالية العربية والإنجليزية فقط.'"), 'unsupported generation must be visibly disabled rather than falsely offered');
   assert.ok(adminFlowSource.includes("window.__KH_AUDIO_REVIEW_LANGUAGE || document.documentElement.lang || 'ar'"), 'queue flow must follow selected audio language');
   console.log('audio-review-core tests passed');
 })().catch(function (e) { console.error(e); process.exit(1); });
