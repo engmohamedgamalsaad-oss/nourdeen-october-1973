@@ -21,6 +21,7 @@ const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
 const BUCKET = "khaledoon-audio-review";
 const PUBLIC_AUDIO_BUCKET = "khaledoon-story-audio-public";
 const SUPPORTED_AUDIO_LANGUAGES = ["ar", "en", "fr", "it", "de"];
+const ACTIVE_AUDIO_LANGUAGES = ["ar", "en"];
 function audioModelForLanguage(language: string): string {
   return ["fr", "it", "de"].includes(language) ? "k2-fsa/OmniVoice" : "VoiceTut Egyptian Tashkeel";
 }
@@ -714,85 +715,13 @@ Deno.serve(async (req: Request) => {
 
 
   if (body.action === "enqueue_approved_language") {
-    if (!SUPPORTED_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "لغة الصوت غير مدعومة." });
-    let arabicSource;
-    try { arabicSource = await resolveStoryBlock(section, slug, "ar", 0, body.story_snapshot); }
-    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية العربية." }); }
-    const { data: row, error: readError } = await service.from("story_audio_reviews")
-      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
-    if (readError) return reply(500, { error: "تعذر قراءة اعتمادات المقاطع.", detail: readError.message });
-    const review = row?.audio_review ?? {};
-    const blocks = arabicSource.story?.i18n?.ar?.blocks ?? [];
-    const indexes = orderedStoryBlockIndexes(blocks);
-    if (!indexes.length) return reply(409, { error: "لا توجد مقاطع منطوقة صالحة لتوليد الصوت." });
-
-    // Preflight the entire language before creating even the first queue job.
-    // A partial translation must never produce a partial language queue.
-    const prepared: Array<{ index: number; block: any; sourceText: string; sourceHash: string; spokenText: string; spokenHash: string }> = [];
-    for (const index of indexes) {
-      const block = blocks[index];
-      const sourceText = String(block?.text ?? "").trim();
-      if (!sourceText) return reply(409, { error: "النص العربي للمقطع " + (index + 1) + " غير صالح؛ لم يبدأ التوليد." });
-      const sourceHash = await sha256Hex(new TextEncoder().encode(sourceText));
-      let spokenText = "";
-      if (language === "ar") {
-        const speech = review?.speech_texts?.["ar:" + index];
-        if (speech?.status === "approved" && speech.source_text_hash === sourceHash &&
-            speech.speaker === block.speaker && typeof speech.approved_text === "string") {
-          spokenText = speech.approved_text.trim();
-        }
-      } else {
-        const translation = review?.translations?.[language + ":" + index];
-        if (translation?.status === "approved" && translation.source_arabic_hash === sourceHash &&
-            translation.speaker === block.speaker && typeof translation.translation_text === "string") {
-          spokenText = translation.translation_text.trim();
-        }
-      }
-      if (!spokenText) {
-        return reply(409, {
-          error: "لم يبدأ توليد الصوت. " + (language === "ar" ? "نص القراءة العربي" : "ترجمة " + (TRANSLATION_LANGUAGES[language] ?? language)) +
-            " للمقطع " + (index + 1) + " غير معتمد أو لم يعد يطابق النص العربي الحالي.",
-          missing_block_index: index,
-          required_segments: indexes.length,
-          approved_segments: prepared.length,
-        });
-      }
-      const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
-      prepared.push({ index, block, sourceText, sourceHash, spokenText, spokenHash });
-    }
-
-    const queued: any[] = [];
-    let alreadyQueued = 0, retriedFailed = 0;
-    for (const item of prepared) {
-      const idempotencyKey = await buildIdempotencyKey(review, section, slug, language, item.index, item.sourceHash, item.spokenHash);
-      const regenRevision = regenRevisionFor(review, language, item.index);
-      const payload = {
-        text: item.spokenText, speaker: item.block.speaker, source_text: item.sourceText,
-        source_text_hash: item.sourceHash, spoken_text_hash: item.spokenHash,
-        regeneration_revision: regenRevision, language_code: ({ ar: "arz", en: "en", fr: "fr", it: "it", de: "de" } as Record<string, string>)[language],
-        reference_role: item.block.speaker, sample_rate: 24000,
-      };
-      const result = await insertOrReuseJob(service, {
-        section, slug, language, block_index: item.index, speaker: item.block.speaker,
-        engine: ["fr", "it", "de"].includes(language) ? "omnivoice-multilingual" : "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
-        idempotency_key: idempotencyKey, status: "pending",
-      }, idempotencyKey);
-      if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع " + (item.index + 1) + " إلى الطابور.", detail: result.error?.message });
-      if (result.created) queued.push(result.job);
-      else if (result.retried) { retriedFailed++; queued.push(result.job); }
-      else alreadyQueued++;
-    }
-    return reply(200, {
-      success: true, queued_count: queued.length, already_queued: alreadyQueued,
-      retried_failed: retriedFailed, skipped_unapproved: 0,
-      required_segments: indexes.length, prepared_segments: prepared.length, jobs: queued,
-    });
+    return reply(409, { error: "التوليد الجماعي معطل. أرسل مقطعًا واحدًا فقط عبر enqueue، ولا تبدأ التالي قبل قبول المقطع الحالي." });
   }
 
   if (body.action === "enqueue") {
     const blockIndex = Number(body.block_index);
     if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
-    if (!SUPPORTED_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "لغة الصوت غير مدعومة." });
+    if (!ACTIVE_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "توليد الصوت متاح حاليًا للعربية والإنجليزية فقط." });
     let source;
     try { source = await resolveStoryBlock(section, slug, "ar", blockIndex, body.story_snapshot); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع العربي." }); }
@@ -803,8 +732,16 @@ Deno.serve(async (req: Request) => {
     const accepted = acceptedBlockIndexes(audioReview, language);
     const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
     if (ordered.indexOf(blockIndex) < 0) return reply(409, { error: "هذا المقطع غير منطوق أو غير موجود." });
-    // No turn-order requirement: any spoken block can be queued at any time.
     if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
+    const nextIndex = ordered.find((index) => !accepted.has(index));
+    if (nextIndex !== blockIndex) return reply(409, { error: "يجب اعتماد المقطع " + (nextIndex + 1) + " قبل بدء أي مقطع لاحق." });
+    const { data: activeJobs, error: activeJobsError } = await service.from("story_audio_generation_queue")
+      .select("block_index,status").eq("section", section).eq("slug", slug)
+      .in("status", ["pending", "processing"]).limit(10);
+    if (activeJobsError) return reply(500, { error: "تعذر التحقق من المقطع الجاري توليده.", detail: activeJobsError.message });
+    if ((activeJobs ?? []).some((job: any) => Number(job.block_index) !== blockIndex)) {
+      return reply(409, { error: "يوجد مقطع آخر قيد التوليد؛ انتظر اكتماله ثم استمع إليه واعتمده قبل المتابعة." });
+    }
     let spokenText = source.sourceText;
     if (language === "ar") {
       const speechRecord = audioReview?.speech_texts?.["ar:" + blockIndex];
@@ -885,7 +822,7 @@ Deno.serve(async (req: Request) => {
     const audioReview = reviewRow?.audio_review ?? {};
     const published = [];
     const targetLanguage = String(body.language ?? "");
-    if (!SUPPORTED_AUDIO_LANGUAGES.includes(targetLanguage)) return reply(400, { error: "حدد لغة صحيحة للنشر: ar أو en أو fr أو it أو de." });
+    if (!ACTIVE_AUDIO_LANGUAGES.includes(targetLanguage)) return reply(400, { error: "نشر الصوت متاح حاليًا للعربية والإنجليزية فقط." });
     for (const lang of [targetLanguage]) {
       let source;
       try { source = await resolveStoryBlock(section, slug, lang === "en" ? "ar" : lang, 0, body.story_snapshot); }

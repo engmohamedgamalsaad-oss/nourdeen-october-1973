@@ -512,54 +512,39 @@
   }
 
   /* أدوات الصوت تخص اللغة المفتوحة حاليًا داخل صفحة الحكاية، لا ملخصًا عامًا لكل اللغات. */
-  var languageBatchBusy = false, translationBatchBusy = false;
+  var translationBatchBusy = false;
   async function updateLanguageBatchPanel() {
     var panel = $('kh-language-audio-batch'), st = story();
     if (!panel || !st) return;
     var L = lang(), api = window.KHStoryAudioReview;
     panel.dataset.lang = L;
     var title = panel.querySelector('.kh-language-audio-title');
-    var generate = panel.querySelector('.kh-language-audio-generate');
     var reviewButton = panel.querySelector('.kh-language-audio-review');
     var status = panel.querySelector('.kh-language-audio-status');
     var bulkTranslate = panel.querySelector('#kh-translation-bulk-generate');
     if (title) title.textContent = 'أدوات اللغة — ' + ({ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'}[L] || L);
-    if (!generate || !reviewButton || !status) return;
-    generate.textContent = 'توليد كل مقاطع الصوت';
-    generate.title = 'إرسال جميع المقاطع الجاهزة في هذه اللغة إلى طابور التوليد دفعة واحدة.';
+    if (!reviewButton || !status) return;
     if (bulkTranslate) {
       bulkTranslate.textContent = L === 'ar' ? 'تجهيز نصوص القراءة لكل المقاطع' : 'ترجمة كل المقاطع دفعة واحدة';
       bulkTranslate.title = L === 'ar'
         ? 'يجهّز نص القراءة الصوتية لكل المقاطع العربية دفعة واحدة.'
         : 'يترجم كل المقاطع بالاعتماد على ترتيب ونصوص المتحدثين في الصفحة العربية.';
-      bulkTranslate.disabled = !token() || languageBatchBusy || translationBatchBusy;
+      bulkTranslate.disabled = !token() || translationBatchBusy;
     }
     reviewButton.textContent = 'معاينة ومراجعة مقاطع ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[L] || L);
-    generate.disabled = true; reviewButton.disabled = true;
-    if (languageBatchBusy) { status.textContent = 'جارٍ تنفيذ طلب هذه اللغة…'; return; }
+    reviewButton.disabled = true;
     if (!token()) { status.textContent = 'سجّل الدخول من لوحة الإدارة لتمكين أدوات الصوت.'; return; }
+    if (!['ar', 'en'].includes(L)) {
+      status.textContent = 'توليد ومراجعة الصوت لهذه اللغة مؤجلان حاليًا؛ الترجمة محفوظة وقابلة للاستخدام عند تفعيل المرحلة.';
+      return;
+    }
     if (!api || typeof api.canReviewLanguage !== 'function') { status.textContent = 'جارٍ تحميل حالة الصوت لهذه اللغة…'; return; }
     try {
-      var queueReady = false;
-      if (L === 'ar') {
-        queueReady = typeof api.canQueueLanguage === 'function' && await api.canQueueLanguage(L);
-      } else {
-        var blocks = st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
-        var indexes = [];
-        blocks.forEach(function (b, i) { if (b && ['karma','narrator'].includes(b.speaker) && String(b.text || '').trim()) indexes.push(i); });
-        var aligned = translationGate(st, L);
-        queueReady = !!translationLoaded && !!aligned.ok && indexes.length > 0 && indexes.every(function (i) {
-          var key = L + ':' + i, rec = translationRecords[key];
-          return !!rec && rec.status === 'approved' && translationConfirmed[key] === true && !!String(translationWorkingText[key] || '').trim();
-        });
-      }
       var reviewReady = api.canReviewLanguage(L) === true;
-      generate.disabled = !queueReady;
       reviewButton.disabled = !reviewReady;
-      status.textContent = queueReady
-        ? (reviewReady ? 'الترجمة مكتملة ومطابقة للمصدر العربي، وكل ملفات الصوت جاهزة للمراجعة.' : 'ترجمة هذه اللغة مكتملة ومطابقة للمصدر. يمكنك توليد صوتها؛ زر المعاينة سيتاح بعد اكتمال كل المقاطع.')
-        : (L === 'ar' ? 'جهّز نص القراءة الصوتية لكل المقاطع أولًا.' : 'أكمل ترجمة كل المقاطع المنطوقة لهذه اللغة وتأكد من مطابقتها للمصدر العربي أولًا.');
-      if (reviewReady) status.textContent = 'اكتمل توليد كل المقاطع. افتح المعاينة واستمع لكل مقطع قبل اعتماده.';
+      status.textContent = reviewReady
+        ? 'اكتمل تجهيز المقاطع. استمع إلى كل مقطع كاملًا واعتمده قبل الانتقال إلى المقطع التالي.'
+        : 'تُجهّز المقاطع وتُراجع واحدًا تلو الآخر. لا يبدأ المقطع التالي قبل الاستماع الكامل واعتماد المقطع الحالي.';
     } catch (e) {
       status.textContent = 'تعذر التحقق من جاهزية اللغة: ' + (e.message || e);
     }
@@ -574,21 +559,6 @@
       var translationStatus = $('kh-translation-bulk-status');
       var bulkTranslate = $('kh-translation-bulk-generate');
       if (bulkTranslate) actions.appendChild(bulkTranslate);
-      var generate = el('button', 'kh-audio-review-btn kh-language-audio-generate', 'توليد كل مقاطع الصوت');
-      generate.type = 'button';
-      generate.addEventListener('click', async function () {
-        if (generate.disabled || languageBatchBusy) return;
-        languageBatchBusy = true; updateLanguageBatchPanel();
-        var status = panel.querySelector('.kh-language-audio-status');
-        try {
-          var result = await audioReviewAction({ action: 'enqueue_approved_language' });
-          if (!result || result.success !== true) throw new Error('لم يؤكد الخادم تجهيز طابور اللغة.');
-          if (status) status.textContent = 'تم فحص اللغة كاملة: ' + (result.prepared_segments || 0) + ' مقطعًا؛ أُرسل ' + (result.queued_count || 0) + ' للطابور، وكان ' + (result.already_queued || 0) + ' موجودًا أو مكتملًا دون تكرار. لم يتم اعتماد أي صوت تلقائيًا.';
-          poll();
-        } catch (e) {
-          if (status) status.textContent = e.message || 'تعذر إرسال مقاطع هذه اللغة إلى الطابور.';
-        } finally { languageBatchBusy = false; updateLanguageBatchPanel(); }
-      });
       var reviewButton = el('button', 'kh-audio-review-btn kh-language-audio-review', 'معاينة ومراجعة المقاطع');
       reviewButton.type = 'button';
       reviewButton.addEventListener('click', function () {
@@ -603,7 +573,7 @@
         if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
       var status = el('p', 'kh-audio-review-state kh-language-audio-status', '');
-      actions.append(generate, reviewButton);
+      actions.appendChild(reviewButton);
       panel.append(title);
       if (translationStatus) {
         translationStatus.classList.add('kh-language-translation-status');
@@ -615,7 +585,6 @@
     updateLanguageBatchPanel();
   }
 
-  /* ---------- بناء الترتيب ---------- */
   function ensureTop(host) {
     var banner = $('kh-audio-review-gate'), importer = $('kh-audio-asr-import');
     if (!banner && !importer) return;

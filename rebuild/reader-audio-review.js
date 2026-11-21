@@ -4,7 +4,8 @@ var params = new URLSearchParams(location.search);
 if (params.get('draft') !== '1') return;
 var SCRIPT_SRC = document.currentScript && document.currentScript.src ? document.currentScript.src : location.href;
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
-var REQUIRED_LANGS = ['ar'];
+var AUDIO_LANGS = ['ar', 'en'];
+var REQUIRED_LANGS = AUDIO_LANGS.slice();
 var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الفرنسية', it: 'الإيطالية', de: 'الألمانية' };
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
@@ -556,7 +557,7 @@ async function loadManifests() {
     return core.expectedSpokenText(storyArabicTexts[index], pron, speechTexts[speechTextKey(index)]);
   });
   // Audio is now produced only by the persistent VoiceTut queue; do not stage legacy NAMAA artifacts.
-  var results = await Promise.all(LANGS.map(async function (lang) {
+  var results = await Promise.all(AUDIO_LANGS.map(async function (lang) {
     try {
       var privateResult;
       try {
@@ -674,7 +675,7 @@ async function loadManifests() {
 }
 function languageGate(language) {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  if (!LANGS.includes(language)) return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
+  if (!AUDIO_LANGS.includes(language)) return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestErrors[language] && !manifestMissing[language]) {
     return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   }
@@ -686,7 +687,25 @@ function languageGate(language) {
   if (stale || gaps) g.ok = false;
   return g;
 }
-function gate() { return languageGate('ar'); }
+function gate() {
+  if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0, staleBlocks: 0, uncoveredBlocks: 0 };
+  var checks = REQUIRED_LANGS.map(function (language) { return languageGate(language); });
+  if (checks.some(function (item) { return item.loading; })) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0, staleBlocks: 0, uncoveredBlocks: 0 };
+  var failed = checks.filter(function (item) { return item.loadError; });
+  if (failed.length) return { ok: false, loadError: true, failedLanguages: REQUIRED_LANGS.filter(function (language, index) { return checks[index].loadError; }), total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0, staleBlocks: 0, uncoveredBlocks: 0 };
+  var missing = [];
+  checks.forEach(function (item) { if (Array.isArray(item.missingLanguages)) missing = missing.concat(item.missingLanguages); });
+  if (missing.length) return { ok: false, missingLanguages: Array.from(new Set(missing)), total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0, staleBlocks: 0, uncoveredBlocks: 0 };
+  var combined = { ok: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0, staleBlocks: 0, uncoveredBlocks: 0 };
+  checks.forEach(function (item) {
+    ['total', 'accepted', 'rejected', 'unreviewed', 'notReady', 'notListened', 'staleBlocks', 'uncoveredBlocks'].forEach(function (key) {
+      combined[key] += Number(item[key] || 0);
+    });
+    if (!item.ok) combined.ok = false;
+  });
+  combined.ok = combined.ok && combined.total > 0 && combined.accepted === combined.total;
+  return combined;
+}
 function gateSummary() {
   var g = gate();
   if (g.loading) return 'يجري فحص الصوت الاختياري. يمكن اعتماد ونشر النص دون انتظار اكتمال الفحص.';
@@ -697,7 +716,7 @@ function gateSummary() {
     return 'تعذر التحقق من ملفات الصوت. هذا لا يمنع اعتماد النص أو نشر الحكاية دون صوت؛ أصلح المشكلة عند تجهيز الصوت.' + (details.length ? ' ' + details.join(' | ') : '');
   }
   if (g.missingLanguages) return 'لم يتم إنشاء الصوت بعد للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '. يمكنك اعتماد ونشر النص الآن، وإضافة الصوت لاحقًا.';
-  if (g.ok) return 'تم قبول كل المقاطع الصوتية العربية (' + g.accepted + '/' + g.total + ').';
+  if (g.ok) return 'تم قبول كل المقاطع الصوتية العربية والإنجليزية (' + g.accepted + '/' + g.total + ').';
   if (g.staleBlocks) return 'يوجد ' + g.staleBlocks + ' مقطع صوته قديم ولا يطابق نص القراءة المعتمد؛ أعد توليده عند تجهيز الصوت. هذا لا يمنع نشر النص.';
   if (g.uncoveredBlocks) return 'يوجد ' + g.uncoveredBlocks + ' مقطع لم يُنشأ صوته بعد. يمكنك نشر النص الآن وتوليد الصوت لاحقًا.';
   return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '. حالة الصوت مستقلة عن نشر النص.';
@@ -1196,9 +1215,17 @@ function engineView(language, index) {
   return view;
 }
 function engineBlockReason(language, index, opts) {
-  if (LANGS.indexOf(language) < 0) return 'لغة الصوت غير مدعومة في المحرك.';
+  if (AUDIO_LANGS.indexOf(language) < 0) return 'توليد الصوت لهذه اللغة مؤجل؛ المرحلة الحالية العربية والإنجليزية فقط.';
   if (reconcileBlocked) return 'تغيّرت الحكاية وهناك مقاطع قيد التوليد؛ انتظر اكتمالها ثم أعد فتح المعاينة.';
-  /* No turn-order requirement: any block can be sent at any time. */
+  if (generationBusy) return 'انتظر انتهاء إرسال المقطع الحالي قبل بدء مقطع آخر.';
+  var activeJob = Object.keys(jobsByBlock).some(function (key) {
+    var job = jobsByBlock[key];
+    return job && (job.status === 'pending' || job.status === 'processing');
+  });
+  if (activeJob) return 'يوجد مقطع قيد التوليد؛ لا يبدأ المقطع التالي قبل مراجعة الحالي واعتماده.';
+  var nextIndex = nextBlockIndexForLanguage(language);
+  if (nextIndex >= 0 && index !== nextIndex) return 'التزم بترتيب المقاطع: اعتمد المقطع ' + (nextIndex + 1) + ' أولًا.';
+
   if (language === 'ar') {
     var rec = speechTexts[speechTextKey(index)];
     if (!rec || rec.status !== 'approved' || !rec.approved_text) return 'اعتمد نص القراءة أولًا (الخطوة ٢).';
@@ -1215,9 +1242,9 @@ function fillEnginePanel(panel) {
   var reason = view.state === 'none' || view.canResend ? engineBlockReason(language, index) : '';
   var busy = !!jobSendBusy[jobKey(language, index)];
   text(msg, busy ? 'جارٍ الإرسال…' : (reason || view.detail || 'جاهز للإرسال إلى المحرك.'));
-  var sendable = LANGS.indexOf(language) >= 0 && (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
+  var sendable = AUDIO_LANGS.indexOf(language) >= 0 && (view.state === 'none' || view.canResend) && !reason && !busy && canWrite;
   btn.disabled = !sendable;
-  setButtonFace(btn, 'spark', LANGS.indexOf(language) < 0 ? 'غير مفعّل لهذه اللغة' : (view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك'));
+  setButtonFace(btn, 'spark', AUDIO_LANGS.indexOf(language) < 0 ? 'مؤجل لهذه اللغة' : (view.canResend ? 'إعادة التوليد' : 'أرسل للمحرك'));
 }
 function updateEnginePanels() {
   Array.prototype.forEach.call(document.querySelectorAll('.kh-engine-controls'), fillEnginePanel);
@@ -1225,9 +1252,10 @@ function updateEnginePanels() {
 async function sendBlockToEngine(language, index, opts) {
   var k = jobKey(language, index);
   if (jobSendBusy[k]) return { job: null, error: 'الإرسال جارٍ بالفعل لهذا المقطع.' };
+  if (generationBusy) return { job: null, error: 'انتظر انتهاء العملية الصوتية الحالية.' };
   var blocked = engineBlockReason(language, index, opts);
   if (blocked) { updateEnginePanels(); return { job: null, error: blocked }; }
-  jobSendBusy[k] = true; updateEnginePanels();
+  jobSendBusy[k] = true; generationBusy = true; updateEnginePanels();
   var outcome = { job: null, error: '' };
   try {
     var queued = await audioAssetsRequest({ action: 'enqueue', section: story.section, slug: story.slug, language: language, block_index: index });
@@ -1237,7 +1265,7 @@ async function sendBlockToEngine(language, index, opts) {
   } catch (error) {
     outcome.error = 'تعذر الإرسال: ' + (error && error.message || error);
     if (!outcome.job) jobsByBlock[k] = { status: 'failed', attempts: 0, last_error: outcome.error, block_index: index, language: language };
-  } finally { jobSendBusy[k] = false; }
+  } finally { jobSendBusy[k] = false; generationBusy = false; }
   updateEnginePanels(); updateGenerationSummary(); schedulePoll();
   return outcome;
 }
@@ -1339,9 +1367,10 @@ function renderGenerationControls(banner) {
     row.style.cssText = 'display:grid;grid-template-columns:minmax(80px,.7fr) minmax(160px,2fr) auto;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line,rgba(255,255,255,.12))';
     var label = document.createElement('strong'); text(label, LANG_NAMES[language]);
     var state = document.createElement('span'); state.className = 'kh-audio-review-state';
-    var langGate = languageGate(language);
+    var langGate = AUDIO_LANGS.includes(language) ? languageGate(language) : { ok: false };
     var published = publishedAudioStatus[language] && publishedAudioStatus[language].published === true;
-    if (published && langGate.ok) text(state, 'منشور — النسخة الحالية متاحة للزوار، ويمكن تحديثها بعد اعتماد بديل.');
+    if (!AUDIO_LANGS.includes(language)) text(state, 'الصوت لهذه اللغة مؤجل للمرحلة التالية؛ الترجمة محفوظة.');
+    else if (published && langGate.ok) text(state, 'منشور — النسخة الحالية متاحة للزوار، ويمكن تحديثها بعد اعتماد بديل.');
     else if (published) text(state, 'منشور حاليًا — النسخة المنشورة محفوظة حتى اعتماد البديل.');
     else if (langGate.ok) text(state, 'كل المقاطع جاهزة ومعتمدة — متاح النشر.');
     else if (langGate.missingLanguages) text(state, 'لم تُجهّز ملفات الصوت بعد.');
@@ -1352,9 +1381,9 @@ function renderGenerationControls(banner) {
     publishButton.className = 'kh-audio-publish-button';
     publishButton.dataset.lang = language;
     publishButton.textContent = published ? 'تحديث الصوت المنشور' : 'نشر صوت ' + LANG_NAMES[language];
-    publishButton.disabled = !langGate.ok || generationBusy;
+    publishButton.disabled = !AUDIO_LANGS.includes(language) || !langGate.ok || generationBusy;
     publishButton.addEventListener('click', async function () {
-      if (!languageGate(language).ok || generationBusy) return;
+      if (!AUDIO_LANGS.includes(language) || !languageGate(language).ok || generationBusy) return;
       generationBusy = true;
       publishButton.disabled = true;
       text(state, 'جارٍ نشر صوت ' + LANG_NAMES[language] + ' فقط…');

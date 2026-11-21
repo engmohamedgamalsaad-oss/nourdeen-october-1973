@@ -45,6 +45,7 @@ function validateAudioReviewGate(
   storyId: string,
 ): string | null {
   const languages = ["ar", "en", "fr", "it", "de"];
+  const audioLanguages = ["ar", "en"];
   const slug = String(packageData?.slug ?? "");
   const storyKey = section + "/" + slug;
   if (!slug || !packageData?.i18n || !audioReview || typeof audioReview !== "object" ||
@@ -145,13 +146,13 @@ function validateAudioReviewGate(
   }
 
   const clips = Object.values(audioReview.clips) as any[];
-  const storyClips = clips.filter((clip: any) => clip && clip.story_id === storyKey);
+  const storyClips = clips.filter((clip: any) => clip && clip.story_id === storyKey && audioLanguages.includes(String(clip.lang)));
   if (storyClips.some((clip: any) => clip.status === "rejected" && clip.resolved !== true)) {
-    return "يوجد مقطع صوت مرفوض لم تتم معالجته؛ لا يمكن النشر.";
+    return "يوجد مقطع صوت عربي أو إنجليزي مرفوض لم تتم معالجته؛ لا يمكن النشر.";
   }
 
   const normalize = (value: string) => value.normalize("NFKC").replace(/\\s+/g, " ").trim();
-  for (const lang of languages) {
+  for (const lang of audioLanguages) {
     const expectedBlocks = expectedByLanguage[lang];
     const currentClips = storyClips.filter((clip: any) =>
       clip.lang === lang && !(clip.status === "rejected" && clip.resolved === true)
