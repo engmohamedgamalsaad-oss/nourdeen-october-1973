@@ -46,11 +46,11 @@ test('language-specific audio controls are shown in the story preview and gated 
   assert.match(flow, /actions\.appendChild\(bulkTranslate\)/);
   assert.match(flow, /panel\.appendChild\(translationStatus\)/);
   assert.match(flow, /ترجمة كل المقاطع دفعة واحدة/);
-  assert.match(flow, /إرسال جميع المقاطع الجاهزة في هذه اللغة إلى طابور التوليد دفعة واحدة/);
+  assert.doesNotMatch(flow, /إرسال جميع المقاطع الجاهزة في هذه اللغة إلى طابور التوليد دفعة واحدة/);
   assert.match(flow, /kh-language-audio-batch/);
-  assert.doesNotMatch(flow, /kh-language-audio-generate/);
+  assert.match(flow, /kh-language-audio-generate/);
   assert.match(flow, /kh-language-audio-review/);
-  assert.doesNotMatch(flow, /enqueue_approved_language/);
+  assert.match(flow, /action: 'enqueue_approved_language'/);
   assert.match(review, /canQueueLanguage: async function/);
   assert.match(review, /canReviewLanguage: function/);
   assert.doesNotMatch(flow, /kh-translation-queue-all/);
