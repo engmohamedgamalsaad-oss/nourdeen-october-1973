@@ -1056,3 +1056,18 @@ test('translation preview starts blank and blocks publishing until each language
   assert.ok(reader.includes('translationConfirmed[key] === true && !!String(translationWorkingText[key] || \'\').trim()'), 'old approved records alone must not enable language publishing');
   assert.ok(reader.includes('توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة»'), 'the UI must distinguish old saved translations from freshly prepared preview text');
 });
+
+
+test('published text-only translation is single-language and preserves the AR/EN audio gate', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  var adminPage = fs.readFileSync('khaledoon/admin.html', 'utf8');
+  assert.ok(publisher.includes('.from(submissionTable).select("id,status,story_meta")'));
+  assert.ok(publisher.includes('sourceRecord.status === "published" && sourceMeta.story_only_draft === true'));
+  assert.ok(publisher.includes('body.text_languages.length !== 1'));
+  assert.ok(publisher.includes('publishedBlock.text = incomingBlock.text'));
+  assert.ok(publisher.includes('indexEntryForPublish = existingEntry'));
+  assert.ok(publisher.includes('const audioLanguages = ["ar", "en"]'));
+  assert.ok(publisher.includes('for (const lang of audioLanguages)'));
+  assert.ok(adminPage.includes('supports_published_text_only_translation_pr!==true'));
+  assert.ok(adminPage.includes("var publishedTextReady=it.status==='published'"));
+});
