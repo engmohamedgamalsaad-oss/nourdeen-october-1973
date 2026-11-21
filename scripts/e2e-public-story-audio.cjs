@@ -95,7 +95,7 @@ const MANIFEST_URL = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object
     assert.match(diagnostic.audioFileContentType || '', /audio\/mpeg/i, 'the published segment must be served as audio/mpeg');
     assert.equal(diagnostic.playerExists, true, 'the public audio player should be mounted');
     assert.equal(diagnostic.playerHidden, false, 'published Arabic audio must be visible on the public Ibn Sina story page');
-    assert.match(diagnostic.scriptSrc || '', /20261114-public-audio-mp3-fix-1/, 'live visitor page must load the fixed player cache version');
+    assert.match(diagnostic.scriptSrc || '', /20261121-ar-en-audio-1/, 'live visitor page must load the fixed player cache version');
     assert.deepEqual(diagnostic.manifest.invalidSegments, [], 'all 17 published segments must pass the public manifest contract');
     assert.deepEqual(pageErrors, [], 'public story page must not throw JavaScript errors');
   } finally {
