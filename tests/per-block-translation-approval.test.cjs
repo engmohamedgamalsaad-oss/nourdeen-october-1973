@@ -33,19 +33,20 @@ test('optional manual translation edit stays tied to the current Arabic source h
 test('English audio cannot be queued or published from an unapproved or stale translation', () => {
   assert.match(assets, /translation\.status !== "approved"/);
   assert.match(assets, /translation\.source_arabic_hash !== source\.sourceTextHash/);
-  assert.match(assets, /enqueue_approved_language/);
+  assert.match(assets, /التوليد الجماعي معطل/);
   assert.match(assets, /ترجمة هذا المقطع غير جاهزة أو قديمة/);
 });
 
-test('bulk queue preserves each Arabic block speaker for the unified Colab worker', () => {
-  assert.match(assets, /speaker: item\.block\.speaker/);
+test('single-segment queue preserves the source speaker for the unified worker', () => {
+  assert.match(assets, /speaker: source\.block\.speaker/);
   assert.match(engine, /registry\.get\(job\.get\("speaker"\)\)/);
   assert.match(engine, /provider\.generate\(selected_model/); // the model is chosen per language since PR #654
 });
 
 test('public audio player accepts normal MP3 filenames and uses a fresh cache key', () => {
   assert.ok(publicAudio.includes("!/^[A-Za-z0-9_-]+\\.mp3$/.test"), 'MP3 validation must escape the dot once, not twice');
-  assert.match(storyReader, /story-audio\.js\?v=20261114-public-audio-mp3-fix-1/);
+  assert.match(publicAudio, /else if \(document\.body\) document\.body\.appendChild\(host\)/, 'legacy pages without a #blocks container must still mount the shared player');
+  assert.match(storyReader, /story-audio\.js\?v=20261121-ar-en-audio-1/);
 });
 
 test('the single Colab notebook registers both voices and the admin preview reports worker presence', () => {
@@ -67,15 +68,22 @@ test('legacy direct-to-main translation publishing is disabled in favor of the r
   assert.match(preview, /لا يبدأ أي توليد صوتي/);
 });
 
-test('bulk language audio queue is all-or-nothing when any segment is unapproved or stale', () => {
-  const preflight = assets.indexOf('const prepared: Array<');
-  const enqueue = assets.indexOf('insertOrReuseJob(service,', preflight);
-  assert.ok(preflight >= 0 && enqueue > preflight, 'all segments must be preflighted before the first queue insert');
-  assert.match(assets, /لم يبدأ توليد الصوت/);
-  assert.match(assets, /required_segments: indexes\.length/);
-  assert.match(assets, /approved_segments: prepared\.length/);
-  assert.match(assets, /translation\.speaker === block\.speaker/);
-  assert.match(preview, /تم فحص اللغة كاملة/);
+test('bulk language audio generation is explicitly disabled', () => {
+  const bulkStart = assets.indexOf('if (body.action === "enqueue_approved_language")');
+  const singleStart = assets.indexOf('if (body.action === "enqueue")', bulkStart);
+  assert.ok(bulkStart >= 0 && singleStart > bulkStart, 'the legacy bulk endpoint must remain identifiable');
+  const bulkAction = assets.slice(bulkStart, singleStart);
+  assert.match(bulkAction, /return reply\(409/);
+  assert.match(bulkAction, /التوليد الجماعي معطل/);
+  assert.doesNotMatch(bulkAction, /insertOrReuseJob/);
+});
+
+test('single audio segments must be queued in order and without another active language job', () => {
+  assert.match(assets, /const nextIndex = ordered\.find/);
+  assert.match(assets, /nextIndex !== blockIndex/);
+  assert.match(assets, /select\("block_index,status,language"\)/);
+  assert.match(assets, /String\(job\.language\) !== language/);
+  assert.match(assets, /ACTIVE_AUDIO_LANGUAGES/);
 });
 
 const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
@@ -117,7 +125,13 @@ test('admin preview switches the story body to the selected locale and displays 
   assert.match(preview, /renderTranslationOnPage\(index, record\.translation_text\)/);
   assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
   assert.match(preview, /site-language-change', function \(\) \{ loadTranslations\(\)\.then\(onUpdated\); \}/);
-  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261116-preview-localized-1/);
+  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261121-ar-en-audio-1/);
+});
+
+test('a single excluded wrong-speaker clip does not invalidate the remaining manifest clips', () => {
+  assert.match(audioReview, /var excludedSpeakerSegments = 0;/);
+  assert.match(audioReview, /excludedSpeakerSegments\+\+;/);
+  assert.match(audioReview, /excludedSpeakerSegments > 0 \|\| data\.provider === 'omnivoice'/);
 });
 
 test('audio readiness waits for a manifest card and the worker verifies uploaded bytes before completing', () => {
@@ -173,9 +187,9 @@ test('audio generation and review controls follow the selected language without 
   assert.ok(src.includes('actions.appendChild(bulkTranslate)'));
   assert.ok(src.includes("panel.appendChild(translationStatus)"));
   assert.ok(src.includes('ترجمة كل المقاطع دفعة واحدة'));
-  assert.ok(src.includes('kh-language-audio-generate'));
+  assert.ok(!src.includes('kh-language-audio-generate'));
   assert.ok(src.includes('kh-language-audio-review'));
-  assert.ok(src.includes("action: 'enqueue_approved_language'"));
+  assert.ok(!src.includes('enqueue_approved_language'));
   assert.ok(audioReview.includes('canQueueLanguage: async function'));
   assert.ok(audioReview.includes('canReviewLanguage: function'));
   assert.ok(!src.includes('kh-translation-queue-all'));

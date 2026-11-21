@@ -131,6 +131,8 @@
     '</div>';
   var blocksHost = document.getElementById('blocks');
   if (blocksHost && blocksHost.parentNode) blocksHost.parentNode.insertBefore(host, blocksHost);
+  else if (document.body) document.body.appendChild(host);
+  else return;
 
   var playButton = document.getElementById('kh-audio-play');
   var pauseButton = document.getElementById('kh-audio-pause');
@@ -346,7 +348,7 @@
     stop();
     setLanguage();
     var thisLoad = ++manifestRun;
-    if (!['ar', 'en', 'fr', 'it', 'de'].includes(lang)) { host.hidden = true; queue = []; manifestState = 'failed'; return; }
+    if (!['ar', 'en'].includes(lang)) { host.hidden = true; queue = []; manifestState = 'failed'; return; }
     host.hidden = true;
     manifestState = 'loading';
     manifestUrl = new URL(encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', PUBLIC_AUDIO_ROOT);
