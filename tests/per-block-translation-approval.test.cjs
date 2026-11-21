@@ -120,6 +120,12 @@ test('admin preview switches the story body to the selected locale and displays 
   assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261121-ar-en-audio-1/);
 });
 
+test('a single excluded wrong-speaker clip does not invalidate the remaining manifest clips', () => {
+  assert.match(audioReview, /var excludedSpeakerSegments = 0;/);
+  assert.match(audioReview, /excludedSpeakerSegments\+\+;/);
+  assert.match(audioReview, /excludedSpeakerSegments > 0 \|\| data\.provider === 'omnivoice'/);
+});
+
 test('audio readiness waits for a manifest card and the worker verifies uploaded bytes before completing', () => {
   assert.match(preview, /job\.status === 'completed'\) s3 = hasVerifiedCard \? \{ s: 'done', t: 'الصوت جاهز' \} : \{ s: 'busy'/);
   assert.match(audioEngine, /function audioEntryForBlock\(language, index\)/);

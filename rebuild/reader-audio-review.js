@@ -579,6 +579,7 @@ async function loadManifests() {
       }
       var localized = story.i18n && story.i18n[lang];
       var localizedBlocks = localized && Array.isArray(localized.blocks) ? localized.blocks : [];
+      var excludedSpeakerSegments = 0;
       data.segments = data.segments.filter(function (seg) {
         var blockIndex = Number(seg.block_index);
         var expectedSpeaker = Number.isInteger(blockIndex) && localizedBlocks[blockIndex] ? localizedBlocks[blockIndex].speaker : '';
@@ -593,6 +594,7 @@ async function loadManifests() {
         // Keep a bad-speaker clip from hiding every other valid segment in this language,
         // but remember it so the block explains why its finished audio is not shown.
         (manifestDropped[lang] = manifestDropped[lang] || []).push({ index: blockIndex, expected: expectedSpeaker, actual: seg.speaker });
+        excludedSpeakerSegments++;
         return false;
       });
       data.segments.forEach(function (seg) {
@@ -607,7 +609,7 @@ async function loadManifests() {
       manifestStale[lang] = split.stale;
       data.segments = split.fresh;
       if (data.segments.length) {
-        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], data.provider === 'omnivoice' || (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0);
+        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], excludedSpeakerSegments > 0 || data.provider === 'omnivoice' || (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0);
         if (!coverage.ok) throw new Error(coverage.error);
       }
       manifestGaps[lang] = core.uncoveredBlocks(localized && localized.blocks, data.segments);
