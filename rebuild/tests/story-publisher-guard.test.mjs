@@ -9,7 +9,7 @@ test('unified publisher creates a review PR and never writes directly to main', 
   const auth = source.indexOf('await supabase.auth.getUser()');
   const admin = source.indexOf('await supabase.rpc("is_admin")');
   const submissionId = source.indexOf('const submissionId =');
-  const recordRead = source.indexOf('.from(submissionTable).select("id,story_meta")');
+  const recordRead = source.indexOf('.from(submissionTable).select("id,status,story_meta")');
   const savedPackage = source.indexOf('const savedStoryPackageRaw: any =');
   const packageGuard = source.indexOf('if (isStoryOnlyDraft) {');
   const approvalGuard = source.indexOf('review.decision !== "approved_waiting_for_github_upload"');
