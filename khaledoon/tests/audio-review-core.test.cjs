@@ -279,6 +279,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(publishStorySource.includes('const audioLanguages = ["ar", "en"]') && publishStorySource.includes('for (const lang of audioLanguages)'), 'the publication edge function must require accepted audio only in Arabic and English');
   assert.ok(audioAssetsSource.includes('const ACTIVE_AUDIO_LANGUAGES = ["ar", "en"]') && audioAssetsSource.includes('التوليد الجماعي معطل') && audioAssetsSource.includes('const nextIndex = ordered.find') && audioAssetsSource.includes('block_index,status,language'), 'the audio edge function must reject bulk generation, non-AR/EN audio, and out-of-order segments');
   assert.ok(publicAudioSource.includes("if (!['ar', 'en'].includes(lang))"), 'the visitor player must expose audio only for Arabic and English in the current phase');
+  assert.ok(publicAudioSource.includes('else if (document.body) document.body.appendChild(host)'), 'the shared player must mount on legacy pages that do not use the unified #blocks reader');
   assert.ok(legacyBridgeSource.includes('rebuild/october-audio-packages/') && legacyBridgeSource.includes('story-audio.js?v=20261121-ar-en-audio-1'), 'legacy October pages must load their own story package into the shared public player');
   ['001','002','003','004'].forEach(function (id) {
     var octoberPage = fs.readFileSync(path.join(__dirname, '../../stories/october/' + id + '/index.html'), 'utf8');

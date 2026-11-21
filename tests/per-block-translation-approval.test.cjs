@@ -45,6 +45,7 @@ test('single-segment queue preserves the source speaker for the unified worker',
 
 test('public audio player accepts normal MP3 filenames and uses a fresh cache key', () => {
   assert.ok(publicAudio.includes("!/^[A-Za-z0-9_-]+\\.mp3$/.test"), 'MP3 validation must escape the dot once, not twice');
+  assert.match(publicAudio, /else if \(document\.body\) document\.body\.appendChild\(host\)/, 'legacy pages without a #blocks container must still mount the shared player');
   assert.match(storyReader, /story-audio\.js\?v=20261121-ar-en-audio-1/);
 });
 

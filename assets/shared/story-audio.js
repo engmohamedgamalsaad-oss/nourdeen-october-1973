@@ -131,6 +131,8 @@
     '</div>';
   var blocksHost = document.getElementById('blocks');
   if (blocksHost && blocksHost.parentNode) blocksHost.parentNode.insertBefore(host, blocksHost);
+  else if (document.body) document.body.appendChild(host);
+  else return;
 
   var playButton = document.getElementById('kh-audio-play');
   var pauseButton = document.getElementById('kh-audio-pause');
