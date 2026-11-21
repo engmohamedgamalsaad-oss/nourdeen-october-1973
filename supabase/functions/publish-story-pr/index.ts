@@ -249,7 +249,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "pull_request", version: "2026-11-15-text-only-translation-pr-1", story_publish_version: "2026-11-15-reviewed-story-pr-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: false, supports_text_only_translation_pr: true });
+    return reply(200, { success: true, publisher_mode: "pull_request", version: "2026-11-17-published-text-only-translation-pr-1", supports_published_text_only_translation_pr: true, story_publish_version: "2026-11-15-reviewed-story-pr-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: false, supports_text_only_translation_pr: true });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
@@ -297,7 +297,7 @@ Deno.serve(async (req: Request) => {
     return reply(400, { error: "يلزم إرسال رقم سجل الحكاية وجدولها للتحقق من صلاحية النشر." });
   }
   const { data: sourceRecord, error: sourceRecordError } = await supabase
-    .from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle();
+    .from(submissionTable).select("id,status,story_meta").eq("id", submissionId).maybeSingle();
   if (sourceRecordError) return reply(500, { error: "تعذر التحقق من سجل الحكاية قبل إنشاء طلب المراجعة." });
   if (!sourceRecord) return reply(404, { error: "سجل الحكاية المطلوب غير موجود أو غير متاح للأدمن الحالي." });
   const sourceMeta = sourceRecord.story_meta && typeof sourceRecord.story_meta === "object" ? sourceRecord.story_meta as Record<string, unknown> : {};
@@ -308,6 +308,17 @@ Deno.serve(async (req: Request) => {
   const submittedStoryPage = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
   const submittedStoryMatch = submittedStoryPage?.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
   const submittedStorySection = submittedStoryMatch?.[1] ?? "";
+  const review = sourceMeta.preview_review && typeof sourceMeta.preview_review === "object"
+    ? sourceMeta.preview_review as Record<string, unknown> : {};
+  const publicationMode = body.publication_mode === "text_only" ? "text_only" : "full";
+  const expectedPublishedStoryPath = submittedStoryMatch
+    ? "stories/" + submittedStorySection + "/" + submittedStoryMatch[2] : "";
+  const savedPublishedStoryPath = String(review.static_story_path ?? "").split("/").filter(Boolean).join("/");
+  const isPublishedTextOnlyUpdate = publicationMode === "text_only" &&
+    sourceRecord.status === "published" && sourceMeta.story_only_draft === true &&
+    !sourceMeta.pending_draft && review.decision === "published" &&
+    String(review.static_story_id ?? "").padStart(3, "0") === String(submittedStoryMatch?.[2] ?? "") &&
+    !!expectedPublishedStoryPath && savedPublishedStoryPath === expectedPublishedStoryPath;
   const savedStoryPackageRaw: any = (pendingMeta.story_only_draft === true ? pendingMeta.story_package : null) ??
     (sourceMeta.story_only_draft === true ? sourceMeta.story_package : null) ??
     (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
@@ -328,9 +339,7 @@ Deno.serve(async (req: Request) => {
     if (!savedStoryPackage || !["KHALEDOON_STORY", "KHALEDOON_STORY_V2"].includes(savedStoryPackage.format)) {
       return reply(409, { error: "حزمة الحكاية الأصلية غير موجودة في سجل الإدارة؛ لم ننشئ طلب مراجعة." });
     }
-    const review = sourceMeta.preview_review && typeof sourceMeta.preview_review === "object"
-      ? sourceMeta.preview_review as Record<string, unknown> : {};
-    if (review.decision !== "approved_waiting_for_github_upload") {
+    if (review.decision !== "approved_waiting_for_github_upload" && !isPublishedTextOnlyUpdate) {
       return reply(409, { error: "يجب اعتماد معاينة الحكاية قبل إنشاء طلب مراجعة للنشر." });
     }
     try {
@@ -366,7 +375,6 @@ Deno.serve(async (req: Request) => {
           pageHtml.includes('data-story-path="data.v2.json"')) {
         return reply(409, { error: "كل الأقسام، بما فيها أكتوبر، يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
       }
-      const publicationMode = body.publication_mode === "text_only" ? "text_only" : "full";
       if (publicationMode === "text_only") {
         if (!SERVICE_ROLE_KEY) return reply(503, { error: "مفتاح الخدمة غير متاح للتحقق من اعتماد الترجمات؛ لم يتم إنشاء طلب مراجعة." });
         const service = createClient(url, SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
@@ -377,17 +385,13 @@ Deno.serve(async (req: Request) => {
         if (!translations || typeof translations !== "object") return reply(409, { error: "لا توجد ترجمات معتمدة محفوظة لهذه الحكاية." });
         const arabicBlocks = packageData.i18n?.ar?.blocks;
         if (!Array.isArray(arabicBlocks) || !arabicBlocks.length) return reply(409, { error: "النص العربي الأصلي غير متاح للتحقق من الترجمات." });
-        // Optional text_languages publishes only the chosen translated languages (each language is independent).
-        // Omitted -> all four, exactly as before. Languages not listed are left untouched in the package.
+        // Translation publishing is deliberately one explicitly selected language per request.
         const textLanguageOptions = ["en", "fr", "it", "de"];
-        let textLanguages = textLanguageOptions;
-        if (body.text_languages !== undefined) {
-          if (!Array.isArray(body.text_languages) || !body.text_languages.length ||
-              body.text_languages.some((lang: unknown) => typeof lang !== "string" || !textLanguageOptions.includes(lang))) {
-            return reply(400, { error: "text_languages يجب أن تكون قائمة غير فارغة من: en أو fr أو it أو de." });
-          }
-          textLanguages = textLanguageOptions.filter((lang) => body.text_languages.includes(lang));
+        if (!Array.isArray(body.text_languages) || body.text_languages.length !== 1 ||
+            typeof body.text_languages[0] !== "string" || !textLanguageOptions.includes(body.text_languages[0])) {
+          return reply(400, { error: "اختر لغة واحدة فقط للنشر: en أو fr أو it أو de." });
         }
+        const textLanguages = [body.text_languages[0]];
         for (const lang of textLanguages) {
           const localized = packageData.i18n?.[lang];
           if (!localized || !Array.isArray(localized.blocks) || localized.blocks.length !== arabicBlocks.length) {
@@ -575,14 +579,11 @@ Deno.serve(async (req: Request) => {
         throw new Error("نشر ترجمة لغة واحدة يتطلب حكاية منشورة في مسارها الحالي؛ أوقفت النشر دون إنشاء طلب مراجعة.");
       }
       const textLanguageOptions = ["en", "fr", "it", "de"];
-      let selectedTextLanguages = textLanguageOptions;
-      if (body.text_languages !== undefined) {
-        if (!Array.isArray(body.text_languages) || !body.text_languages.length ||
-            body.text_languages.some((lang: unknown) => typeof lang !== "string" || !textLanguageOptions.includes(lang))) {
-          throw new Error("text_languages غير صالحة؛ أوقفت النشر دون تغيير أي لغة.");
-        }
-        selectedTextLanguages = textLanguageOptions.filter((lang) => body.text_languages.includes(lang));
+      if (!Array.isArray(body.text_languages) || body.text_languages.length !== 1 ||
+          typeof body.text_languages[0] !== "string" || !textLanguageOptions.includes(body.text_languages[0])) {
+        throw new Error("اختر لغة واحدة فقط للنشر: en أو fr أو it أو de.");
       }
+      const selectedTextLanguages = [body.text_languages[0]];
       const currentStoryPath = storyRoot + "story.json";
       const currentQuizPath = "stories/quizzes/" + storyId + ".json";
       const decodeGithubText = (response: any) => new TextDecoder().decode(
@@ -614,10 +615,21 @@ Deno.serve(async (req: Request) => {
       }
       for (const lang of selectedTextLanguages) {
         const translated = incomingPackage.i18n?.[lang];
-        if (!translated || !Array.isArray(translated.blocks) || translated.blocks.length !== currentArabicBlocks.length) {
+        const publishedLocale = currentStory.i18n?.[lang];
+        if (!translated || !Array.isArray(translated.blocks) || translated.blocks.length !== currentArabicBlocks.length ||
+            !publishedLocale || !Array.isArray(publishedLocale.blocks) || publishedLocale.blocks.length !== currentArabicBlocks.length) {
           throw new Error("ترجمة " + lang + " غير مكتملة أو لا تطابق عدد المقاطع المنشورة؛ أوقفت النشر.");
         }
-        currentStory.i18n[lang] = translated;
+        for (let index = 0; index < currentArabicBlocks.length; index++) {
+          const incomingBlock = translated.blocks[index];
+          const publishedBlock = publishedLocale.blocks[index];
+          if (!incomingBlock || !publishedBlock || incomingBlock.speaker !== publishedBlock.speaker) {
+            throw new Error("المتحدث أو ترتيب المقاطع في " + lang + " لا يطابق النسخة المنشورة؛ أوقفت النشر.");
+          }
+          if (!["karma", "narrator"].includes(currentArabicBlocks[index]?.speaker)) continue;
+          // Preserve the published locale object and update only the approved speech text field.
+          publishedBlock.text = incomingBlock.text;
+        }
       }
       incomingPackageFile.content = JSON.stringify(currentStory, null, 2) + "\n";
       incomingPackageFile.encoding = "utf-8";
@@ -626,15 +638,8 @@ Deno.serve(async (req: Request) => {
       if (!existingEntry.i18n || textLanguageOptions.some((lang) => !existingEntry.i18n[lang])) {
         throw new Error("بيانات اللغات المنشورة في فهرس الحكاية غير مكتملة؛ أوقفت النشر لحمايتها.");
       }
-      const mergedIndexEntry: any = { ...existingEntry, i18n: { ...(existingEntry.i18n || {}) } };
-      for (const lang of selectedTextLanguages) {
-        const localizedIndex = incomingEntry.i18n?.[lang];
-        if (!localizedIndex || typeof localizedIndex.title !== "string" || !localizedIndex.title.trim()) {
-          throw new Error("بيانات فهرس اللغة " + lang + " غير مكتملة؛ أوقفت النشر.");
-        }
-        mergedIndexEntry.i18n[lang] = localizedIndex;
-      }
-      indexEntryForPublish = mergedIndexEntry;
+      // A block-text translation update must not rewrite localized index titles or person metadata.
+      indexEntryForPublish = existingEntry;
 
       const incomingQuizFile = body.files.find((file: any) => file.path === currentQuizPath);
       if (!incomingQuizFile) throw new Error("ملف بنك الأسئلة غير موجود؛ أوقفت نشر الترجمة.");
