@@ -675,7 +675,7 @@ async function loadManifests() {
 }
 function languageGate(language) {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  if (!AUDIO_LANGS.includes(language)) return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
+  if (!AUDIO_LANGS.includes(language)) return { ok: false, deferred: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestErrors[language] && !manifestMissing[language]) {
     return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   }
@@ -793,12 +793,13 @@ function renderGateBanner(banner) {
       var clip = review.clips[entry.key];
       return clip && clip.status === 'accepted';
     }).length;
-    var langGate = languageGate(lang);
+    var deferred = !AUDIO_LANGS.includes(lang);
+    var langGate = deferred ? { ok: false, deferred: true } : languageGate(lang);
     var chip = document.createElement('span');
     chip.className = 'kh-lang-chip';
     var isPublished = !!(publishedAudioStatus[lang] && publishedAudioStatus[lang].published);
-    chip.dataset.state = (!manifests[lang] && !isPublished) ? 'none' : (langGate.ok ? 'done' : 'part');
-    var label = isPublished && !manifests[lang] ? 'منشور' : (!manifests[lang] ? 'لم يُنشأ الصوت' : (list.length ? acc + '/' + list.length + ' مقبول' : 'قيد المراجعة'));
+    chip.dataset.state = deferred || (!manifests[lang] && !isPublished) ? 'none' : (langGate.ok ? 'done' : 'part');
+    var label = deferred ? 'مؤجل' : (isPublished && !manifests[lang] ? 'منشور' : (!manifests[lang] ? 'لم يُنشأ الصوت' : (list.length ? acc + '/' + list.length + ' مقبول' : 'قيد المراجعة')));
     if (isPublished && manifests[lang]) label += ' · منشور';
     text(chip, LANG_NAMES[lang] + ' ' + label);
     chips.appendChild(chip);
@@ -813,7 +814,7 @@ function renderGateBanner(banner) {
 function canApprove() { return gate().ok; }
 window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate, languageGate: languageGate,
   canQueueLanguage: async function (language) {
-    if (!story || !LANGS.includes(language)) return false;
+    if (!story || !AUDIO_LANGS.includes(language)) return false;
     var blocks = story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
     var indexes = orderedStoryBlockIndexes(blocks);
     if (!indexes.length) return false;
@@ -834,7 +835,7 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
     return true;
   },
   canReviewLanguage: function (language) {
-    if (!story || !LANGS.includes(language) || !manifests[language] || manifestErrors[language] ||
+    if (!story || !AUDIO_LANGS.includes(language) || !manifests[language] || manifestErrors[language] ||
         (manifestStale[language] || []).length || (manifestGaps[language] || []).length) return false;
     var blocks = story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
     var indexes = orderedStoryBlockIndexes(blocks);
@@ -846,7 +847,7 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
   },
   prepareAllSpeechTexts: function (onProgress) { return prepareAllSpeechTexts(onProgress); },
   publishLanguageAudio: async function (language) {
-    if (!story || !LANGS.includes(language)) throw new Error('اختر لغة صحيحة لنشر الصوت.');
+    if (!story || !AUDIO_LANGS.includes(language)) throw new Error('نشر الصوت متاح حاليًا للعربية والإنجليزية فقط.');
     var gate = languageGate(language);
     if (!gate || !gate.ok) throw new Error('لا يمكن نشر الصوت: راجع جاهزية كل مقاطع اللغة واعتماداتها أولًا.');
     if (generationBusy) throw new Error('هناك عملية صوتية أخرى قيد التنفيذ.');
@@ -862,7 +863,7 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
       return result;
     } finally { generationBusy = false; }
   },
-  isLanguageAudioPublished: function (language) { return !!(LANGS.includes(language) && publishedAudioStatus[language] && publishedAudioStatus[language].published === true); },
+  isLanguageAudioPublished: function (language) { return !!(AUDIO_LANGS.includes(language) && publishedAudioStatus[language] && publishedAudioStatus[language].published === true); },
   refreshAudio: async function () { await loadManifests(); await loadPublicAudioStatus(); render(); return true; } };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
 async function play(entry, button, forceRestart) {
