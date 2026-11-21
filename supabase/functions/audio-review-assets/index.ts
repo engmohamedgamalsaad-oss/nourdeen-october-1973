@@ -734,6 +734,7 @@ Deno.serve(async (req: Request) => {
     if (ordered.indexOf(blockIndex) < 0) return reply(409, { error: "هذا المقطع غير منطوق أو غير موجود." });
     if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
     const nextIndex = ordered.find((index) => !accepted.has(index));
+    if (nextIndex === undefined) return reply(409, { error: "كل المقاطع الصوتية في هذه اللغة معتمدة بالفعل." });
     if (nextIndex !== blockIndex) return reply(409, { error: "يجب اعتماد المقطع " + (nextIndex + 1) + " قبل بدء أي مقطع لاحق." });
     const { data: activeJobs, error: activeJobsError } = await service.from("story_audio_generation_queue")
       .select("block_index,status").eq("section", section).eq("slug", slug)
