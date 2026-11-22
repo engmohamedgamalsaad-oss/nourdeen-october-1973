@@ -57,12 +57,19 @@ const records = [
     body:'نص وهمي لاختبار فتح محرر السجل المنشور ونقل نسخته الجديدة دون تعديل النسخة الحية.',
     sources:'مصدر تجريبي', consent:true, created_at:'2026-10-17T09:00:00Z', translations:{},
     story_meta:{ preview_review:{ decision:'published', static_story_id:'098', static_story_path:'stories/science/098/' } } },
-  { id:'visual-linked-published-005', status:'published', section:'science', title:'فاروق الباز',
+  { id:'visual-linked-published-005', status:'published', section:'science', title:'سجل مراجعة مرتبط — فاروق الباز',
     subtitle:'سجل تحرير مرتبط صراحة بالصفحة المنشورة 012', figure_name:'فاروق الباز', narrator_name:'راوٍ تجريبي',
     narrator_grade:'الصف الأول الإعدادي', original_body:'نص أصلي تجريبي مرتبط بصفحة منشورة.',
     body:'نص تجريبي للتحقق من ظهور سجل التحرير المنشور داخل بطاقة صفحة الموقع.',
     sources:'مصدر تجريبي', consent:true, created_at:'2026-10-16T09:00:00Z', translations:{},
     story_meta:{ preview_review:{ decision:'published', static_story_id:'012', static_story_path:'stories/science/012/' } } }
+];
+const legacyRecords = [
+  { id:'legacy-pending-006', status:'pending', section:'october', title:'اختبار سجل أكتوبر القديم',
+    subtitle:'سجل وهمي من الجدول القديم', figure_name:'شخصية أكتوبر تجريبية', narrator_name:'راوٍ تجريبي',
+    narrator_grade:'الصف الأول الإعدادي', original_body:'نص أصلي وهمي لسجل أكتوبر القديم.',
+    body:'نص تجريبي طويل لاختبار ظهور السجل القديم في القائمة والفلاتر.', sources:'مصدر تجريبي', consent:true,
+    created_at:'2026-10-15T09:00:00Z', translations:{}, story_meta:{} }
 ];
 
 async function main() {
@@ -85,6 +92,7 @@ async function main() {
       const page = await context.newPage();
       const submissionWrites = [];
       const submissionPatches = [];
+      const legacyWrites = [];
       const publisherCalls = [];
       await page.route('https://**/*', route => route.abort());
       await page.route(SUPA + '/**', async route => {
@@ -97,11 +105,25 @@ async function main() {
           return route.fulfill({ status:400, contentType:'application/json', body:JSON.stringify({ error:'legacy function does not support capabilities' }) });
         }
         if (url.includes('/rest/v1/khaledoon_submissions') && !['GET','HEAD','OPTIONS'].includes(req.method())) { submissionWrites.push(req.method() + ' ' + url); if(req.method()==='PATCH'){ try{submissionPatches.push(JSON.parse(req.postData()||'{}'))}catch(_){submissionPatches.push({})} } }
+        if (url.includes('/rest/v1/submitted_stories') && !['GET','HEAD','OPTIONS'].includes(req.method())) legacyWrites.push(req.method() + ' ' + url);
         if (url.includes('/rest/v1/rpc/is_admin')) {
           return route.fulfill({ status:200, contentType:'application/json', body:'true' });
         }
+        if (url.includes('/rest/v1/pagination_test')) {
+          const all = Array.from({ length:501 }, (_,i) => ({ id:'pagination-'+i, created_at:'2026-10-01T00:00:00Z' }));
+          const [start,end] = (req.headers()['range'] || '0-499').split('-').map(Number);
+          const selected = all.slice(start,end+1);
+          return route.fulfill({ status:200, headers:{ 'Content-Range':selected.length ? start+'-'+(start+selected.length-1)+'/'+all.length : '*/'+all.length }, contentType:'application/json', body:JSON.stringify(selected) });
+        }
         if (url.includes('/rest/v1/khaledoon_submissions')) {
-          return route.fulfill({ status:200, contentType:'application/json', body:JSON.stringify(records) });
+          const [start,end] = (req.headers()['range'] || '0-499').split('-').map(Number);
+          const selected = records.slice(start,end+1);
+          return route.fulfill({ status:200, headers:{ 'Content-Range':selected.length ? start+'-'+(start+selected.length-1)+'/'+records.length : '*/'+records.length }, contentType:'application/json', body:JSON.stringify(selected) });
+        }
+        if (url.includes('/rest/v1/submitted_stories')) {
+          const [start,end] = (req.headers()['range'] || '0-499').split('-').map(Number);
+          const selected = legacyRecords.slice(start,end+1);
+          return route.fulfill({ status:200, headers:{ 'Content-Range':selected.length ? start+'-'+(start+selected.length-1)+'/'+legacyRecords.length : '*/'+legacyRecords.length }, contentType:'application/json', body:JSON.stringify(selected) });
         }
         if (url.includes('/rest/v1/story_visibility')) {
           return route.fulfill({ status:200, contentType:'application/json', body:'[]' });
@@ -114,10 +136,36 @@ async function main() {
         }
         return route.fulfill({ status:200, contentType:'application/json', body:'[]' });
       });
-      await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html', { waitUntil:'domcontentloaded' });
+      await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html?admin_test_hooks=1', { waitUntil:'domcontentloaded' });
       await page.locator('#app').waitFor({ state:'visible', timeout:15000 });
       await page.getByText('اختبار بصري — حكاية مرسلة للمعاينة').waitFor({ state:'visible', timeout:15000 });
       await page.getByText(/تنبيه: قد تطابق صفحة/).waitFor({ state:'visible', timeout:10000 });
+      const adminCount = page.locator('#stats .stat').filter({ hasText:'سجلات الأدمن' });
+      assert.equal(await adminCount.locator('strong').textContent(), '6', 'admin total must include both tables and linked records');
+      const paginationCount = await page.evaluate(async () => (await window.__KHAdminTestHooks.loadAllRows('pagination_test','اختبار ترقيم الصفحات')).length);
+      assert.equal(paginationCount, 501, 'all rows must be loaded across more than one PostgREST range');
+      const editingTab = page.locator('#tabs button').filter({ hasText:'تحت التحرير (2)' });
+      await editingTab.click();
+      await page.getByText('اختبار سجل أكتوبر القديم').waitFor({ state:'visible', timeout:10000 });
+      await page.evaluate(async () => {
+        await window.__KHAdminTestHooks.removeItem({ id:'legacy-pending-006', _t:'o', status:'pending', title:'اختبار سجل أكتوبر القديم' }, document.createElement('button'));
+      });
+      assert.ok(legacyWrites.some(entry => entry.startsWith('DELETE ') && entry.includes('/submitted_stories?id=eq.legacy-pending-006')), 'legacy deletion must target submitted_stories only');
+      const publishedTab = page.locator('#tabs button').filter({ hasText:'سجلات الأدمن بحالة «منشورة»' }).first();
+      await publishedTab.click();
+      const linkedPageRow = page.locator('#list > details.pubrow').filter({ hasText:'فاروق الباز' }).first();
+      await linkedPageRow.evaluate(el => { el.open = true; el.dispatchEvent(new Event('toggle')); });
+      const linkedSubmission = linkedPageRow.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' });
+      await linkedSubmission.waitFor({ state:'visible', timeout:10000 });
+      assert.equal(await linkedPageRow.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' }).count(), 1, 'the linked admin row must appear once under its published page');
+      await page.locator('#search').fill('سجل مراجعة مرتبط');
+      const filteredLinkedPage = page.locator('#list > details.pubrow').filter({ hasText:'فاروق الباز' }).first();
+      await filteredLinkedPage.evaluate(el => { el.open = true; el.dispatchEvent(new Event('toggle')); });
+      await filteredLinkedPage.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' }).waitFor({ state:'visible', timeout:10000 });
+      await page.locator('#search').fill('');
+      await page.locator('#tabs button').filter({ hasText:'كل السجلات (6)' }).click();
+      const resetLinkedPage = page.locator('#list > details.pubrow').filter({ hasText:'فاروق الباز' }).first();
+      await resetLinkedPage.evaluate(el => { el.open = false; el.dispatchEvent(new Event('toggle')); });
       await page.screenshot({ path:path.join(OUT, 'admin-' + viewport.name + '-dark.png'), fullPage:true });
       await page.locator('#th').click();
       await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'light');

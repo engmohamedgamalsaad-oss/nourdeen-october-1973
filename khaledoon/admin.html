@@ -229,25 +229,49 @@ async function logout(silent){
  if(!silent)say('ok','تم تسجيل الخروج.');
 }
 
+async function loadAllRows(table,label){
+ var rows=[],seen=Object.create(null),offset=0,pageSize=500,pageCount=0;
+ while(true){
+  var response=await rest(table+'?select=*&order=created_at.desc,id.asc',{
+   headers:{Range:offset+'-'+(offset+pageSize-1),'Range-Unit':'items',Prefer:'count=exact'}
+  });
+  if(response.status===404&&table==='khaledoon_submissions')throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
+  if(!response.ok)throw new Error('تعذر تحميل '+label+' ('+response.status+').');
+  var page=await response.json();
+  if(!Array.isArray(page))throw new Error('استجابة '+label+' غير صالحة؛ لم أعرض قائمة جزئية.');
+  if(!page.length)break;
+  var added=0;
+  page.forEach(function(row){
+   if(!row||row.id==null){rows.push(row);added++;return}
+   var key=String(row.id);
+   if(!seen[key]){seen[key]=true;rows.push(row);added++}
+  });
+  if(!added)throw new Error('توقفت صفحات '+label+' دون تقدم؛ لم أعرض إجماليًا ناقصًا أو مكررًا.');
+  offset+=page.length;
+  var contentRange=response.headers&&response.headers.get('Content-Range')||'';
+  var totalMatch=contentRange.match(/\/(\d+|\*)$/);
+  if(totalMatch&&totalMatch[1]!=='*'&&offset>=Number(totalMatch[1]))break;
+  pageCount++;
+  if(pageCount>2000)throw new Error('تجاوز تحميل '+label+' حد الأمان للصفحات؛ لم أعرض نتيجة جزئية.');
+ }
+ return rows;
+}
+/* خطافات اختبار مغلقة افتراضيًا؛ لا تُتاح إلا عند طلب admin_test_hooks صراحةً في بيئة الاختبار. */
+if(new URLSearchParams(location.search).get('admin_test_hooks')==='1')window.__KHAdminTestHooks={loadAllRows:loadAllRows,removeItem:removeItem};
 async function loadList(){
  var responses=await Promise.all([
-  rest('khaledoon_submissions?select=*&order=created_at.desc'),
-  rest('submitted_stories?select=*&order=created_at.desc')
+  loadAllRows('khaledoon_submissions','حكايات خالدون'),
+  loadAllRows('submitted_stories','سجلات أكتوبر القديمة')
  ]);
- var response=responses[0],legacyResponse=responses[1];
- if(response.status===404)throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
- if(!response.ok)throw new Error('تعذر تحميل حكايات خالدون ('+response.status+').');
- if(!legacyResponse.ok)throw new Error('تعذر تحميل سجلات أكتوبر القديمة ('+legacyResponse.status+').');
- adminRecords=await response.json();
- legacyAdminRecords=await legacyResponse.json();
+ adminRecords=responses[0];
+ legacyAdminRecords=responses[1];
  adminRecords.forEach(function(x){x._t='k';x._workflow=window.KHWorkflow.stateOf(x).state});
  legacyAdminRecords.forEach(function(x){x._t='o';x._workflow=window.KHWorkflow.stateOf(x).state});
  sitePageItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
- /* اربط سجل التحرير بالصفحة المنشورة باستخدام المعرّف الصريح فقط؛ لا نخفي السجل من الإدارة قبل عرضه داخل صفحة الموقع. */
+ /* اربط سجل التحرير بالصفحة المنشورة باستخدام المعرّف الصريح فقط؛ يظل السجل قابلًا للإدارة داخل بطاقة الصفحة. */
  var linkedPublished={};
  adminRecords.concat(legacyAdminRecords).forEach(function(record){
   var page=window.KHWorkflow.linkedSite(record,sitePageItems);
-  /* سجل الصفحة قد يتحول إلى review أثناء تجهيز نقلها؛ وجود pending_draft لا يلغي الصفحة القديمة المنشورة. */
   if(record.status!=='published'&&!(page&&record.story_meta&&record.story_meta.pending_draft&&typeof record.story_meta.pending_draft==='object'))return;
   if(page){
    if(!Array.isArray(page.submissions))page.submissions=[];
@@ -276,7 +300,7 @@ function renderStats(){
  var b=$('stats');b.textContent='';
  /* عداد سجلات الأدمن يجب أن يطابق سجلات الإدارة الظاهرة في القائمة؛
     نستبعد من حسابات الحالات فقط السجلات التي لها صفحة منشورة بالفعل. */
- var visibleAdminRecords=items.filter(function(record){return record._t==='k'});
+ var visibleAdminRecords=adminRecords.concat(legacyAdminRecords);
  var queueRecords=visibleAdminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&record.status==='published'||itemState(record)==='awaiting_publish'&&isAlreadyOnSite(record))});
  var counts=window.KHWorkflow.counters(queueRecords,sitePageItems);
  counts.records=adminRecords.length+legacyAdminRecords.length;
@@ -297,8 +321,9 @@ function renderStats(){
 function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b)}
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
- chip(t,'كل السجلات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
- ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return i._t!=='site'&&itemState(i)===k&&!(k==='awaiting_publish'&&isAlreadyOnSite(i))}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
+ var allAdminRecords=adminRecords.concat(legacyAdminRecords);
+ chip(t,'كل السجلات ('+allAdminRecords.length+')',fStatus==='all',function(){fStatus='all';render()});
+ ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=allAdminRecords.filter(function(i){return itemState(i)===k&&!(k==='awaiting_publish'&&isAlreadyOnSite(i))}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
  chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
  Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
@@ -1415,17 +1440,39 @@ function renderNewStoryGate(list){
  cancel.addEventListener('click',function(){newStoryGate=false;newStoryPromptCopied=false;render()});
  bar.appendChild(copy);bar.appendChild(start);bar.appendChild(cancel);box.appendChild(bar);list.appendChild(box);
 }
+/* افحص سجل الإدارة المرتبط داخل حاوية صفحة الموقع حتى لا تختفي سجلاته مع الفلاتر أو البحث. */
+function recordMatchesView(record,k){
+ var statusMatches=fStatus==='all'||(fStatus!=='site_pages'&&itemState(record)===fStatus&&!(fStatus==='awaiting_publish'&&isAlreadyOnSite(record)));
+ var sectionMatches=fSec==='all'||record.section===fSec;
+ var searchMatches=!k||[record.title,record.figure_name,record.narrator_name,record.student_name,record.grade,record.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1});
+ return statusMatches&&sectionMatches&&searchMatches;
+}
+function pageMatchesView(page,k){
+ var sectionMatches=fSec==='all'||page.section===fSec;
+ var searchMatches=!k||[page.title,page.figure_name,page.person].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1});
+ return sectionMatches&&searchMatches;
+}
 function render(){
  renderStats();renderTabs();
  var list=$('list');list.textContent='';
  if(newStoryGate){renderNewStoryGate(list);return}
  var k=term.trim().toLocaleLowerCase();
  var shown=items.filter(function(i){
-  return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':(fStatus==='published'?i._t!=='site'&&itemState(i)==='published':itemState(i)===fStatus&&!(fStatus==='awaiting_publish'&&isAlreadyOnSite(i)))))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
+  if(i._t!=='site')return recordMatchesView(i,k);
+  var pageMatches=pageMatchesView(i,k);
+  if(fStatus==='site_pages')return pageMatches;
+  var linkedMatches=(i.submissions||[]).filter(function(record){return recordMatchesView(record,k)});
+  return fStatus==='all'?(pageMatches||linkedMatches.length>0):linkedMatches.length>0;
  });
  if(draftNew){openIds['k:null']=true;list.appendChild(pubRow({id:null,_t:'k',status:'pending',section:'curriculum',created_at:new Date().toISOString(),story_meta:{}}));}
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
- shown.forEach(function(i){list.appendChild(pubRow(i))});
+ shown.forEach(function(i){
+  if(i._t!=='site'){list.appendChild(pubRow(i));return}
+  var pageMatches=pageMatchesView(i,k);
+  var linkedMatches=(i.submissions||[]).filter(function(record){return recordMatchesView(record,k)});
+  var visibleSubmissions=(fStatus==='site_pages'||(fStatus==='all'&&pageMatches))?i.submissions:linkedMatches;
+  list.appendChild(pubRow(Object.assign({},i,{submissions:visibleSubmissions})));
+ });
 }
 
 var REACTION_TYPES={like:'أعجبني',loved:'حكاية ومجهود مميز',unknown_before:'حكاية لم أكن أعرفها من قبل',inspiring:'حكاية ملهمة',more_stories:'أحب أقرأ حكايات تانية'};
