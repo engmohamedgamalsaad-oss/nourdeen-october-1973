@@ -140,8 +140,10 @@ async function main() {
       await page.locator('#app').waitFor({ state:'visible', timeout:15000 });
       await page.getByText('اختبار بصري — حكاية مرسلة للمعاينة').waitFor({ state:'visible', timeout:15000 });
       await page.getByText(/تنبيه: قد تطابق صفحة/).waitFor({ state:'visible', timeout:10000 });
-      const adminCount = page.locator('#stats .stat').filter({ hasText:'سجلات الأدمن' });
-      assert.equal(await adminCount.locator('strong').textContent(), '6', 'admin total must include both tables and linked records');
+      const submissionCount = page.locator('#stats .stat').filter({ hasText:'سجلات الإرسال في قاعدة البيانات' });
+      assert.equal(await submissionCount.locator('strong').textContent(), '6', 'database submission count must include both submission tables');
+      const adminListCount = page.locator('#stats .stat').filter({ hasText:'إجمالي العناصر في قائمة الأدمن' });
+      assert.equal(await adminListCount.locator('strong').textContent(), '22', 'admin list total must count 17 published site pages plus 5 unlinked submission records exactly once');
       const paginationCount = await page.evaluate(async () => (await window.__KHAdminTestHooks.loadAllRows('pagination_test','اختبار ترقيم الصفحات')).length);
       assert.equal(paginationCount, 501, 'all rows must be loaded across more than one PostgREST range');
       const editingTab = page.locator('#tabs button').filter({ hasText:'تحت التحرير (2)' });
@@ -163,7 +165,7 @@ async function main() {
       await filteredLinkedPage.evaluate(el => { el.open = true; el.dispatchEvent(new Event('toggle')); });
       await filteredLinkedPage.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' }).waitFor({ state:'visible', timeout:10000 });
       await page.locator('#search').fill('');
-      await page.locator('#tabs button').filter({ hasText:'كل السجلات (6)' }).click();
+      await page.locator('#tabs button').filter({ hasText:'كل العناصر (22)' }).click();
       const resetLinkedPage = page.locator('#list > details.pubrow').filter({ hasText:'فاروق الباز' }).first();
       await resetLinkedPage.evaluate(el => { el.open = false; el.dispatchEvent(new Event('toggle')); });
       await page.screenshot({ path:path.join(OUT, 'admin-' + viewport.name + '-dark.png'), fullPage:true });
