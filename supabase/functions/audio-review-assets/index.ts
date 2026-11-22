@@ -21,7 +21,8 @@ const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
 const BUCKET = "khaledoon-audio-review";
 const PUBLIC_AUDIO_BUCKET = "khaledoon-story-audio-public";
 const SUPPORTED_AUDIO_LANGUAGES = ["ar", "en", "fr", "it", "de"];
-const ACTIVE_AUDIO_LANGUAGES = ["ar", "en"];
+const ACTIVE_AUDIO_LANGUAGES = ["ar", "en", "fr", "it", "de"];
+const BULK_AUDIO_LANGUAGES = ["en", "fr", "it", "de"];
 function audioModelForLanguage(language: string): string {
   return ["fr", "it", "de"].includes(language) ? "k2-fsa/OmniVoice" : "VoiceTut Egyptian Tashkeel";
 }
@@ -714,41 +715,40 @@ Deno.serve(async (req: Request) => {
   }
 
 
-  if (body.action === "enqueue_approved_language") {
-    return reply(409, { error: "التوليد الجماعي معطل. أرسل مقطعًا واحدًا فقط عبر enqueue، ولا تبدأ التالي قبل قبول المقطع الحالي." });
-  }
-
-  if (body.action === "enqueue") {
-    const blockIndex = Number(body.block_index);
-    if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
-    if (!ACTIVE_AUDIO_LANGUAGES.includes(language)) return reply(400, { error: "توليد الصوت متاح حاليًا للعربية والإنجليزية فقط." });
+// One Arabic block -> one queue job. Shared by the single-clip action and the bulk action.
+  // Arabic keeps the strict one-clip-at-a-time review order. The four translated languages
+  // (en / fr / it / de) are generated together, so the order and active-job gates do not apply to them.
+  type EnqueueOutcome = { status: number; data: Record<string, unknown> };
+  const enqueueOneBlock = async (blockIndex: number, audioReview: any, snapshot: any, bulk: boolean): Promise<EnqueueOutcome> => {
+    const fail = (status: number, data: Record<string, unknown>): EnqueueOutcome => ({ status, data });
+    const strictOrder = language === "ar";
+    if (!Number.isInteger(blockIndex) || blockIndex < 0) return fail(400, { error: "رقم المقطع غير صالح." });
+    if (!ACTIVE_AUDIO_LANGUAGES.includes(language)) return fail(400, { error: "لغة الصوت غير مدعومة." });
     let source;
-    try { source = await resolveStoryBlock(section, slug, "ar", blockIndex, body.story_snapshot); }
-    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع العربي." }); }
-    const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
-      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
-    if (reviewError) return reply(500, { error: "تعذر قراءة سجل مراجعة الحكاية.", detail: reviewError.message });
-    const audioReview = reviewRow?.audio_review ?? {};
+    try { source = await resolveStoryBlock(section, slug, "ar", blockIndex, snapshot); }
+    catch (error) { return fail(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع العربي." }); }
     const accepted = acceptedBlockIndexes(audioReview, language);
     const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
-    if (ordered.indexOf(blockIndex) < 0) return reply(409, { error: "هذا المقطع غير منطوق أو غير موجود." });
-    if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
-    const nextIndex = ordered.find((index) => !accepted.has(index));
-    if (nextIndex === undefined) return reply(409, { error: "كل المقاطع الصوتية في هذه اللغة معتمدة بالفعل." });
-    if (nextIndex !== blockIndex) return reply(409, { error: "يجب اعتماد المقطع " + (nextIndex + 1) + " قبل بدء أي مقطع لاحق." });
-    const { data: activeJobs, error: activeJobsError } = await service.from("story_audio_generation_queue")
-      .select("block_index,status,language").eq("section", section).eq("slug", slug)
-      .in("status", ["pending", "processing"]).limit(10);
-    if (activeJobsError) return reply(500, { error: "تعذر التحقق من المقطع الجاري توليده.", detail: activeJobsError.message });
-    if ((activeJobs ?? []).some((job: any) => Number(job.block_index) !== blockIndex || String(job.language) !== language)) {
-      return reply(409, { error: "يوجد مقطع آخر قيد التوليد؛ انتظر اكتماله ثم استمع إليه واعتمده قبل المتابعة." });
+    if (ordered.indexOf(blockIndex) < 0) return fail(409, { error: "هذا المقطع غير منطوق أو غير موجود." });
+    if (accepted.has(blockIndex)) return fail(409, { error: "هذا المقطع معتمد بالفعل." });
+    if (strictOrder) {
+      const nextIndex = ordered.find((index) => !accepted.has(index));
+      if (nextIndex === undefined) return fail(409, { error: "كل المقاطع الصوتية في هذه اللغة معتمدة بالفعل." });
+      if (nextIndex !== blockIndex) return fail(409, { error: "يجب اعتماد المقطع " + (nextIndex + 1) + " قبل بدء أي مقطع لاحق." });
+      const { data: activeJobs, error: activeJobsError } = await service.from("story_audio_generation_queue")
+        .select("block_index,status,language").eq("section", section).eq("slug", slug).eq("language", language)
+        .in("status", ["pending", "processing"]).limit(10);
+      if (activeJobsError) return fail(500, { error: "تعذر التحقق من المقطع الجاري توليده.", detail: activeJobsError.message });
+      if ((activeJobs ?? []).some((job: any) => Number(job.block_index) !== blockIndex)) {
+        return fail(409, { error: "يوجد مقطع آخر قيد التوليد؛ انتظر اكتماله ثم استمع إليه واعتمده قبل المتابعة." });
+      }
     }
     let spokenText = source.sourceText;
     if (language === "ar") {
       const speechRecord = audioReview?.speech_texts?.["ar:" + blockIndex];
       if (!speechRecord || speechRecord.status !== "approved" || typeof speechRecord.approved_text !== "string" ||
           !speechRecord.approved_text.trim() || speechRecord.source_text_hash !== source.sourceTextHash) {
-        return reply(409, { error: "نص القراءة غير جاهز لهذا المقطع؛ اضغط «الترجمة» أو «إعادة الترجمة» أولًا." });
+        return fail(409, { error: "نص القراءة غير جاهز لهذا المقطع؛ اضغط «الترجمة» أو «إعادة الترجمة» أولًا." });
       }
       spokenText = speechRecord.approved_text.trim();
     } else {
@@ -756,7 +756,7 @@ Deno.serve(async (req: Request) => {
       if (!translation || translation.status !== "approved" ||
           typeof translation.translation_text !== "string" || !translation.translation_text.trim() ||
           translation.source_arabic_hash !== source.sourceTextHash) {
-        return reply(409, { error: "ترجمة هذا المقطع غير جاهزة أو قديمة؛ اضغط «الترجمة» أو «إعادة الترجمة» أولًا." });
+        return fail(409, { error: "ترجمة هذا المقطع غير جاهزة أو قديمة؛ اضغط «الترجمة» أو «إعادة الترجمة» أولًا." });
       }
       spokenText = translation.translation_text.trim();
       const storyCopy = structuredClone(source.story);
@@ -770,11 +770,19 @@ Deno.serve(async (req: Request) => {
       };
       source = { ...source, story: storyCopy, block: storyCopy.i18n[language].blocks[blockIndex] };
     }
-    try { await invalidatePublicClipAudio(service, section, slug, language, blockIndex); }
-    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة لهذا المقطع." }); }
     const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
     const regenRevision = regenRevisionFor(audioReview, language, blockIndex);
     const idempotencyKey = await buildIdempotencyKey(audioReview, section, slug, language, blockIndex, source.sourceTextHash, spokenHash);
+    if (bulk) {
+      // Bulk runs never touch a block whose identical job already exists (pending / processing / completed):
+      // nothing is regenerated and published audio is not withdrawn. Only a failed job is retried below.
+      const { data: existingJob, error: existingError } = await service.from("story_audio_generation_queue")
+        .select("id,status,section,slug,language,block_index,speaker,created_at").eq("idempotency_key", idempotencyKey).maybeSingle();
+      if (existingError) return fail(500, { error: "تعذر التحقق من وجود مهمة سابقة لهذا المقطع.", detail: existingError.message });
+      if (existingJob && existingJob.status !== "failed") return fail(200, { success: true, already_queued: true, job: existingJob });
+    }
+    try { await invalidatePublicClipAudio(service, section, slug, language, blockIndex); }
+    catch (error) { return fail(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة لهذا المقطع." }); }
     const payload = {
       text: spokenText,
       speaker: source.block.speaker,
@@ -791,10 +799,65 @@ Deno.serve(async (req: Request) => {
       engine: ["fr", "it", "de"].includes(language) ? "omnivoice-multilingual" : "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
       idempotency_key: idempotencyKey, status: "pending",
     }, idempotencyKey);
-    if (!result.ok) return reply(500, { error: "تعذر إضافة المقطع إلى طابور التوليد.", detail: result.error?.message });
-    if (result.created) return reply(200, { success: true, queued: true, job: result.job });
-    return reply(200, { success: true, already_queued: !result.retried, retried_failed: result.retried, job: result.job });
+    if (!result.ok) return fail(500, { error: "تعذر إضافة المقطع إلى طابور التوليد.", detail: result.error?.message });
+    if (result.created) return fail(200, { success: true, queued: true, job: result.job });
+    return fail(200, { success: true, already_queued: !result.retried, retried_failed: result.retried, job: result.job });
+  };
+
+  // Bulk generation for the four translated languages only (en / fr / it / de); Arabic is never bulk-generated.
+  // Every block gets its own job and its own outcome, and one block that cannot be queued never hides or blocks the rest.
+  if (body.action === "enqueue_approved_language") {
+    if (!BULK_AUDIO_LANGUAGES.includes(language)) {
+      return reply(409, { error: "التوليد الجماعي متاح للغات المترجمة فقط (en / fr / it / de)؛ العربية تبقى مقطعًا مقطعًا." });
+    }
+    let story = storyFromSnapshot(body.story_snapshot, section, slug);
+    if (!story) {
+      try { story = (await resolveStoryBlock(section, slug, "ar", 0, undefined)).story; }
+      catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل التوليد الجماعي." }); }
+    }
+    const arabicBlocks = story?.i18n?.ar?.blocks;
+    if (!Array.isArray(arabicBlocks) || !arabicBlocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع عربية صالحة." });
+    const spokenIndexes = orderedStoryBlockIndexes(arabicBlocks).filter((index) => isSpeakableBlock(arabicBlocks[index]));
+    if (!spokenIndexes.length) return reply(409, { error: "لا توجد مقاطع منطوقة في هذه الحكاية." });
+    const { data: bulkReviewRow, error: bulkReviewError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (bulkReviewError) return reply(500, { error: "تعذر قراءة سجل مراجعة الحكاية.", detail: bulkReviewError.message });
+    const bulkReview = bulkReviewRow?.audio_review ?? {};
+    const alreadyAccepted = acceptedBlockIndexes(bulkReview, language);
+    const results: Record<string, unknown>[] = [];
+    for (const index of spokenIndexes) {
+      if (alreadyAccepted.has(index)) { results.push({ block_index: index, state: "accepted" }); continue; }
+      const outcome = await enqueueOneBlock(index, bulkReview, body.story_snapshot, true);
+      const data = outcome.data as any;
+      if (outcome.status === 200) {
+        results.push({
+          block_index: index,
+          state: data.queued ? "queued" : (data.retried_failed ? "retried" : "already_queued"),
+          job_id: data.job?.id ?? null, job_status: data.job?.status ?? null,
+        });
+      } else {
+        results.push({ block_index: index, state: outcome.status === 409 ? "blocked" : "failed", error: String(data?.error ?? "تعذر إرسال المقطع."), http_status: outcome.status });
+      }
+    }
+    const count = (state: string) => results.filter((item) => item.state === state).length;
+    const counts = {
+      total: results.length, queued: count("queued"), retried: count("retried"), already_queued: count("already_queued"),
+      accepted: count("accepted"), blocked: count("blocked"), failed: count("failed"),
+    };
+    return reply(200, { success: true, language, counts, complete: counts.blocked === 0 && counts.failed === 0, results });
   }
+
+  if (body.action === "enqueue") {
+    const blockIndex = Number(body.block_index);
+    if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
+    const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewError) return reply(500, { error: "تعذر قراءة سجل مراجعة الحكاية.", detail: reviewError.message });
+    const outcome = await enqueueOneBlock(blockIndex, reviewRow?.audio_review ?? {}, body.story_snapshot, false);
+    return reply(outcome.status, outcome.data);
+  }
+
+  
 
   if (body.action === "queue_status") {
     const { data, error } = await service.from("story_audio_generation_queue")
@@ -823,10 +886,10 @@ Deno.serve(async (req: Request) => {
     const audioReview = reviewRow?.audio_review ?? {};
     const published = [];
     const targetLanguage = String(body.language ?? "");
-    if (!ACTIVE_AUDIO_LANGUAGES.includes(targetLanguage)) return reply(400, { error: "نشر الصوت متاح حاليًا للعربية والإنجليزية فقط." });
+    if (!ACTIVE_AUDIO_LANGUAGES.includes(targetLanguage)) return reply(400, { error: "لغة نشر الصوت غير مدعومة." });
     for (const lang of [targetLanguage]) {
       let source;
-      try { source = await resolveStoryBlock(section, slug, lang === "en" ? "ar" : lang, 0, body.story_snapshot); }
+      try { source = await resolveStoryBlock(section, slug, "ar", 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
       let blocks = source.story?.i18n?.[lang]?.blocks;
       if (lang !== "ar") {
