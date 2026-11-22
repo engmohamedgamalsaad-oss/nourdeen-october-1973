@@ -103,6 +103,9 @@ test('admin imports the workflow module and derives status counters', function (
   assert.ok(admin.includes('function recordMatchesView(record,k)'), 'status, section and search filters must evaluate linked records as records');
   assert.ok(admin.includes('adminRecords.concat(legacyAdminRecords)'), 'admin list and published-story linking must include both submission tables');
   assert.ok(admin.includes('counts.records=adminRecords.length+legacyAdminRecords.length'), 'admin total must count both submission tables');
+  assert.ok(admin.includes("rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'PATCH'"), 'legacy October saves must target submitted_stories');
+  assert.ok(admin.includes("var table=it._t==='o'?'submitted_stories':'khaledoon_submissions'"), 'row-level update and delete actions must route by the record table marker');
+  assert.ok(admin.includes("var previewTable=it._t==='o'?'submitted_stories':'khaledoon_submissions'"), 'preview links must retain the source table for the selected record');
   assert.ok(admin.includes('window.KHWorkflow.counters(queueRecords,sitePageItems)'), 'workflow queue counters must exclude already-published linked records');
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
