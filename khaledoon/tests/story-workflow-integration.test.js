@@ -96,8 +96,11 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
 });
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
-  assert.ok(admin.includes("rest('khaledoon_submissions?select=*&order=created_at.desc')"), 'admin must load current submissions');
-  assert.ok(admin.includes("rest('submitted_stories?select=*&order=created_at.desc')"), 'admin must load legacy October submissions');
+  assert.ok(admin.includes("loadAllRows('khaledoon_submissions'"), 'admin must load all current submissions through pagination');
+  assert.ok(admin.includes("loadAllRows('submitted_stories'"), 'admin must load all legacy October submissions through pagination');
+  assert.ok(admin.includes("'Range-Unit':'items'"), 'admin must request explicit PostgREST row ranges');
+  assert.ok(admin.includes('var visibleAdminRecords=adminRecords.concat(legacyAdminRecords)'), 'queue counters must include both admin tables');
+  assert.ok(admin.includes('function recordMatchesView(record,k)'), 'status, section and search filters must evaluate linked records as records');
   assert.ok(admin.includes('adminRecords.concat(legacyAdminRecords)'), 'admin list and published-story linking must include both submission tables');
   assert.ok(admin.includes('counts.records=adminRecords.length+legacyAdminRecords.length'), 'admin total must count both submission tables');
   assert.ok(admin.includes('window.KHWorkflow.counters(queueRecords,sitePageItems)'), 'workflow queue counters must exclude already-published linked records');
