@@ -344,7 +344,7 @@ test('published stories cannot be deleted and deleting drafts never hides static
   assert.ok(!admin.includes('hideStaticStoryBeforeDelete'));
   assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
   assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
-  assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
+  assert.ok(admin.includes("var visibleRecords=adminRecords.concat(legacyAdminRecords).filter(function(record){return !linkedPublished[String(record._t+':'+record.id)]})"));
   assert.ok(admin.includes("function storyFor(it){if(it&&it._t==='site')return vStories.find(function(s){return String(s.id)===String(it.id)})||it;return window.KHWorkflow.linkedSite(it,vStories)}"));
 });
 test('admin validates every translated field and every quiz translation before AI import', function () {
