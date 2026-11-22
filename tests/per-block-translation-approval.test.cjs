@@ -33,7 +33,6 @@ test('optional manual translation edit stays tied to the current Arabic source h
 test('English audio cannot be queued or published from an unapproved or stale translation', () => {
   assert.match(assets, /translation\.status !== "approved"/);
   assert.match(assets, /translation\.source_arabic_hash !== source\.sourceTextHash/);
-  assert.match(assets, /التوليد الجماعي معطل/);
   assert.match(assets, /ترجمة هذا المقطع غير جاهزة أو قديمة/);
 });
 
@@ -68,21 +67,42 @@ test('legacy direct-to-main translation publishing is disabled in favor of the r
   assert.match(preview, /لا يبدأ أي توليد صوتي/);
 });
 
-test('bulk language audio generation is explicitly disabled', () => {
+test('bulk audio generation covers only en/fr/it/de, one job per segment, and never Arabic', () => {
   const bulkStart = assets.indexOf('if (body.action === "enqueue_approved_language")');
   const singleStart = assets.indexOf('if (body.action === "enqueue")', bulkStart);
-  assert.ok(bulkStart >= 0 && singleStart > bulkStart, 'the legacy bulk endpoint must remain identifiable');
+  assert.ok(bulkStart >= 0 && singleStart > bulkStart, 'the bulk endpoint must remain identifiable');
   const bulkAction = assets.slice(bulkStart, singleStart);
+  assert.match(bulkAction, /BULK_AUDIO_LANGUAGES\.includes\(language\)/);
   assert.match(bulkAction, /return reply\(409/);
-  assert.match(bulkAction, /التوليد الجماعي معطل/);
-  assert.doesNotMatch(bulkAction, /insertOrReuseJob/);
+  assert.match(bulkAction, /التوليد الجماعي متاح للغات المترجمة فقط/);
+  assert.match(bulkAction, /enqueueOneBlock\(index, bulkReview, body\.story_snapshot, true\)/);
+  assert.match(bulkAction, /alreadyAccepted\.has\(index\)/);
+  assert.match(bulkAction, /"blocked"/);
+  assert.match(bulkAction, /"failed"/);
+  assert.match(bulkAction, /results/);
+  // one segment that cannot be queued never stops or hides the others: no early return inside the loop
+  const loop = bulkAction.slice(bulkAction.indexOf('for (const index of spokenIndexes)'), bulkAction.indexOf('const count ='));
+  assert.doesNotMatch(loop, /return reply/);
+  assert.match(assets, /const BULK_AUDIO_LANGUAGES = \["en", "fr", "it", "de"\]/);
 });
 
-test('single audio segments must be queued in order and without another active language job', () => {
+test('bulk generation never withdraws or regenerates a block whose identical job already exists', () => {
+  const helperStart = assets.indexOf('const enqueueOneBlock = async');
+  const helper = assets.slice(helperStart, assets.indexOf('if (body.action === "enqueue_approved_language")'));
+  const reuse = helper.indexOf('if (bulk) {');
+  const invalidate = helper.indexOf('await invalidatePublicClipAudio');
+  assert.ok(reuse >= 0 && invalidate > reuse, 'the existing-job check must run before any published clip is withdrawn');
+  assert.match(helper, /existingJob\.status !== "failed"/);
+});
+
+test('Arabic keeps strict one-segment-at-a-time order; only the other four languages are exempt', () => {
+  assert.match(assets, /const strictOrder = language === "ar"/);
+  assert.match(assets, /if \(strictOrder\) \{/);
   assert.match(assets, /const nextIndex = ordered\.find/);
   assert.match(assets, /nextIndex !== blockIndex/);
   assert.match(assets, /select\("block_index,status,language"\)/);
-  assert.match(assets, /String\(job\.language\) !== language/);
+  assert.match(assets, /\.eq\("language", language\)/);
+  assert.match(assets, /Number\(job\.block_index\) !== blockIndex/);
   assert.match(assets, /ACTIVE_AUDIO_LANGUAGES/);
 });
 
@@ -187,9 +207,11 @@ test('audio generation and review controls follow the selected language without 
   assert.ok(src.includes('actions.appendChild(bulkTranslate)'));
   assert.ok(src.includes("panel.appendChild(translationStatus)"));
   assert.ok(src.includes('ترجمة كل المقاطع دفعة واحدة'));
-  assert.ok(!src.includes('kh-language-audio-generate'));
+  assert.ok(src.includes('kh-language-audio-generate-all') && src.includes('kh-language-audio-approve-all'), 'the four translated languages get bulk generate and approve buttons');
+  assert.ok(src.includes('generateAll.hidden = true') && src.includes('bulkLanguage'), 'the bulk buttons stay hidden for Arabic');
   assert.ok(src.includes('kh-language-audio-review'));
-  assert.ok(!src.includes('enqueue_approved_language'));
+  assert.ok(!src.includes('enqueue_approved_language') && audioReview.includes("action: 'enqueue_approved_language'"), 'the flow layer calls the review API; only the review script talks to the edge function');
+  assert.ok(audioReview.includes('approveLanguageAudio: async function') && audioReview.includes('generateLanguageAudio: async function') && audioReview.includes('languageBulkStatus: function'));
   assert.ok(audioReview.includes('canQueueLanguage: async function'));
   assert.ok(audioReview.includes('canReviewLanguage: function'));
   assert.ok(!src.includes('kh-translation-queue-all'));

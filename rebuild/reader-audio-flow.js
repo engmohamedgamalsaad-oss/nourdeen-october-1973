@@ -513,6 +513,34 @@
 
   /* أدوات الصوت تخص اللغة المفتوحة حاليًا داخل صفحة الحكاية، لا ملخصًا عامًا لكل اللغات. */
   var translationBatchBusy = false;
+  var audioBatchBusy = false, audioBatchNote = {};
+  /* توليد/اعتماد كل مقاطع اللغة الحالية دفعة واحدة (للغات الأربع المترجمة فقط). */
+  async function runAudioBatch(kind, button) {
+    var L = lang(), api = window.KHStoryAudioReview;
+    if (audioBatchBusy || L === 'ar' || !api) return;
+    audioBatchBusy = true; audioBatchNote[L] = '';
+    var status = document.querySelector('#kh-language-audio-batch .kh-language-audio-status');
+    if (button) button.disabled = true;
+    if (status) status.textContent = kind === 'generate' ? 'جارٍ إرسال كل المقاطع إلى الطابور…' : 'جارٍ اعتماد صوت كل المقاطع…';
+    try {
+      if (kind === 'generate') {
+        var r = await api.generateLanguageAudio(L), c = r.counts || {};
+        var failedItems = (r.results || []).filter(function (item) { return item.state === 'blocked' || item.state === 'failed'; });
+        audioBatchNote[L] = 'أُرسل ' + (c.queued || 0) + ' · أُعيد ' + (c.retried || 0) + ' · موجود بالطابور ' + (c.already_queued || 0) +
+          ' · معتمد ' + (c.accepted || 0) + ' · تعذّر ' + failedItems.length + '.' +
+          (failedItems.length ? ' ' + failedItems.slice(0, 3).map(function (item) { return 'مقطع ' + (item.block_index + 1) + ': ' + item.error; }).join(' | ') : '');
+      } else {
+        var a = await api.approveLanguageAudio(L);
+        audioBatchNote[L] = 'تم اعتماد ' + a.approved + ' مقطع صوتيًا لهذه اللغة.';
+      }
+    } catch (e) {
+      audioBatchNote[L] = (e && e.message) || 'تعذر تنفيذ العملية.';
+    } finally {
+      audioBatchBusy = false;
+      refresh();
+      setTimeout(function () { audioBatchNote[L] = ''; refresh(); }, 15000);
+    }
+  }
   async function updateLanguageBatchPanel() {
     var panel = $('kh-language-audio-batch'), st = story();
     if (!panel || !st) return;
@@ -534,14 +562,27 @@
     reviewButton.textContent = 'معاينة ومراجعة مقاطع ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[L] || L);
     reviewButton.disabled = true;
     if (!token()) { status.textContent = 'سجّل الدخول من لوحة الإدارة لتمكين أدوات الصوت.'; return; }
-    if (!['ar', 'en'].includes(L)) {
-      status.textContent = 'توليد ومراجعة الصوت لهذه اللغة مؤجلان حاليًا؛ الترجمة محفوظة وقابلة للاستخدام عند تفعيل المرحلة.';
-      return;
-    }
     if (!api || typeof api.canReviewLanguage !== 'function') { status.textContent = 'جارٍ تحميل حالة الصوت لهذه اللغة…'; return; }
+    var bulkGenerate = panel.querySelector('.kh-language-audio-generate-all');
+    var bulkApprove = panel.querySelector('.kh-language-audio-approve-all');
+    var bulkLanguage = L !== 'ar' && typeof api.languageBulkStatus === 'function';
+    if (bulkGenerate) bulkGenerate.hidden = !bulkLanguage;
+    if (bulkApprove) bulkApprove.hidden = !bulkLanguage;
     try {
       var reviewReady = api.canReviewLanguage(L) === true;
       reviewButton.disabled = !reviewReady;
+      if (bulkLanguage) {
+        var s = api.languageBulkStatus(L);
+        if (bulkGenerate) bulkGenerate.disabled = !token() || audioBatchBusy || s.total === 0 || s.accepted === s.total;
+        if (bulkApprove) bulkApprove.disabled = !token() || audioBatchBusy || !s.canApprove;
+        if (!audioBatchBusy && !audioBatchNote[L]) {
+          status.textContent = 'المقاطع ' + s.total + ': معتمد ' + s.accepted + ' · جاهز ' + s.ready + ' · في الطابور ' + s.pending +
+            ' · قيد التوليد ' + s.processing + ' · فاشل ' + s.failed + ' · لم يُرسل ' + s.none + ' · مرفوض ' + s.rejected +
+            '. الاعتماد الجماعي يتطلب اكتمال كل المقاطع والاستماع لكل مقطع كاملًا.';
+        }
+        if (audioBatchNote[L]) status.textContent = audioBatchNote[L];
+        return;
+      }
       status.textContent = reviewReady
         ? 'اكتمل تجهيز المقاطع. استمع إلى كل مقطع كاملًا واعتمده قبل الانتقال إلى المقطع التالي.'
         : 'تُجهّز المقاطع وتُراجع واحدًا تلو الآخر. لا يبدأ المقطع التالي قبل الاستماع الكامل واعتماد المقطع الحالي.';
@@ -573,6 +614,16 @@
         if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
       var status = el('p', 'kh-audio-review-state kh-language-audio-status', '');
+      /* أزرار اللغات الأربع المترجمة فقط (en / fr / it / de)؛ تُخفى في العربية. */
+      var generateAll = el('button', 'kh-audio-review-btn kh-language-audio-generate-all', 'توليد كل المقاطع');
+      generateAll.type = 'button'; generateAll.hidden = true;
+      generateAll.title = 'يرسل كل مقاطع هذه اللغة إلى طابور الصوت دفعة واحدة، لكل مقطع حالة مستقلة.';
+      generateAll.addEventListener('click', function () { runAudioBatch('generate', generateAll); });
+      var approveAll = el('button', 'kh-audio-review-btn kh-language-audio-approve-all', 'اعتماد كل المقاطع');
+      approveAll.type = 'button'; approveAll.hidden = true;
+      approveAll.title = 'يعتمد صوت كل المقاطع دفعة واحدة، بعد اكتمالها جميعًا والاستماع الكامل لكل مقطع.';
+      approveAll.addEventListener('click', function () { runAudioBatch('approve', approveAll); });
+      actions.append(generateAll, approveAll);
       actions.appendChild(reviewButton);
       panel.append(title);
       if (translationStatus) {
