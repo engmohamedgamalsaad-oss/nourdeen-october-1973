@@ -96,9 +96,11 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
 });
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
-  assert.ok(admin.includes("items.filter(function(record){return record._t==='k'})"), 'admin record total must match the records shown in the admin list');
+  assert.ok(admin.includes("rest('khaledoon_submissions?select=*&order=created_at.desc')"), 'admin must load current submissions');
+  assert.ok(admin.includes("rest('submitted_stories?select=*&order=created_at.desc')"), 'admin must load legacy October submissions');
+  assert.ok(admin.includes('adminRecords.concat(legacyAdminRecords)'), 'admin list and published-story linking must include both submission tables');
+  assert.ok(admin.includes('counts.records=adminRecords.length+legacyAdminRecords.length'), 'admin total must count both submission tables');
   assert.ok(admin.includes('window.KHWorkflow.counters(queueRecords,sitePageItems)'), 'workflow queue counters must exclude already-published linked records');
-  assert.ok(admin.includes('counts.records=adminRecords.length'), 'the admin records total must include linked submissions stored under published story cards');
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
 });
@@ -342,7 +344,7 @@ test('published stories cannot be deleted and deleting drafts never hides static
   assert.ok(!admin.includes('hideStaticStoryBeforeDelete'));
   assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
   assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
-  assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
+  assert.ok(admin.includes("var visibleRecords=adminRecords.concat(legacyAdminRecords).filter(function(record){return !linkedPublished[String(record._t+':'+record.id)]})"));
   assert.ok(admin.includes("function storyFor(it){if(it&&it._t==='site')return vStories.find(function(s){return String(s.id)===String(it.id)})||it;return window.KHWorkflow.linkedSite(it,vStories)}"));
 });
 test('admin validates every translated field and every quiz translation before AI import', function () {

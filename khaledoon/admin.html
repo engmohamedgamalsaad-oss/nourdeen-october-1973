@@ -171,7 +171,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 (function(){
 'use strict';
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
-var session=null,items=[],adminRecords=[],sitePageItems=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null,newStoryGate=false,newStoryPromptCopied=false;
+var session=null,items=[],adminRecords=[],legacyAdminRecords=[],sitePageItems=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null,newStoryGate=false,newStoryPromptCopied=false;
 var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false,vErr='';
 var reactionRows=[],reactionFilter='all',reactionTerm='',reactionLoaded=false;
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
@@ -230,25 +230,32 @@ async function logout(silent){
 }
 
 async function loadList(){
- var response=await rest('khaledoon_submissions?select=*&order=created_at.desc');
+ var responses=await Promise.all([
+  rest('khaledoon_submissions?select=*&order=created_at.desc'),
+  rest('submitted_stories?select=*&order=created_at.desc')
+ ]);
+ var response=responses[0],legacyResponse=responses[1];
  if(response.status===404)throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
  if(!response.ok)throw new Error('تعذر تحميل حكايات خالدون ('+response.status+').');
+ if(!legacyResponse.ok)throw new Error('تعذر تحميل سجلات أكتوبر القديمة ('+legacyResponse.status+').');
  adminRecords=await response.json();
+ legacyAdminRecords=await legacyResponse.json();
  adminRecords.forEach(function(x){x._t='k';x._workflow=window.KHWorkflow.stateOf(x).state});
+ legacyAdminRecords.forEach(function(x){x._t='o';x._workflow=window.KHWorkflow.stateOf(x).state});
  sitePageItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
  /* اربط سجل التحرير بالصفحة المنشورة باستخدام المعرّف الصريح فقط؛ لا نخفي السجل من الإدارة قبل عرضه داخل صفحة الموقع. */
  var linkedPublished={};
- adminRecords.forEach(function(record){
+ adminRecords.concat(legacyAdminRecords).forEach(function(record){
   var page=window.KHWorkflow.linkedSite(record,sitePageItems);
   /* سجل الصفحة قد يتحول إلى review أثناء تجهيز نقلها؛ وجود pending_draft لا يلغي الصفحة القديمة المنشورة. */
   if(record.status!=='published'&&!(page&&record.story_meta&&record.story_meta.pending_draft&&typeof record.story_meta.pending_draft==='object'))return;
   if(page){
    if(!Array.isArray(page.submissions))page.submissions=[];
    page.submissions.push(record);
-   linkedPublished[String(record.id)]=true;
+   linkedPublished[String(record._t+':'+record.id)]=true;
   }
  });
- var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]});
+ var visibleRecords=adminRecords.concat(legacyAdminRecords).filter(function(record){return !linkedPublished[String(record._t+':'+record.id)]});
  items=visibleRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  var requestedParams=new URLSearchParams(location.search),requestedCodeEdit=requestedParams.get('editcode'),returnFromPreview=requestedParams.get('returnfrompreview')==='1';if(requestedCodeEdit){var requestedTable=requestedParams.get('table')||'khaledoon_submissions',requestedPrefix=requestedTable==='submitted_stories'?'o:':'k:';openIds[requestedPrefix+requestedCodeEdit]=true;if(!requestedCodeEditInitialized){aiInitialUnlockById[requestedPrefix+requestedCodeEdit]=true;requestedCodeEditInitialized=true;}fStatus='all';fSec='all';}
  render();if(view==='vis'&&vLoaded)renderVis();if(returnFromPreview&&requestedCodeEdit){var returnCodeEditor=document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');if(returnCodeEditor){returnCodeEditor.scrollIntoView({behavior:'auto',block:'center'});try{returnCodeEditor.focus({preventScroll:true})}catch(ignoreReturnFocus){returnCodeEditor.focus()}}}
@@ -272,7 +279,7 @@ function renderStats(){
  var visibleAdminRecords=items.filter(function(record){return record._t==='k'});
  var queueRecords=visibleAdminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&record.status==='published'||itemState(record)==='awaiting_publish'&&isAlreadyOnSite(record))});
  var counts=window.KHWorkflow.counters(queueRecords,sitePageItems);
- counts.records=adminRecords.length;
+ counts.records=adminRecords.length+legacyAdminRecords.length;
  [
   ['سجلات الأدمن',counts.records,'all'],
   ['تحت التحرير',counts.queues.editing,'editing'],
