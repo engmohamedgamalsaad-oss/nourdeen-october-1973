@@ -272,7 +272,7 @@ function renderStats(){
  var visibleAdminRecords=items.filter(function(record){return record._t==='k'});
  var queueRecords=visibleAdminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&record.status==='published'||itemState(record)==='awaiting_publish'&&isAlreadyOnSite(record))});
  var counts=window.KHWorkflow.counters(queueRecords,sitePageItems);
- counts.records=visibleAdminRecords.length;
+ counts.records=adminRecords.length;
  [
   ['سجلات الأدمن',counts.records,'all'],
   ['تحت التحرير',counts.queues.editing,'editing'],
