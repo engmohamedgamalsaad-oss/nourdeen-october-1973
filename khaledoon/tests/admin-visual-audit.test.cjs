@@ -164,6 +164,8 @@ async function main() {
       await filteredLinkedPage.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' }).waitFor({ state:'visible', timeout:10000 });
       await page.locator('#search').fill('');
       await page.locator('#tabs button').filter({ hasText:'كل السجلات (6)' }).click();
+      const resetLinkedPage = page.locator('#list > details.pubrow').filter({ hasText:'فاروق الباز' }).first();
+      await resetLinkedPage.evaluate(el => { el.open = false; el.dispatchEvent(new Event('toggle')); });
       await page.screenshot({ path:path.join(OUT, 'admin-' + viewport.name + '-dark.png'), fullPage:true });
       await page.locator('#th').click();
       await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'light');
