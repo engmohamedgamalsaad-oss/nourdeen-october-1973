@@ -107,7 +107,7 @@ test('admin imports the workflow module and derives status counters', function (
   assert.ok(admin.includes("var table=it._t==='o'?'submitted_stories':'khaledoon_submissions'"), 'row-level update and delete actions must route by the record table marker');
   assert.ok(admin.includes("var previewTable=it._t==='o'?'submitted_stories':'khaledoon_submissions'"), 'preview links must retain the source table for the selected record');
   assert.ok(admin.includes('window.KHWorkflow.counters(queueRecords,sitePageItems)'), 'workflow queue counters must exclude already-published linked records');
-  assert.ok(admin.includes("itemState(i)===fStatus"));
+  assert.ok(admin.includes("itemState(record)===fStatus"), 'admin status filtering must use the same record-state resolver for linked and unlinked rows');
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
 });
 test('manual story builder inline JavaScript remains syntactically valid', function () {
@@ -132,8 +132,8 @@ test('manual story builder supports the unified cover, sourced-image, and map me
 test('published admin records and published site pages are separate filters', function () {
   assert.ok(admin.includes("k==='published'?'سجلات الأدمن بحالة «منشورة»'"));
   assert.ok(admin.includes("chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')'"));
-  assert.ok(admin.includes("fStatus==='published'?i._t!=='site'&&itemState(i)==='published'"));
-  assert.ok(admin.includes("return i._t!=='site'&&itemState(i)===k"));
+  assert.ok(admin.includes("if(fStatus==='site_pages')return pageMatches"), 'published site pages must retain their separate filter');
+  assert.ok(admin.includes("return fStatus==='all'?(pageMatches||linkedMatches.length>0):linkedMatches.length>0"), 'linked admin records must appear under their own status filter without duplicating the page');
 });
 test('copied story prompts are compact, mode-specific, and include validated image fields', function () {
   assert.ok(admin.includes("function buildNewStoryPrompt(providerKey,mode)"));
