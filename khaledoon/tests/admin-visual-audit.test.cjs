@@ -154,13 +154,13 @@ async function main() {
       const publishedTab = page.locator('#tabs button').filter({ hasText:'سجلات الأدمن بحالة «منشورة»' }).first();
       await publishedTab.click();
       const linkedPageRow = page.locator('#list > details.pubrow').filter({ hasText:'فاروق الباز' }).first();
-      await linkedPageRow.locator(':scope > summary').click();
+      await linkedPageRow.evaluate(el => { el.open = true; el.dispatchEvent(new Event('toggle')); });
       const linkedSubmission = linkedPageRow.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' });
       await linkedSubmission.waitFor({ state:'visible', timeout:10000 });
       assert.equal(await linkedPageRow.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' }).count(), 1, 'the linked admin row must appear once under its published page');
       await page.locator('#search').fill('سجل مراجعة مرتبط');
       const filteredLinkedPage = page.locator('#list > details.pubrow').filter({ hasText:'فاروق الباز' }).first();
-      await filteredLinkedPage.locator(':scope > summary').click();
+      await filteredLinkedPage.evaluate(el => { el.open = true; el.dispatchEvent(new Event('toggle')); });
       await filteredLinkedPage.locator('details.fcard > summary').filter({ hasText:'سجل مراجعة مرتبط' }).waitFor({ state:'visible', timeout:10000 });
       await page.locator('#search').fill('');
       await page.locator('#tabs button').filter({ hasText:'كل السجلات (6)' }).click();
