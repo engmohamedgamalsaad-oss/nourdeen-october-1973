@@ -1439,7 +1439,7 @@ function renderNewStoryGate(list){
  bar.appendChild(copy);bar.appendChild(start);bar.appendChild(cancel);box.appendChild(bar);list.appendChild(box);
 }
 function recordMatchesView(record,k){
- var statusMatches=fStatus==='all'||(fStatus!=='site_pages'&&itemState(record)===fStatus);
+ var statusMatches=fStatus==='all'||(fStatus!=='site_pages'&&itemState(record)===fStatus&&!(fStatus==='awaiting_publish'&&isAlreadyOnSite(record)));
  var sectionMatches=fSec==='all'||record.section===fSec;
  var searchMatches=!k||[record.title,record.figure_name,record.narrator_name,record.student_name,record.grade,record.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1});
  return statusMatches&&sectionMatches&&searchMatches;
