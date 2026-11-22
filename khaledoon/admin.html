@@ -256,6 +256,7 @@ async function loadAllRows(table,label){
  }
  return rows;
 }
+/* خطافات اختبار مغلقة افتراضيًا؛ لا تُتاح إلا عند طلب admin_test_hooks صراحةً في بيئة الاختبار. */
 if(new URLSearchParams(location.search).get('admin_test_hooks')==='1')window.__KHAdminTestHooks={loadAllRows:loadAllRows,removeItem:removeItem};
 async function loadList(){
  var responses=await Promise.all([
