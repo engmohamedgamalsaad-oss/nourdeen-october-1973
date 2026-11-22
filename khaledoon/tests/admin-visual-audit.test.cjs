@@ -136,13 +136,13 @@ async function main() {
         }
         return route.fulfill({ status:200, contentType:'application/json', body:'[]' });
       });
-      await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html', { waitUntil:'domcontentloaded' });
+      await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html?admin_test_hooks=1', { waitUntil:'domcontentloaded' });
       await page.locator('#app').waitFor({ state:'visible', timeout:15000 });
       await page.getByText('اختبار بصري — حكاية مرسلة للمعاينة').waitFor({ state:'visible', timeout:15000 });
       await page.getByText(/تنبيه: قد تطابق صفحة/).waitFor({ state:'visible', timeout:10000 });
       const adminCount = page.locator('#stats .stat').filter({ hasText:'سجلات الأدمن' });
       assert.equal(await adminCount.locator('strong').textContent(), '6', 'admin total must include both tables and linked records');
-      const paginationCount = await page.evaluate(async () => (await loadAllRows('pagination_test','اختبار ترقيم الصفحات')).length);
+      const paginationCount = await page.evaluate(async () => (await window.__KHAdminTestHooks.loadAllRows('pagination_test','اختبار ترقيم الصفحات')).length);
       assert.equal(paginationCount, 501, 'all rows must be loaded across more than one PostgREST range');
       const editingTab = page.locator('#tabs button').filter({ hasText:'تحت التحرير (3)' });
       await editingTab.click();
