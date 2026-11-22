@@ -144,7 +144,7 @@ async function main() {
       assert.equal(await adminCount.locator('strong').textContent(), '6', 'admin total must include both tables and linked records');
       const paginationCount = await page.evaluate(async () => (await window.__KHAdminTestHooks.loadAllRows('pagination_test','اختبار ترقيم الصفحات')).length);
       assert.equal(paginationCount, 501, 'all rows must be loaded across more than one PostgREST range');
-      const editingTab = page.locator('#tabs button').filter({ hasText:'تحت التحرير (3)' });
+      const editingTab = page.locator('#tabs button').filter({ hasText:'تحت التحرير (2)' });
       await editingTab.click();
       await page.getByText('اختبار سجل أكتوبر القديم').waitFor({ state:'visible', timeout:10000 });
       await page.evaluate(async () => {
