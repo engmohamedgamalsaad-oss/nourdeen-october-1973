@@ -298,14 +298,15 @@ function isAlreadyOnSite(record){
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- /* عداد سجلات الأدمن يجب أن يطابق سجلات الإدارة الظاهرة في القائمة؛
-    نستبعد من حسابات الحالات فقط السجلات التي لها صفحة منشورة بالفعل. */
+ /* إجمالي القائمة يحسب بطاقات الحكايات المنشورة وسجلات الإرسال غير المرتبطة دون تكرار؛
+    والعداد التالي يوضح صفوف الإرسال الفعلية في قاعدة البيانات. */
  var visibleAdminRecords=adminRecords.concat(legacyAdminRecords);
  var queueRecords=visibleAdminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&record.status==='published'||itemState(record)==='awaiting_publish'&&isAlreadyOnSite(record))});
  var counts=window.KHWorkflow.counters(queueRecords,sitePageItems);
  counts.records=adminRecords.length+legacyAdminRecords.length;
  [
-  ['سجلات الأدمن',counts.records,'all'],
+  ['إجمالي العناصر في قائمة الأدمن',items.length,'all'],
+  ['سجلات الإرسال في قاعدة البيانات',counts.records,'all'],
   ['تحت التحرير',counts.queues.editing,'editing'],
   ['مرسلة للمعاينة',counts.queues.preview,'preview_sent'],
   ['معاينة مرفوضة',counts.byState.preview_rejected,'preview_rejected'],
@@ -322,7 +323,7 @@ function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
  var allAdminRecords=adminRecords.concat(legacyAdminRecords);
- chip(t,'كل السجلات ('+allAdminRecords.length+')',fStatus==='all',function(){fStatus='all';render()});
+ chip(t,'كل العناصر ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
  ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=allAdminRecords.filter(function(i){return itemState(i)===k&&!(k==='awaiting_publish'&&isAlreadyOnSite(i))}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
  chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
