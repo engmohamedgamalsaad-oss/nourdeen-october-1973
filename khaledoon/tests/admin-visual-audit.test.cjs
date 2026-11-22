@@ -148,7 +148,7 @@ async function main() {
       await editingTab.click();
       await page.getByText('اختبار سجل أكتوبر القديم').waitFor({ state:'visible', timeout:10000 });
       await page.evaluate(async () => {
-        await removeItem({ id:'legacy-pending-006', _t:'o', status:'pending', title:'اختبار سجل أكتوبر القديم' }, document.createElement('button'));
+        await window.__KHAdminTestHooks.removeItem({ id:'legacy-pending-006', _t:'o', status:'pending', title:'اختبار سجل أكتوبر القديم' }, document.createElement('button'));
       });
       assert.ok(legacyWrites.some(entry => entry.startsWith('DELETE ') && entry.includes('/submitted_stories?id=eq.legacy-pending-006')), 'legacy deletion must target submitted_stories only');
       const publishedTab = page.locator('#tabs button').filter({ hasText:'سجلات الأدمن بحالة «منشورة»' }).first();
