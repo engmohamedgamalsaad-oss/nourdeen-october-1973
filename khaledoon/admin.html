@@ -1440,6 +1440,7 @@ function renderNewStoryGate(list){
  cancel.addEventListener('click',function(){newStoryGate=false;newStoryPromptCopied=false;render()});
  bar.appendChild(copy);bar.appendChild(start);bar.appendChild(cancel);box.appendChild(bar);list.appendChild(box);
 }
+/* افحص سجل الإدارة المرتبط داخل حاوية صفحة الموقع حتى لا تختفي سجلاته مع الفلاتر أو البحث. */
 function recordMatchesView(record,k){
  var statusMatches=fStatus==='all'||(fStatus!=='site_pages'&&itemState(record)===fStatus&&!(fStatus==='awaiting_publish'&&isAlreadyOnSite(record)));
  var sectionMatches=fSec==='all'||record.section===fSec;
