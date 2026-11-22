@@ -298,8 +298,8 @@ function isAlreadyOnSite(record){
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- /* عداد سجلات الأدمن يجب أن يطابق سجلات الإدارة الظاهرة في القائمة؛
-    نستبعد من حسابات الحالات فقط السجلات التي لها صفحة منشورة بالفعل. */
+ /* إجمالي القائمة يحسب بطاقات الحكايات المنشورة وسجلات الإرسال غير المرتبطة دون تكرار؛
+    والعداد التالي يوضح صفوف الإرسال الفعلية في قاعدة البيانات. */
  var visibleAdminRecords=adminRecords.concat(legacyAdminRecords);
  var queueRecords=visibleAdminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&record.status==='published'||itemState(record)==='awaiting_publish'&&isAlreadyOnSite(record))});
  var counts=window.KHWorkflow.counters(queueRecords,sitePageItems);
