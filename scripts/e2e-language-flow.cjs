@@ -851,8 +851,12 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     apiCalls.push({ method, path, search: url.search });
     const headers = {
       'access-control-allow-origin': '*',
-      'access-control-allow-headers': 'apikey,authorization,content-type,prefer',
+      'access-control-allow-headers': 'apikey,authorization,content-type,prefer,range,range-unit',
       'access-control-allow-methods': 'GET,POST,PATCH,OPTIONS',
+      'access-control-expose-headers': 'Content-Range',
+      /* Match the single seeded submissions row and the empty legacy table.
+         The real admin paginates until Content-Range confirms the final page. */
+      'content-range': path.endsWith('/rest/v1/khaledoon_submissions') ? '0-0/1' : '*/0',
       'content-type': 'application/json'
     };
     if (method === 'OPTIONS') return route.fulfill({ status: 204, headers });
