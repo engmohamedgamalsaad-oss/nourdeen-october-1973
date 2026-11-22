@@ -149,8 +149,13 @@ async function main() {
       await page.getByText('اختبار سجل أكتوبر القديم').waitFor({ state:'visible', timeout:10000 });
       const publishedTab = page.locator('#tabs button').filter({ hasText:'سجلات الأدمن بحالة «منشورة»' }).first();
       await publishedTab.click();
+      const linkedPageSummary = page.locator('summary').filter({ hasText:'فاروق الباز' }).first();
+      await linkedPageSummary.click();
       await page.getByText('سجل مراجعة مرتبط — فاروق الباز').waitFor({ state:'visible', timeout:10000 });
+      assert.equal(await page.locator('summary').filter({ hasText:'سجل إرسال مرتبط:' }).count(), 1, 'the linked admin row must appear once under its published page');
       await page.locator('#search').fill('سجل مراجعة مرتبط');
+      const filteredLinkedPage = page.locator('summary').filter({ hasText:'فاروق الباز' }).first();
+      await filteredLinkedPage.click();
       await page.getByText('سجل مراجعة مرتبط — فاروق الباز').waitFor({ state:'visible', timeout:10000 });
       await page.locator('#search').fill('');
       await page.locator('#tabs button').filter({ hasText:'كل السجلات (6)' }).click();
