@@ -256,7 +256,7 @@ async function loadAllRows(table,label){
  }
  return rows;
 }
-if(new URLSearchParams(location.search).get('admin_test_hooks')==='1')window.__KHAdminTestHooks={loadAllRows:loadAllRows};
+if(new URLSearchParams(location.search).get('admin_test_hooks')==='1')window.__KHAdminTestHooks={loadAllRows:loadAllRows,removeItem:removeItem};
 async function loadList(){
  var responses=await Promise.all([
   loadAllRows('khaledoon_submissions','حكايات خالدون'),
