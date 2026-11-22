@@ -878,13 +878,16 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
   const failedRequests = [];
+  let importPhase = 'initialize browser';
   const pageErrors = [];
   const consoleErrors = [];
   page.on('pageerror', (error) => pageErrors.push(String(error && error.message || error)));
   page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
   page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
   try {
+    importPhase = 'load admin page';
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
+    importPhase = 'wait for authenticated admin shell';
     await page.waitForFunction(() => {
       const app = document.querySelector('#app');
       const tabs = document.querySelector('#views');
@@ -892,11 +895,13 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     }, null, { timeout: 20000 });
     // Explicitly activate the submissions view; the row may already exist in the DOM
     // while another admin view is selected, so DOM presence alone is not visibility.
+    importPhase = 'activate submissions view';
     await page.locator('#views').getByRole('button', { name: 'الحكايات المرسلة', exact: true }).click();
     await page.waitForFunction(() => {
       const view = document.querySelector('#viewSubs');
       return !!view && !view.hidden;
     }, null, { timeout: 5000 });
+    importPhase = 'wait for seeded draft row';
     await page.waitForFunction(() => Array.from(document.querySelectorAll('#viewSubs details.pubrow')).some((row) => row.textContent.includes('Existing E2E Draft')), null, { timeout: 20000 });
     const card = page.locator('#viewSubs details.pubrow:has(button[title="فتح محرر الحكاية لتعديل النص والترجمات والصور والمصادر في أي وقت"])')
       .filter({ hasText: 'Existing E2E Draft' })
@@ -904,9 +909,11 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     // Trigger the row disclosure, then invoke the row's real edit handler. The
     // browser audit can report the summary as hidden while its parent disclosure is
     // collapsed, so dispatch the native click on the same elements directly.
+    importPhase = 'open seeded draft row';
     await card.locator('summary').evaluate((summary) => summary.click());
     await card.locator('button[title="فتح محرر الحكاية لتعديل النص والترجمات والصور والمصادر في أي وقت"]').evaluate((button) => button.click());
     const textarea = card.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
+    importPhase = 'wait for AI paste editor';
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(storyPackage));
     const importButton = card.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
@@ -917,6 +924,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       await importButton.click();
       await page.waitForFunction((el) => !!el && !el.readOnly, await textarea.elementHandle(), { timeout: 5000 });
     }
+    importPhase = 'submit imported story package';
     await importButton.click();
     // The admin refreshes its list after a successful save, removing the transient
     // status node and import controls. Assert the persisted mocked record and preview
@@ -952,7 +960,8 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     }
     return { checks: [{ ok: hard.length === 0, savedAsDraft: savedRecord.status !== 'published', sourceMarkerReadable: !String(savedRecord.sources || '').includes('%D8%'), previewOpened: !!popup }], hard };
   } catch (e) {
-    hard.push('Actual story paste/import browser flow failed: ' + String(e.message || e).slice(0,1800));
+    const diagnostics = await page.evaluate(() => ({ appHidden: document.querySelector('#app')?.hidden ?? null, viewSubsHidden: document.querySelector('#viewSubs')?.hidden ?? null, views: document.querySelector('#views')?.innerText || '', rows: document.querySelectorAll('#viewSubs details.pubrow').length, pageText: document.body?.innerText?.slice(0,1200) || '' })).catch(() => ({}));
+    hard.push('Actual story paste/import browser flow failed during ' + importPhase + ': ' + String(e.message || e).slice(0,1200) + '; diagnostics=' + JSON.stringify(diagnostics) + '; API calls=' + JSON.stringify(apiCalls));
     return { checks: [{ ok: false }], hard };
   } finally {
     await ctx.close();
