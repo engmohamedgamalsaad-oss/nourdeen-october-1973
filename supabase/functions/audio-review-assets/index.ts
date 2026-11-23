@@ -495,11 +495,11 @@ Deno.serve(async (req: Request) => {
       }
     }
     if (!upstream) return reply(502, {
-      error: "تعذر الاتصال بـGemini بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي ترجمة. (" + translationTrace.join("، ") + ")",
+      error: "تعذر الاتصال بـGemini بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي ترجمة. (\u2066" + translationTrace.join(", ") + "\u2069)",
       detail: networkError, attempts: translationTrace,
     });
     if (!upstream.ok) return reply(upstream.status === 429 || retryableStatuses.has(upstream.status) ? 503 : 502, {
-      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي نص. (" + translationTrace.join("، ") + ")", upstream_status: upstream.status, attempts: translationTrace,
+      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي نص. (\u2066" + translationTrace.join(", ") + "\u2069)", upstream_status: upstream.status, attempts: translationTrace,
     });
     let generated: any;
     try {
