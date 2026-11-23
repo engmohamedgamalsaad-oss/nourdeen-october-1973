@@ -179,8 +179,8 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.match(preview, /النص العربي المرجعي:/);
   assert.equal(preview.includes('source.appendChild(el("p", "", arabicBlock'), false);
   assert.ok(preview.includes('wrap.append(textarea, buttons, status)'));
-  assert.ok(assets.includes('const translationModels = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"];'));
-  assert.equal(/translationModels = \[[^\]]*flash-lite/.test(assets), false);
+  assert.ok(assets.includes('const translationModels = ["gemini-3.1-flash-lite", "gemini-3.6-flash", "gemini-3.8-flash"];'));
+  assert.match(assets, /translationModels = \[\"gemini-3\.1-flash-lite\"/);
   assert.ok(assets.includes('const retryableStatuses = new Set([408, 429, 500, 502, 503, 504]);'));
   assert.match(assets, /const translationDeadlineAt = Date\.now\(\) \+ 75000;/);
   assert.match(assets, /const delayMs = Math\.min\(6000, Math\.max\(retryAfterMs, 2000 \* attempt\)\);/);
