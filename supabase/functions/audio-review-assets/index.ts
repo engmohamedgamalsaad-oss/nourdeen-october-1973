@@ -496,18 +496,18 @@ Deno.serve(async (req: Request) => {
         // Retry transient quota/capacity/network errors on the same model; do not fan out.
         if (attempt >= 3) break translationAttempts;
         const retryAfter = upstream?.headers.get("retry-after");
-        const retryAfterMs = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter) ? Number(retryAfter) * 1000 : 0;
+        const retryAfterMs = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) * 1000 : 0;
         const delayMs = Math.min(12000, Math.max(retryAfterMs, 2500 * attempt));
         if (translationDeadlineAt - Date.now() <= delayMs + 4000) break translationAttempts;
         await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
     }
     if (!upstream) return reply(502, {
-      error: "تعذر الاتصال بـGemini بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي ترجمة. (\u2066" + translationTrace.join(", ") + "\u2069)",
+      error: "تعذر الاتصال بـGemini بعد " + attemptsMade + " محاولات؛ لم يتم حفظ أي ترجمة. (\u2066" + translationTrace.join(", ") + "\u2069)",
       detail: networkError, attempts: translationTrace,
     });
     if (!upstream.ok) return reply(upstream.status === 429 || retryableStatuses.has(upstream.status) ? 503 : 502, {
-      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي نص. (\u2066" + translationTrace.join(", ") + "\u2069)", upstream_status: upstream.status, upstream_error: upstreamError, attempts: translationTrace,
+      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات؛ لم يتم حفظ أي نص. (\u2066" + translationTrace.join(", ") + "\u2069)", upstream_status: upstream.status, upstream_error: upstreamError, attempts: translationTrace,
     });
     let generated: any;
     try {
