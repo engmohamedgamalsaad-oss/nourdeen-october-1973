@@ -27,8 +27,9 @@ test('Arabic and English keep VoiceTut while FR IT DE use official multilingual 
 
 test('server queues the selected approved translation for every supported language', () => {
   const source = fs.readFileSync(path.join(root, 'supabase/functions/audio-review-assets/index.ts'), 'utf8');
-  assert.match(source, /if \(!SUPPORTED_AUDIO_LANGUAGES\.includes\(language\)\)/);
-  assert.match(source, /translations\?\.\[language \+ ":" \+ index\]/);
+  assert.match(source, /const ACTIVE_AUDIO_LANGUAGES = \["ar", "en", "fr", "it", "de"\];/);
+  assert.match(source, /if \(!ACTIVE_AUDIO_LANGUAGES\.includes\(language\)\)/);
+  assert.match(source, /translations\?\.\[language \+ ":" \+ blockIndex\]/);
   assert.match(source, /translations\?\.\[lang \+ ":" \+ index\]/);
   assert.match(source, /if \(lang !== "ar"\)/);
   assert.match(source, /audioModelForLanguage\(lang\)/);

@@ -9,7 +9,7 @@ test('unified publisher creates a review PR and never writes directly to main', 
   const auth = source.indexOf('await supabase.auth.getUser()');
   const admin = source.indexOf('await supabase.rpc("is_admin")');
   const submissionId = source.indexOf('const submissionId =');
-  const recordRead = source.indexOf('.from(submissionTable).select("id,story_meta")');
+  const recordRead = source.indexOf('.from(submissionTable).select("id,status,story_meta")');
   const savedPackage = source.indexOf('const savedStoryPackageRaw: any =');
   const packageGuard = source.indexOf('if (isStoryOnlyDraft) {');
   const approvalGuard = source.indexOf('review.decision !== "approved_waiting_for_github_upload"');
@@ -30,13 +30,14 @@ test('unified publisher creates a review PR and never writes directly to main', 
   assert.ok(source.includes('record.source_arabic_hash !== sourceHash'));
   assert.ok(source.includes('record.speaker !== sourceBlock.speaker'));
   assert.ok(source.includes('targetBlock.text = record.translation_text.trim()'));
-  // Per-language text publishing: default is all four languages; text_languages narrows validation and rewriting to the chosen ones.
+  // Per-language text publishing: each request publishes exactly one explicitly selected language.
   assert.ok(source.includes('const textLanguageOptions = ["en", "fr", "it", "de"];'));
-  assert.ok(source.includes('let textLanguages = textLanguageOptions;'));
+  assert.ok(source.includes('body.text_languages.length !== 1'));
+  assert.ok(source.includes('اختر لغة واحدة فقط للنشر: en أو fr أو it أو de.'));
+  assert.ok(source.includes('const textLanguages = [body.text_languages[0]];'));
   assert.ok(source.includes('for (const lang of textLanguages)'));
-  assert.ok(source.includes('text_languages يجب أن تكون قائمة غير فارغة'));
-  assert.ok(source.indexOf('for (const lang of textLanguages)') > source.indexOf('body.text_languages !== undefined'),
-    'language subset must be validated before it is used');
+  assert.ok(source.indexOf('for (const lang of textLanguages)') > source.indexOf('body.text_languages.length !== 1'),
+    'language selection must be validated before it is used');
   assert.ok(!source.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'));
 });
 
