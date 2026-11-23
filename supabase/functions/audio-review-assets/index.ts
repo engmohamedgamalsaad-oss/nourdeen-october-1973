@@ -894,8 +894,8 @@ Deno.serve(async (req: Request) => {
     const targetLanguage = String(body.language ?? "");
     if (!ACTIVE_AUDIO_LANGUAGES.includes(targetLanguage)) return reply(400, { error: "لغة نشر الصوت غير مدعومة." });
     for (const lang of [targetLanguage]) {
-      let source;
-      try { source = await resolveStoryBlock(section, slug, "ar", 0, body.story_snapshot); }
+      let source = { story: storyFromSnapshot(body.story_snapshot, section, slug) };
+      try { if (!source.story) source = await resolveStoryBlock(section, slug, "ar", 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
       let blocks = source.story?.i18n?.[lang]?.blocks;
       if (lang !== "ar") {
@@ -915,6 +915,9 @@ Deno.serve(async (req: Request) => {
         }
       }
       if (!Array.isArray(blocks) || !blocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع صالحة باللغة " + lang + "." });
+      const requiredIndexes = orderedStoryBlockIndexes(blocks).filter((index) => isSpeakableBlock(blocks[index]));
+      if (!requiredIndexes.length) return reply(409, { error: "لا توجد مقاطع منطوقة صالحة للنشر باللغة " + lang + "." });
+      const required = new Set(requiredIndexes);
       const prefix = section + "/" + slug + "/" + lang;
       const { data: manifestFile, error: manifestError } = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
       if (manifestError || !manifestFile) return reply(409, { error: "لا توجد حزمة صوت خاصة مكتملة باللغة " + lang + "." });
@@ -922,14 +925,14 @@ Deno.serve(async (req: Request) => {
       try { manifest = JSON.parse(await manifestFile.text()); }
       catch { return reply(422, { error: "ملف manifest غير صالح باللغة " + lang + "." }); }
       if (manifest?.version !== 1 || manifest.section !== section || manifest.story !== slug ||
-          manifest.language !== lang || !Array.isArray(manifest.segments) || manifest.segments.length !== blocks.length) {
+          manifest.language !== lang || !Array.isArray(manifest.segments) || manifest.segments.length !== required.size) {
         return reply(409, { error: "حزمة الصوت لا تغطي جميع مقاطع الحكاية باللغة " + lang + "." });
       }
       const seen = new Set<number>();
       for (const segment of manifest.segments) {
         const index = Number(segment?.block_index);
         const block = Number.isInteger(index) ? blocks[index] : null;
-        if (!block || seen.has(index) || segment.speaker !== block.speaker ||
+        if (!block || !required.has(index) || seen.has(index) || segment.speaker !== block.speaker ||
             segment.provider !== "omnivoice" || segment.model !== audioModelForLanguage(lang) ||
             segment.voice !== (block.speaker === "karma" ? "omnivoice-karma-reference" : "omnivoice-narrator-reference") ||
             typeof segment.src !== "string" || !/^[A-Za-z0-9_-]+\.mp3$/.test(segment.src) ||
@@ -948,7 +951,7 @@ Deno.serve(async (req: Request) => {
         }
         seen.add(index);
       }
-      if (seen.size !== blocks.length) return reply(409, { error: "هناك مقاطع مفقودة من حزمة الصوت باللغة " + lang + "." });
+      if (seen.size !== required.size) return reply(409, { error: "هناك مقاطع مفقودة من حزمة الصوت باللغة " + lang + "." });
       for (const segment of manifest.segments) {
         const path = prefix + "/" + segment.src;
         const { data: audioFile, error: audioError } = await service.storage.from(BUCKET).download(path);

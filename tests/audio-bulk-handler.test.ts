@@ -1,5 +1,5 @@
 const MOCK = String.raw`// Minimal in-memory Supabase stand-in for the tables/storage calls the audio function makes.
-export const db: { reviews: any[]; queue: any[]; nextId: number } = { reviews: [], queue: [], nextId: 1 };
+export const db: { reviews: any[]; queue: any[]; nextId: number; files: Record<string, string | Uint8Array>; uploads: string[] } = { reviews: [], queue: [], nextId: 1, files: {}, uploads: [] };
 const matches = (row: any, filters: [string, any][], ins: [string, any[]][]) =>
   filters.every(([k, v]) => row[k] === v) && ins.every(([k, vs]) => vs.includes(row[k]));
 function builder(table: string) {
@@ -34,7 +34,11 @@ export function createClient(_url: string, _key: string, opts?: any) {
     auth: { getUser: async () => ({ data: { user: { id: "admin" } }, error: null }) },
     rpc: async () => ({ data: true, error: null }),
     from: (t: string) => builder(t),
-    storage: { from: () => ({ download: async () => ({ data: null, error: { message: "Object not found", statusCode: "404" } }), upload: async () => ({ error: null }), remove: async () => ({ error: null }) }) },
+    storage: { from: (bucket: string) => ({
+      download: async (path: string) => { const value = db.files[bucket + "/" + path]; return value === undefined ? {data:null,error:{message:"Object not found",statusCode:"404"}} : {data:new Blob([value]),error:null}; },
+      upload: async (path: string, value: any) => { db.uploads.push(bucket + "/" + path); db.files[bucket + "/" + path] = value; return {error:null}; },
+      remove: async () => ({error:null})
+    }) },
     _isAuth: isAuth,
   };
 }
@@ -46,6 +50,8 @@ export function createClient(_url: string, _key: string, opts?: any) {
 // Run: deno test --allow-read --allow-write --allow-env tests/audio-bulk-handler.test.ts
 import assert from "node:assert/strict";
 import vm from "node:vm";
+import { createRequire } from "node:module";
+const core = createRequire(import.meta.url)("../khaledoon/assets/audio-review-core.js");
 
 const FUNCTION_DIR = new URL("../supabase/functions/audio-review-assets/", import.meta.url);
 const workDir = await Deno.makeTempDir({ prefix: "audio-bulk-handler-" });
@@ -225,4 +231,84 @@ Deno.test("actual flow request carries appended preview Arabic into real transla
     assert.match(upstreamBodies[0].contents[0].parts[0].text,/German/);
     assert.equal(db.queue.length,0,"translation must not enqueue audio");
   } finally { (globalThis as any).fetch = realFetch; }
+});
+
+Deno.test("publication covers only speakable blocks, preserving heading indexes and approved audio hashes for all languages", async () => {
+  for (const lang of ["ar","en","fr","it","de"]) {
+    setReview({}); db.files = {}; db.uploads = [];
+    const bytes = new Uint8Array([73,68,51,1,2,3]);
+    const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(b=>b.toString(16).padStart(2,"0")).join("");
+    const model = ["fr","it","de"].includes(lang) ? "k2-fsa/OmniVoice" : "VoiceTut Egyptian Tashkeel";
+    const segments = [];
+    for (const i of [0,1,3,4]) {
+      const text = lang === "ar" ? ar[i].text : lang + " text " + i;
+      segments.push({block_index:i,chunk_index:0,speaker:ar[i].speaker,src:"clip-"+i+".mp3",text,provider:"omnivoice",model,voice:ar[i].speaker==="karma"?"omnivoice-karma-reference":"omnivoice-narrator-reference",audio_sha256:digest});
+      db.files["khaledoon-audio-review/science/t/"+lang+"/clip-"+i+".mp3"] = bytes;
+      db.reviews[0].audio_review.clips[lang+":"+i]={lang,block_index:i,status:"accepted",audio_sha256:digest};
+      db.reviews[0].audio_review.speech_texts["ar:"+i]={status:"approved",approved_text:ar[i].text,source_text_hash:await sha(ar[i].text)};
+    }
+    db.reviews[0].audio_review.translations=await translations(lang,[0,1,3,4]);
+    db.files["khaledoon-audio-review/science/t/"+lang+"/manifest.json"]=JSON.stringify({version:1,section:"science",story:"t",language:lang,segments});
+    const r=await call({action:"publish_audio",language:lang});
+    assert.equal(r.status,200,lang+": "+JSON.stringify(r.json));
+    assert.equal(db.uploads.length,5);
+    const publicManifest=JSON.parse(new TextDecoder().decode(db.files["khaledoon-story-audio-public/science/t/"+lang+"/manifest.json"] as Uint8Array));
+    const localized=ar.map((block,i)=>({...block,text:lang==="ar"?block.text:lang+" text "+i}));
+    assert.equal(core.validateManifestCoverage(localized,publicManifest.segments).ok,true);
+    assert.deepEqual(core.uncoveredBlocks(localized,publicManifest.segments),[]);
+    if (["ar","en"].includes(lang)) {
+      const player=await Deno.readTextFile(new URL("../assets/shared/story-audio.js",import.meta.url));
+      const validators=player.slice(player.indexOf("  function validPublicSegment("),player.indexOf("  var queue = []"));
+      const context:any={lang,story:{i18n:{[lang]:{blocks:localized}}}};
+      vm.createContext(context); vm.runInContext(validators+";this.validate=completePublicManifest;",context);
+      assert.equal(context.validate(publicManifest),true,"visitor accepts sparse original indexes");
+      assert.equal(context.validate({...publicManifest,segments:publicManifest.segments.slice(1)}),false);
+    }
+    const manifestPath="khaledoon-audio-review/science/t/"+lang+"/manifest.json";
+    const expectBlocked = async (changed: any[], expectedStatus: number) => {
+      db.uploads=[];
+      db.files[manifestPath]=JSON.stringify({version:1,section:"science",story:"t",language:lang,segments:changed});
+      const result=await call({action:"publish_audio",language:lang});
+      assert.equal(result.status,expectedStatus,lang+": "+JSON.stringify(result.json));
+      assert.equal(db.uploads.length,0,"blocked publication must not upload public files");
+    };
+    await expectBlocked(segments.slice(1),409);
+    await expectBlocked([segments[0],segments[0],...segments.slice(2)],422);
+    await expectBlocked([{...segments[0],block_index:2},...segments.slice(1)],422);
+    const decision=db.reviews[0].audio_review.clips[lang+":0"];
+    decision.status="rejected";
+    await expectBlocked(segments,409);
+    decision.status="accepted";
+    const oldText=segments[0].text;
+    segments[0].text="stale audio text";
+    await expectBlocked(segments,409);
+    segments[0].text=oldText;
+    db.files["khaledoon-audio-review/science/t/"+lang+"/clip-0.mp3"]=new Uint8Array([9,9,9]);
+    await expectBlocked(segments,422);
+  }
+});
+Deno.test("publication can start with a non-spoken heading in the current preview", async () => {
+  setReview({}); db.files={}; db.uploads=[];
+  const source="Current preview source";
+  const snap={section:"science",slug:"t",blocks:{ar:[{speaker:"title",text:"Heading"},{speaker:"narrator",text:source},{speaker:"title",text:"End heading"}]}};
+  const bytes=new Uint8Array([1,2,3]);
+  const digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(b=>b.toString(16).padStart(2,"0")).join("");
+  db.reviews[0].audio_review.speech_texts["ar:1"]={status:"approved",approved_text:source,source_text_hash:await sha(source)};
+  db.reviews[0].audio_review.clips["ar:1"]={lang:"ar",block_index:1,status:"accepted",audio_sha256:digest};
+  db.files["khaledoon-audio-review/science/t/ar/manifest.json"]=JSON.stringify({version:1,section:"science",story:"t",language:"ar",segments:[{block_index:1,speaker:"narrator",src:"clip.mp3",text:source,provider:"omnivoice",model:"VoiceTut Egyptian Tashkeel",voice:"omnivoice-narrator-reference",audio_sha256:digest}]});
+  db.files["khaledoon-audio-review/science/t/ar/clip.mp3"]=bytes;
+  const r=await call({action:"publish_audio",language:"ar",story_snapshot:snap});
+  assert.equal(r.status,200,JSON.stringify(r.json));
+  assert.equal(db.uploads.length,2);
+});
+
+Deno.test("sparse spoken indexes preserve required AR/EN readiness and full listening gates", () => {
+  const entries=[{key:"ar-1",lang:"ar",block_index:1},{key:"en-1",lang:"en",block_index:1}];
+  const review=core.emptyReview();
+  review.clips={"ar-1":{status:"accepted"},"en-1":{status:"accepted"}};
+  const manifests={ar:{},en:{}};
+  const ready={"ar-1":"ready","en-1":"ready"};
+  assert.equal(core.evaluateFiveLanguageGate(manifests,entries,review,ready,{"ar-1":true,"en-1":true}).ok,true);
+  assert.equal(core.evaluateFiveLanguageGate(manifests,entries,review,ready,{"ar-1":true}).ok,false);
+  assert.equal(core.evaluateFiveLanguageGate({ar:{}},entries,review,ready,{"ar-1":true,"en-1":true}).ok,false);
 });
