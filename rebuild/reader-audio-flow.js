@@ -59,6 +59,21 @@
   function storyIdentity(st) {
     return { section: st && st.section, slug: st && st.slug };
   }
+  function translationStorySnapshot(st) {
+    if (!st || !st.i18n) return null;
+    var blocks = {};
+    ['ar', 'en', 'fr', 'it', 'de'].forEach(function (language) {
+      var localized = st.i18n[language];
+      if (!localized || !Array.isArray(localized.blocks)) return;
+      blocks[language] = localized.blocks.map(function (block) {
+        return {
+          speaker: block && typeof block.speaker === 'string' ? block.speaker : '',
+          text: block && typeof block.text === 'string' ? block.text : ''
+        };
+      });
+    });
+    return { section: st.section, slug: st.slug, blocks: blocks };
+  }
   async function audioReviewAction(payload) {
     var st = story(), t = token(), identity = storyIdentity(st);
     if (!st || !identity.section || !identity.slug || !t) throw new Error("سجّل الدخول من لوحة الإدارة وافتح معاينة الحكاية من جديد.");
@@ -66,7 +81,7 @@
       method: "POST",
       headers: { "Content-Type": "application/json", apikey: KEY, Authorization: "Bearer " + t },
       body: JSON.stringify(Object.assign({
-        section: identity.section, slug: identity.slug, language: lang(), story_snapshot: st,
+        section: identity.section, slug: identity.slug, language: lang(), story_snapshot: translationStorySnapshot(st),
       }, payload)),
     });
     var data = await response.json().catch(function () { return {}; });

@@ -242,3 +242,6 @@ test('one bulk translation run fans out from canonical Arabic to all four target
   assert.match(source, /translation_generate/);
   assert.match(assets, /resolveStoryBlock\(section, slug, "ar", index, body\.story_snapshot\)/);
 });
+
+// Request snapshot regressions run in the existing translation approval CI step.
+require("./translation-preview-snapshot.test.cjs");
