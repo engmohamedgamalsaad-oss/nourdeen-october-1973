@@ -45,6 +45,7 @@ export function createClient(_url: string, _key: string, opts?: any) {
 // generation action for the four translated languages (en / fr / it / de) and the Arabic one-clip-at-a-time gate.
 // Run: deno test --allow-read --allow-write --allow-env tests/audio-bulk-handler.test.ts
 import assert from "node:assert/strict";
+import vm from "node:vm";
 
 const FUNCTION_DIR = new URL("../supabase/functions/audio-review-assets/", import.meta.url);
 const workDir = await Deno.makeTempDir({ prefix: "audio-bulk-handler-" });
@@ -190,5 +191,38 @@ Deno.test("a refused key (403) stops after the first model instead of trying the
     assert.equal(r.status, 502);
     assert.deepEqual(asked, ["gemini-3.8-flash"]);
     assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 403/);
+  } finally { (globalThis as any).fetch = realFetch; }
+});
+
+Deno.test("actual flow request carries appended preview Arabic into real translation resolver without fallback or audio invalidation", async () => {
+  const flow = await Deno.readTextFile(new URL("../rebuild/reader-audio-flow.js", import.meta.url));
+  const helpers = flow.slice(flow.indexOf("  function storyIdentity("), flow.indexOf("  async function sha256Trim("));
+  const previewAr = [{speaker:"karma",text:"Preview edit"},{speaker:"title",text:"Heading"},{speaker:"narrator",text:"Appended preview Arabic"}];
+  const preview = {section:"science",slug:"unpublished-preview",i18n:{ar:{blocks:previewAr},en:{blocks:[]}}};
+  const requests: any[] = [];
+  const context: any = {story:()=>preview,token:()=>"test-session",lang:()=>"en",SUPA:"http://x",KEY:"test",
+    fetch: async (_url: any, init: any) => { requests.push(JSON.parse(init.body)); return new Response(JSON.stringify({success:true})); }};
+  vm.createContext(context);
+  vm.runInContext(helpers + ";this.request = audioReviewAction;",context);
+  await context.request({action:"translation_generate",language:"de",block_index:2,force:false});
+  const actualPayload = requests[0];
+  const realFetch = globalThis.fetch;
+  const upstreamBodies: any[] = [];
+  (globalThis as any).fetch = async (url: any, init: any) => {
+    assert.ok(String(url).includes("generativelanguage.googleapis.com"),"preview must not fall back to GitHub or storage");
+    upstreamBodies.push(JSON.parse(init.body));
+    return new Response(JSON.stringify({candidates:[{content:{parts:[{text:JSON.stringify({translation_text:"Vorschautext",review_notes:[]})}]}}]}));
+  };
+  try {
+    db.reviews.length = 0; db.queue.length = 0;
+    const r = await call(actualPayload);
+    assert.equal(r.status,200,JSON.stringify(r.json));
+    assert.equal(r.json.translation.source_arabic_hash,await sha(previewAr[2].text));
+    assert.equal(r.json.translation.speaker,"narrator");
+    assert.equal(r.json.translation.block_index,2);
+    assert.equal(r.json.translation.language,"de");
+    assert.match(upstreamBodies[0].contents[0].parts[0].text,/Appended preview Arabic/);
+    assert.match(upstreamBodies[0].contents[0].parts[0].text,/German/);
+    assert.equal(db.queue.length,0,"translation must not enqueue audio");
   } finally { (globalThis as any).fetch = realFetch; }
 });
