@@ -275,7 +275,7 @@
       var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(ar.text).trim()));
       var hash = Array.from(new Uint8Array(digest), function (b3) { return b3.toString(16).padStart(2, "0"); }).join("");
       var result = await audioReviewAction({
-        action: "translation_save", block_index: index, decision: "approved",
+        action: "translation_save", language: L, block_index: index, decision: "approved",
         translation_text: String(textarea.value || "").trim(), source_arabic_hash: hash,
       });
       translationRecords[key] = result.translation;
@@ -298,7 +298,7 @@
       paint(box); updateTranslationPublishButton();
       try {
         await waitForTranslationSlot();
-        var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
+        var result = await audioReviewAction({ action: "translation_generate", language: L, block_index: index, force: true });
         var generatedText = String(result.translation && result.translation.translation_text || "").trim();
         if (!generatedText || !result.translation || result.translation.status !== "approved") throw new Error("لم تُحفظ ترجمة معتمدة وصالحة لهذا المقطع.");
         translationRecords[key] = result.translation;
@@ -695,17 +695,22 @@
       bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
       bulkTranslate.addEventListener('click', async function () {
         if (translationBatchBusy || translationSingleBusy) return;
-        var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
+        var st = story(), activeLanguage = lang(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
         if (!blocks.length) return;
-        var batchLanguages = ['en', 'fr', 'it', 'de'];
-        var labels = {en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'};
+        if (!['ar', 'en', 'fr', 'it', 'de'].includes(activeLanguage)) {
+          bulkStatus.textContent = 'لغة الصفحة الحالية غير مدعومة للترجمة.';
+          return;
+        }
+        // كل صفحة تعمل على لغتها الحالية فقط؛ العربية تجهز نص القراءة ولا تطلق ترجمة للغات أخرى.
+        var batchLanguages = activeLanguage === 'ar' ? [] : [activeLanguage];
+        var labels = {ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'};
         var todo = [];
         for (var i = 0; i < blocks.length; i++) {
           if (blocks[i] && ['karma', 'narrator'].includes(blocks[i].speaker) && String(blocks[i].text || '').trim()) todo.push(i);
         }
         translationBatchBusy = true; setTranslationGenerateControlsDisabled(true);
-        var doneByLanguage = {en:0,fr:0,it:0,de:0};
-        var skippedByLanguage = {en:0,fr:0,it:0,de:0};
+        var doneByLanguage = {}, skippedByLanguage = {};
+        batchLanguages.forEach(function (language) { doneByLanguage[language] = 0; skippedByLanguage[language] = 0; });
         var failed = [];
         var sessionLost = false;
         try {
@@ -714,11 +719,11 @@
           translationRecords = reviewData.audio_review && reviewData.audio_review.translations || translationRecords || {};
 
           // Arabic remains the canonical source. Its speech-text preparation is a separate step,
-          // and never substitutes for translating the four target languages.
-          if (lang() === 'ar' && window.KHStoryAudioReview &&
+          // and is kept separate from every translated-language page.
+          if (activeLanguage === 'ar' && window.KHStoryAudioReview &&
               typeof window.KHStoryAudioReview.prepareAllSpeechTexts === 'function') {
             var speechResult = await window.KHStoryAudioReview.prepareAllSpeechTexts(function (i, n) {
-              bulkStatus.textContent = 'اللغة العربية هي المصدر: تجهيز نص القراءة للمقطع ' + (i + 1) + ' من ' + n + '، ثم ترجمة اللغات الأربع…';
+              bulkStatus.textContent = 'اللغة العربية هي المصدر: تجهيز نص القراءة للمقطع ' + (i + 1) + ' من ' + n + '. لن تبدأ ترجمة أي لغة أخرى من الصفحة العربية.';
             });
             if (speechResult && Array.isArray(speechResult.failed)) {
               speechResult.failed.forEach(function (item) {
@@ -750,7 +755,7 @@
               }
             }
             if (!languageTodo.length) {
-              bulkStatus.textContent = 'اللغة ' + languageLabel + ' جاهزة بالفعل؛ أنتقل إلى اللغة التالية…';
+              bulkStatus.textContent = 'مقاطع صفحة ' + languageLabel + ' جاهزة بالفعل.';
               continue;
             }
             var lastErrors = Object.create(null);
@@ -809,17 +814,19 @@
           }
         } catch (e) {
           translationBatchBusy = false; setTranslationGenerateControlsDisabled(false);
-          bulkStatus.textContent = e.message || 'تعذرت ترجمة اللغات الأربع من المصدر العربي.';
+          bulkStatus.textContent = e.message || (activeLanguage === 'ar' ? 'تعذر تجهيز نصوص القراءة العربية.' : 'تعذرت ترجمة مقاطع ' + labels[activeLanguage] + ' من المصدر العربي.');
           bulkTranslate.disabled = !token();
           return;
         }
         var summary = batchLanguages.map(function (language) {
           return labels[language] + ': ' + doneByLanguage[language] + ' جديدة، ' + skippedByLanguage[language] + ' مطابقة للمصدر';
         }).join(' | ');
-        bulkStatus.textContent = 'اكتملت دورة الترجمة من العربية. ' + summary +
-          (failed.length ? ' | تعذر تجهيز: ' + failed.join('؛ ') : '') +
-          (sessionLost ? ' | انتهت جلسة الدخول؛ سجّل الدخول ثم أعد تشغيل العملية لإكمال اللغات المتبقية.' : '') +
-          ' لم يبدأ أي توليد صوتي.';
+        bulkStatus.textContent = activeLanguage === 'ar'
+          ? 'اكتمل تجهيز نصوص القراءة العربية للمقاطع. لم تبدأ أي ترجمة للغات أخرى ولم يبدأ أي توليد صوتي.'
+          : 'اكتملت ترجمة مقاطع صفحة ' + labels[activeLanguage] + ' فقط من المصدر العربي. ' + summary +
+            (failed.length ? ' | تعذر تجهيز: ' + failed.join('؛ ') : '') +
+            (sessionLost ? ' | انتهت جلسة الدخول؛ سجّل الدخول ثم أعد تشغيل العملية لإكمال مقاطع هذه اللغة.' : '') +
+            ' لم يبدأ أي توليد صوتي.';
         translationBatchBusy = false; setTranslationGenerateControlsDisabled(false);
         onUpdated();
       });

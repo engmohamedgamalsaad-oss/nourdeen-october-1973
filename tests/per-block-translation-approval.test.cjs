@@ -146,7 +146,7 @@ test('admin preview switches the story body to the selected locale and displays 
   assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
   assert.match(preview, /site-language-change', function \(\) \{ loadTranslations\(\)\.then\(onUpdated\); \}/);
   assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261123-quiz-loading-1/);
-  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader-audio-flow\.js\?v=20261123-serialized-translation-1/);
+  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader-audio-flow\.js\?v=20261123-active-language-only-1/);
 });
 
 test('a single excluded wrong-speaker clip does not invalidate the remaining manifest clips', () => {
@@ -236,15 +236,20 @@ test('language preview offers a separate approved-audio publish action before th
 });
 
 
-test('one bulk translation run fans out from canonical Arabic to all four target languages', () => {
+test('each language preview translates only its active language; Arabic prepares speech text only', () => {
   const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-flow.js'), 'utf8');
-  assert.match(source, /var batchLanguages = \['en', 'fr', 'it', 'de'\]/);
+  assert.match(source, /var activeLanguage = lang\(\)/);
+  assert.match(source, /var batchLanguages = activeLanguage === 'ar' \? \[\] : \[activeLanguage\]/);
+  assert.doesNotMatch(source, /var batchLanguages = \['en', 'fr', 'it', 'de'\]/);
   assert.match(source, /action: 'translation_generate',[\s\S]{0,100}language: targetLanguage,[\s\S]{0,60}block_index: blockIndex/);
+  assert.match(source, /action: "translation_generate", language: L, block_index: index/);
+  assert.match(source, /action: "translation_save", language: L, block_index: index/);
+  assert.match(source, /ترجمة مقاطع صفحة ' \+ labels\[activeLanguage\] \+ ' فقط/);
+  assert.match(source, /لم تبدأ أي ترجمة للغات أخرى/);
   assert.match(source, /var sourceBlock = blocks\[blockIndex\]/);
   assert.match(source, /existing\.source_arabic_hash === sourceHash/);
   assert.match(source, /force: !!\(translationRecords\[key\] && translationRecords\[key\]\.status === 'approved'\)/);
   assert.match(source, /translationWorkingText\[key\] = String\(existing\.translation_text\)/);
-  assert.match(source, /translation_generate/);
   assert.match(assets, /resolveStoryBlock\(section, slug, "ar", index, body\.story_snapshot\)/);
 });
 
