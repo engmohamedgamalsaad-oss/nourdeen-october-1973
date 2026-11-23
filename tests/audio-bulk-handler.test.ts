@@ -58,7 +58,7 @@ await Deno.writeTextFile(`${workDir}/index.ts`, source);
 await Deno.writeTextFile(`${workDir}/queue-logic.ts`, await Deno.readTextFile(new URL("queue-logic.ts", FUNCTION_DIR)));
 await Deno.writeTextFile(`${workDir}/mock-supabase.ts`, MOCK);
 
-Deno.env.set("SUPABASE_URL", "http://x"); Deno.env.set("SUPABASE_ANON_KEY", "a"); Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "s");
+Deno.env.set("SUPABASE_URL", "http://x"); Deno.env.set("SUPABASE_ANON_KEY", "a"); Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "s"); Deno.env.set("GEMINI_API_KEY", "test-key");
 let handler: any = null;
 (Deno as any).serve = (h: any) => { handler = h; return {}; };
 await import(`file://${workDir}/index.ts`);
@@ -89,8 +89,8 @@ Deno.test("bulk queues every speakable block of a translated language, skipping 
   const r = await call({ action: "enqueue_approved_language", language: "fr" });
   assert.equal(r.status, 200); assert.equal(r.json.counts.total, 4); assert.equal(r.json.counts.queued, 4); assert.equal(r.json.complete, true);
   assert.equal(db.queue.length, 4);
-  assert.ok(db.queue.every((j) => j.engine === "omnivoice-multilingual" && j.language === "fr" && j.status === "pending"));
-  assert.deepEqual(db.queue.map((j) => j.block_index), [0, 1, 3, 4]);
+  assert.ok(db.queue.every((j: any) => j.engine === "omnivoice-multilingual" && j.language === "fr" && j.status === "pending"));
+  assert.deepEqual(db.queue.map((j: any) => j.block_index), [0, 1, 3, 4]);
 });
 Deno.test("running bulk again reuses identical jobs: nothing duplicated or regenerated", async () => {
   const before = db.queue.length; const r = await call({ action: "enqueue_approved_language", language: "fr" });
@@ -115,7 +115,7 @@ Deno.test("already accepted blocks are skipped", async () => {
   db.queue.length = 0;
   setReview({ translations: await translations("en", [0, 1, 3, 4]), clips: { k: { lang: "en", block_index: 0, status: "accepted" } } });
   const r = await call({ action: "enqueue_approved_language", language: "en" });
-  assert.equal(r.json.counts.accepted, 1); assert.equal(r.json.counts.queued, 3); assert.ok(!db.queue.some((j) => j.block_index === 0));
+  assert.equal(r.json.counts.accepted, 1); assert.equal(r.json.counts.queued, 3); assert.ok(!db.queue.some((j: any) => j.block_index === 0));
 });
 Deno.test("single enqueue for a translated language is no longer order-gated", async () => {
   db.queue.length = 0; setReview({ translations: await translations("fr", [0, 1, 3, 4]) });
@@ -140,4 +140,55 @@ Deno.test("fr jobs in flight do not block Arabic enqueue (per-language active-jo
   await call({ action: "enqueue_approved_language", language: "fr" });
   const r = await call({ action: "enqueue", language: "ar", block_index: 0 });
   assert.equal(r.status, 200);
+});
+
+Deno.test("translation falls back to the next Gemini model when the first model answers 404 and reports each attempt", async () => {
+  const realFetch = globalThis.fetch;
+  const asked: string[] = [];
+  (globalThis as any).fetch = async (url: any) => {
+    const u = String(url);
+    if (!u.includes("generativelanguage.googleapis.com")) return realFetch(url);
+    const model = u.split("/models/")[1].split(":")[0];
+    asked.push(model);
+    if (model === "gemini-3.8-flash") return new Response("{}", { status: 404 });
+    return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify({ translation_text: "Hello", review_notes: [] }) }] } }] }), { status: 200 });
+  };
+  try {
+    setReview({});
+    const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
+    assert.equal(r.status, 200, JSON.stringify(r.json));
+    assert.equal(r.json.translation.model, "gemini-3.7-flash");
+    assert.deepEqual(asked, ["gemini-3.8-flash", "gemini-3.7-flash"]);
+  } finally { (globalThis as any).fetch = realFetch; }
+});
+Deno.test("translation failure message lists the model and HTTP status of every attempt", async () => {
+  const realFetch = globalThis.fetch;
+  (globalThis as any).fetch = async (url: any) => {
+    if (!String(url).includes("generativelanguage.googleapis.com")) return realFetch(url);
+    return new Response("{}", { status: 404 });
+  };
+  try {
+    setReview({});
+    const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
+    assert.equal(r.status, 502);
+    assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 404/);
+    assert.match(r.json.error, /gemini-3\.6-flash #1: HTTP 404/);
+  } finally { (globalThis as any).fetch = realFetch; }
+});
+Deno.test("a refused key (403) stops after the first model instead of trying the others", async () => {
+  const realFetch = globalThis.fetch;
+  const asked: string[] = [];
+  (globalThis as any).fetch = async (url: any) => {
+    const u = String(url);
+    if (!u.includes("generativelanguage.googleapis.com")) return realFetch(url);
+    asked.push(u.split("/models/")[1].split(":")[0]);
+    return new Response("{}", { status: 403 });
+  };
+  try {
+    setReview({});
+    const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
+    assert.equal(r.status, 502);
+    assert.deepEqual(asked, ["gemini-3.8-flash"]);
+    assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 403/);
+  } finally { (globalThis as any).fetch = realFetch; }
 });

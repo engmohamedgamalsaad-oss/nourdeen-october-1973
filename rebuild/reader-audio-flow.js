@@ -720,6 +720,7 @@
               bulkStatus.textContent = 'اللغة ' + languageLabel + ' جاهزة بالفعل؛ أنتقل إلى اللغة التالية…';
               continue;
             }
+            var lastErrors = Object.create(null);
             var translateOne = async function (blockIndex, round) {
               var key = targetLanguage + ':' + blockIndex;
               bulkStatus.textContent = (round ? 'إعادة المحاولة ' + round + ' من 3 — ' : '') +
@@ -753,6 +754,7 @@
                   return 'skipped';
                 }
                 translationStates[key] = 'failed';
+                lastErrors[blockIndex] = message;
                 paintTranslationBlock(blockIndex, 'failed', message + ' — يمكنك إعادة المحاولة.', null, targetLanguage);
                 if (/سجّل الدخول|سجل الدخول/.test(message)) return 'auth';
                 return 'failed';
@@ -762,12 +764,13 @@
               maxRounds: 3, waitSeconds: 20,
               sleep: function (ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); },
               onWait: function (pending, round, left) {
+                var reason = lastErrors[pending[0]] ? ' السبب: ' + lastErrors[pending[0]] : '';
                 bulkStatus.textContent = 'تعذر مؤقتًا ' + pending.length + ' مقطع باللغة ' + languageLabel +
-                  '. إعادة محاولة تلقائية ' + round + ' من 3 بعد ' + left + ' ثانية.';
+                  '. إعادة محاولة تلقائية ' + round + ' من 3 بعد ' + left + ' ثانية.' + reason;
               }
             });
             skippedByLanguage[targetLanguage] += rounds.skipped;
-            rounds.failed.forEach(function (index) { failed.push(languageLabel + ' — المقطع ' + (index + 1)); });
+            rounds.failed.forEach(function (index) { failed.push(languageLabel + ' — المقطع ' + (index + 1) + (lastErrors[index] ? ' (' + lastErrors[index] + ')' : '')); });
             if (rounds.sessionLost) { sessionLost = true; break; }
           }
         } catch (e) {
