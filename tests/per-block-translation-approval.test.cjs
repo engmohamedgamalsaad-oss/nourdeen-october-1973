@@ -184,6 +184,8 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.match(assets, /if \(attempt >= 3\) break translationAttempts/);
   assert.match(preview, /translationSingleBusy = true/);
   assert.match(preview, /يوجد طلب ترجمة آخر قيد التنفيذ/);
+  assert.match(preview, /async function waitForTranslationSlot\(\)/);
+  assert.match(preview, /5000 - \(Date\.now\(\) - lastTranslationRequestAt\)/);
   assert.ok(assets.includes('const retryableStatuses = new Set([408, 429, 500, 502, 503, 504]);'));
   assert.match(assets, /const translationDeadlineAt = Date\.now\(\) \+ 75000;/);
   assert.match(assets, /const delayMs = Math\.min\(12000, Math\.max\(retryAfterMs, 2500 \* attempt\)\);/);
