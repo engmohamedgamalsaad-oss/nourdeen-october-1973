@@ -287,6 +287,13 @@
       document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
     }
     generate.addEventListener("click", async function () {
+      if (translationBatchBusy || translationSingleBusy) {
+        status.textContent = "يوجد طلب ترجمة آخر قيد التنفيذ؛ انتظر اكتماله قبل بدء طلب جديد.";
+        status.dataset.state = "processing";
+        return;
+      }
+      translationSingleBusy = true;
+      setTranslationGenerateControlsDisabled(true);
       generate.disabled = true; translationStates[key] = "processing"; status.textContent = "Gemini يعيد ترجمة هذا المقطع وحده من النص العربي والسياق وملاحظاتك السابقة…"; status.dataset.state = "processing";
       paint(box); updateTranslationPublishButton();
       try {
@@ -303,7 +310,7 @@
         status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
       } catch (e) { translationStates[key] = "failed"; status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; status.dataset.state = "failed"; paint(box); updateTranslationPublishButton(); }
-      finally { generate.disabled = false; }
+      finally { translationSingleBusy = false; setTranslationGenerateControlsDisabled(false); generate.disabled = false; updateLanguageBatchPanel(); }
     });
     save.addEventListener("click", async function () {
       save.disabled = true;
@@ -527,7 +534,12 @@
   }
 
   /* أدوات الصوت تخص اللغة المفتوحة حاليًا داخل صفحة الحكاية، لا ملخصًا عامًا لكل اللغات. */
-  var translationBatchBusy = false;
+  var translationBatchBusy = false, translationSingleBusy = false;
+  function setTranslationGenerateControlsDisabled(disabled) {
+    document.querySelectorAll('.kh-translation-generate').forEach(function (button) { button.disabled = !!disabled; });
+    var bulkButton = $('kh-translation-bulk-generate');
+    if (bulkButton) bulkButton.disabled = !!disabled || !token();
+  }
   var audioBatchBusy = false, audioBatchNote = {};
   /* توليد/اعتماد كل مقاطع اللغة الحالية دفعة واحدة (للغات الأربع المترجمة فقط). */
   async function runAudioBatch(kind, button) {
@@ -676,7 +688,7 @@
       var bulkTranslate = el('button', 'kh-translation-bulk-generate', 'الترجمة');
       bulkTranslate.id = 'kh-translation-bulk-generate'; bulkTranslate.type = 'button';
       bulkTranslate.addEventListener('click', async function () {
-        if (translationBatchBusy) return;
+        if (translationBatchBusy || translationSingleBusy) return;
         var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
         if (!blocks.length) return;
         var batchLanguages = ['en', 'fr', 'it', 'de'];
@@ -685,7 +697,7 @@
         for (var i = 0; i < blocks.length; i++) {
           if (blocks[i] && ['karma', 'narrator'].includes(blocks[i].speaker) && String(blocks[i].text || '').trim()) todo.push(i);
         }
-        translationBatchBusy = true; bulkTranslate.disabled = true;
+        translationBatchBusy = true; setTranslationGenerateControlsDisabled(true);
         var doneByLanguage = {en:0,fr:0,it:0,de:0};
         var skippedByLanguage = {en:0,fr:0,it:0,de:0};
         var failed = [];
@@ -789,7 +801,7 @@
             if (rounds.sessionLost) { sessionLost = true; break; }
           }
         } catch (e) {
-          translationBatchBusy = false;
+          translationBatchBusy = false; setTranslationGenerateControlsDisabled(false);
           bulkStatus.textContent = e.message || 'تعذرت ترجمة اللغات الأربع من المصدر العربي.';
           bulkTranslate.disabled = !token();
           return;
@@ -801,7 +813,7 @@
           (failed.length ? ' | تعذر تجهيز: ' + failed.join('؛ ') : '') +
           (sessionLost ? ' | انتهت جلسة الدخول؛ سجّل الدخول ثم أعد تشغيل العملية لإكمال اللغات المتبقية.' : '') +
           ' لم يبدأ أي توليد صوتي.';
-        translationBatchBusy = false; bulkTranslate.disabled = !token();
+        translationBatchBusy = false; setTranslationGenerateControlsDisabled(false);
         onUpdated();
       });
       bulkRow.appendChild(bulkTranslate);
