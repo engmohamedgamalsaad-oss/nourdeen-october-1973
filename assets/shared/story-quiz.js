@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  var match = location.pathname.match(/\/(\d{3})\/?$/);
+  var match = location.pathname.match(/\/(\d{3})(?:\/index\.html|\/)?$/);
   var id = match && match[1];
   
   var lang = (document.documentElement.lang || "ar").slice(0, 2);
@@ -55,6 +55,9 @@
     var tr = q.i18n && q.i18n[locale];
     return !!(tr && typeof tr.q === "string" && Array.isArray(tr.o) && tr.o.length === q.o.length && typeof tr.e === "string");
   }
+  function translatedQuestion(q) {
+    return lang !== "ar" && hasTranslation(q, lang) ? q.i18n[lang] : q;
+  }
   function questionPool(locale) {
     if (locale === "ar") return all;
     var translated = all.filter(function (q) { return hasTranslation(q, locale); });
@@ -90,13 +93,14 @@
     return result;
   }
   function begin() {
+    if (start.disabled || all.length < 5) return;
     run = shuffle(questionPool(lang)).slice(0, Math.min(5, questionPool(lang).length));
     answers = []; current = 0; chosen = null; submitted = false;
     start.hidden = true; app.hidden = false; question();
   }
   function question() {
     var q = run[current];
-    var translated = (q.i18n && q.i18n[lang]) || q;
+    var translated = translatedQuestion(q);
     q.displayOptions = shuffle(translated.o.map(function (text, originalIndex) {
       return { text: text, originalIndex: originalIndex };
     }));
@@ -133,7 +137,7 @@
     }
     submitted = true;
     var q = run[current];
-    var translated = (q.i18n && q.i18n[lang]) || q;
+    var translated = translatedQuestion(q);
     var isCorrect = q.displayOptions[chosen].originalIndex === q.a;
     answers.push({ q: q, correct: isCorrect });
     app.querySelectorAll("[data-option]").forEach(function (button) {
@@ -159,7 +163,7 @@
       esc(t("again")) + '</button></div><div class="story-quiz-review"><h3>' + esc(t("review")) + '</h3>' +
       answers.map(function (answer) {
         var q = answer.q;
-        var translated = (q.i18n && q.i18n[lang]) || q;
+        var translated = translatedQuestion(q);
         return '<details ' + (!answer.correct ? 'open' : '') + '><summary>' +
           (answer.correct ? '✓ ' : '✗ ') + esc(translated.q) + '</summary><p><strong>' +
           esc(t("answer")) + '</strong> ' + esc(translated.o[q.a]) + '</p><p><strong>' +
@@ -167,6 +171,7 @@
       }).join("") + '</div>';
     document.getElementById("story-quiz-retry").addEventListener("click", begin);
   }
+  start.disabled = true;
   start.addEventListener("click", begin);
   var root = location.pathname.split("/stories/")[0] + "/";
   var previewBank = window.__KH_PREVIEW_QUIZ_BANK;
@@ -178,6 +183,7 @@
   bankRequest.then(function (data) {
     all = data.questions || [];
     if (all.length < 5) throw new Error("Insufficient quiz questions");
+    start.disabled = false;
   }).catch(function () {
     start.disabled = true;
     start.textContent = t("unavailable");
