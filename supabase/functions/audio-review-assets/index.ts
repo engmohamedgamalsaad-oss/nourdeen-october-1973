@@ -454,13 +454,13 @@ Deno.serve(async (req: Request) => {
       } },
     });
     const translationDeadlineAt = Date.now() + 75000;
-    const perAttemptTimeoutMs = 32000;
-    let model = translationModels[0], upstream: Response | null = null, networkError = "", attemptsMade = 0;
+    const perAttemptTimeoutMs = 18000;
+    let model = translationModels[0], upstream: Response | null = null, networkError = "", upstreamError = "", attemptsMade = 0;
     const translationTrace: string[] = [];
     translationAttempts:
     for (let modelIndex = 0; modelIndex < translationModels.length; modelIndex++) {
       model = translationModels[modelIndex];
-      for (let attempt = 1; attempt <= 2; attempt++) {
+      for (let attempt = 1; attempt <= 3; attempt++) {
         const remainingMs = translationDeadlineAt - Date.now();
         if (remainingMs < 4000) break translationAttempts;
         attemptsMade++;
@@ -478,20 +478,28 @@ Deno.serve(async (req: Request) => {
         } finally { clearTimeout(timer); }
         if (upstream?.ok) break translationAttempts;
         const retryable = !upstream || retryableStatuses.has(upstream.status);
-        translationTrace.push(model + " #" + attempt + ": " + (upstream ? "HTTP " + upstream.status : (networkError || "network")));
+        upstreamError = "";
+        if (upstream && !upstream.ok) {
+          try {
+            const errorPayload = await upstream.clone().json();
+            upstreamError = String(errorPayload?.error?.message ?? errorPayload?.message ?? "").slice(0, 500);
+          } catch {}
+        }
+        translationTrace.push(model + " #" + attempt + ": " +
+          (upstream ? "HTTP " + upstream.status + (upstreamError ? " " + upstreamError : "") : (networkError || "network")));
         if (upstream?.body) await upstream.body.cancel().catch(() => {});
         // 401/403 mean the key or project is refused for every model, so stop. Any other non-retryable
         // answer (for example 404 for an unavailable model, or 400 for a model-specific request problem)
         // only rules out this model; try the next one.
         if (!retryable && upstream && (upstream.status === 401 || upstream.status === 403)) break translationAttempts;
         if (!retryable) break;
-        if (attempt < 2) {
-          const retryAfter = upstream?.headers.get("retry-after");
-          const retryAfterMs = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) * 1000 : 0;
-          const delayMs = Math.min(6000, Math.max(retryAfterMs, 2000 * attempt));
-          if (translationDeadlineAt - Date.now() <= delayMs + 4000) break;
-          await new Promise((resolve) => setTimeout(resolve, delayMs));
-        }
+        // Retry transient quota/capacity/network errors on the same model; do not fan out.
+        if (attempt >= 3) break translationAttempts;
+        const retryAfter = upstream?.headers.get("retry-after");
+        const retryAfterMs = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter) ? Number(retryAfter) * 1000 : 0;
+        const delayMs = Math.min(12000, Math.max(retryAfterMs, 2500 * attempt));
+        if (translationDeadlineAt - Date.now() <= delayMs + 4000) break translationAttempts;
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
     }
     if (!upstream) return reply(502, {
@@ -499,7 +507,7 @@ Deno.serve(async (req: Request) => {
       detail: networkError, attempts: translationTrace,
     });
     if (!upstream.ok) return reply(upstream.status === 429 || retryableStatuses.has(upstream.status) ? 503 : 502, {
-      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي نص. (\u2066" + translationTrace.join(", ") + "\u2069)", upstream_status: upstream.status, attempts: translationTrace,
+      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي نص. (\u2066" + translationTrace.join(", ") + "\u2069)", upstream_status: upstream.status, upstream_error: upstreamError, attempts: translationTrace,
     });
     let generated: any;
     try {
