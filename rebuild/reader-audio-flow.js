@@ -719,11 +719,11 @@
           translationRecords = reviewData.audio_review && reviewData.audio_review.translations || translationRecords || {};
 
           // Arabic remains the canonical source. Its speech-text preparation is a separate step,
-          // and never substitutes for translating the four target languages.
-          if (lang() === 'ar' && window.KHStoryAudioReview &&
+          // and is kept separate from every translated-language page.
+          if (activeLanguage === 'ar' && window.KHStoryAudioReview &&
               typeof window.KHStoryAudioReview.prepareAllSpeechTexts === 'function') {
             var speechResult = await window.KHStoryAudioReview.prepareAllSpeechTexts(function (i, n) {
-              bulkStatus.textContent = 'اللغة العربية هي المصدر: تجهيز نص القراءة للمقطع ' + (i + 1) + ' من ' + n + '، ثم ترجمة اللغات الأربع…';
+              bulkStatus.textContent = 'اللغة العربية هي المصدر: تجهيز نص القراءة للمقطع ' + (i + 1) + ' من ' + n + '. لن تبدأ ترجمة أي لغة أخرى من الصفحة العربية.';
             });
             if (speechResult && Array.isArray(speechResult.failed)) {
               speechResult.failed.forEach(function (item) {
@@ -755,7 +755,7 @@
               }
             }
             if (!languageTodo.length) {
-              bulkStatus.textContent = 'اللغة ' + languageLabel + ' جاهزة بالفعل؛ أنتقل إلى اللغة التالية…';
+              bulkStatus.textContent = 'مقاطع صفحة ' + languageLabel + ' جاهزة بالفعل.';
               continue;
             }
             var lastErrors = Object.create(null);
