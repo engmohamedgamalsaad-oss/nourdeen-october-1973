@@ -58,7 +58,7 @@ await Deno.writeTextFile(`${workDir}/index.ts`, source);
 await Deno.writeTextFile(`${workDir}/queue-logic.ts`, await Deno.readTextFile(new URL("queue-logic.ts", FUNCTION_DIR)));
 await Deno.writeTextFile(`${workDir}/mock-supabase.ts`, MOCK);
 
-Deno.env.set("SUPABASE_URL", "http://x"); Deno.env.set("SUPABASE_ANON_KEY", "a"); Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "s");
+Deno.env.set("SUPABASE_URL", "http://x"); Deno.env.set("SUPABASE_ANON_KEY", "a"); Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "s"); Deno.env.set("GEMINI_API_KEY", "test-key");
 let handler: any = null;
 (Deno as any).serve = (h: any) => { handler = h; return {}; };
 await import(`file://${workDir}/index.ts`);
@@ -140,4 +140,38 @@ Deno.test("fr jobs in flight do not block Arabic enqueue (per-language active-jo
   await call({ action: "enqueue_approved_language", language: "fr" });
   const r = await call({ action: "enqueue", language: "ar", block_index: 0 });
   assert.equal(r.status, 200);
+});
+
+Deno.test("translation falls back to the next Gemini model when the first model answers 404 and reports each attempt", async () => {
+  const realFetch = globalThis.fetch;
+  const asked: string[] = [];
+  (globalThis as any).fetch = async (url: any) => {
+    const u = String(url);
+    if (!u.includes("generativelanguage.googleapis.com")) return realFetch(url);
+    const model = u.split("/models/")[1].split(":")[0];
+    asked.push(model);
+    if (model === "gemini-3.8-flash") return new Response("{}", { status: 404 });
+    return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify({ translation_text: "Hello", review_notes: [] }) }] } }] }), { status: 200 });
+  };
+  try {
+    setReview({});
+    const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
+    assert.equal(r.status, 200, JSON.stringify(r.json));
+    assert.equal(r.json.translation.model, "gemini-3.7-flash");
+    assert.deepEqual(asked, ["gemini-3.8-flash", "gemini-3.7-flash"]);
+  } finally { (globalThis as any).fetch = realFetch; }
+});
+Deno.test("translation failure message lists the model and HTTP status of every attempt", async () => {
+  const realFetch = globalThis.fetch;
+  (globalThis as any).fetch = async (url: any) => {
+    if (!String(url).includes("generativelanguage.googleapis.com")) return realFetch(url);
+    return new Response("{}", { status: 403 });
+  };
+  try {
+    setReview({});
+    const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
+    assert.equal(r.status, 502);
+    assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 403/);
+    assert.match(r.json.error, /gemini-3\.6-flash #1: HTTP 403/);
+  } finally { (globalThis as any).fetch = realFetch; }
 });

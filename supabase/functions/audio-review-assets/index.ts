@@ -456,6 +456,7 @@ Deno.serve(async (req: Request) => {
     const translationDeadlineAt = Date.now() + 75000;
     const perAttemptTimeoutMs = 32000;
     let model = translationModels[0], upstream: Response | null = null, networkError = "", attemptsMade = 0;
+    const translationTrace: string[] = [];
     translationAttempts:
     for (let modelIndex = 0; modelIndex < translationModels.length; modelIndex++) {
       model = translationModels[modelIndex];
@@ -477,11 +478,14 @@ Deno.serve(async (req: Request) => {
         } finally { clearTimeout(timer); }
         if (upstream?.ok) break translationAttempts;
         const retryable = !upstream || retryableStatuses.has(upstream.status);
+        translationTrace.push(model + " #" + attempt + ": " + (upstream ? "HTTP " + upstream.status : (networkError || "network")));
         if (upstream?.body) await upstream.body.cancel().catch(() => {});
-        if (!retryable) break translationAttempts;
+        // A non-retryable answer (for example 404 for an unavailable model) only rules out this model;
+        // try the next model instead of failing the whole translation.
+        if (!retryable) break;
         if (attempt < 2) {
           const retryAfter = upstream?.headers.get("retry-after");
-          const retryAfterMs = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter) ? Number(retryAfter) * 1000 : 0;
+          const retryAfterMs = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) * 1000 : 0;
           const delayMs = Math.min(6000, Math.max(retryAfterMs, 2000 * attempt));
           if (translationDeadlineAt - Date.now() <= delayMs + 4000) break;
           await new Promise((resolve) => setTimeout(resolve, delayMs));
@@ -489,11 +493,11 @@ Deno.serve(async (req: Request) => {
       }
     }
     if (!upstream) return reply(502, {
-      error: "تعذر الاتصال بـGemini بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي ترجمة.",
-      detail: networkError,
+      error: "تعذر الاتصال بـGemini بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي ترجمة. (" + translationTrace.join("، ") + ")",
+      detail: networkError, attempts: translationTrace,
     });
     if (!upstream.ok) return reply(upstream.status === 429 || retryableStatuses.has(upstream.status) ? 503 : 502, {
-      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي نص.", upstream_status: upstream.status,
+      error: "Gemini لم يُكمل الترجمة بعد " + attemptsMade + " محاولات على عدة نماذج؛ لم يتم حفظ أي نص. (" + translationTrace.join("، ") + ")", upstream_status: upstream.status, attempts: translationTrace,
     });
     let generated: any;
     try {
