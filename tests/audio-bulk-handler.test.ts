@@ -165,13 +165,30 @@ Deno.test("translation failure message lists the model and HTTP status of every 
   const realFetch = globalThis.fetch;
   (globalThis as any).fetch = async (url: any) => {
     if (!String(url).includes("generativelanguage.googleapis.com")) return realFetch(url);
+    return new Response("{}", { status: 404 });
+  };
+  try {
+    setReview({});
+    const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
+    assert.equal(r.status, 502);
+    assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 404/);
+    assert.match(r.json.error, /gemini-3\.6-flash #1: HTTP 404/);
+  } finally { (globalThis as any).fetch = realFetch; }
+});
+Deno.test("a refused key (403) stops after the first model instead of trying the others", async () => {
+  const realFetch = globalThis.fetch;
+  const asked: string[] = [];
+  (globalThis as any).fetch = async (url: any) => {
+    const u = String(url);
+    if (!u.includes("generativelanguage.googleapis.com")) return realFetch(url);
+    asked.push(u.split("/models/")[1].split(":")[0]);
     return new Response("{}", { status: 403 });
   };
   try {
     setReview({});
     const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
     assert.equal(r.status, 502);
+    assert.deepEqual(asked, ["gemini-3.8-flash"]);
     assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 403/);
-    assert.match(r.json.error, /gemini-3\.6-flash #1: HTTP 403/);
   } finally { (globalThis as any).fetch = realFetch; }
 });

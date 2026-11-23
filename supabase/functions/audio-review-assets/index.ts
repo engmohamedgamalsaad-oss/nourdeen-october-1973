@@ -480,8 +480,10 @@ Deno.serve(async (req: Request) => {
         const retryable = !upstream || retryableStatuses.has(upstream.status);
         translationTrace.push(model + " #" + attempt + ": " + (upstream ? "HTTP " + upstream.status : (networkError || "network")));
         if (upstream?.body) await upstream.body.cancel().catch(() => {});
-        // A non-retryable answer (for example 404 for an unavailable model) only rules out this model;
-        // try the next model instead of failing the whole translation.
+        // 401/403 mean the key or project is refused for every model, so stop. Any other non-retryable
+        // answer (for example 404 for an unavailable model, or 400 for a model-specific request problem)
+        // only rules out this model; try the next one.
+        if (!retryable && upstream && (upstream.status === 401 || upstream.status === 403)) break translationAttempts;
         if (!retryable) break;
         if (attempt < 2) {
           const retryAfter = upstream?.headers.get("retry-after");
