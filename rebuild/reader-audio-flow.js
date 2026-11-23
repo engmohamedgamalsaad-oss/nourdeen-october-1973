@@ -297,6 +297,7 @@
       generate.disabled = true; translationStates[key] = "processing"; status.textContent = "Gemini يعيد ترجمة هذا المقطع وحده من النص العربي والسياق وملاحظاتك السابقة…"; status.dataset.state = "processing";
       paint(box); updateTranslationPublishButton();
       try {
+        await waitForTranslationSlot();
         var result = await audioReviewAction({ action: "translation_generate", block_index: index, force: true });
         var generatedText = String(result.translation && result.translation.translation_text || "").trim();
         if (!generatedText || !result.translation || result.translation.status !== "approved") throw new Error("لم تُحفظ ترجمة معتمدة وصالحة لهذا المقطع.");
@@ -534,7 +535,12 @@
   }
 
   /* أدوات الصوت تخص اللغة المفتوحة حاليًا داخل صفحة الحكاية، لا ملخصًا عامًا لكل اللغات. */
-  var translationBatchBusy = false, translationSingleBusy = false;
+  var translationBatchBusy = false, translationSingleBusy = false, lastTranslationRequestAt = 0;
+  async function waitForTranslationSlot() {
+    var waitMs = Math.max(0, 5000 - (Date.now() - lastTranslationRequestAt));
+    if (waitMs) await new Promise(function (resolve) { setTimeout(resolve, waitMs); });
+    lastTranslationRequestAt = Date.now();
+  }
   function setTranslationGenerateControlsDisabled(disabled) {
     document.querySelectorAll('.kh-translation-generate').forEach(function (button) { button.disabled = !!disabled; });
     var bulkButton = $('kh-translation-bulk-generate');
@@ -755,6 +761,7 @@
               translationStates[key] = 'processing';
               paintTranslationBlock(blockIndex, 'processing', 'Gemini يترجم هذا المقطع إلى ' + languageLabel + ' من المصدر العربي…', null, targetLanguage);
               try {
+                await waitForTranslationSlot();
                 var result = await audioReviewAction({
                   action: 'translation_generate',
                   language: targetLanguage,
