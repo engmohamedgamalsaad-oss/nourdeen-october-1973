@@ -145,7 +145,7 @@ test('admin preview switches the story body to the selected locale and displays 
   assert.match(preview, /renderTranslationOnPage\(index, record\.translation_text\)/);
   assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
   assert.match(preview, /site-language-change', function \(\) \{ loadTranslations\(\)\.then\(onUpdated\); \}/);
-  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261121-ar-en-audio-1/);
+  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261123-quiz-loading-1/);
 });
 
 test('a single excluded wrong-speaker clip does not invalidate the remaining manifest clips', () => {

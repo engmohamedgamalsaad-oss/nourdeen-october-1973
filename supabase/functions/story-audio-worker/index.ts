@@ -25,7 +25,7 @@ const reply = (status: number, body: Record<string, unknown>) =>
   new Response(JSON.stringify(body), { status, headers });
 
 async function sha256(bytes: Uint8Array): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const digest = await crypto.subtle.digest("SHA-256", new Uint8Array(bytes));
   return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, "0")).join("");
 }
 function decodeBase64(value: string): Uint8Array {
