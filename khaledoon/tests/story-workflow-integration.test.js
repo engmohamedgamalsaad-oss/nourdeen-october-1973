@@ -75,7 +75,7 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("u.searchParams.set('draft','1')"), 'the live story iframe must enter authenticated draft audio-review mode');
   assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js?v=20261122-four-lang-audio-1')"), 'the preview must load the shared audio review core');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js?v=20261122-four-lang-audio-1')"), 'the preview must mount the per-language audio generation and listening controls');
-  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261123-active-language-only-1')"), 'the preview must mount the current per-language translation and audio status flow');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261124-bulk-retry-preserve-1')"), 'the preview must mount the current per-language translation and audio status flow');
   assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261122-four-lang-audio-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
   assert.ok(preview.includes("if(!scriptUrl.searchParams.has('v'))"), 'preview loader must preserve the translation snapshot script cache version');
   var readerHtml = fs.readFileSync('rebuild/reader.html', 'utf8');
