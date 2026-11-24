@@ -36,7 +36,7 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', msg => { if (msg.type()==='error') errors.push(msg.text()); });
     const url = `http://127.0.0.1:${port}/assets/3d/karma/baseline_2026-11-24/browser_perf_page.html?model=${encodeURIComponent(model.url)}`;
-    await page.goto(url, { waitUntil:'domcontentloaded' });
+    await page.goto(url, { waitUntil:'domcontentloaded', timeout:90000 });
     await page.waitForFunction(() => window.__karmaLoaded === true, { timeout:90000 });
     await page.waitForTimeout(1000);
     await page.evaluate(() => window.__startPerf());
