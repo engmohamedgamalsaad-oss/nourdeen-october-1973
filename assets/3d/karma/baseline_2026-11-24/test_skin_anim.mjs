@@ -148,7 +148,7 @@ report.tests.tilt.pass = tilt.completed && tiltPeak > 0.05;
 
 report.deformation = {
   restBounds: { min: restBox.min, max: restBox.max },
-  leanBounds: { min: leanBox.min.toArray(), max: leanBox.max.toArray() },
+  leanBounds: { min: leanBox.min, max: leanBox.max },
   changed: maxSkinVertexDelta > 1e-5,
   maxSkinVertexDelta,
   changedSkinVertices
