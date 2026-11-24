@@ -99,10 +99,11 @@ const stand = await advance(controller.stand(), 0.6);
 report.tests.stand = { ...stand, state: controller.stateName };
 report.tests.stand.pass = stand.completed && controller.stateName === 'idle';
 
-let jumpRise = -Infinity;
+const jumpBase = controller.holder.position.y;
+let jumpRise = jumpBase;
 const jump = await advance(controller.jump(), 1.5, () => { jumpRise = Math.max(jumpRise, controller.holder.position.y); });
-report.tests.jump = { ...jump, risePx: jumpRise - 0 };
-report.tests.jump.pass = jump.completed && jumpRise > controller.vh / 2 + 5;
+report.tests.jump = { ...jump, risePx: jumpRise - jumpBase };
+report.tests.jump.pass = jump.completed && report.tests.jump.risePx > 5;
 
 let wavePeak = 0;
 const wave = await advance(controller.wave(2), 2.5, () => {
@@ -124,12 +125,13 @@ report.deformation = {
   changed: JSON.stringify(restBox.min) !== JSON.stringify(leanBox.min.toArray()) ||
            JSON.stringify(restBox.max) !== JSON.stringify(leanBox.max.toArray())
 };
+report.deformation.pass = report.deformation.changed;
 report.tests.skinData.pass = maxWeightDeviation < 1e-3 && invalidJointIndices === 0;
 report.tests.allSixMotionsPass = ['walkTo','leanOn','stand','jump','wave','tilt'].every((name) => report.tests[name].pass);
 const t0 = performance.now();
 for (let i = 0; i < 1200; i++) controller.update(dt);
 report.controllerUpdate1200FramesMs = +(performance.now() - t0).toFixed(2);
-report.tests.overallPass = report.tests.skinData.pass && report.tests.allSixMotionsPass;
+report.tests.overallPass = report.tests.skinData.pass && report.tests.allSixMotionsPass && report.deformation.pass;
 console.log(JSON.stringify(report, null, 2));
 const output = process.argv[3] || 'RESULT_skin_anim.json';
 fs.writeFileSync(output, JSON.stringify(report, null, 2));
