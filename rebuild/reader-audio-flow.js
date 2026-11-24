@@ -198,7 +198,7 @@
       var status = review.querySelector(".kh-translation-status");
       if (record && textarea) textarea.value = String(record.translation_text || "");
       if (status) {
-        status.textContent = message || (state === "processing" ? "Gemini يجهّز ترجمة هذا المقطع…" : state === "failed" ? "فشلت ترجمة هذا المقطع؛ يمكنك إعادة المحاولة." : "✓ النص جاهز ومعتمد تلقائيًا.");
+        status.textContent = message || (state === "processing" ? "Gemini يجهّز ترجمة هذا المقطع…" : state === "failed" ? "فشلت ترجمة هذا المقطع؛ يمكنك إعادة المحاولة." : "✓ النص جاهز للمراجعة والاعتماد.");
         status.dataset.state = state || "missing";
       }
     }
@@ -315,7 +315,7 @@
     });
     save.addEventListener("click", async function () {
       save.disabled = true;
-      try { await saveManualEdit(); status.textContent = "تم حفظ تعديلك. أُبطل الصوت القديم لهذا المقطع فقط."; }
+      try { await saveManualEdit(); status.textContent = "تم حفظ تعديلك كمسودة. اعتمد الترجمة الجماعية قبل توليد الصوت."; }
       catch (e) { status.textContent = e.message || "تعذر حفظ التعديل."; paintStatus(); }
     });
     buttons.append(generate, save);
