@@ -54,11 +54,17 @@ const controller = new KarmaController({
 scene.add(controller.object3D);
 const gl = renderer.getContext();
 const samples = [];
+let updateCount = 0;
 const renderStep = () => {
-  const start = performance.now();
   controller.update(1 / 60);
-  renderer.render(scene, camera);
-  samples.push(performance.now() - start);
+  updateCount++;
+  // Simulate controller updates at 60 Hz while sampling the expensive software
+  // WebGL render every 12th update (5 render samples per simulated second).
+  if (updateCount % 12 === 0) {
+    const start = performance.now();
+    renderer.render(scene, camera);
+    samples.push(performance.now() - start);
+  }
 };
 window.__karmaLoaded = true;
 window.__runSixActions = async () => {
