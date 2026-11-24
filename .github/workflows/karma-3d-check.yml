@@ -1,0 +1,44 @@
+name: Karma 3D rig and motion verification
+
+on:
+  pull_request:
+    paths:
+      - 'assets/3d/karma/**'
+      - '.github/workflows/karma-3d-check.yml'
+  push:
+    branches:
+      - 'feat/karma-controller-rig-hardening-2026-11-24'
+    paths:
+      - 'assets/3d/karma/**'
+      - '.github/workflows/karma-3d-check.yml'
+
+jobs:
+  rig-and-six-motions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: assets/3d/karma/baseline_2026-11-24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install the pinned Three.js test dependency
+        run: npm install --no-audit --no-fund
+      - name: Syntax-check canonical rig and controller modules
+        run: |
+          node --input-type=module --check < ../js/KarmaRig.js
+          node --input-type=module --check < ../js/KarmaController.js
+          node --input-type=module --check < KarmaRig.node-test-adapter.js
+          node --input-type=module --check < KarmaController.node-test-adapter.js
+          node --check test_skin_anim.mjs
+      - name: Run rig, skin, six-motion, deformation and timing checks on preserved baseline
+        run: node test_skin_anim.mjs karma_skinned_baseline_NOT_FINAL.glb RESULT_skin_anim.json
+      - name: Upload measured report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: karma-rig-six-motion-report
+          path: assets/3d/karma/baseline_2026-11-24/RESULT_skin_anim.json
+          if-no-files-found: warn
