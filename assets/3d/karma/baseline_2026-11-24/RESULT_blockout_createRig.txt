@@ -1,0 +1,7 @@
+{"loadedInThree":true,"meshes_tris":2184,"skinnedMeshes":0,"boneObjects":0,"animations":0,"nodes":34}
+missing bones: [ 'Head', 'Foot_L', 'Foot_R' ]
+createRig threw: Karma rig: missing bone Head
+(node:978) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///downloads/karma_stage2_test/KarmaRig.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /downloads/karma_stage2_test/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

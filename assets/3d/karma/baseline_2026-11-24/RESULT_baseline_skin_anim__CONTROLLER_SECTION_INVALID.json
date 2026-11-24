@@ -1,0 +1,52 @@
+{
+ "file": "karma_skinned_baseline.glb",
+ "bytes": 21425080,
+ "skinnedMeshes": 2,
+ "joints": 19,
+ "inverses": 19,
+ "triangles": 283229,
+ "maxWeightSumDeviation": 5.21540641784668e-8,
+ "badJointIndex": 0,
+ "createRig": "OK",
+ "bones": 19,
+ "mounts": {
+  "head": true,
+  "hair": true,
+  "placeholder": true
+ },
+ "restBox": {
+  "min": [
+   -0.309,
+   0,
+   -0.133
+  ],
+  "max": [
+   0.306,
+   0.999,
+   0.143
+  ]
+ },
+ "controller": {
+  "walkReached": false,
+  "pos": [
+   475,
+   260
+  ],
+  "jumpRisePx": 51,
+  "waveHandRaisePx": 11845,
+  "state": "lean",
+  "leanSpineZ": 0.137,
+  "leanBox": {
+   "min": [
+    -0.2,
+    0,
+    -9.9
+   ],
+   "max": [
+    74.7,
+    169.7,
+    19
+   ]
+  }
+ }
+}
