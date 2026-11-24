@@ -238,7 +238,7 @@ test('language preview offers a separate approved-audio publish action before th
 
 test('each language preview translates only its active language; Arabic prepares speech text only', () => {
   const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-flow.js'), 'utf8');
-  assert.match(source, /var activeLanguage = lang\(\)/);
+  assert.match(source, /activeLanguage = lang\(\)/, 'capture the active preview language once at the start of the bulk action');
   assert.match(source, /var batchLanguages = activeLanguage === 'ar' \? \[\] : \[activeLanguage\]/);
   assert.doesNotMatch(source, /var batchLanguages = \['en', 'fr', 'it', 'de'\]/);
   assert.match(source, /action: 'translation_generate',[\s\S]{0,100}language: targetLanguage,[\s\S]{0,60}block_index: blockIndex/);
