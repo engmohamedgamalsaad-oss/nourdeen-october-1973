@@ -162,6 +162,13 @@
       queueError = String(e && e.message || e);
     }
   }
+  // Bulk retry preserves approved translations for the exact Arabic source and speaker.
+  function isCurrentApprovedTranslation(record, sourceBlock, sourceHash) {
+    return !!record && record.status === 'approved' &&
+      record.source_arabic_hash === sourceHash &&
+      record.speaker === sourceBlock.speaker &&
+      !!String(record.translation_text || '').trim();
+  }
   async function runTranslationRounds(indices, translateOne, opts) {
     var maxRounds = opts.maxRounds, waitSeconds = opts.waitSeconds, sleep = opts.sleep, onWait = opts.onWait;
     var done = 0, skipped = 0, pending = indices.slice(), round = 0, stopped = false;
@@ -742,10 +749,7 @@
               var key = targetLanguage + ':' + blockIndex;
               var existing = translationRecords[key];
               var sourceHash = await sha256Trim(sourceBlock.text);
-              if (existing && existing.status === 'approved' &&
-                  existing.source_arabic_hash === sourceHash &&
-                  existing.speaker === sourceBlock.speaker &&
-                  String(existing.translation_text || '').trim()) {
+              if (isCurrentApprovedTranslation(existing, sourceBlock, sourceHash)) {
                 translationWorkingText[key] = String(existing.translation_text);
                 translationConfirmed[key] = true;
                 translationStates[key] = 'approved';
