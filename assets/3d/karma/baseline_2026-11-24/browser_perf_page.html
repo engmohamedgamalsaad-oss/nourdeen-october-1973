@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Karma GLB browser performance test</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./node_modules/three/build/three.module.js",
+    "three/examples/jsm/": "./node_modules/three/examples/jsm/"
+  }
+}
+</script>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#202428}
+canvas{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+<canvas id="karma"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { createRig } from './KarmaRig.node-test-adapter.js';
+import { KarmaController } from './KarmaController.node-test-adapter.js';
+
+const canvas = document.getElementById('karma');
+const width = window.innerWidth, height = window.innerHeight;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+renderer.setSize(width, height, false);
+renderer.setClearColor(0x202428, 1);
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x62606a, 1.5));
+const key = new THREE.DirectionalLight(0xffffff, 1.8);
+key.position.set(-250, 500, 800);
+scene.add(key);
+const camera = new THREE.OrthographicCamera(-width/2, width/2, height/2, -height/2, 0.1, 2500);
+camera.position.set(0, 0, 1200);
+camera.lookAt(0, 0, 0);
+const modelUrl = new URLSearchParams(location.search).get('model');
+if (!modelUrl) throw new Error('Missing ?model= URL');
+const gltf = await new GLTFLoader().loadAsync(modelUrl);
+const rig = createRig(gltf.scene);
+const rects = [
+  { id: 'a', left: width * 0.12, top: height * 0.48, width: width * 0.28, height: height * 0.22 },
+  { id: 'b', left: width * 0.60, top: height * 0.38, width: width * 0.28, height: height * 0.24 }
+];
+const controller = new KarmaController({
+  rig, getCardRects: () => rects,
+  viewport: { width, height }, characterHeightPx: Math.min(170, height * 0.23), modelHeight: 1
+});
+scene.add(controller.object3D);
+const gl = renderer.getContext();
+const samples = [];
+let last = performance.now(), sampling = false, rafCount = 0;
+function frame(now) {
+  const dt = Math.min((now - last) / 1000, 0.05);
+  last = now;
+  controller.update(dt);
+  renderer.render(scene, camera);
+  if (sampling) { samples.push(now - (now - dt * 1000)); rafCount++; }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.__karmaLoaded = true;
+window.__runSixActions = async () => {
+  const results = {};
+  const run = async (name, promise) => {
+    const start = performance.now();
+    results[name] = await promise;
+    results[name].elapsedMs = +(performance.now() - start).toFixed(2);
+  };
+  await run('walkTo', controller.walkTo('b', { side: 'top' }));
+  await run('leanOn', controller.leanOn('a', { side: 'right' }));
+  await run('stand', controller.stand());
+  await run('jump', controller.jump());
+  await run('wave', controller.wave(2));
+  await run('tilt', controller.tilt('left', 1.4));
+  return results;
+};
+window.__startPerf = () => { samples.length = 0; rafCount = 0; sampling = true; };
+window.__stopPerf = () => {
+  sampling = false;
+  const sorted = [...samples].sort((a,b) => a-b);
+  const mean = sorted.length ? sorted.reduce((a,b)=>a+b,0)/sorted.length : 0;
+  const p95 = sorted.length ? sorted[Math.min(sorted.length-1, Math.floor(sorted.length*0.95))] : 0;
+  const glInfo = {
+    maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+    maxRenderbufferSize: gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),
+    renderer: gl.getParameter(gl.RENDERER),
+    vendor: gl.getParameter(gl.VENDOR)
+  };
+  return {
+    frameSamples: sorted.length,
+    fps: mean > 0 ? +(1000/mean).toFixed(2) : 0,
+    meanFrameMs: +mean.toFixed(3),
+    p95FrameMs: +p95.toFixed(3),
+    drawCalls: renderer.info.render.calls,
+    triangles: renderer.info.render.triangles,
+    geometries: renderer.info.memory.geometries,
+    textures: renderer.info.memory.textures,
+    pixelRatio: renderer.getPixelRatio(),
+    viewport: { width, height },
+    glInfo
+  };
+};
+</script>
+</body>
+</html>
