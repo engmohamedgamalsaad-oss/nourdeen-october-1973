@@ -577,7 +577,7 @@
 
   async function translationApprovalStatus(language) {
     var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
-    var out = { total: 0, approved: 0, ready: 0, missing: 0, canApprove: false };
+    var out = { total: 0, approved: 0, ready: 0, missing: 0, allCurrent: false, canApprove: false };
     if (!st || language === 'ar') return out;
     for (var i = 0; i < blocks.length; i++) {
       var source = blocks[i];
@@ -590,7 +590,8 @@
       else if (record.status === 'approved') out.approved++;
       else out.ready++;
     }
-    out.canApprove = out.total > 0 && out.missing === 0 && out.ready > 0;
+    out.allCurrent = out.total > 0 && out.missing === 0;
+    out.canApprove = out.allCurrent && out.ready > 0;
     return out;
   }
   async function approveAllTranslations(button) {
@@ -604,7 +605,7 @@
     try {
       var latest = await audioReviewAction({ action: 'review_get' });
       translationRecords = latest.audio_review && latest.audio_review.translations || {};
-      var pending = [];
+      var pending = [], alreadyApproved = 0;
       for (var i = 0; i < blocks.length; i++) {
         var source = blocks[i];
         if (!source || !['karma', 'narrator'].includes(source.speaker) || !String(source.text || '').trim()) continue;
@@ -612,10 +613,20 @@
         if (!record || !String(record.translation_text || '').trim() || record.speaker !== source.speaker || record.source_arabic_hash !== hash || !['draft', 'approved'].includes(record.status)) {
           throw new Error('الترجمة غير مكتملة أو قديمة في المقطع ' + (i + 1) + '. أعد ترجمة هذا المقطع أولًا.');
         }
+        translationWorkingText[key] = String(record.translation_text);
+        translationConfirmed[key] = true;
         if (record.status === 'draft') pending.push({ index: i, key: key, text: record.translation_text, hash: hash });
-        else { translationWorkingText[key] = record.translation_text; translationConfirmed[key] = true; translationStates[key] = 'approved'; }
+        else {
+          alreadyApproved++;
+          translationStates[key] = 'approved';
+          renderTranslationOnPage(i, record.translation_text);
+        }
       }
-      if (!pending.length) throw new Error('كل الترجمات معتمدة بالفعل؛ لا يوجد ما يحتاج إلى اعتماد.');
+      if (!pending.length) {
+        if (!alreadyApproved) throw new Error('لا توجد ترجمات مكتملة يمكن اعتمادها.');
+        if (status) status.textContent = 'كل ترجمات ' + L.toUpperCase() + ' معتمدة بالفعل. لم يتم إرسال أي طلب جديد.';
+        return;
+      }
       for (var p = 0; p < pending.length; p++) {
         var item = pending[p];
         var saved = await audioReviewAction({ action: 'translation_save', language: L, block_index: item.index, decision: 'approved', translation_text: item.text, source_arabic_hash: item.hash });
@@ -666,12 +677,27 @@
     try {
       var reviewReady = api.canReviewLanguage(L) === true;
       var translationState = await translationApprovalStatus(L);
+      if (bulkTranslate && L !== 'ar') {
+        bulkTranslate.disabled = !token() || translationBatchBusy || translationState.allCurrent;
+        bulkTranslate.title = translationState.allCurrent
+          ? 'كل الترجمات موجودة ومطابقة للمصدر؛ لن نعيد إرسالها إلى Gemini.'
+          : 'يعالج المقاطع الناقصة أو القديمة فقط، ويترك المقاطع الناجحة كما هي.';
+      }
       reviewButton.disabled = !bulkLanguage || (translationState.ready + translationState.approved === 0);
       if (audioReviewButton) audioReviewButton.disabled = !reviewReady;
       if (bulkTranslationApprove) bulkTranslationApprove.disabled = !token() || translationBatchBusy || !translationState.canApprove;
       if (bulkLanguage) {
         var s = api.languageBulkStatus(L);
-        if (bulkGenerate) bulkGenerate.disabled = !token() || audioBatchBusy || s.total === 0 || s.accepted === s.total;
+        var audioGenerationInFlight = s.pending + s.processing + s.verifying > 0;
+        var audioGenerationComplete = s.total > 0 && s.ready + s.accepted === s.total;
+        if (bulkGenerate) {
+          bulkGenerate.disabled = !token() || audioBatchBusy || s.total === 0 || audioGenerationInFlight || audioGenerationComplete;
+          bulkGenerate.title = audioGenerationComplete
+            ? 'تم توليد الصوت لكل المقاطع؛ لن نكرر التوليد.'
+            : audioGenerationInFlight
+              ? 'هناك مقاطع قيد التوليد بالفعل؛ انتظر اكتمالها.'
+              : 'يعيد إرسال المقاطع التي ينقصها الصوت أو فشل توليدها فقط.';
+        }
         if (bulkApprove) bulkApprove.disabled = !token() || audioBatchBusy || !s.canApprove;
         if (!audioBatchBusy && !audioBatchNote[L]) {
           status.textContent = 'الصوت — ' + s.total + ' مقطع: معتمد ' + s.accepted + ' · جاهز ' + s.ready + ' · في الطابور ' + s.pending +
