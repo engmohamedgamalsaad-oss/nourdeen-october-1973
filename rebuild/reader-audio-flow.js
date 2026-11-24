@@ -742,15 +742,23 @@
               var key = targetLanguage + ':' + blockIndex;
               var existing = translationRecords[key];
               var sourceHash = await sha256Trim(sourceBlock.text);
-              if (existing && existing.status === 'approved' &&
-                  existing.source_arabic_hash === sourceHash &&
-                  existing.speaker === sourceBlock.speaker &&
-                  String(existing.translation_text || '').trim()) {
+              var hasCurrentApprovedTranslation = !!(existing &&
+                existing.status === 'approved' &&
+                existing.source_arabic_hash === sourceHash &&
+                existing.speaker === sourceBlock.speaker &&
+                String(existing.translation_text || '').trim());
+              if (hasCurrentApprovedTranslation) {
+                // Preserve and restore successful translations without another Gemini request.
                 translationWorkingText[key] = String(existing.translation_text);
                 translationConfirmed[key] = true;
                 translationStates[key] = 'approved';
+                renderTranslationOnPage(blockIndex, translationWorkingText[key]);
+                paintTranslationBlock(blockIndex, 'approved',
+                  '✓ ترجمة محفوظة ومطابقة للمصدر — تم تخطيها دون إرسال طلب جديد.',
+                  existing, targetLanguage);
                 skippedByLanguage[targetLanguage]++;
               } else {
+                // Only missing, failed, draft, or source-stale translations are retried.
                 languageTodo.push(blockIndex);
               }
             }
