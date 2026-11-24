@@ -22,9 +22,17 @@ export function createRig(gltfScene) {
   // A matching node name is not enough: every controller bone must be a real
   // joint in at least one skin used by the character.
   const skeletons = skinned.map((mesh) => new Set(mesh.skeleton.bones));
-  const missingJoints = BONES.filter((name) => !skeletons.some((set) => set.has(bones[name])));
-  if (missingJoints.length) {
-    throw new Error('Karma rig: named nodes are not skin joints: ' + missingJoints.join(', '));
+  const nonBones = BONES.filter((name) => bones[name].isBone !== true);
+  if (nonBones.length) {
+    throw new Error('Karma rig: named joints are not THREE.Bone nodes: ' + nonBones.join(', '));
+  }
+  const fullRigSkins = skinned.filter((mesh) => BONES.every((name) => mesh.skeleton.bones.includes(bones[name])));
+  if (!fullRigSkins.length) {
+    const missingJoints = BONES.filter((name) => !skeletons.some((set) => set.has(bones[name])));
+    throw new Error(
+      'Karma rig: no single SkinnedMesh skeleton contains all 19 controller joints' +
+      (missingJoints.length ? '; absent from every skin: ' + missingJoints.join(', ') : '')
+    );
   }
 
   const headMount = gltfScene.getObjectByName('HeadMount');
@@ -60,6 +68,9 @@ export function attachHead(rig, headObject, { hair = null } = {}) {
   }
   if (!rig.headMount || (hair && !rig.hairMount)) {
     throw new Error('Karma rig: required head/hair mount is missing');
+  }
+  if (hair && hair.isObject3D !== true) {
+    throw new TypeError('Karma rig: hair must be a THREE.Object3D');
   }
   if (rig.headPlaceholder) rig.headPlaceholder.visible = false;
   rig.headMount.add(headObject);
