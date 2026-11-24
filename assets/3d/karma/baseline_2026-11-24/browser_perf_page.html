@@ -75,7 +75,10 @@ window.__runSixActions = async () => {
   };
   await run('walkTo', controller.walkTo('b', { side: 'top' }));
   await run('leanOn', controller.leanOn('a', { side: 'right' }));
+  await new Promise(resolve => setTimeout(resolve, 400));
+  results.leanOn.state = controller.stateName;
   await run('stand', controller.stand());
+  results.stand.state = controller.stateName;
   await run('jump', controller.jump());
   await run('wave', controller.wave(2));
   await run('tilt', controller.tilt('left', 1.4));
