@@ -146,7 +146,7 @@ test('admin preview switches the story body to the selected locale and displays 
   assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
   assert.match(preview, /site-language-change', function \(\) \{ loadTranslations\(\)\.then\(onUpdated\); \}/);
   assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261123-quiz-loading-1/);
-  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader-audio-flow\.js\?v=20261123-active-language-only-1/);
+  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader-audio-flow\.js\?v=20261124-bulk-skip-approved-1/);
 });
 
 test('a single excluded wrong-speaker clip does not invalidate the remaining manifest clips', () => {
@@ -247,7 +247,11 @@ test('each language preview translates only its active language; Arabic prepares
   assert.match(source, /ترجمة مقاطع صفحة ' \+ labels\[activeLanguage\] \+ ' فقط/);
   assert.match(source, /لم تبدأ أي ترجمة للغات أخرى/);
   assert.match(source, /var sourceBlock = blocks\[blockIndex\]/);
-  assert.match(source, /existing\.source_arabic_hash === sourceHash/);
+  assert.match(source, /function isCurrentApprovedTranslation\(record, sourceBlock, sourceHash\)/);
+  assert.match(source, /if \(isCurrentApprovedTranslation\(existing, sourceBlock, sourceHash\)\)/);
+  assert.match(source, /languageTodo\.push\(blockIndex\)/);
+  assert.match(source, /skippedByLanguage\[targetLanguage\]\+\+/);
+  assert.match(source, /force: !!\(translationRecords\[key\] && translationRecords\[key\]\.status === 'approved'\)/);
   assert.match(source, /force: !!\(translationRecords\[key\] && translationRecords\[key\]\.status === 'approved'\)/);
   assert.match(source, /translationWorkingText\[key\] = String\(existing\.translation_text\)/);
   assert.match(assets, /resolveStoryBlock\(section, slug, "ar", index, body\.story_snapshot\)/);
