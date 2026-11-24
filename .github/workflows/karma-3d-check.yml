@@ -33,12 +33,16 @@ jobs:
           node --input-type=module --check < KarmaRig.node-test-adapter.js
           node --input-type=module --check < KarmaController.node-test-adapter.js
           node --check test_skin_anim.mjs
-      - name: Run rig, skin, six-motion, deformation and timing checks on preserved baseline
-        run: node test_skin_anim.mjs karma_skinned_baseline_NOT_FINAL.glb RESULT_skin_anim.json
-      - name: Upload measured report
+      - name: Run rig and six-motion checks on preserved baseline
+        run: node test_skin_anim.mjs karma_skinned_baseline_NOT_FINAL.glb RESULT_baseline.json
+      - name: Compare the independent weight-ramp experiment
+        run: node test_skin_anim.mjs ../rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb RESULT_weights_v2.json
+      - name: Upload measured baseline and experiment reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: karma-rig-six-motion-report
-          path: assets/3d/karma/baseline_2026-11-24/RESULT_skin_anim.json
+          name: karma-rig-six-motion-reports
+          path: |
+            assets/3d/karma/baseline_2026-11-24/RESULT_baseline.json
+            assets/3d/karma/baseline_2026-11-24/RESULT_weights_v2.json
           if-no-files-found: warn
