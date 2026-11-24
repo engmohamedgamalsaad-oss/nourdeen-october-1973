@@ -75,14 +75,14 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("u.searchParams.set('draft','1')"), 'the live story iframe must enter authenticated draft audio-review mode');
   assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js?v=20261122-four-lang-audio-1')"), 'the preview must load the shared audio review core');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js?v=20261122-four-lang-audio-1')"), 'the preview must mount the per-language audio generation and listening controls');
-  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261124-bulk-retry-preserve-1')"), 'the preview must mount the current per-language translation and audio status flow');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js?v=20261124-button-state-fix-1')"), 'the preview must mount the current per-language translation and audio status flow');
   assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261122-four-lang-audio-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
   assert.ok(preview.includes("if(!scriptUrl.searchParams.has('v'))"), 'preview loader must preserve the translation snapshot script cache version');
   var readerHtml = fs.readFileSync('rebuild/reader.html', 'utf8');
   assert.ok(readerHtml.includes('reader-audio-review.js?v=20261122-four-lang-audio-1'), 'reader must load the current shared audio review core');
   var audioFlow = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
   assert.ok(audioFlow.includes('validateTranslationAlignment') && audioFlow.includes('kh-language-audio-generate-all') && audioFlow.includes('generateAll.hidden = true'), 'non-Arabic audio generation is bulk-driven per language, hidden for Arabic, and the server blocks blocks whose Arabic source is stale or unverified');
-  assert.ok(audioFlow.includes("translationRecords[translationKey]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment must have a current approved translation (default-approved after Gemini) before audio generation');
+  assert.ok(audioFlow.includes("translationRecords[translationKey]") && audioFlow.includes("currentTranslation.status !== 'approved'"), 'each translated segment must have a current explicitly approved translation (Gemini saves drafts pending owner approval) before audio generation');
   assert.ok(audioFlow.includes('translationWorkingText[key]') && audioFlow.includes('async function restoreSavedTranslations()') && audioFlow.includes('record.source_arabic_hash !== hash || record.speaker !== source.speaker') && !audioFlow.includes('textarea.value = currentBlock.text'), 'translation editor must restore only the current review record, not preload old published package text');
   assert.ok(audioFlow.includes("localStorage.setItem('kh-text-publish-language', language)"), 'preview must remember the selected language for the admin text-only PR');
   assert.ok(audioFlow.includes("type: 'KH_TEXT_LANGUAGE_PUBLISH'") && audioFlow.includes("context.submission_id"), 'preview must hand the selected language and submission ID to its opener');
@@ -90,7 +90,7 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(audioFlow.includes('لم يُنشر بعد') && audioFlow.includes('isLanguageAudioPublished') && audioFlow.includes('audioPending.hidden = audioPublished'), 'each translated-language preview must show the text-only audio readiness notice');
   assert.ok(!audioFlow.includes("if (!rec.panels.length && (L !== 'ar' && L !== 'en')) return;"), 'all translated-language blocks must retain their four workflow steps even before audio panels exist');
   assert.ok(!admin.includes('popup.opener=null;'), 'admin preview must retain its opener so the text-only publish request reaches the matching submission');
-  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261122-four-lang-audio-1') && readerHtml.includes('reader-audio-flow.js?v=20261123-active-language-only-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
+  assert.ok(readerHtml.includes('reader-audio-review.js?v=20261122-four-lang-audio-1') && readerHtml.includes('reader-audio-flow.js?v=20261124-button-state-fix-1'), 'the story reader must load the current audio-review and Arabic-source translation workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
   assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
   assert.ok(!preview.includes('Khaledoon_VoiceTut_Colab_Worker.ipynb'), 'the obsolete single-clip worker link must not remain');
@@ -1060,12 +1060,12 @@ test('unified publisher requires an approved canonical package before creating a
 });
 
 
-test('translation preview starts blank and blocks publishing until each language segment is freshly prepared', function () {
+test('translation preview restores only source-matching saved translations and requires explicit approval before publishing', function () {
   var reader = fs.readFileSync('rebuild/reader-audio-flow.js', 'utf8');
-  assert.ok(reader.includes('textarea.value = Object.prototype.hasOwnProperty.call(translationWorkingText, key) ? translationWorkingText[key] : "";'), 'saved translation text must not be injected when a language preview opens');
-  assert.ok(reader.includes('translationWorkingText = Object.create(null);'), 'each new preview session must start with empty working translations');
-  assert.ok(reader.includes('translationConfirmed[key] === true && !!String(translationWorkingText[key] || \'\').trim()'), 'old approved records alone must not enable language publishing');
-  assert.ok(reader.includes('توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة»'), 'the UI must distinguish old saved translations from freshly prepared preview text');
+  assert.ok(reader.includes('async function restoreSavedTranslations()'), 'saved translation records must be restored on preview load');
+  assert.ok(reader.includes('record.source_arabic_hash !== hash || record.speaker !== source.speaker'), 'saved translations must be ignored when the Arabic source or speaker changed');
+  assert.ok(reader.includes('translationWorkingText[key] = record.translation_text;') && reader.includes('renderTranslationOnPage(index, record.translation_text);'), 'current saved translations must be visible in the preview');
+  assert.ok(reader.includes("record.status === 'approved' && translationStates[key] !== 'processing'"), 'a saved draft must not unlock text publishing before explicit approval');
 });
 
 
