@@ -266,7 +266,7 @@ report.mobileProfile = {
 };
 report.tests.rigAndMotionPass =
   report.tests.skinData.pass && report.tests.allSixMotionsPass &&
-  report.tests.deformation.pass && report.tests.deformationSweepPass && report.tests.nonIdentityRestRotation.pass;
+  report.deformation.pass && report.tests.deformationSweepPass && report.tests.nonIdentityRestRotation.pass;
 report.tests.finalQualityReady = report.tests.rigAndMotionPass && report.tests.deformationQualityPass;
 report.status = report.tests.finalQualityReady ? 'QUALITY_THRESHOLDS_PASS' :
   report.tests.rigAndMotionPass ? 'MECHANICS_PASS_DEFORMATION_REVIEW_REQUIRED' : 'TEST_FAILURE';
