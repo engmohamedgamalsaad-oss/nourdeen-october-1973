@@ -34,10 +34,18 @@ try {
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
+    page.on('requestfailed', req => errors.push(req.url() + ': ' + (req.failure()?.errorText || 'request failed')));
     page.on('console', msg => { if (msg.type()==='error') errors.push(msg.text()); });
+    await page.addInitScript(() => {
+      window.__bootError = null;
+      window.addEventListener('error', e => { window.__bootError = e.message || String(e.error); });
+      window.addEventListener('unhandledrejection', e => { window.__bootError = String(e.reason); });
+    });
     const url = `http://127.0.0.1:${port}/assets/3d/karma/baseline_2026-11-24/browser_perf_page.html?model=${encodeURIComponent(model.url)}`;
     await page.goto(url, { waitUntil:'domcontentloaded', timeout:90000 });
-    await page.waitForFunction(() => window.__karmaLoaded === true, { timeout:90000 });
+    await page.waitForFunction(() => window.__karmaLoaded === true || !!window.__bootError, { timeout:90000 });
+    const bootError = await page.evaluate(() => window.__bootError);
+    if (bootError) throw new Error('Karma browser boot failed: ' + bootError);
     await page.waitForTimeout(1000);
     await page.evaluate(() => window.__startPerf());
     const actions = await page.evaluate(() => window.__runSixActions());
