@@ -1,0 +1,221 @@
+{
+ "file": "karma_skinned_baseline.glb",
+ "results": {
+  "walkTo": {
+   "resolved": {
+    "completed": true
+   },
+   "pos": [
+    475,
+    260
+   ],
+   "target": [
+    475,
+    260
+   ],
+   "state": "idle"
+  },
+  "jump": {
+   "resolved": {
+    "completed": true
+   },
+   "risePx": 51
+  },
+  "wave": {
+   "resolved": {
+    "completed": true
+   },
+   "handRiseModelUnits": 69.063,
+   "handRisePx": 11740.6
+  },
+  "tilt": {
+   "resolved": {
+    "completed": true
+   },
+   "maxNeckHeadRotZ": 0.218
+  },
+  "leanOn": {
+   "resolved": {
+    "completed": true
+   },
+   "state": "lean",
+   "pos": [
+    267,
+    500
+   ],
+   "spineRotZ": 0.135
+  },
+  "stand": {
+   "state": "idle",
+   "spineRotZ": 0
+  }
+ },
+ "scale": 170,
+ "deform": {
+  "Shoulder_L": {
+   "bone": "UpperArm_L",
+   "euler": [
+    0,
+    0,
+    1.2
+   ],
+   "movedVerts": 20694,
+   "maxDisp": 0.311,
+   "nan": 0,
+   "maxEdgeStretch": 12.5,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.144,
+   "pctOver4x": 0.048
+  },
+  "Shoulder_R": {
+   "bone": "UpperArm_R",
+   "euler": [
+    0,
+    0,
+    -1.2
+   ],
+   "movedVerts": 21114,
+   "maxDisp": 0.311,
+   "nan": 0,
+   "maxEdgeStretch": 15.83,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.157,
+   "pctOver4x": 0.05
+  },
+  "Elbow_L": {
+   "bone": "Forearm_L",
+   "euler": [
+    -1.6,
+    0,
+    0
+   ],
+   "movedVerts": 11296,
+   "maxDisp": 0.165,
+   "nan": 0,
+   "maxEdgeStretch": 2.9,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.001,
+   "pctOver4x": 0
+  },
+  "Elbow_R": {
+   "bone": "Forearm_R",
+   "euler": [
+    -1.6,
+    0,
+    0
+   ],
+   "movedVerts": 11121,
+   "maxDisp": 0.163,
+   "nan": 0,
+   "maxEdgeStretch": 2.58,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.002,
+   "pctOver4x": 0
+  },
+  "Hip_L": {
+   "bone": "UpperLeg_L",
+   "euler": [
+    -1,
+    0,
+    0
+   ],
+   "movedVerts": 17073,
+   "maxDisp": 0.409,
+   "nan": 0,
+   "maxEdgeStretch": 10.72,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.112,
+   "pctOver4x": 0.033
+  },
+  "Hip_R": {
+   "bone": "UpperLeg_R",
+   "euler": [
+    -1,
+    0,
+    0
+   ],
+   "movedVerts": 16727,
+   "maxDisp": 0.409,
+   "nan": 0,
+   "maxEdgeStretch": 8.95,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.102,
+   "pctOver4x": 0.034
+  },
+  "Knee_L": {
+   "bone": "LowerLeg_L",
+   "euler": [
+    1.2,
+    0,
+    0
+   ],
+   "movedVerts": 11333,
+   "maxDisp": 0.285,
+   "nan": 0,
+   "maxEdgeStretch": 4.79,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.018,
+   "pctOver4x": 0.001
+  },
+  "Knee_R": {
+   "bone": "LowerLeg_R",
+   "euler": [
+    1.2,
+    0,
+    0
+   ],
+   "movedVerts": 10578,
+   "maxDisp": 0.285,
+   "nan": 0,
+   "maxEdgeStretch": 4.38,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.013,
+   "pctOver4x": 0.001
+  },
+  "Neck": {
+   "bone": "Neck",
+   "euler": [
+    0.5,
+    0.6,
+    0.4
+   ],
+   "movedVerts": 260229,
+   "maxDisp": 0.356,
+   "nan": 0,
+   "maxEdgeStretch": 16.13,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.512,
+   "pctOver4x": 0.058
+  },
+  "Head": {
+   "bone": "Head",
+   "euler": [
+    0.4,
+    0.6,
+    0.3
+   ],
+   "movedVerts": 255334,
+   "maxDisp": 0.244,
+   "nan": 0,
+   "maxEdgeStretch": 15.5,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.704,
+   "pctOver4x": 0.029
+  },
+  "Spine": {
+   "bone": "Spine",
+   "euler": [
+    0.3,
+    0,
+    0.4
+   ],
+   "movedVerts": 297159,
+   "maxDisp": 0.267,
+   "nan": 0,
+   "maxEdgeStretch": 5.55,
+   "edgesSampled": 121380,
+   "pctOver2x": 0.028,
+   "pctOver4x": 0.001
+  }
+ }
+}
