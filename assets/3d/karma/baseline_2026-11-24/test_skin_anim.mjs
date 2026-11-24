@@ -73,7 +73,9 @@ const advance = async (promise, seconds, observe = () => {}) => {
   return result;
 };
 const angle = (name) => rig.bones[name].quaternion.angleTo(controller.restQuaternions[name]);
-const snapshotSkin = () => skinned.map((mesh) => {
+const snapshotSkin = () => {
+  rig.scene.updateMatrixWorld(true);
+  return skinned.map((mesh) => {
   mesh.skeleton.update();
   const attr = mesh.geometry.getAttribute('position');
   const points = new Float32Array(attr.count * 3);
@@ -83,7 +85,8 @@ const snapshotSkin = () => skinned.map((mesh) => {
     points.set([p.x, p.y, p.z], i * 3);
   }
   return points;
-});
+  });
+};
 const boundsOf = (snapshots) => {
   const box = new THREE.Box3();
   for (const points of snapshots) {
