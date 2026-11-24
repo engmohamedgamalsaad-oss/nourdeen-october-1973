@@ -5,7 +5,7 @@ globalThis.createImageBitmap = async () => ({ width: 1, height: 1, close() {} })
 
 const THREE = await import('three');
 const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
-const { createRig } = await import('./KarmaRig.node-test-adapter.js');
+const { createRig, attachHead } = await import('./KarmaRig.node-test-adapter.js');
 const { KarmaController } = await import('./KarmaController.node-test-adapter.js');
 
 const file = process.argv[2];
