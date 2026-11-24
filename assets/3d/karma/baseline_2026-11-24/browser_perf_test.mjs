@@ -23,6 +23,20 @@ const models = [
   { name:'baseline', url:'/assets/3d/karma/baseline_2026-11-24/karma_skinned_baseline_NOT_FINAL.glb' },
   { name:'weights_v2_experiment', url:'/assets/3d/karma/rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb' }
 ];
+const karmaRoot = path.join(repoRoot, 'assets/3d/karma');
+const walk = (dir) => fs.readdirSync(dir, { withFileTypes:true }).flatMap(entry => {
+  const full = path.join(dir, entry.name);
+  if (entry.isDirectory()) return entry.name === 'archive_2026-11-24' ? [] : walk(full);
+  return entry.isFile() && entry.name.toLowerCase().endsWith('.glb') && !entry.name.toLowerCase().includes('not_final') ? [full] : [];
+});
+const known = new Set(models.map(model => path.resolve(repoRoot, '.' + model.url)));
+for (const full of walk(karmaRoot)) {
+  if (known.has(path.resolve(full))) continue;
+  models.push({
+    name:'final_' + path.basename(full, '.glb').replace(/[^a-z0-9_-]/gi, '_'),
+    url:'/' + path.relative(repoRoot, full).split(path.sep).join('/')
+  });
+}
 const viewports = [
   { name:'desktop', width:1280, height:800 },
   { name:'mobile', width:390, height:844 }
