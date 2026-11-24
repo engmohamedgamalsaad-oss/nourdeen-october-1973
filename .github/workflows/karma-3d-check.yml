@@ -27,7 +27,7 @@ jobs:
       - name: Install the pinned Three.js and browser test dependencies
         run: |
           npm install --no-audit --no-fund
-          npm install --no-save playwright --no-audit --no-fund
+          npm install --no-save playwright @gltf-transform/cli --no-audit --no-fund
           npx playwright install chromium
       - name: Syntax-check canonical rig and controller modules
         run: |
@@ -46,6 +46,17 @@ jobs:
             node test_skin_anim.mjs "$EXPERIMENT" RESULT_weights_v2.json
           else
             echo "Weight-ramp experiment is not present in this PR merge snapshot; comparison skipped."
+          fi
+      - name: Build a non-destructive mobile optimization candidate
+        run: |
+          EXPERIMENT=../rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb
+          if [ -f "$EXPERIMENT" ]; then
+            npx gltf-transform optimize "$EXPERIMENT" karma_weights_v2_optimized_NOT_FINAL.glb \
+              --instance false --palette false --simplify true --simplify-ratio 0.6 \
+              --simplify-error 0.001 --compress false --texture-compress webp
+            node test_skin_anim.mjs karma_weights_v2_optimized_NOT_FINAL.glb RESULT_optimized.json
+          else
+            echo "No weight-ramp experiment; optimization candidate skipped."
           fi
       - name: Strictly verify any final Karma GLB delivered on the branch
         run: |
