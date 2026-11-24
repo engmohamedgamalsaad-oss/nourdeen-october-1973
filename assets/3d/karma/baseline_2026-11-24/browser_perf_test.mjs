@@ -42,7 +42,8 @@ try {
       window.addEventListener('unhandledrejection', e => { window.__bootError = String(e.reason); });
     });
     const url = `http://127.0.0.1:${port}/assets/3d/karma/baseline_2026-11-24/browser_perf_page.html?model=${encodeURIComponent(model.url)}`;
-    await page.goto(url, { waitUntil:'domcontentloaded', timeout:90000 });
+    const response = await page.goto(url, { waitUntil:'domcontentloaded', timeout:90000 });
+    if (!response || !response.ok()) throw new Error('Preview page HTTP failure: ' + (response?.status() ?? 'no response') + ' ' + url);
     await page.waitForFunction(() => window.__karmaLoaded === true || !!window.__bootError, { timeout:90000 });
     const bootError = await page.evaluate(() => window.__bootError);
     if (bootError) throw new Error('Karma browser boot failed: ' + bootError);
