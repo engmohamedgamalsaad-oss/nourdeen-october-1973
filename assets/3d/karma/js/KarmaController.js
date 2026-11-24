@@ -6,8 +6,9 @@
 import * as THREE from 'three';
 
 const D2R = Math.PI / 180;
-const E = new THREE.Euler(); const Q = new THREE.Quaternion();
-const IDENTITY = new THREE.Quaternion();
+const E = new THREE.Euler();
+const Q = new THREE.Quaternion();
+const DELTA = new THREE.Quaternion();
 
 export class KarmaController {
   /**
@@ -20,6 +21,11 @@ export class KarmaController {
    */
   constructor({ rig, getCardRects, viewport, characterHeightPx = 170, modelHeight = 1 }) {
     this.rig = rig; this.getCardRects = getCardRects;
+    // Cache authored local rest rotations. Animation targets are local deltas,
+    // not absolute rotations; this keeps non-identity exported rigs intact.
+    this.restQuaternions = Object.fromEntries(
+      Object.entries(rig.bones).map(([name, bone]) => [name, bone.quaternion.clone()])
+    );
     this.holder = new THREE.Group(); this.holder.name = 'KarmaHolder'; this.holder.add(rig.scene);
     this.modelHeight = modelHeight; this.charH = characterHeightPx;
     this.vw = viewport.width; this.vh = viewport.height;
@@ -117,6 +123,9 @@ export class KarmaController {
     // facing + pose blending
     this.facing += (faceTo - this.facing) * (1 - Math.exp(-9 * dt));
     this._blend(T, dt);
+    // stand() is a cancellable navigation command. Resolve it after the
+    // neutral pose has had time to blend in instead of leaving its Promise pending.
+    if (s.name === 'idle' && s.resolve && this.t >= 0.25) this._finish(s, true);
     this._syncHolder();
   }
 
@@ -203,8 +212,16 @@ export class KarmaController {
   _blend(T, dt) {
     const k = 1 - Math.exp(-16 * dt);
     for (const name in this.rig.bones) {
-      const bone = this.rig.bones[name]; const t = T[name];
-      if (t) { E.set(t[0], t[1], t[2], 'XYZ'); Q.setFromEuler(E); } else Q.copy(IDENTITY);
+      const bone = this.rig.bones[name];
+      const rest = this.restQuaternions[name] || bone.quaternion;
+      const t = T[name];
+      if (t) {
+        E.set(t[0], t[1], t[2], 'XYZ');
+        DELTA.setFromEuler(E);
+        Q.copy(rest).multiply(DELTA);
+      } else {
+        Q.copy(rest);
+      }
       bone.quaternion.slerp(Q, k);
     }
   }
