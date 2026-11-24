@@ -38,11 +38,10 @@ try {
     const url = `http://127.0.0.1:${port}/assets/3d/karma/baseline_2026-11-24/browser_perf_page.html?model=${encodeURIComponent(model.url)}`;
     await page.goto(url, { waitUntil:'domcontentloaded' });
     await page.waitForFunction(() => window.__karmaLoaded === true, { timeout:90000 });
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(1000);
+    await page.evaluate(() => window.__startPerf());
     const actions = await page.evaluate(() => window.__runSixActions());
     await page.waitForTimeout(500);
-    await page.evaluate(() => window.__startPerf());
-    await page.waitForTimeout(4000);
     const perf = await page.evaluate(() => window.__stopPerf());
     report.results.push({ model:model.name, viewport:viewport.name, actions, perf, errors });
     await context.close();
