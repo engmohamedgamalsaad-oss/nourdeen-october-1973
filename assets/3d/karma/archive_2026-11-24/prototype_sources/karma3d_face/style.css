@@ -1,0 +1,28 @@
+html, body, #root { margin: 0; min-height: 100%; }
+body { background: var(--ds-page); }
+.file-nav { display: flex; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid var(--ds-hairline); }
+.file-nav a { padding: 10px 0; color: var(--ds-ink-2); text-decoration: none; }
+.file-nav a[aria-current="page"] { color: var(--ds-ink); box-shadow: inset 0 -1px 0 var(--ds-ink); }
+@media (max-width: 600px) { .file-nav a { display: inline-flex; align-items: center; min-height: 44px; } }
+.kp-stage { position: relative; height: 520px; overflow: hidden; border-radius: 16px; background: linear-gradient(180deg, #dff0ff 0%, #f6efe0 100%); outline: none; direction: ltr; touch-action: manipulation; }
+.kp-stage:focus-visible { box-shadow: 0 0 0 3px var(--ds-ink); }
+.kp-row { position: absolute; left: 24px; right: 24px; bottom: 30px; display: flex; align-items: flex-end; justify-content: space-between; gap: 64px; direction: rtl; }
+.kp-card { flex: 1 1 0; min-width: 0; box-sizing: border-box; background: #fff; border: 1px solid rgba(0,0,0,.12); border-radius: 12px 12px 0 0; padding: 10px 8px; text-align: center; overflow: hidden; transition: height .5s ease; box-shadow: 0 2px 0 rgba(0,0,0,.06); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.kp-initial { width: 34px; height: 34px; border-radius: 50%; background: #ffd21f; color: #2a1812; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none; }
+.kp-name { font-weight: 700; font-size: 14px; line-height: 1.25; color: #1b2a3a; }
+.kp-field { font-size: 12px; color: #55606b; line-height: 1.25; }
+.kp-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; background: #c9b79a; border-top: 3px solid #a99677; }
+.kp-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.kp-state { position: absolute; top: 10px; left: 12px; font-size: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.8); color: #1b2a3a; direction: rtl; }
+.kp-nowebgl { position: absolute; inset: 40% 10% auto; text-align: center; direction: rtl; }
+.kp-controls, .kp-pad { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; direction: rtl; }
+.kp-pad .file-button { flex: 1 1 0; min-height: 52px; font-size: 18px; touch-action: none; user-select: none; }
+.kp-hint { direction: rtl; margin-top: 12px; color: var(--ds-ink-2); }
+@media (max-width: 600px) {
+  .kp-row { left: 12px; right: 12px; gap: 44px; }
+  .kp-c3 { display: none; }
+  .kp-card { padding: 8px 4px; }
+  .kp-name { font-size: 11px; }
+  .kp-field { display: none; }
+  .kp-initial { width: 26px; height: 26px; font-size: 13px; }
+}

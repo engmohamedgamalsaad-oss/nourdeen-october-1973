@@ -1,0 +1,94 @@
+// @ts-ignore vendored three.js r160 (local copy, no remote code)
+import * as THREE from './vendor/three.module.min.js';
+import faceUrl from './faceData';
+
+const mat = (color: number, rough = 0.65) => new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: 0 });
+
+export type Joints = {
+    root: any; body: any; torso: any; head: any;
+    lThigh: any; lShin: any; rThigh: any; rShin: any;
+    lArm: any; lFore: any; rArm: any; rFore: any;
+    pigL: any; pigR: any; mouth: any;
+};
+
+// Procedural stand-in for Karma: built from primitives, with a joint hierarchy
+// (hips, torso, neck, shoulders, elbows, knees) driven by code each frame.
+export function buildKarma() {
+    const skin = mat(0xf3cdb6, 0.8), shirt = mat(0xffd21f), denim = mat(0x3f78c4, 0.85), denimDark = mat(0x2f5f9f, 0.85);
+    const cuff = mat(0x6fa0dd, 0.85), hair = mat(0x4b2a24, 0.5), pink = mat(0xe84f9f, 0.9), dark = mat(0x2a1812, 0.4);
+    const white = mat(0xffffff, 0.6), teal = mat(0x30c9c0), sole = mat(0xf4f4f4, 0.8), cheek = mat(0xf59a8e, 0.9);
+    const add = (parent: any, geo: any, m: any, x = 0, y = 0, z = 0) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); parent.add(o); return o; };
+    const grp = (parent: any, x = 0, y = 0, z = 0) => { const g = new THREE.Group(); g.position.set(x, y, z); parent.add(g); return g; };
+
+    const root = new THREE.Group();
+    const body = grp(root);
+
+    // legs: denim with cuffs, sneakers (white left with teal, pink right)
+    const leg = (side: number) => {
+        const thigh = grp(body, side * 0.065, 0.42, 0);
+        add(thigh, new THREE.CapsuleGeometry(0.058, 0.14, 6, 12), denim, 0, -0.1, 0);
+        const shin = grp(thigh, 0, -0.2, 0);
+        add(shin, new THREE.CapsuleGeometry(0.055, 0.1, 6, 12), denim, 0, -0.1, 0);
+        add(shin, new THREE.CylinderGeometry(0.066, 0.066, 0.04, 14), cuff, 0, -0.17, 0);
+        const shoe = add(shin, new THREE.SphereGeometry(0.075, 14, 10), side < 0 ? white : pink, 0, -0.235, 0.035);
+        shoe.scale.set(0.95, 0.6, 1.5);
+        const toe = add(shin, new THREE.SphereGeometry(0.05, 10, 8), side < 0 ? teal : white, 0, -0.235, 0.1);
+        toe.scale.set(1, 0.7, 0.9);
+        add(shin, new THREE.BoxGeometry(0.1, 0.02, 0.2), sole, 0, -0.275, 0.04);
+        return { thigh, shin };
+    };
+    const L = leg(-1), R = leg(1);
+
+    // hips + overalls
+    add(body, new THREE.CylinderGeometry(0.12, 0.125, 0.13, 18), denim, 0, 0.42, 0);
+    const torso = grp(body, 0, 0.45, 0);
+    add(torso, new THREE.CapsuleGeometry(0.115, 0.1, 6, 16), shirt, 0, 0.12, 0);
+    add(torso, new THREE.BoxGeometry(0.17, 0.15, 0.03), denim, 0, 0.1, 0.105).rotation.x = -0.05;
+    add(torso, new THREE.BoxGeometry(0.05, 0.04, 0.012), denimDark, 0, 0.12, 0.123);
+    add(torso, new THREE.CylinderGeometry(0.119, 0.12, 0.12, 18), denim, 0, 0.02, 0);
+    for (const s of [-1, 1]) add(torso, new THREE.BoxGeometry(0.025, 0.16, 0.02), denim, s * 0.06, 0.2, 0.1).rotation.x = -0.35;
+
+    // arms
+    const arm = (side: number) => {
+        const a = grp(torso, side * 0.15, 0.2, 0);
+        add(a, new THREE.CapsuleGeometry(0.043, 0.06, 6, 10), shirt, 0, -0.07, 0);
+        const f = grp(a, 0, -0.14, 0);
+        add(f, new THREE.CapsuleGeometry(0.036, 0.07, 6, 10), skin, 0, -0.06, 0);
+        add(f, new THREE.SphereGeometry(0.045, 12, 10), skin, 0, -0.14, 0);
+        return { a, f };
+    };
+    const aL = arm(-1), aR = arm(1);
+
+    // head: big, chibi proportions like the reference
+    const neck = grp(torso, 0, 0.3, 0);
+    const head = grp(neck, 0, 0.0, 0);
+    add(head, new THREE.SphereGeometry(0.165, 28, 22), skin, 0, 0.17, 0).scale.set(1, 1, 0.96);
+    // hair cap (top + back), fringe
+    const cap = add(head, new THREE.SphereGeometry(0.178, 28, 22, 0, Math.PI * 2, 0, 1.75), hair, 0, 0.18, -0.012);
+    cap.rotation.x = -0.22;
+    for (const s of [-1, 1]) { add(head, new THREE.SphereGeometry(0.08, 12, 10), hair, s * 0.085, 0.3, 0.1).scale.set(1, 0.7, 0.8); }
+    add(head, new THREE.SphereGeometry(0.17, 20, 16), hair, 0, 0.14, -0.06).scale.set(1, 1.05, 0.85);
+    // face: texture cut from the approved reference image, wrapped on the front of the head
+    const tex = new THREE.TextureLoader().load(faceUrl); tex.colorSpace = THREE.SRGBColorSpace;
+    const faceMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4, depthWrite: false });
+    const faceMesh = add(head, new THREE.SphereGeometry(0.172, 32, 24, Math.PI / 2 - 0.85, 1.7, 0.78, 1.5), faceMat, 0, 0.17, 0);
+    faceMesh.scale.set(1, 1, 0.96);
+    const mouth = new THREE.Group(); head.add(mouth);
+    // pigtails: long wavy hair + pink clips, springy
+    const pig = (side: number) => {
+        const g = grp(head, side * 0.14, 0.3, -0.01);
+        for (const [dx, dy, dz, r] of [[0, 0.02, 0.03, 0.05], [side * 0.03, 0.06, 0.04, 0.04], [-side * 0.02, 0.07, 0.03, 0.038], [side * 0.04, 0.0, 0.05, 0.036]]) add(g, new THREE.SphereGeometry(r, 10, 8), pink, dx, dy, dz);
+        add(g, new THREE.SphereGeometry(0.014, 8, 6), white, side * -0.01, -0.04, 0.085);
+        let y = -0.02;
+        [0.065, 0.06, 0.052, 0.042, 0.032].forEach((r, i) => { y -= r * 1.25; add(g, new THREE.SphereGeometry(r, 12, 10), hair, Math.sin(i * 1.4) * 0.018, y, -0.005); });
+        return g;
+    };
+    const pigL = pig(-1), pigR = pig(1);
+
+    root.traverse((o: any) => { if (o.isMesh) o.castShadow = false; });
+    const joints: Joints = {
+        root, body, torso, head, lThigh: L.thigh, lShin: L.shin, rThigh: R.thigh, rShin: R.shin,
+        lArm: aL.a, lFore: aL.f, rArm: aR.a, rFore: aR.f, pigL, pigR, mouth,
+    };
+    return { THREE, root, joints };
+}
