@@ -20,21 +20,27 @@ const server = http.createServer((req,res) => {
 await new Promise(resolve => server.listen(port, '127.0.0.1', resolve));
 const browser = await chromium.launch({ headless:true, args:['--no-sandbox','--enable-webgl','--use-gl=swiftshader','--disable-dev-shm-usage'] });
 const models = [];
-// Baseline and weight-v2 render timings are retained in earlier CI artifacts.
-// This run measures an optimization candidate only if it survived rig validation,
-// plus any newly delivered final GLBs.
+// Compare the current weight-ramp experiment, a validated optimization candidate,
+// and any newly delivered final GLBs from either branch checkout.
+const baseExperimentUrl = '/base-work/assets/3d/karma/rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb';
+if (fs.existsSync(path.join(repoRoot, baseExperimentUrl.slice(1)))) {
+  models.push({ name:'weights_v2_experiment', url:baseExperimentUrl });
+}
 const optimizedUrl = '/assets/3d/karma/baseline_2026-11-24/karma_weights_v2_optimized_NOT_FINAL.glb';
 if (fs.existsSync(path.join(repoRoot, optimizedUrl.slice(1)))) {
   models.push({ name:'optimized_experiment', url:optimizedUrl });
 }
-const karmaRoot = path.join(repoRoot, 'assets/3d/karma');
+const karmaRoots = [
+  path.join(repoRoot, 'assets/3d/karma'),
+  path.join(repoRoot, 'base-work/assets/3d/karma')
+].filter(fs.existsSync);
 const walk = (dir) => fs.readdirSync(dir, { withFileTypes:true }).flatMap(entry => {
   const full = path.join(dir, entry.name);
   if (entry.isDirectory()) return entry.name === 'archive_2026-11-24' ? [] : walk(full);
   return entry.isFile() && entry.name.toLowerCase().endsWith('.glb') && !entry.name.toLowerCase().includes('not_final') ? [full] : [];
 });
 const known = new Set(models.map(model => path.resolve(repoRoot, '.' + model.url)));
-for (const full of walk(karmaRoot)) {
+for (const root of karmaRoots) for (const full of walk(root)) {
   if (known.has(path.resolve(full))) continue;
   models.push({
     name:'final_' + path.basename(full, '.glb').replace(/[^a-z0-9_-]/gi, '_'),
