@@ -249,6 +249,10 @@ test('each language preview translates only its active language; Arabic prepares
   assert.match(source, /var sourceBlock = blocks\[blockIndex\]/);
   assert.match(source, /existing\.source_arabic_hash === sourceHash/);
   assert.match(source, /force: !!\(translationRecords\[key\] && translationRecords\[key\]\.status === 'approved'\)/);
+  assert.match(source, /var hasCurrentApprovedTranslation = !!\(existing &&[\s\S]*?existing\.source_arabic_hash === sourceHash[\s\S]*?existing\.speaker === sourceBlock\.speaker[\s\S]*?existing\.translation_text/);
+  assert.match(source, /if \(hasCurrentApprovedTranslation\) \{[\s\S]*?renderTranslationOnPage\(blockIndex, translationWorkingText\[key\]\)[\s\S]*?تم تخطيها دون إرسال طلب جديد/);
+  assert.match(source, /Only missing, failed, draft, or source-stale translations are retried/);
+
   assert.match(source, /translationWorkingText\[key\] = String\(existing\.translation_text\)/);
   assert.match(assets, /resolveStoryBlock\(section, slug, "ar", index, body\.story_snapshot\)/);
 });
