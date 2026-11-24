@@ -54,46 +54,42 @@ const controller = new KarmaController({
 scene.add(controller.object3D);
 const gl = renderer.getContext();
 const samples = [];
-let last = performance.now(), sampling = false, rafCount = 0;
-function frame(now) {
-  const frameMs = now - last;
-  const dt = Math.min(frameMs / 1000, 0.05);
-  last = now;
-  controller.update(dt);
+const renderStep = () => {
+  const start = performance.now();
+  controller.update(1 / 60);
   renderer.render(scene, camera);
-  if (sampling) { samples.push(frameMs); rafCount++; }
-  requestAnimationFrame(frame);
-}
-requestAnimationFrame(frame);
+  samples.push(performance.now() - start);
+};
 window.__karmaLoaded = true;
 window.__runSixActions = async () => {
   const results = {};
-  const run = async (name, promise) => {
+  const drive = async (name, promise, maxSeconds) => {
     const start = performance.now();
-    results[name] = await Promise.race([
-      promise,
-      new Promise((_, reject) => setTimeout(() => reject(
-        new Error(name + ' timed out; controller state=' + controller.stateName +
-          ', feet=' + controller.pos.x.toFixed(1) + ',' + controller.pos.y.toFixed(1))
-      ), 15000))
-    ]);
-    results[name].stateAfter = controller.stateName;
-    results[name].elapsedMs = +(performance.now() - start).toFixed(2);
+    let result = null;
+    promise.then(value => { result = value; });
+    for (let i = 0; i < maxSeconds * 60 && result === null; i++) {
+      renderStep();
+      await Promise.resolve();
+    }
+    if (result === null) {
+      throw new Error(name + ' timed out; controller state=' + controller.stateName +
+        ', feet=' + controller.pos.x.toFixed(1) + ',' + controller.pos.y.toFixed(1));
+    }
+    results[name] = { ...result, stateAfter: controller.stateName, elapsedMs: +(performance.now() - start).toFixed(2) };
   };
-  await run('walkTo', controller.walkTo('b', { side: 'top' }));
-  await run('leanOn', controller.leanOn('a', { side: 'right' }));
-  await new Promise(resolve => setTimeout(resolve, 400));
+  await drive('walkTo', controller.walkTo('b', { side: 'top' }), 10);
+  await drive('leanOn', controller.leanOn('a', { side: 'right' }), 10);
+  for (let i = 0; i < 24; i++) { renderStep(); await Promise.resolve(); }
   results.leanOn.state = controller.stateName;
-  await run('stand', controller.stand());
+  await drive('stand', controller.stand(), 1);
   results.stand.state = controller.stateName;
-  await run('jump', controller.jump());
-  await run('wave', controller.wave(2));
-  await run('tilt', controller.tilt('left', 1.4));
+  await drive('jump', controller.jump(), 2);
+  await drive('wave', controller.wave(2), 3);
+  await drive('tilt', controller.tilt('left', 1.4), 2.5);
   return results;
 };
-window.__startPerf = () => { samples.length = 0; rafCount = 0; sampling = true; };
+window.__startPerf = () => { samples.length = 0; };
 window.__stopPerf = () => {
-  sampling = false;
   const sorted = [...samples].sort((a,b) => a-b);
   const mean = sorted.length ? sorted.reduce((a,b)=>a+b,0)/sorted.length : 0;
   const p95 = sorted.length ? sorted[Math.min(sorted.length-1, Math.floor(sorted.length*0.95))] : 0;
@@ -104,17 +100,18 @@ window.__stopPerf = () => {
     vendor: gl.getParameter(gl.VENDOR)
   };
   return {
-    frameSamples: sorted.length,
-    fps: mean > 0 ? +(1000/mean).toFixed(2) : 0,
-    meanFrameMs: +mean.toFixed(3),
-    p95FrameMs: +p95.toFixed(3),
+    renderSamples: sorted.length,
+    renderThroughputFps: mean > 0 ? +(1000/mean).toFixed(2) : 0,
+    meanRenderCallMs: +mean.toFixed(3),
+    p95RenderCallMs: +p95.toFixed(3),
     drawCalls: renderer.info.render.calls,
     triangles: renderer.info.render.triangles,
     geometries: renderer.info.memory.geometries,
     textures: renderer.info.memory.textures,
     pixelRatio: renderer.getPixelRatio(),
     viewport: { width, height },
-    glInfo
+    glInfo,
+    note: 'Synchronous update+render throughput on SwiftShader; not a physical-device FPS measurement.'
   };
 };
 </script>
