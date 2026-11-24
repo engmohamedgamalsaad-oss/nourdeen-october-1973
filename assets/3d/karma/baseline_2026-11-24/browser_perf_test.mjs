@@ -19,11 +19,14 @@ const server = http.createServer((req,res) => {
 });
 await new Promise(resolve => server.listen(port, '127.0.0.1', resolve));
 const browser = await chromium.launch({ headless:true, args:['--no-sandbox','--enable-webgl','--use-gl=swiftshader','--disable-dev-shm-usage'] });
-const models = [
-  // Baseline and weight-v2 render timings are retained in earlier CI artifacts.
-  // This run measures the optimized candidate and any newly delivered final GLBs.
-  { name:'optimized_experiment', url:'/assets/3d/karma/baseline_2026-11-24/karma_weights_v2_optimized_NOT_FINAL.glb' }
-];
+const models = [];
+// Baseline and weight-v2 render timings are retained in earlier CI artifacts.
+// This run measures an optimization candidate only if it survived rig validation,
+// plus any newly delivered final GLBs.
+const optimizedUrl = '/assets/3d/karma/baseline_2026-11-24/karma_weights_v2_optimized_NOT_FINAL.glb';
+if (fs.existsSync(path.join(repoRoot, optimizedUrl.slice(1)))) {
+  models.push({ name:'optimized_experiment', url:optimizedUrl });
+}
 const karmaRoot = path.join(repoRoot, 'assets/3d/karma');
 const walk = (dir) => fs.readdirSync(dir, { withFileTypes:true }).flatMap(entry => {
   const full = path.join(dir, entry.name);
