@@ -1,0 +1,30 @@
+<!doctype html><meta charset=utf8><body style="margin:0;background:#111"><canvas id=c></canvas><pre id=log style="color:#9f9;font:12px monospace;margin:0"></pre>
+<script type=importmap>{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<script type=module>
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {createRig} from './KarmaRig.js';import {KarmaController} from './KarmaController.js';
+const q=new URLSearchParams(location.search);const glb=q.get('glb')||'karma_skinned_baseline.glb';
+const ZOOM=q.get('zoom')==='1';const VW=800,VH=420,CW=ZOOM?300:400,CH=ZOOM?340:210;const FROM=+(q.get('from')||0),NF=48,COLS=ZOOM?8:8,ROWS=ZOOM?6:6;
+const cv=document.getElementById('c');cv.width=CW*COLS;cv.height=CH*ROWS;
+const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});r.setScissorTest(true);r.setSize(cv.width,cv.height,false);
+const g=await new GLTFLoader().loadAsync(glb);const rig=createRig(g.scene);
+const rects=[{id:'a',left:80,top:250,width:110,height:170},{id:'b',left:520,top:230,width:130,height:190}];
+const c=new KarmaController({rig,getCardRects:()=>rects,viewport:{width:VW,height:VH},characterHeightPx:170,modelHeight:1});
+const sc=new THREE.Scene();sc.background=new THREE.Color(0x2c3238);sc.add(c.object3D);
+// card boxes (visual only)
+for(const k of rects){const m=new THREE.Mesh(new THREE.PlaneGeometry(k.width,k.height),new THREE.MeshBasicMaterial({color:0x6b4f8a}));m.position.set(k.left+k.width/2-VW/2,VH/2-(k.top+k.height/2),-50);sc.add(m)}
+sc.add(new THREE.HemisphereLight(0xffffff,0x666677,1.7));const dl=new THREE.DirectionalLight(0xffffff,1.5);dl.position.set(0.3,0.6,1);sc.add(dl);
+const cam=new THREE.OrthographicCamera(-VW/2,VW/2,VH/2,-VH/2,-500,500);cam.position.z=200;
+
+const rend=(cell)=>{if(ZOOM){const hx=c.holder.position.x,hy=c.holder.position.y+90;const hh=105,hw=hh*CW/CH;cam.left=hx-hw;cam.right=hx+hw;cam.top=hy+hh;cam.bottom=hy-hh;cam.updateProjectionMatrix()}const col=cell%COLS,row=Math.floor(cell/COLS);r.setViewport(col*CW,(ROWS-1-row)*CH,CW,CH);r.setScissor(col*CW,(ROWS-1-row)*CH,CW,CH);r.render(sc,cam)};
+const FPS=10,TOTAL=19.5;const ev=[[0.0,()=>c.walkTo('b',{side:'top'})],[3.8,()=>c.jump()],[5.0,()=>c.wave(2)],[7.8,()=>c.tilt('left',1.4)],[9.8,()=>c.leanOn('a',{side:'right'})],[16.0,()=>c.stand()]];
+let ei=0,t=0,cell=0;const res={};
+for(let f=0;f<Math.round(TOTAL*FPS);f++){const T=f/FPS;
+ while(ei<ev.length&&ev[ei][0]<=T+1e-6){const n=ei;ev[ei][1]().then(v=>res[n]=v);ei++}
+ for(let i=0;i<6;i++)c.update(1/60);
+ if(f>=FROM&&f<FROM+NF){rend(cell);cell++}}
+await new Promise(r=>setTimeout(r,50));
+document.getElementById('log').textContent=JSON.stringify(res)+' frames '+cell;
+document.body.insertAdjacentHTML('beforeend','<textarea id=png>'+cv.toDataURL('image/png')+'</textarea>');document.title='done';
+</script>
