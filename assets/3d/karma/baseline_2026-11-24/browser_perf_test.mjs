@@ -26,6 +26,14 @@ const baseExperimentUrl = '/base-work/assets/3d/karma/rig_tests_2026-11-24/weigh
 if (fs.existsSync(path.join(repoRoot, baseExperimentUrl.slice(1)))) {
   models.push({ name:'weights_v2_experiment', url:baseExperimentUrl });
 }
+const integratedUrl = '/base-work/assets/3d/karma/integrated_v1_2026-11-24/EXPERIMENT_NOT_FINAL_karma_integrated_v1.glb';
+const integratedReport = path.join(repoRoot, 'assets/3d/karma/baseline_2026-11-24/RESULT_integrated_v1.json');
+if (fs.existsSync(path.join(repoRoot, integratedUrl.slice(1))) && fs.existsSync(integratedReport)) {
+  try {
+    const result = JSON.parse(fs.readFileSync(integratedReport, 'utf8'));
+    if (result.tests?.rigAndMotionPass) models.push({ name:'integrated_v1_experiment', url:integratedUrl });
+  } catch {}
+}
 const optimizedUrl = '/assets/3d/karma/baseline_2026-11-24/karma_weights_v2_optimized_NOT_FINAL.glb';
 if (fs.existsSync(path.join(repoRoot, optimizedUrl.slice(1)))) {
   models.push({ name:'optimized_experiment', url:optimizedUrl });
