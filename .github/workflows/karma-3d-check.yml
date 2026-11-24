@@ -24,8 +24,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install the pinned Three.js test dependency
-        run: npm install --no-audit --no-fund
+      - name: Install the pinned Three.js and browser test dependencies
+        run: |
+          npm install --no-audit --no-fund
+          npm install --no-save playwright --no-audit --no-fund
+          npx playwright install chromium
       - name: Syntax-check canonical rig and controller modules
         run: |
           node --input-type=module --check < ../js/KarmaRig.js
@@ -43,7 +46,9 @@ jobs:
           else
             echo "Weight-ramp experiment is not present in this PR merge snapshot; comparison skipped."
           fi
-      - name: Upload measured baseline and experiment reports
+      - name: Run desktop and mobile browser render performance checks
+        run: node browser_perf_test.mjs RESULT_browser_perf.json
+      - name: Upload measured baseline, experiment and browser reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -51,4 +56,5 @@ jobs:
           path: |
             assets/3d/karma/baseline_2026-11-24/RESULT_baseline.json
             assets/3d/karma/baseline_2026-11-24/RESULT_weights_v2.json
+            assets/3d/karma/baseline_2026-11-24/RESULT_browser_perf.json
           if-no-files-found: warn
