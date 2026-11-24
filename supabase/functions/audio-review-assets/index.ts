@@ -522,15 +522,15 @@ Deno.serve(async (req: Request) => {
     if (!translationText || translationText.length > 12000 || !Array.isArray(generated?.review_notes)) {
       return reply(502, { error: "رد Gemini لا يطابق مخطط الترجمة؛ لم يتم حفظ أي ترجمة." });
     }
-    // A successful Gemini preparation is the default-approved text for audio generation.
-    // It never queues audio by itself; the queue starts only from the generate-all action.
+    // Gemini creates a saved translation draft. The owner must review and explicitly approve it
+    // before any audio-generation action can use this segment.
     const preparedAt = new Date().toISOString();
     const preparedTranslation = {
       language, block_index: index, speaker: source.block.speaker,
       source_arabic_hash: sourceHash, translation_text: translationText,
-      status: "approved", auto_approved: true, model,
+      status: "draft", auto_approved: false, model,
       review_notes: generated.review_notes.filter((v: any) => typeof v === "string").slice(0, 20),
-      updated_at: preparedAt, approved_at: preparedAt,
+      updated_at: preparedAt, approved_at: null,
     };
     // Re-read immediately before writing: never let a translation request overwrite
     // audio decisions saved while Gemini was generating this translation.
