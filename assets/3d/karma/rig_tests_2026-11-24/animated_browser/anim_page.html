@@ -1,0 +1,33 @@
+<!doctype html><meta charset=utf8><body style="margin:0;background:#111"><canvas id=c></canvas><pre id=log style="color:#9f9;font:12px monospace;margin:0"></pre>
+<script type=importmap>{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<script type=module>
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {createRig} from './KarmaRig.js';import {KarmaController} from './KarmaController.js';
+const q=new URLSearchParams(location.search);const glb=q.get('glb')||'karma_skinned_baseline.glb';
+const VW=800,VH=420,CW=400,CH=210;
+const cv=document.getElementById('c');const COLS=4,ROWS=4;cv.width=CW*COLS;cv.height=CH*ROWS+0;
+const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});r.setScissorTest(true);r.setSize(cv.width,cv.height,false);
+const g=await new GLTFLoader().loadAsync(glb);const rig=createRig(g.scene);
+const rects=[{id:'a',left:80,top:250,width:110,height:170},{id:'b',left:520,top:230,width:130,height:190}];
+const c=new KarmaController({rig,getCardRects:()=>rects,viewport:{width:VW,height:VH},characterHeightPx:170,modelHeight:1});
+const sc=new THREE.Scene();sc.background=new THREE.Color(0x2c3238);sc.add(c.object3D);
+// card boxes (visual only)
+for(const k of rects){const m=new THREE.Mesh(new THREE.PlaneGeometry(k.width,k.height),new THREE.MeshBasicMaterial({color:0x6b4f8a}));m.position.set(k.left+k.width/2-VW/2,VH/2-(k.top+k.height/2),-50);sc.add(m)}
+sc.add(new THREE.HemisphereLight(0xffffff,0x666677,1.7));const dl=new THREE.DirectionalLight(0xffffff,1.5);dl.position.set(0.3,0.6,1);sc.add(dl);
+const cam=new THREE.OrthographicCamera(-VW/2,VW/2,VH/2,-VH/2,-500,500);cam.position.z=200;
+let cell=0;const labels=[];
+const snap=(label)=>{const col=cell%COLS,row=Math.floor(cell/COLS);r.setViewport(col*CW,(ROWS-1-row)*CH,CW,CH);r.setScissor(col*CW,(ROWS-1-row)*CH,CW,CH);cam.left=-VW/2;cam.right=VW/2;
+ cam.updateProjectionMatrix();r.render(sc,cam);labels.push(`${cell}:${label} state=${c.stateName} pos=${c.pos.x.toFixed(0)},${c.pos.y.toFixed(0)}`);cell++};
+const step=(s)=>{for(let i=0;i<Math.round(s*60);i++)c.update(1/60)};
+const res={};const P=(n,p)=>p.then(v=>res[n]=v);
+snap('start idle');
+P('walkTo',c.walkTo('b',{side:'top'}));step(0.8);snap('walkTo mid');step(0.9);snap('walkTo mid2');step(3);snap('walkTo arrived');
+P('jump',c.jump());step(0.25);snap('jump rise');step(0.15);snap('jump top');step(0.8);
+P('wave',c.wave(2));step(0.6);snap('wave');step(1.0);snap('wave2');step(1.2);
+P('tilt',c.tilt('left',1.4));step(0.7);snap('tilt');step(1.0);
+P('leanOn',c.leanOn('a',{side:'right'}));step(1.5);snap('leanOn walking');step(3);snap('leanOn walking2');step(4);snap('lean settled');
+P('stand',c.stand());step(1.5);snap('stand');
+await new Promise(r=>setTimeout(r,50));
+document.getElementById('log').textContent=JSON.stringify(res)+'\n'+labels.join('\n');document.body.insertAdjacentHTML('beforeend','<textarea id=png>'+cv.toDataURL('image/png')+'</textarea>');document.title='done';
+</script>

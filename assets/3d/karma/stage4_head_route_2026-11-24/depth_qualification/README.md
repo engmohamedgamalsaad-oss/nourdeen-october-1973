@@ -1,0 +1,5 @@
+# Depth-estimation route qualification (EXPERIMENT, internal comparison images not committed)
+Model: depth-anything/Depth-Anything-V2-Small-hf, https://huggingface.co/depth-anything/Depth-Anything-V2-Small-hf , model card license field: apache-2.0 (read from the Hugging Face API at test time). Weights downloaded locally (99 MB); the reference photo never left the sandbox.
+Run: CPU only, about 1.0 s on the front reference crop, output is 518x490 relative inverse depth (not metric).
+Observation: smooth relief with a clear nose bump, cheeks, chin, ears. Eyes, brows, lips and teeth are not resolved.
+Head test (depth_relief_test.py): high-pass depth added as z-displacement to the front of head v3, scaled so the nose gets about 0.014 units. Result: no material gain. A ring artifact appears where the mask meets the hair/forehead residual, the eyelids got worse, and nose volume in 3/4 and profile is only slightly larger. So this route does not close the likeness gap by itself; lids, lips and nose form need authored geometry. Profile depth remains an estimate.
