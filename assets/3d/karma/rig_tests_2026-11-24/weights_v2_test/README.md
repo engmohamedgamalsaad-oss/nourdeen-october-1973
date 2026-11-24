@@ -1,0 +1,3 @@
+# Neck/head weight ramp test (TEST, not final; baseline GLB on the branch is untouched)
+build_glb_v2.py = build_glb.py with a wider head-weight ramp for hair vertices outside the neck column. The 21 MB test GLB is local only (karma_skinned_baseline_wv2_TEST.glb), not committed.
+Harness result (extreme Neck 0.5/0.6/0.4 rad): sampled edges stretched over 2x went 0.51 -> 0.19 percent (neck test) and 0.70 -> 0.25 percent (head test). neck_cmp.png: left baseline, right v2, same extreme pose. Visible improvement is small. The head still sits on the chest because the TRELLIS neck is very short. The pose is about 1 rad of yaw, much stronger than the controller's tilt (about 0.2 rad).
