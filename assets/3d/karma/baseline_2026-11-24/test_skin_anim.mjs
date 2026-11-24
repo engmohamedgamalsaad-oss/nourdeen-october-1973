@@ -220,11 +220,32 @@ for (const [name, bone] of Object.entries(rig.bones)) bone.quaternion.copy(baseP
 rig.scene.updateMatrixWorld(true);
 report.tests.deformationSweepPass = Object.values(report.deformationSweep).every((item) => item.pass);
 report.tests.allSixMotionsPass = ['walkTo','leanOn','stand','jump','wave','tilt'].every((name) => report.tests[name].pass);
+report.qualityThresholds = { maxEdgesOver2xPercent: 0.30, maxEdgesOver4xPercent: 0.05 };
+report.deformationQuality = {
+  maxEdgesOver2xPercent: Math.max(...Object.values(report.deformationSweep).map((item) => item.pctEdgesOver2x)),
+  maxEdgesOver4xPercent: Math.max(...Object.values(report.deformationSweep).map((item) => item.pctEdgesOver4x))
+};
+report.tests.deformationQualityPass =
+  report.deformationQuality.maxEdgesOver2xPercent <= report.qualityThresholds.maxEdgesOver2xPercent &&
+  report.deformationQuality.maxEdgesOver4xPercent <= report.qualityThresholds.maxEdgesOver4xPercent;
 const t0 = performance.now();
 for (let i = 0; i < 1200; i++) controller.update(dt);
 report.controllerUpdate1200FramesMs = +(performance.now() - t0).toFixed(2);
-report.tests.overallPass = report.tests.skinData.pass && report.tests.allSixMotionsPass && report.deformation.pass && report.tests.deformationSweepPass;
+report.mobileProfile = {
+  fileMB: +(bytes.length / (1024 * 1024)).toFixed(2),
+  triangles: report.triangles,
+  skinnedMeshes: report.skinnedMeshes,
+  maxJointsPerSkin: Math.max(...report.joints),
+  controllerUpdatePerFrameMs: +(report.controllerUpdate1200FramesMs / 1200).toFixed(5),
+  note: 'Controller CPU only; excludes GPU skinning, draw calls, texture upload and browser compositing.'
+};
+report.tests.rigAndMotionPass =
+  report.tests.skinData.pass && report.tests.allSixMotionsPass &&
+  report.deformation.pass && report.tests.deformationSweepPass;
+report.tests.finalQualityReady = report.tests.rigAndMotionPass && report.tests.deformationQualityPass;
+report.status = report.tests.finalQualityReady ? 'QUALITY_THRESHOLDS_PASS' :
+  report.tests.rigAndMotionPass ? 'MECHANICS_PASS_DEFORMATION_REVIEW_REQUIRED' : 'TEST_FAILURE';
 console.log(JSON.stringify(report, null, 2));
 const output = process.argv[3] || 'RESULT_skin_anim.json';
 fs.writeFileSync(output, JSON.stringify(report, null, 2));
-if (!report.tests.overallPass) process.exitCode = 1;
+if (!report.tests.rigAndMotionPass || (process.env.KARMA_STRICT_DEFORMATION === '1' && !report.tests.finalQualityReady)) process.exitCode = 1;
