@@ -21,6 +21,11 @@ jobs:
         working-directory: assets/3d/karma/baseline_2026-11-24
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch the current shared Karma work branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/karma-3d-blockout-handoff-2026-11-24
+          path: base-work
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -41,7 +46,7 @@ jobs:
         run: node test_skin_anim.mjs karma_skinned_baseline_NOT_FINAL.glb RESULT_baseline.json
       - name: Compare the independent weight-ramp experiment when present in the current base
         run: |
-          EXPERIMENT=../rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb
+          EXPERIMENT=../../../../base-work/assets/3d/karma/rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb
           if [ -f "$EXPERIMENT" ]; then
             node test_skin_anim.mjs "$EXPERIMENT" RESULT_weights_v2.json
           else
@@ -64,9 +69,10 @@ jobs:
           fi
       - name: Strictly verify any final Karma GLB delivered on the branch
         run: |
-          mapfile -d '' models < <(find .. -type f -name '*.glb' \
-            ! -path '*/archive_2026-11-24/*' \
-            ! -iname '*not_final*' -print0)
+          mapfile -d '' models < <(
+            find .. -type f -name '*.glb' ! -path '*/archive_2026-11-24/*' ! -iname '*not_final*' -print0
+            find ../../../../base-work/assets/3d/karma -type f -name '*.glb' ! -path '*/archive_2026-11-24/*' ! -iname '*not_final*' -print0
+          )
           if [ "${#models[@]}" -eq 0 ]; then
             echo "No final GLB delivered yet; only preserved non-final baselines are present."
             exit 0
