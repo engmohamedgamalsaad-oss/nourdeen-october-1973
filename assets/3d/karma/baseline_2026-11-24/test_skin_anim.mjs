@@ -154,12 +154,76 @@ report.deformation = {
   changedSkinVertices
 };
 report.deformation.pass = report.deformation.changed && changedSkinVertices > 0;
-report.tests.skinData.pass = maxWeightDeviation < 1e-3 && invalidJointIndices === 0;
+report.tests.skinData = { pass: maxWeightDeviation < 1e-3 && invalidJointIndices === 0, maxWeightSumDeviation: maxWeightDeviation, invalidJointIndices };
+
+// Per-joint deformation sweep. Rest rotations are restored after every pose.
+const deformationCases = {
+  Shoulder_L: ['UpperArm_L', [0, 0, 1.2]],
+  Shoulder_R: ['UpperArm_R', [0, 0, -1.2]],
+  Elbow_L: ['Forearm_L', [-1.6, 0, 0]],
+  Elbow_R: ['Forearm_R', [-1.6, 0, 0]],
+  Hip_L: ['UpperLeg_L', [-1.0, 0, 0]],
+  Hip_R: ['UpperLeg_R', [-1.0, 0, 0]],
+  Knee_L: ['LowerLeg_L', [1.2, 0, 0]],
+  Knee_R: ['LowerLeg_R', [1.2, 0, 0]],
+  Neck: ['Neck', [0.5, 0.6, 0.4]],
+  Head: ['Head', [0.4, 0.6, 0.3]],
+  Spine: ['Spine', [0.3, 0, 0.4]]
+};
+const basePose = Object.fromEntries(Object.entries(rig.bones).map(([name, bone]) => [name, bone.quaternion.clone()]));
+const neutralSnapshots = snapshotSkin();
+report.deformationSweep = {};
+for (const [label, [boneName, euler]] of Object.entries(deformationCases)) {
+  for (const [name, bone] of Object.entries(rig.bones)) bone.quaternion.copy(basePose[name]);
+  const delta = new THREE.Quaternion().setFromEuler(new THREE.Euler(...euler, 'XYZ'));
+  rig.bones[boneName].quaternion.copy(basePose[boneName]).multiply(delta);
+  const posed = snapshotSkin();
+  let movedVertices = 0, maxDisplacement = 0, nanValues = 0, maxEdgeStretch = 0;
+  let sampledEdges = 0, over2x = 0, over4x = 0;
+  for (let meshIndex = 0; meshIndex < skinned.length; meshIndex++) {
+    const mesh = skinned[meshIndex];
+    const before = neutralSnapshots[meshIndex], after = posed[meshIndex];
+    for (let i = 0; i < after.length; i += 3) {
+      if (!Number.isFinite(after[i]) || !Number.isFinite(after[i + 1]) || !Number.isFinite(after[i + 2])) nanValues++;
+      const d = Math.hypot(after[i] - before[i], after[i + 1] - before[i + 1], after[i + 2] - before[i + 2]);
+      if (d > 1e-3) movedVertices++;
+      maxDisplacement = Math.max(maxDisplacement, d);
+    }
+    const index = mesh.geometry.index;
+    if (index) {
+      const indices = index.array;
+      for (let tri = 0; tri + 2 < indices.length; tri += 21) {
+        for (let edge = 0; edge < 3; edge++) {
+          const a = indices[tri + edge], b = indices[tri + ((edge + 1) % 3)];
+          const ai = a * 3, bi = b * 3;
+          const beforeLength = Math.hypot(before[ai] - before[bi], before[ai + 1] - before[bi + 1], before[ai + 2] - before[bi + 2]);
+          if (beforeLength <= 1e-4) continue;
+          const afterLength = Math.hypot(after[ai] - after[bi], after[ai + 1] - after[bi + 1], after[ai + 2] - after[bi + 2]);
+          const ratio = afterLength / beforeLength;
+          maxEdgeStretch = Math.max(maxEdgeStretch, ratio);
+          sampledEdges++;
+          if (ratio > 2) over2x++;
+          if (ratio > 4) over4x++;
+        }
+      }
+    }
+  }
+  report.deformationSweep[label] = {
+    bone: boneName, euler, movedVertices, maxDisplacement: +maxDisplacement.toFixed(5),
+    nanValues, maxEdgeStretch: +maxEdgeStretch.toFixed(2), sampledEdges,
+    pctEdgesOver2x: sampledEdges ? +(100 * over2x / sampledEdges).toFixed(3) : 0,
+    pctEdgesOver4x: sampledEdges ? +(100 * over4x / sampledEdges).toFixed(3) : 0,
+    pass: movedVertices > 0 && nanValues === 0
+  };
+}
+for (const [name, bone] of Object.entries(rig.bones)) bone.quaternion.copy(basePose[name]);
+rig.scene.updateMatrixWorld(true);
+report.tests.deformationSweepPass = Object.values(report.deformationSweep).every((item) => item.pass);
 report.tests.allSixMotionsPass = ['walkTo','leanOn','stand','jump','wave','tilt'].every((name) => report.tests[name].pass);
 const t0 = performance.now();
 for (let i = 0; i < 1200; i++) controller.update(dt);
 report.controllerUpdate1200FramesMs = +(performance.now() - t0).toFixed(2);
-report.tests.overallPass = report.tests.skinData.pass && report.tests.allSixMotionsPass && report.deformation.pass;
+report.tests.overallPass = report.tests.skinData.pass && report.tests.allSixMotionsPass && report.deformation.pass && report.tests.deformationSweepPass;
 console.log(JSON.stringify(report, null, 2));
 const output = process.argv[3] || 'RESULT_skin_anim.json';
 fs.writeFileSync(output, JSON.stringify(report, null, 2));
