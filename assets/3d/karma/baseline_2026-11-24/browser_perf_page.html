@@ -58,9 +58,9 @@ let updateCount = 0;
 const renderStep = () => {
   controller.update(1 / 60);
   updateCount++;
-  // Simulate controller updates at 60 Hz while sampling the expensive software
-  // WebGL render every 12th update (5 render samples per simulated second).
-  if (updateCount % 12 === 0) {
+  // Simulate controller updates at 60 Hz while sampling software WebGL
+  // every 30th update (2 render samples per simulated second).
+  if (updateCount % 30 === 0) {
     const start = performance.now();
     renderer.render(scene, camera);
     samples.push(performance.now() - start);
