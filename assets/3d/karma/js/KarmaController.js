@@ -1,7 +1,7 @@
 // assets/3d/karma/js/KarmaController.js
 // State-machine controller that moves the Karma rig between real card rectangles.
 // World units = CSS pixels of the canvas (orthographic camera: left=-w/2, right=w/2, top=h/2, bottom=-h/2).
-// Rig convention: faces +Z, Karma's left = +X, origin at the soles. Bones keep identity rest rotation (A-pose is in the mesh).
+// Rig convention: faces +Z, Karma's left = +X, origin at the soles. Authored rest rotations are preserved; pose values are local deltas.
 // STATUS: recovered from the first Claude's session log. UNTESTED - never executed against a real GLB.
 import * as THREE from 'three';
 
