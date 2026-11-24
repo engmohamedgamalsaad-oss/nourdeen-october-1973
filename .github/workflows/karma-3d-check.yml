@@ -71,8 +71,11 @@ jobs:
             npx gltf-transform optimize "$EXPERIMENT" karma_weights_v2_optimized_NOT_FINAL.glb \
               --instance false --palette false --flatten false --simplify true --simplify-ratio 0.6 \
               --simplify-error 0.001 --compress false --texture-compress webp --prune false
-            if ! node test_skin_anim.mjs karma_weights_v2_optimized_NOT_FINAL.glb RESULT_optimized.json; then
-              echo "::warning::Optimized candidate failed rig checks; discarding it before browser benchmark."
+            if ! node restore_karma_rig_mounts.mjs karma_weights_v2_optimized_NOT_FINAL.glb; then
+              echo "::warning::Could not restore the required mount hierarchy; discarding optimization candidate."
+              rm -f karma_weights_v2_optimized_NOT_FINAL.glb
+            elif ! KARMA_STRICT_DEFORMATION=1 node test_skin_anim.mjs karma_weights_v2_optimized_NOT_FINAL.glb RESULT_optimized.json; then
+              echo "::warning::Optimized candidate failed rig, motion or deformation quality; discarding it."
               rm -f karma_weights_v2_optimized_NOT_FINAL.glb RESULT_optimized.json
             fi
           else
