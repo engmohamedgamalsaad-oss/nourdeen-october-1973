@@ -47,6 +47,19 @@ jobs:
           else
             echo "Weight-ramp experiment is not present in this PR merge snapshot; comparison skipped."
           fi
+      - name: Strictly verify any final Karma GLB delivered on the branch
+        run: |
+          mapfile -d '' models < <(find .. -type f -name '*.glb' \
+            ! -path '*/archive_2026-11-24/*' \
+            ! -iname '*not_final*' -print0)
+          if [ "${#models[@]}" -eq 0 ]; then
+            echo "No final GLB delivered yet; only preserved non-final baselines are present."
+            exit 0
+          fi
+          for model in "${models[@]}"; do
+            output="RESULT_delivery_$(basename "${model%.glb}").json"
+            KARMA_STRICT_DEFORMATION=1 node test_skin_anim.mjs "$model" "$output"
+          done
       - name: Run desktop and mobile browser render performance checks
         run: node browser_perf_test.mjs RESULT_browser_perf.json
       - name: Upload measured baseline, experiment and browser reports
@@ -57,5 +70,5 @@ jobs:
           path: |
             assets/3d/karma/baseline_2026-11-24/RESULT_baseline.json
             assets/3d/karma/baseline_2026-11-24/RESULT_weights_v2.json
-            assets/3d/karma/baseline_2026-11-24/RESULT_browser_perf.json
+            assets/3d/karma/baseline_2026-11-24/RESULT_*.json
           if-no-files-found: warn
