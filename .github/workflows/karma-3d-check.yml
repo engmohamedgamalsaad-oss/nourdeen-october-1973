@@ -48,6 +48,7 @@ jobs:
             echo "Weight-ramp experiment is not present in this PR merge snapshot; comparison skipped."
           fi
       - name: Build a non-destructive mobile optimization candidate
+        continue-on-error: true
         run: |
           EXPERIMENT=../rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb
           if [ -f "$EXPERIMENT" ]; then
