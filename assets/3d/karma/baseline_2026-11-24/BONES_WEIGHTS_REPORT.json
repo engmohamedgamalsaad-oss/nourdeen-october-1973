@@ -1,0 +1,64 @@
+{
+ "joints": 19,
+ "names": [
+  "Hips",
+  "Spine",
+  "Chest",
+  "Neck",
+  "Head",
+  "Shoulder_L",
+  "UpperArm_L",
+  "Forearm_L",
+  "Hand_L",
+  "Shoulder_R",
+  "UpperArm_R",
+  "Forearm_R",
+  "Hand_R",
+  "UpperLeg_L",
+  "LowerLeg_L",
+  "Foot_L",
+  "UpperLeg_R",
+  "LowerLeg_R",
+  "Foot_R"
+ ],
+ "meshes": [
+  {
+   "vertices": 300076,
+   "max_weight_sum_dev": 1.7881393432617188e-07,
+   "min_nonzero_influences": 1,
+   "max_influences": 4,
+   "joint_index_max": 18
+  },
+  {
+   "vertices": 468,
+   "max_weight_sum_dev": 0.0,
+   "min_nonzero_influences": 1,
+   "max_influences": 1,
+   "joint_index_max": 4
+  }
+ ],
+ "dominant_vertex_count_by_joint": {
+  "Hips": 708,
+  "Spine": 1376,
+  "Chest": 508,
+  "Neck": 2094,
+  "Head": 252924,
+  "Shoulder_L": 5268,
+  "UpperArm_L": 895,
+  "Forearm_L": 1406,
+  "Hand_L": 499,
+  "Shoulder_R": 5702,
+  "UpperArm_R": 1015,
+  "Forearm_R": 1284,
+  "Hand_R": 571,
+  "UpperLeg_L": 4344,
+  "LowerLeg_L": 2514,
+  "Foot_L": 6454,
+  "UpperLeg_R": 4322,
+  "LowerLeg_R": 2062,
+  "Foot_R": 6598
+ },
+ "unused_joints": [],
+ "ibm_count": 19,
+ "ibm_translation_equals_negative_joint_world_position_identity_rotation": true
+}

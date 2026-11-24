@@ -1,3 +1,4 @@
+// TEST ADAPTER, NOT the canonical file. Byte-for-byte copy of assets/3d/karma/js/KarmaController.js (commit be409f3) with this comment line added; no other change.
 // assets/3d/karma/js/KarmaController.js
 // State-machine controller that moves the Karma rig between real card rectangles.
 // World units = CSS pixels of the canvas (orthographic camera: left=-w/2, right=w/2, top=h/2, bottom=-h/2).

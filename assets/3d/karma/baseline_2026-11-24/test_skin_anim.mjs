@@ -2,7 +2,7 @@ import fs from 'fs';
 globalThis.self=globalThis; globalThis.createImageBitmap=async()=>({width:1,height:1,close(){}});
 const THREE=await import('three');
 const {GLTFLoader}=await import('three/examples/jsm/loaders/GLTFLoader.js');
-const {createRig}=await import('./KarmaRig.js'); const {KarmaController}=await import('./KarmaController.js');
+const {createRig}=await import('./KarmaRig.node-test-adapter.js'); const {KarmaController}=await import('./KarmaController.node-test-adapter.js');
 const f=process.argv[2]; const b=fs.readFileSync(f); const ab=b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength);
 const gltf=await new Promise((r,j)=>new GLTFLoader().parse(ab,'',r,j));
 const R={file:f,bytes:b.length};

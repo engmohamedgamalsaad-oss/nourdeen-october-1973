@@ -10,4 +10,4 @@ console.log(JSON.stringify({loadedInThree:true,meshes_tris:tris,skinnedMeshes:sk
 const BONES=['Hips','Spine','Chest','Neck','Head','Shoulder_L','UpperArm_L','Forearm_L','Hand_L','Shoulder_R','UpperArm_R','Forearm_R','Hand_R','UpperLeg_L','LowerLeg_L','Foot_L','UpperLeg_R','LowerLeg_R','Foot_R'];
 console.log('missing bones:',BONES.filter(b=>!gltf.scene.getObjectByName(b)));
 // replicate KarmaRig.createRig checks
-try{ const {createRig}=await import('./KarmaRig.js'); createRig(gltf.scene); console.log('createRig OK'); }catch(e){ console.log('createRig threw:',e.message); }
+try{ const {createRig}=await import('./KarmaRig.node-test-adapter.js'); createRig(gltf.scene); console.log('createRig OK'); }catch(e){ console.log('createRig threw:',e.message); }

@@ -1,3 +1,4 @@
+// TEST ADAPTER, NOT the canonical file. Copy of assets/3d/karma/js/KarmaRig.js (commit be409f3) used only to run tests in Node. Only change: import path three/addons/ -> three/examples/jsm/. Do not replace the canonical file with this.
 // assets/3d/karma/js/KarmaRig.js
 // Loads the Karma body GLB and exposes bones / head mount. Needs an import map for "three" (see docs/3d/KARMA_BODY_RIG_README.md).
 import * as THREE from 'three';
