@@ -157,17 +157,49 @@ Deno.test("translation falls back to the next Gemini model when the first model 
     if (!u.includes("generativelanguage.googleapis.com")) return realFetch(url);
     const model = u.split("/models/")[1].split(":")[0];
     asked.push(model);
-    if (model === "gemini-3.8-flash") return new Response("{}", { status: 404 });
+    if (model === "gemini-3.1-flash-lite") return new Response("{}", { status: 404 });
     return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify({ translation_text: "Hello", review_notes: [] }) }] } }] }), { status: 200 });
   };
   try {
     setReview({});
     const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
     assert.equal(r.status, 200, JSON.stringify(r.json));
-    assert.equal(r.json.translation.model, "gemini-3.7-flash");
-    assert.deepEqual(asked, ["gemini-3.8-flash", "gemini-3.7-flash"]);
+    assert.equal(r.json.translation.model, "gemini-3.6-flash");
+    assert.deepEqual(asked, ["gemini-3.1-flash-lite", "gemini-3.6-flash"]);
   } finally { (globalThis as any).fetch = realFetch; }
 });
+Deno.test("three transient 503 responses fall back to the next Gemini model", async () => {
+  const realFetch = globalThis.fetch;
+  const realSetTimeout = globalThis.setTimeout;
+  const realClearTimeout = globalThis.clearTimeout;
+  const asked: string[] = [];
+  (globalThis as any).setTimeout = (fn: (...args: any[]) => void) => { queueMicrotask(fn); return 1 as any; };
+  (globalThis as any).clearTimeout = () => {};
+  (globalThis as any).fetch = async (url: any) => {
+    const u = String(url);
+    if (!u.includes("generativelanguage.googleapis.com")) return realFetch(url);
+    const model = u.split("/models/")[1].split(":")[0];
+    asked.push(model);
+    if (model === "gemini-3.1-flash-lite") return new Response(JSON.stringify({ error: { message: "high demand" } }), { status: 503 });
+    return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify({ translation_text: "Hello after fallback", review_notes: [] }) }] } }] }), { status: 200 });
+  };
+  try {
+    setReview({});
+    const r = await call({ action: "translation_generate", language: "en", block_index: 0 });
+    assert.equal(r.status, 200, JSON.stringify(r.json));
+    assert.equal(r.json.translation.model, "gemini-3.6-flash");
+    assert.deepEqual(asked, [
+      "gemini-3.1-flash-lite", "gemini-3.1-flash-lite", "gemini-3.1-flash-lite",
+      "gemini-3.6-flash",
+    ]);
+    assert.equal(r.json.translation.translation_text, "Hello after fallback");
+  } finally {
+    (globalThis as any).fetch = realFetch;
+    (globalThis as any).setTimeout = realSetTimeout;
+    (globalThis as any).clearTimeout = realClearTimeout;
+  }
+});
+
 Deno.test("translation failure message lists the model and HTTP status of every attempt", async () => {
   const realFetch = globalThis.fetch;
   (globalThis as any).fetch = async (url: any) => {
@@ -178,7 +210,7 @@ Deno.test("translation failure message lists the model and HTTP status of every 
     setReview({});
     const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
     assert.equal(r.status, 502);
-    assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 404/);
+    assert.match(r.json.error, /gemini-3\.1-flash-lite #1: HTTP 404/);
     assert.match(r.json.error, /gemini-3\.6-flash #1: HTTP 404/);
   } finally { (globalThis as any).fetch = realFetch; }
 });
@@ -195,8 +227,8 @@ Deno.test("a refused key (403) stops after the first model instead of trying the
     setReview({});
     const r = await call({ action: "translation_generate", language: "de", block_index: 0 });
     assert.equal(r.status, 502);
-    assert.deepEqual(asked, ["gemini-3.8-flash"]);
-    assert.match(r.json.error, /gemini-3\.8-flash #1: HTTP 403/);
+    assert.deepEqual(asked, ["gemini-3.1-flash-lite"]);
+    assert.match(r.json.error, /gemini-3\.1-flash-lite #1: HTTP 403/);
   } finally { (globalThis as any).fetch = realFetch; }
 });
 

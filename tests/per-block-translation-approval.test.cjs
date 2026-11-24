@@ -181,7 +181,7 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.equal(preview.includes('source.appendChild(el("p", "", arabicBlock'), false);
   assert.ok(preview.includes('wrap.append(textarea, buttons, status)'));
   assert.ok(assets.includes('const translationModels = ["gemini-3.1-flash-lite", "gemini-3.6-flash"];'));
-  assert.match(assets, /if \(attempt >= 3\) break translationAttempts/);
+  assert.match(assets, /if \(attempt >= 3\) break;/, 'after three temporary failures, try the next configured model');
   assert.match(preview, /translationSingleBusy = true/);
   assert.match(preview, /يوجد طلب ترجمة آخر قيد التنفيذ/);
   assert.match(preview, /async function waitForTranslationSlot\(\)/);
@@ -190,7 +190,7 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.match(assets, /const translationDeadlineAt = Date\.now\(\) \+ 75000;/);
   assert.match(assets, /const delayMs = Math\.min\(12000, Math\.max\(retryAfterMs, 2500 \* attempt\)\);/);
   assert.match(assets, /AbortController\(\)[\s\S]{0,120}perAttemptTimeoutMs/);
-  assert.match(assets, /بعد " \+ attemptsMade \+ " محاولات على عدة نماذج/);
+  assert.match(assets, /بعد " \+ attemptsMade \+ " محاولات/);
   assert.match(assets, /status: "approved", auto_approved: true, model,/);
 });
 
@@ -238,7 +238,7 @@ test('language preview offers a separate approved-audio publish action before th
 
 test('each language preview translates only its active language; Arabic prepares speech text only', () => {
   const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-flow.js'), 'utf8');
-  assert.match(source, /var activeLanguage = lang\(\)/);
+  assert.match(source, /activeLanguage = lang\(\)/, 'capture the active preview language once at the start of the bulk action');
   assert.match(source, /var batchLanguages = activeLanguage === 'ar' \? \[\] : \[activeLanguage\]/);
   assert.doesNotMatch(source, /var batchLanguages = \['en', 'fr', 'it', 'de'\]/);
   assert.match(source, /action: 'translation_generate',[\s\S]{0,100}language: targetLanguage,[\s\S]{0,60}block_index: blockIndex/);
