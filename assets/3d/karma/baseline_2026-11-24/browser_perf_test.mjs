@@ -20,8 +20,8 @@ const server = http.createServer((req,res) => {
 await new Promise(resolve => server.listen(port, '127.0.0.1', resolve));
 const browser = await chromium.launch({ headless:true, args:['--no-sandbox','--enable-webgl','--use-gl=swiftshader','--disable-dev-shm-usage'] });
 const models = [
-  { name:'baseline', url:'/assets/3d/karma/baseline_2026-11-24/karma_skinned_baseline_NOT_FINAL.glb' },
-  { name:'weights_v2_experiment', url:'/assets/3d/karma/rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb' },
+  // Baseline and weight-v2 render timings are retained in earlier CI artifacts.
+  // This run measures the optimized candidate and any newly delivered final GLBs.
   { name:'optimized_experiment', url:'/assets/3d/karma/baseline_2026-11-24/karma_weights_v2_optimized_NOT_FINAL.glb' }
 ];
 const karmaRoot = path.join(repoRoot, 'assets/3d/karma');
