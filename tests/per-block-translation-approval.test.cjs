@@ -181,7 +181,7 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.equal(preview.includes('source.appendChild(el("p", "", arabicBlock'), false);
   assert.ok(preview.includes('wrap.append(textarea, buttons, status)'));
   assert.ok(assets.includes('const translationModels = ["gemini-3.1-flash-lite", "gemini-3.6-flash"];'));
-  assert.match(assets, /if \(attempt >= 3\) break translationAttempts/);
+  assert.match(assets, /if \(attempt >= 3\) break;/, 'after three temporary failures, try the next configured model');
   assert.match(preview, /translationSingleBusy = true/);
   assert.match(preview, /يوجد طلب ترجمة آخر قيد التنفيذ/);
   assert.match(preview, /async function waitForTranslationSlot\(\)/);
