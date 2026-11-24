@@ -56,11 +56,12 @@ const gl = renderer.getContext();
 const samples = [];
 let last = performance.now(), sampling = false, rafCount = 0;
 function frame(now) {
-  const dt = Math.min((now - last) / 1000, 0.05);
+  const frameMs = now - last;
+  const dt = Math.min(frameMs / 1000, 0.05);
   last = now;
   controller.update(dt);
   renderer.render(scene, camera);
-  if (sampling) { samples.push(now - (now - dt * 1000)); rafCount++; }
+  if (sampling) { samples.push(frameMs); rafCount++; }
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
