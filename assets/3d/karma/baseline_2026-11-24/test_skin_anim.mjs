@@ -220,6 +220,30 @@ for (const [name, bone] of Object.entries(rig.bones)) bone.quaternion.copy(baseP
 rig.scene.updateMatrixWorld(true);
 report.tests.deformationSweepPass = Object.values(report.deformationSweep).every((item) => item.pass);
 report.tests.allSixMotionsPass = ['walkTo','leanOn','stand','jump','wave','tilt'].every((name) => report.tests[name].pass);
+
+// Prove the controller preserves a deliberately non-identity authored rest pose.
+const originalRotations = Object.fromEntries(Object.entries(rig.bones).map(([name, bone]) => [name, bone.quaternion.clone()]));
+const syntheticHeadRest = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.13, -0.09, 0.07, 'XYZ'));
+rig.bones.Head.quaternion.copy(syntheticHeadRest);
+const restProbe = new KarmaController({
+  rig, getCardRects: () => rects,
+  viewport: { width: 800, height: 600 }, characterHeightPx: 170, modelHeight: 1
+});
+const headDelta = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.2, 0, 0, 'XYZ'));
+restProbe._blend({ Head: [0.2, 0, 0] }, 1);
+const expectedHead = syntheticHeadRest.clone().multiply(headDelta);
+const restAngleError = rig.bones.Head.quaternion.angleTo(expectedHead);
+const otherRestErrors = Object.entries(rig.bones)
+  .filter(([name]) => name !== 'Head')
+  .map(([name, bone]) => bone.quaternion.angleTo(restProbe.restQuaternions[name]));
+report.tests.nonIdentityRestRotation = {
+  pass: restAngleError < 1e-4 && Math.max(0, ...otherRestErrors) < 1e-4,
+  headAngleErrorRadians: restAngleError,
+  maxOtherJointRestErrorRadians: Math.max(0, ...otherRestErrors)
+};
+for (const [name, bone] of Object.entries(rig.bones)) bone.quaternion.copy(originalRotations[name]);
+rig.scene.updateMatrixWorld(true);
+
 report.qualityThresholds = { maxEdgesOver2xPercent: 0.30, maxEdgesOver4xPercent: 0.05 };
 report.deformationQuality = {
   maxEdgesOver2xPercent: Math.max(...Object.values(report.deformationSweep).map((item) => item.pctEdgesOver2x)),
@@ -241,7 +265,7 @@ report.mobileProfile = {
 };
 report.tests.rigAndMotionPass =
   report.tests.skinData.pass && report.tests.allSixMotionsPass &&
-  report.deformation.pass && report.tests.deformationSweepPass;
+  report.tests.deformation.pass && report.tests.deformationSweepPass && report.tests.nonIdentityRestRotation.pass;
 report.tests.finalQualityReady = report.tests.rigAndMotionPass && report.tests.deformationQualityPass;
 report.status = report.tests.finalQualityReady ? 'QUALITY_THRESHOLDS_PASS' :
   report.tests.rigAndMotionPass ? 'MECHANICS_PASS_DEFORMATION_REVIEW_REQUIRED' : 'TEST_FAILURE';
