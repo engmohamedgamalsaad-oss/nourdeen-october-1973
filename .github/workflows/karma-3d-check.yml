@@ -36,6 +36,7 @@ jobs:
           node --input-type=module --check < KarmaRig.node-test-adapter.js
           node --input-type=module --check < KarmaController.node-test-adapter.js
           node --check test_skin_anim.mjs
+          node --check browser_perf_test.mjs
       - name: Run rig and six-motion checks on preserved baseline
         run: node test_skin_anim.mjs karma_skinned_baseline_NOT_FINAL.glb RESULT_baseline.json
       - name: Compare the independent weight-ramp experiment when present in the current base
