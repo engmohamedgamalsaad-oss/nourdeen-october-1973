@@ -4,10 +4,10 @@ import { readFile } from 'node:fs/promises';
 
 const flow = await readFile(new URL('../reader-audio-flow.js', import.meta.url), 'utf8');
 
-test('approved translations are restored only when source hash and speaker still match', () => {
+test('current translation drafts and approvals are restored only when source hash and speaker still match', () => {
   assert.match(flow, /async function sha256Trim\(value\)/);
   assert.match(flow, /async function restoreSavedTranslations\(\)/);
-  assert.match(flow, /record\.status !== "approved"/);
+  assert.match(flow, /!\["approved", "draft"\]\.includes\(record\.status\)/);
   assert.match(flow, /record\.source_arabic_hash !== hash \|\| record\.speaker !== source\.speaker/);
   assert.match(flow, /translationWorkingText\[key\] = record\.translation_text/);
   assert.match(flow, /translationConfirmed\[key\] = true/);
