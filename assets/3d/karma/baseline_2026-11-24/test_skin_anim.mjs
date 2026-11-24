@@ -242,6 +242,7 @@ report.tests.nonIdentityRestRotation = {
   maxOtherJointRestErrorRadians: Math.max(0, ...otherRestErrors)
 };
 for (const [name, bone] of Object.entries(rig.bones)) bone.quaternion.copy(originalRotations[name]);
+controller.holder.add(rig.scene);
 rig.scene.updateMatrixWorld(true);
 
 report.qualityThresholds = { maxEdgesOver2xPercent: 0.30, maxEdgesOver4xPercent: 0.05 };
