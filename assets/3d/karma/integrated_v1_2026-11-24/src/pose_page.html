@@ -1,0 +1,19 @@
+<!doctype html><meta charset=utf8><body style="margin:0;background:#202428"><canvas id=c width=1600 height=500></canvas>
+<script type=importmap>{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<script type=module>
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {createRig} from './KarmaRig.js';
+const q=new URLSearchParams(location.search);const glb=q.get('glb')||'karma_skinned_baseline.glb';
+const r=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true,preserveDrawingBuffer:true});
+r.setScissorTest(true);
+const g=await new GLTFLoader().loadAsync(glb);const rig=createRig(g.scene);
+const sc=new THREE.Scene();sc.background=new THREE.Color(0x30363c);sc.add(g.scene);
+sc.add(new THREE.HemisphereLight(0xffffff,0x555566,1.6));const dl=new THREE.DirectionalLight(0xffffff,1.6);dl.position.set(1,2,3);sc.add(dl);
+const cam=new THREE.PerspectiveCamera(30,0.8,0.1,20);cam.position.set(0,0.5,3.2);cam.lookAt(0,0.5,0);
+const poses=[['rest',{}],['shoulders up',{UpperArm_L:[0,0,1.2],UpperArm_R:[0,0,-1.2]}],['elbows bent',{Forearm_L:[-1.6,0,0],Forearm_R:[-1.6,0,0]}],['hips fwd',{UpperLeg_L:[-1,0,0],UpperLeg_R:[-0.6,0,0]}],['knees bent',{UpperLeg_L:[-0.6,0,0],UpperLeg_R:[-0.6,0,0],LowerLeg_L:[1.2,0,0],LowerLeg_R:[1.2,0,0]}],['neck/head turn',{Neck:[0.2,0.6,0.3],Head:[0.2,0.4,0.2]}]];
+r.setSize(1600,500,false);const W=1600/poses.length;
+poses.forEach(([n,p],i)=>{for(const k in rig.bones)rig.bones[k].rotation.set(0,0,0);for(const k in p)rig.bones[k].rotation.set(...p[k]);g.scene.updateMatrixWorld(true);
+ r.setViewport(i*W,0,W,500);r.setScissor(i*W,0,W,500);cam.aspect=W/500;cam.updateProjectionMatrix();r.render(sc,cam);});
+document.title='done';
+</script>

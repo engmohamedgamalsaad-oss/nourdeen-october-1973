@@ -1,0 +1,14 @@
+{"walkTo":{"completed":true},"jump":{"completed":true},"wave":{"completed":true},"tilt":{"completed":true},"leanOn":{"completed":true}}
+0:start idle state=idle pos=400,420
+1:walkTo mid state=walk pos=500,318
+2:walkTo mid2 state=idle pos=585,230
+3:walkTo arrived state=idle pos=585,230
+4:jump rise state=jump pos=585,230
+5:jump top state=jump pos=585,230
+6:wave state=wave pos=585,230
+7:wave2 state=wave pos=585,230
+8:tilt state=tilt pos=585,230
+9:leanOn walking state=walk pos=346,350
+10:leanOn walking2 state=lean pos=207,420
+11:lean settled state=lean pos=207,420
+12:stand state=idle pos=207,420
