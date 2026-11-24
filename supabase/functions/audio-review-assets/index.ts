@@ -493,8 +493,9 @@ Deno.serve(async (req: Request) => {
         // only rules out this model; try the next one.
         if (!retryable && upstream && (upstream.status === 401 || upstream.status === 403)) break translationAttempts;
         if (!retryable) break;
-        // Retry transient quota/capacity/network errors on the same model; do not fan out.
-        if (attempt >= 3) break translationAttempts;
+        // After three transient failures on this model, move to the next configured model.
+        // Keep retries sequential: never fan out parallel requests or duplicate a segment.
+        if (attempt >= 3) break;
         const retryAfter = upstream?.headers.get("retry-after");
         const retryAfterMs = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) * 1000 : 0;
         const delayMs = Math.min(12000, Math.max(retryAfterMs, 2500 * attempt));
