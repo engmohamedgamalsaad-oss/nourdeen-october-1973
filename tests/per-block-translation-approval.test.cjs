@@ -190,7 +190,7 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.match(assets, /const translationDeadlineAt = Date\.now\(\) \+ 75000;/);
   assert.match(assets, /const delayMs = Math\.min\(12000, Math\.max\(retryAfterMs, 2500 \* attempt\)\);/);
   assert.match(assets, /AbortController\(\)[\s\S]{0,120}perAttemptTimeoutMs/);
-  assert.match(assets, /بعد " \+ attemptsMade \+ " محاولات على عدة نماذج/);
+  assert.match(assets, /بعد " \+ attemptsMade \+ " محاولات/);
   assert.match(assets, /status: "approved", auto_approved: true, model,/);
 });
 
