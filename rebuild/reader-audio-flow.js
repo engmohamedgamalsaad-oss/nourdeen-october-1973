@@ -129,7 +129,7 @@
       var source = arabic[index];
       if (!source || !["karma", "narrator"].includes(source.speaker)) continue;
       var key = L + ":" + index, record = translationRecords[key];
-      if (!record || record.status !== "approved" ||
+      if (!record || !["approved", "draft"].includes(record.status) ||
           typeof record.translation_text !== "string" || !record.translation_text.trim()) continue;
       var hash = await sha256Trim(source.text);
       if (record.source_arabic_hash !== hash || record.speaker !== source.speaker) {
@@ -150,7 +150,7 @@
       var result = await restoreSavedTranslations();
       translationStates = Object.create(null);
       Object.keys(translationRecords).forEach(function (key) {
-        translationStates[key] = translationConfirmed[key] ? "approved" : (translationRecords[key] && translationRecords[key].status === "approved" ? "stale" : (translationRecords[key] && translationRecords[key].status || "missing"));
+        translationStates[key] = translationConfirmed[key] ? (translationRecords[key].status || "draft") : (translationRecords[key] && translationRecords[key].status === "approved" ? "stale" : (translationRecords[key] && translationRecords[key].status || "missing"));
       });
       translationLoaded = true;
       if (result.stale) queueError = "تم تجاهل " + result.stale + " ترجمة قديمة لأن النص العربي أو المتحدث تغيّر.";
@@ -186,7 +186,7 @@
     if (record) {
       translationRecords[key] = record;
       translationWorkingText[key] = String(record.translation_text || "");
-      translationConfirmed[key] = !!translationWorkingText[key].trim() && record.status === "approved";
+      translationConfirmed[key] = !!translationWorkingText[key].trim() && ["approved", "draft"].includes(record.status);
       if (targetLanguage === lang()) {
         if (translationConfirmed[key]) renderTranslationOnPage(index, translationWorkingText[key]);
       }
@@ -198,7 +198,7 @@
       var status = review.querySelector(".kh-translation-status");
       if (record && textarea) textarea.value = String(record.translation_text || "");
       if (status) {
-        status.textContent = message || (state === "processing" ? "Gemini يجهّز ترجمة هذا المقطع…" : state === "failed" ? "فشلت ترجمة هذا المقطع؛ يمكنك إعادة المحاولة." : "✓ النص جاهز ومعتمد تلقائيًا.");
+        status.textContent = message || (state === "processing" ? "Gemini يجهّز ترجمة هذا المقطع…" : state === "failed" ? "فشلت ترجمة هذا المقطع؛ يمكنك إعادة المحاولة." : "✓ النص جاهز للمراجعة والاعتماد.");
         status.dataset.state = state || "missing";
       }
     }
@@ -257,8 +257,8 @@
         save.disabled = !String(textarea.value || "").trim();
         return;
       }
-      status.textContent = r.status === "approved" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة الجديدة جاهزة ومطابقة للمصدر العربي" + (r.auto_approved ? " تلقائيًا" : "") : "توجد ترجمة محفوظة سابقًا؛ اضغط «إعادة الترجمة» لتجهيز ترجمة جديدة في هذه المعاينة.") :
-        r.status === "draft" ? "مسودة قديمة — اضغط «إعادة الترجمة»" :
+      status.textContent = r.status === "approved" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة معتمدة ومطابقة للمصدر العربي" : "توجد ترجمة معتمدة محفوظة ومطابقة للمصدر.") :
+        r.status === "draft" ? (translationConfirmed[key] && String(textarea.value || "").trim() ? "✓ الترجمة جاهزة — راجعها ثم اضغط «اعتماد ترجمة كل المقاطع»." : "توجد مسودة ترجمة محفوظة — راجعها ثم اعتمدها.") :
         r.status === "needs_revision" ? "تحتاج إلى إعادة ترجمة" : "لم تُجهَّز الترجمة بعد — اضغط «الترجمة»";
       status.dataset.state = translationConfirmed[key] ? (r.status || "missing") : (r.status === "approved" ? "saved-not-loaded" : (r.status || "missing"));
       save.disabled = !String(textarea.value || "").trim();
@@ -275,11 +275,11 @@
       var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(ar.text).trim()));
       var hash = Array.from(new Uint8Array(digest), function (b3) { return b3.toString(16).padStart(2, "0"); }).join("");
       var result = await audioReviewAction({
-        action: "translation_save", language: L, block_index: index, decision: "approved",
+        action: "translation_save", language: L, block_index: index, decision: "draft",
         translation_text: String(textarea.value || "").trim(), source_arabic_hash: hash,
       });
       translationRecords[key] = result.translation;
-      translationStates[key] = "approved";
+      translationStates[key] = "draft";
       translationWorkingText[key] = String(textarea.value || "").trim();
       translationConfirmed[key] = true;
       renderTranslationOnPage(index, translationWorkingText[key]);
@@ -300,22 +300,22 @@
         await waitForTranslationSlot();
         var result = await audioReviewAction({ action: "translation_generate", language: L, block_index: index, force: true });
         var generatedText = String(result.translation && result.translation.translation_text || "").trim();
-        if (!generatedText || !result.translation || result.translation.status !== "approved") throw new Error("لم تُحفظ ترجمة معتمدة وصالحة لهذا المقطع.");
+        if (!generatedText || !result.translation || !["draft", "approved"].includes(result.translation.status)) throw new Error("لم تُحفظ ترجمة صالحة لهذا المقطع.");
         translationRecords[key] = result.translation;
-        translationStates[key] = "approved";
+        translationStates[key] = result.translation.status;
         textarea.value = generatedText;
         translationWorkingText[key] = generatedText;
         translationConfirmed[key] = true;
         renderTranslationOnPage(index, generatedText);
         paintStatus(); paint(box); updateTranslationPublishButton();
-        status.textContent += " — أُعيدت الترجمة واعتُمدت تلقائيًا، والصوت القديم لهذا المقطع غير صالح.";
+        status.textContent += " — حُفظت كمسودة؛ راجعها ثم استخدم «اعتماد ترجمة كل المقاطع» قبل توليد الصوت.";
         document.dispatchEvent(new CustomEvent("kh-audio-review-updated"));
       } catch (e) { translationStates[key] = "failed"; status.textContent = (e.message || "تعذر إعادة الترجمة.") + " — يمكنك إعادة المحاولة."; status.dataset.state = "failed"; paint(box); updateTranslationPublishButton(); }
       finally { translationSingleBusy = false; setTranslationGenerateControlsDisabled(false); generate.disabled = false; updateLanguageBatchPanel(); }
     });
     save.addEventListener("click", async function () {
       save.disabled = true;
-      try { await saveManualEdit(); status.textContent = "تم حفظ تعديلك. أُبطل الصوت القديم لهذا المقطع فقط."; }
+      try { await saveManualEdit(); status.textContent = "تم حفظ تعديلك كمسودة. اعتمد الترجمة الجماعية قبل توليد الصوت."; }
       catch (e) { status.textContent = e.message || "تعذر حفظ التعديل."; paintStatus(); }
     });
     buttons.append(generate, save);
@@ -574,6 +574,64 @@
       setTimeout(function () { audioBatchNote[L] = ''; refresh(); }, 15000);
     }
   }
+
+  async function translationApprovalStatus(language) {
+    var st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
+    var out = { total: 0, approved: 0, ready: 0, missing: 0, canApprove: false };
+    if (!st || language === 'ar') return out;
+    for (var i = 0; i < blocks.length; i++) {
+      var source = blocks[i];
+      if (!source || !['karma', 'narrator'].includes(source.speaker) || !String(source.text || '').trim()) continue;
+      out.total++;
+      var record = translationRecords[language + ':' + i];
+      var current = !!(record && ['draft', 'approved'].includes(record.status) && record.speaker === source.speaker &&
+        String(record.translation_text || '').trim() && record.source_arabic_hash === await sha256Trim(source.text));
+      if (!current) out.missing++;
+      else if (record.status === 'approved') out.approved++;
+      else out.ready++;
+    }
+    out.canApprove = out.total > 0 && out.missing === 0 && out.ready > 0;
+    return out;
+  }
+  async function approveAllTranslations(button) {
+    var L = lang(), st = story(), blocks = st && st.i18n && st.i18n.ar && st.i18n.ar.blocks || [];
+    var status = $('kh-translation-bulk-status');
+    if (L === 'ar' || translationBatchBusy || translationSingleBusy || !st) return;
+    translationBatchBusy = true;
+    if (button) button.disabled = true;
+    setTranslationGenerateControlsDisabled(true);
+    if (status) status.textContent = 'جارٍ التحقق من الترجمات المحفوظة ومطابقتها للمصدر العربي…';
+    try {
+      var latest = await audioReviewAction({ action: 'review_get' });
+      translationRecords = latest.audio_review && latest.audio_review.translations || {};
+      var pending = [];
+      for (var i = 0; i < blocks.length; i++) {
+        var source = blocks[i];
+        if (!source || !['karma', 'narrator'].includes(source.speaker) || !String(source.text || '').trim()) continue;
+        var key = L + ':' + i, record = translationRecords[key], hash = await sha256Trim(source.text);
+        if (!record || !String(record.translation_text || '').trim() || record.speaker !== source.speaker || record.source_arabic_hash !== hash || !['draft', 'approved'].includes(record.status)) {
+          throw new Error('الترجمة غير مكتملة أو قديمة في المقطع ' + (i + 1) + '. أعد ترجمة هذا المقطع أولًا.');
+        }
+        if (record.status === 'draft') pending.push({ index: i, key: key, text: record.translation_text, hash: hash });
+        else { translationWorkingText[key] = record.translation_text; translationConfirmed[key] = true; translationStates[key] = 'approved'; }
+      }
+      if (!pending.length) throw new Error('كل الترجمات معتمدة بالفعل؛ لا يوجد ما يحتاج إلى اعتماد.');
+      for (var p = 0; p < pending.length; p++) {
+        var item = pending[p];
+        var saved = await audioReviewAction({ action: 'translation_save', language: L, block_index: item.index, decision: 'approved', translation_text: item.text, source_arabic_hash: item.hash });
+        if (!saved.translation || saved.translation.status !== 'approved') throw new Error('لم يتأكد اعتماد ترجمة المقطع ' + (item.index + 1) + '.');
+        translationRecords[item.key] = saved.translation;
+        translationWorkingText[item.key] = saved.translation.translation_text;
+        translationConfirmed[item.key] = true;
+        translationStates[item.key] = 'approved';
+        renderTranslationOnPage(item.index, saved.translation.translation_text);
+        paintTranslationBlock(item.index, 'approved', '✓ الترجمة معتمدة بعد مراجعتها.', saved.translation, L);
+      }
+      if (status) status.textContent = 'تم اعتماد ' + pending.length + ' ترجمة للغة ' + L.toUpperCase() + '. أصبح توليد الصوت متاحًا للمقاطع المعتمدة.';
+    } catch (e) { if (status) status.textContent = 'لم يكتمل اعتماد الترجمات: ' + (e && e.message || e); }
+    finally { translationBatchBusy = false; setTranslationGenerateControlsDisabled(false); updateTranslationPublishButton(); updateLanguageBatchPanel(); }
+  }
+
   async function updateLanguageBatchPanel() {
     var panel = $('kh-language-audio-batch'), st = story();
     if (!panel || !st) return;
@@ -581,19 +639,23 @@
     panel.dataset.lang = L;
     var title = panel.querySelector('.kh-language-audio-title');
     var reviewButton = panel.querySelector('.kh-language-audio-review');
+    var audioReviewButton = panel.querySelector('.kh-language-audio-review-audio');
     var status = panel.querySelector('.kh-language-audio-status');
     var bulkTranslate = panel.querySelector('#kh-translation-bulk-generate');
+    var bulkTranslationApprove = panel.querySelector('#kh-translation-approve-all');
     if (title) title.textContent = 'أدوات اللغة — ' + ({ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'}[L] || L);
     if (!reviewButton || !status) return;
     if (bulkTranslate) {
       bulkTranslate.textContent = L === 'ar' ? 'تجهيز نصوص القراءة لكل المقاطع' : 'ترجمة كل المقاطع دفعة واحدة';
       bulkTranslate.title = L === 'ar'
         ? 'يجهّز نص القراءة الصوتية لكل المقاطع العربية دفعة واحدة.'
-        : 'يترجم كل المقاطع بالاعتماد على ترتيب ونصوص المتحدثين في الصفحة العربية.';
+        : 'يجهّز الترجمات كمسودات من المصدر العربي؛ لن يبدأ الصوت قبل اعتمادها.';
       bulkTranslate.disabled = !token() || translationBatchBusy;
     }
-    reviewButton.textContent = 'معاينة ومراجعة مقاطع ' + ({ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'}[L] || L);
+    reviewButton.textContent = 'معاينة ومراجعة الترجمة';
     reviewButton.disabled = true;
+    if (audioReviewButton) { audioReviewButton.hidden = L === 'ar'; audioReviewButton.textContent = 'مراجعة الصوت والاستماع'; audioReviewButton.disabled = true; }
+    if (bulkTranslationApprove) { bulkTranslationApprove.hidden = L === 'ar'; bulkTranslationApprove.disabled = true; }
     if (!token()) { status.textContent = 'سجّل الدخول من لوحة الإدارة لتمكين أدوات الصوت.'; return; }
     if (!api || typeof api.canReviewLanguage !== 'function') { status.textContent = 'جارٍ تحميل حالة الصوت لهذه اللغة…'; return; }
     var bulkGenerate = panel.querySelector('.kh-language-audio-generate-all');
@@ -603,15 +665,19 @@
     if (bulkApprove) bulkApprove.hidden = !bulkLanguage;
     try {
       var reviewReady = api.canReviewLanguage(L) === true;
-      reviewButton.disabled = !reviewReady;
+      var translationState = await translationApprovalStatus(L);
+      reviewButton.disabled = !bulkLanguage || (translationState.ready + translationState.approved === 0);
+      if (audioReviewButton) audioReviewButton.disabled = !reviewReady;
+      if (bulkTranslationApprove) bulkTranslationApprove.disabled = !token() || translationBatchBusy || !translationState.canApprove;
       if (bulkLanguage) {
         var s = api.languageBulkStatus(L);
         if (bulkGenerate) bulkGenerate.disabled = !token() || audioBatchBusy || s.total === 0 || s.accepted === s.total;
         if (bulkApprove) bulkApprove.disabled = !token() || audioBatchBusy || !s.canApprove;
         if (!audioBatchBusy && !audioBatchNote[L]) {
-          status.textContent = 'المقاطع ' + s.total + ': معتمد ' + s.accepted + ' · جاهز ' + s.ready + ' · في الطابور ' + s.pending +
+          status.textContent = 'الصوت — ' + s.total + ' مقطع: معتمد ' + s.accepted + ' · جاهز ' + s.ready + ' · في الطابور ' + s.pending +
             ' · قيد التوليد ' + s.processing + ' · فاشل ' + s.failed + ' · لم يُرسل ' + s.none + ' · مرفوض ' + s.rejected +
-            '. الاعتماد الجماعي يتطلب اكتمال كل المقاطع والاستماع لكل مقطع كاملًا.';
+            '. اعتماد الصوت يتطلب اكتمال كل المقاطع والاستماع لكل مقطع كاملًا.\n' +
+            'الترجمة — ' + translationState.total + ' مقطع: معتمد ' + translationState.approved + ' · جاهز للاعتماد ' + translationState.ready + ' · ناقص أو قديم ' + translationState.missing + '.';
         }
         if (audioBatchNote[L]) status.textContent = audioBatchNote[L];
         return;
@@ -633,19 +699,28 @@
       var translationStatus = $('kh-translation-bulk-status');
       var bulkTranslate = $('kh-translation-bulk-generate');
       if (bulkTranslate) actions.appendChild(bulkTranslate);
-      var reviewButton = el('button', 'kh-audio-review-btn kh-language-audio-review', 'معاينة ومراجعة المقاطع');
+      var reviewButton = el('button', 'kh-audio-review-btn kh-language-audio-review', 'معاينة ومراجعة الترجمة');
       reviewButton.type = 'button';
       reviewButton.addEventListener('click', function () {
         if (reviewButton.disabled) return;
         var boxes = document.querySelectorAll('.kh-flow-box');
-        boxes.forEach(function (box) {
-          box.open = true;
-          var step = box.querySelector('details.kh-step[data-step="4"]');
-          if (step) step.open = true;
-        });
+        boxes.forEach(function (box) { box.open = true; var step = box.querySelector('details.kh-step[data-step="1"]'); if (step) step.open = true; });
         var first = host.querySelector('.kh-flow-box');
         if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
+      var audioReviewButton = el('button', 'kh-audio-review-btn kh-language-audio-review-audio', 'مراجعة الصوت والاستماع');
+      audioReviewButton.type = 'button'; audioReviewButton.hidden = true;
+      audioReviewButton.addEventListener('click', function () {
+        if (audioReviewButton.disabled) return;
+        var boxes = document.querySelectorAll('.kh-flow-box');
+        boxes.forEach(function (box) { box.open = true; var step = box.querySelector('details.kh-step[data-step="4"]'); if (step) step.open = true; });
+        var first = host.querySelector('.kh-flow-box');
+        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      var translationApprove = el('button', 'kh-audio-review-btn kh-translation-approve-all', 'اعتماد ترجمة كل المقاطع');
+      translationApprove.id = 'kh-translation-approve-all'; translationApprove.type = 'button'; translationApprove.hidden = true;
+      translationApprove.title = 'يعتمد الترجمات المحفوظة بعد مراجعتها، ولا يبدأ توليد الصوت.';
+      translationApprove.addEventListener('click', function () { approveAllTranslations(translationApprove); });
       var status = el('p', 'kh-audio-review-state kh-language-audio-status', '');
       /* أزرار اللغات الأربع المترجمة فقط (en / fr / it / de)؛ تُخفى في العربية. */
       var generateAll = el('button', 'kh-audio-review-btn kh-language-audio-generate-all', 'توليد كل المقاطع');
@@ -656,8 +731,7 @@
       approveAll.type = 'button'; approveAll.hidden = true;
       approveAll.title = 'يعتمد صوت كل المقاطع دفعة واحدة، بعد اكتمالها جميعًا والاستماع الكامل لكل مقطع.';
       approveAll.addEventListener('click', function () { runAudioBatch('approve', approveAll); });
-      actions.append(generateAll, approveAll);
-      actions.appendChild(reviewButton);
+      actions.append(translationApprove, reviewButton, generateAll, audioReviewButton, approveAll);
       panel.append(title);
       if (translationStatus) {
         translationStatus.classList.add('kh-language-translation-status');
@@ -743,12 +817,12 @@
               var existing = translationRecords[key];
               var sourceHash = await sha256Trim(sourceBlock.text);
               var hasCurrentApprovedTranslation = !!(existing &&
-                existing.status === 'approved' &&
+                ['approved', 'draft'].includes(existing.status) &&
                 existing.source_arabic_hash === sourceHash &&
                 existing.speaker === sourceBlock.speaker &&
                 String(existing.translation_text || '').trim());
               if (hasCurrentApprovedTranslation) {
-                // Preserve and restore successful translations without another Gemini request.
+                // Preserve current translations, including drafts awaiting explicit approval.
                 translationWorkingText[key] = String(existing.translation_text);
                 translationConfirmed[key] = true;
                 translationStates[key] = 'approved';
@@ -782,15 +856,15 @@
                   force: !!(translationRecords[key] && translationRecords[key].status === 'approved')
                 });
                 var translated = result.translation;
-                if (!translated || translated.status !== 'approved' || !String(translated.translation_text || '').trim()) {
-                  throw new Error('لم يُرجع الخادم ترجمة معتمدة للغة ' + languageLabel + '.');
+                if (!translated || !["draft", "approved"].includes(translated.status) || !String(translated.translation_text || '').trim()) {
+                  throw new Error('لم يُرجع الخادم نص ترجمة صالحًا للغة ' + languageLabel + '.');
                 }
                 translationRecords[key] = translated;
                 translationWorkingText[key] = String(translated.translation_text);
                 translationConfirmed[key] = true;
-                translationStates[key] = 'approved';
+                translationStates[key] = translated.status;
                 doneByLanguage[targetLanguage]++;
-                paintTranslationBlock(blockIndex, 'approved', '✓ الترجمة العربية المصدر جاهزة ومعتمدة باللغة ' + languageLabel + '.', translated, targetLanguage);
+                paintTranslationBlock(blockIndex, translated.status, '✓ الترجمة محفوظة للمراجعة والاعتماد باللغة ' + languageLabel + '.', translated, targetLanguage);
                 return 'done';
               } catch (e) {
                 var message = String(e && e.message || 'تعذرت ترجمة هذا المقطع.');

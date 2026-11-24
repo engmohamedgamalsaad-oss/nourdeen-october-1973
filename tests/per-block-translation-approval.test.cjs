@@ -14,10 +14,10 @@ const storyReader = fs.readFileSync(path.join(root, 'rebuild/reader.js'), 'utf8'
 const worker = fs.readFileSync(path.join(root, 'supabase/functions/story-audio-worker/index.ts'), 'utf8');
 const audioEngine = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
 
-test('translation generation is per block and a successful Gemini result is default-approved', () => {
+test('translation generation is per block and saves a draft pending explicit approval', () => {
   assert.match(assets, /body\.action === "translation_generate"/);
   assert.match(assets, /source_arabic_hash: sourceHash, translation_text: translationText/);
-  assert.match(assets, /status: "approved", auto_approved: true/);
+  assert.match(assets, /status: "draft", auto_approved: false/);
   assert.doesNotMatch(assets, /Save as a draft only/);
 });
 
@@ -26,7 +26,7 @@ test('optional manual translation edit stays tied to the current Arabic source h
   assert.match(assets, /source\.sourceTextHash !== body\.source_arabic_hash/);
   assert.match(assets, /status: decision/);
   assert.match(preview, /حفظ تعديلي \(اختياري\)/);
-  assert.doesNotMatch(preview, /kh-translation-approve/);
+  assert.match(preview, /kh-translation-approve-all/);
   assert.match(preview, /translation_save/);
 });
 
@@ -111,7 +111,8 @@ const audioReview = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review
 test('bulk translation paints each segment immediately and preserves the result in its own editor', () => {
   assert.match(preview, /function paintTranslationBlock\(index, state, message, record\)/);
   assert.match(preview, /translationWorkingText\[key\] = String\(translated\.translation_text\)/);
-  assert.match(preview, /paintTranslationBlock\(blockIndex, 'approved'/);
+  assert.match(preview, /paintTranslationBlock\(blockIndex, translated\.status/);
+  assert.match(preview, /paintTranslationBlock\(item\.index, 'approved'/);
   assert.match(preview, /paintTranslationBlock\(blockIndex, 'failed'/);
   assert.match(preview, /translationStates\[key\] = 'processing'/);
   assert.match(preview, /translationStates\[key\] !== 'failed'/);
