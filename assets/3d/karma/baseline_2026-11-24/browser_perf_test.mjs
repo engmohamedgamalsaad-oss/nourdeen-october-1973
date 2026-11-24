@@ -76,5 +76,11 @@ try {
 const out = process.argv[2] || 'RESULT_browser_perf.json';
 fs.writeFileSync(out, JSON.stringify(report,null,2));
 console.log(JSON.stringify(report,null,2));
-const bad = report.results.some(r => r.errors.length || Object.values(r.actions).some(a => !a.completed) || !r.perf.frameSamples);
+const bad = report.results.some(r =>
+  r.errors.length ||
+  Object.values(r.actions).some(a => !a.completed) ||
+  r.actions.leanOn.state !== 'lean' ||
+  r.actions.stand.state !== 'idle' ||
+  !r.perf.frameSamples
+);
 if (bad) process.exitCode = 1;
