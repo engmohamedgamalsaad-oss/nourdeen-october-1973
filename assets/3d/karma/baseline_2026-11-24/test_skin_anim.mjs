@@ -37,7 +37,12 @@ for (const mesh of skinned) {
   for (let i = 0; i < weights.count; i++) {
     const sum = weights.getX(i) + weights.getY(i) + weights.getZ(i) + weights.getW(i);
     maxWeightDeviation = Math.max(maxWeightDeviation, Math.abs(sum - 1));
-    for (let k = 0; k < 4; k++) if (joints.getComponent(i, k) >= mesh.skeleton.bones.length) invalidJointIndices++;
+    for (let k = 0; k < 4; k++) {
+      const joint = joints.getComponent(i, k);
+      const weight = weights.getComponent(i, k);
+      if (!Number.isInteger(joint) || joint < 0 || joint >= mesh.skeleton.bones.length) invalidJointIndices++;
+      if (!Number.isFinite(weight) || weight < 0) invalidJointIndices++;
+    }
   }
 }
 report.maxWeightSumDeviation = maxWeightDeviation;
@@ -68,22 +73,28 @@ const advance = async (promise, seconds, observe = () => {}) => {
   return result;
 };
 const angle = (name) => rig.bones[name].quaternion.angleTo(controller.restQuaternions[name]);
-const bbox = () => {
-  rig.scene.updateMatrixWorld(true);
-  const box = new THREE.Box3();
+const snapshotSkin = () => skinned.map((mesh) => {
+  mesh.skeleton.update();
+  const attr = mesh.geometry.getAttribute('position');
+  const points = new Float32Array(attr.count * 3);
   const p = new THREE.Vector3();
-  for (const mesh of skinned) {
-    const attr = mesh.geometry.getAttribute('position');
-    for (let i = 0; i < attr.count; i += 12) {
-      mesh.getVertexPosition(i, p);
-      p.applyMatrix4(mesh.matrixWorld);
-      box.expandByPoint(p);
+  for (let i = 0; i < attr.count; i++) {
+    mesh.getVertexPosition(i, p);
+    points.set([p.x, p.y, p.z], i * 3);
+  }
+  return points;
+});
+const boundsOf = (snapshots) => {
+  const box = new THREE.Box3();
+  for (const points of snapshots) {
+    for (let i = 0; i < points.length; i += 3) {
+      box.expandByPoint(new THREE.Vector3(points[i], points[i + 1], points[i + 2]));
     }
   }
   return { min: box.min.toArray(), max: box.max.toArray() };
 };
-
-const restBox = bbox();
+const restSnapshot = snapshotSkin();
+const restBox = boundsOf(restSnapshot);
 const walk = await advance(controller.walkTo('b', { side: 'top' }), 8);
 report.tests.walkTo = { ...walk, position: controller.pos.toArray(), target: [475, 260] };
 report.tests.walkTo.pass = walk.completed && Math.hypot(controller.pos.x - 475, controller.pos.y - 260) < 0.01;
@@ -91,7 +102,20 @@ report.tests.walkTo.pass = walk.completed && Math.hypot(controller.pos.x - 475, 
 const lean = await advance(controller.leanOn('a', { side: 'right' }), 8);
 for (let i = 0; i < 30; i++) controller.update(dt);
 const leanSpine = angle('Spine');
-const leanBox = bbox();
+const leanSnapshot = snapshotSkin();
+const leanBox = boundsOf(leanSnapshot);
+let maxSkinVertexDelta = 0;
+let changedSkinVertices = 0;
+for (let m = 0; m < restSnapshot.length; m++) {
+  for (let i = 0; i < restSnapshot[m].length; i += 3) {
+    const dx = leanSnapshot[m][i] - restSnapshot[m][i];
+    const dy = leanSnapshot[m][i + 1] - restSnapshot[m][i + 1];
+    const dz = leanSnapshot[m][i + 2] - restSnapshot[m][i + 2];
+    const delta = Math.hypot(dx, dy, dz);
+    maxSkinVertexDelta = Math.max(maxSkinVertexDelta, delta);
+    if (delta > 1e-5) changedSkinVertices++;
+  }
+}
 report.tests.leanOn = { ...lean, state: controller.stateName, spineDeltaRadians: leanSpine };
 report.tests.leanOn.pass = lean.completed && controller.stateName === 'lean' && leanSpine > 0.02;
 
@@ -122,10 +146,11 @@ report.tests.tilt.pass = tilt.completed && tiltPeak > 0.05;
 report.deformation = {
   restBounds: { min: restBox.min, max: restBox.max },
   leanBounds: { min: leanBox.min.toArray(), max: leanBox.max.toArray() },
-  changed: JSON.stringify(restBox.min) !== JSON.stringify(leanBox.min.toArray()) ||
-           JSON.stringify(restBox.max) !== JSON.stringify(leanBox.max.toArray())
+  changed: maxSkinVertexDelta > 1e-5,
+  maxSkinVertexDelta,
+  changedSkinVertices
 };
-report.deformation.pass = report.deformation.changed;
+report.deformation.pass = report.deformation.changed && changedSkinVertices > 0;
 report.tests.skinData.pass = maxWeightDeviation < 1e-3 && invalidJointIndices === 0;
 report.tests.allSixMotionsPass = ['walkTo','leanOn','stand','jump','wave','tilt'].every((name) => report.tests[name].pass);
 const t0 = performance.now();
