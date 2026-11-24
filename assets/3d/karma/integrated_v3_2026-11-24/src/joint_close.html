@@ -1,0 +1,25 @@
+<!doctype html><meta charset=utf8><body style="margin:0;background:#202428"><canvas id=c width=1600 height=800></canvas><pre id=log></pre>
+<script type=importmap>{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<script type=module>
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {createRig} from './KarmaRig.js';
+const q=new URLSearchParams(location.search);const glb=q.get('glb');
+const cv=document.getElementById('c');const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});r.setScissorTest(true);r.setSize(1600,800,false);
+const g=await new GLTFLoader().loadAsync(glb);const rig=createRig(g.scene);const sc=new THREE.Scene();sc.background=new THREE.Color(0x30363c);sc.add(g.scene);
+sc.add(new THREE.HemisphereLight(0xffffff,0x666677,1.5));const dl=new THREE.DirectionalLight(0xffffff,1.6);dl.position.set(1,1.5,3);sc.add(dl);
+const cam=new THREE.PerspectiveCamera(25,1,0.05,20);
+// [label, pose, camera pos, look-at]
+const P=[
+['elbow L side',{Forearm_L:[-1.6,0,0]},[1.1,0.45,0.35],[0.2,0.42,0.02]],
+['elbow L front',{Forearm_L:[-1.6,0,0]},[0.25,0.45,1.1],[0.2,0.42,0.02]],
+['knee L side',{UpperLeg_L:[-0.6,0,0],LowerLeg_L:[1.2,0,0]},[1.2,0.2,0.0],[0.07,0.2,0.0]],
+['knee L front',{UpperLeg_L:[-0.6,0,0],LowerLeg_L:[1.2,0,0]},[0.1,0.25,1.2],[0.07,0.2,0.0]],
+['neck/head tilt front',{Neck:[0,0.3,0.18],Head:[0,0.2,0.12]},[0,0.75,1.0],[0,0.72,0]],
+['neck/head turn+nod side',{Neck:[0.15,0.6,0.0],Head:[0.2,0.5,0.0]},[0.8,0.75,0.6],[0,0.72,0]],
+['shoulder L up front',{UpperArm_L:[0,0,1.2]},[0.1,0.58,1.2],[0.12,0.55,0]],
+['hip L fwd side',{UpperLeg_L:[-1.0,0,0]},[1.2,0.35,0.0],[0.07,0.3,0.1]]];
+P.forEach(([n,p,cp,la],i)=>{for(const k in rig.bones)rig.bones[k].rotation.set(0,0,0);for(const k in p)rig.bones[k].rotation.set(...p[k]);g.scene.updateMatrixWorld(true);
+ const col=i%4,row=Math.floor(i/4);r.setViewport(col*400,(1-row)*400,400,400);r.setScissor(col*400,(1-row)*400,400,400);cam.position.set(...cp);cam.lookAt(...la);r.render(sc,cam)});
+document.body.insertAdjacentHTML('beforeend','<textarea id=png>'+cv.toDataURL('image/png')+'</textarea>');document.title='done';
+</script>
