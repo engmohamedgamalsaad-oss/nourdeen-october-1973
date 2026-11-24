@@ -319,7 +319,11 @@ if (!engine.includes('window.KH_LANG.supported')) fail('assets/shared/i18n.js: l
 
 /* ---------- 4b) كل ملفات JS تُترجَم بلا أخطاء + قاموس الألمانية سليم ---------- */
 for (const rel of walk('').filter((f) => /\.(?:js|cjs)$/.test(f)).sort()) {
-  try { new vm.Script(read(rel), { filename: rel }); }
+  const source = read(rel);
+  // vm.Script parses classic scripts, not ES modules. Module files are checked
+  // separately by Node's module parser in the CI workflow.
+  if (/^\s*(?:import\s|export\s)/m.test(source)) continue;
+  try { new vm.Script(source, { filename: rel }); }
   catch (e) { fail(`${rel}: syntax error: ${e.message}`); }
 }
 {
