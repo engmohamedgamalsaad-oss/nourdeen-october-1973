@@ -64,13 +64,11 @@ try {
     const bootError = await page.evaluate(() => window.__bootError);
     if (bootError) throw new Error('Karma browser boot failed: ' + bootError);
     console.log(`[${model.name}/${viewport.name}] GLB loaded; running six actions`);
-    await page.waitForTimeout(1000);
     await page.evaluate(() => window.__startPerf());
     const actions = await page.evaluate(() => window.__runSixActions());
-    await page.waitForTimeout(500);
     const perf = await page.evaluate(() => window.__stopPerf());
     report.results.push({ model:model.name, viewport:viewport.name, actions, perf, errors });
-    console.log(`[${model.name}/${viewport.name}] done: ${perf.fps} fps, ${perf.p95FrameMs} ms p95`);
+    console.log(`[${model.name}/${viewport.name}] done: ${perf.renderThroughputFps} render-throughput fps, ${perf.p95RenderCallMs} ms p95`);
     await context.close();
   }
 } finally {
@@ -85,6 +83,6 @@ const bad = report.results.some(r =>
   Object.values(r.actions).some(a => !a.completed) ||
   r.actions.leanOn.state !== 'lean' ||
   r.actions.stand.state !== 'idle' ||
-  !r.perf.frameSamples
+  !r.perf.renderSamples
 );
 if (bad) process.exitCode = 1;
