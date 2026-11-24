@@ -1,0 +1,9 @@
+mean err (pupil-distance units): 0.041
+face_w               ref 2.18 mine 2.15
+face_h               ref 2.27 mine 2.26
+eye_w                ref 0.46 mine 0.48
+inner_gap_over_eyew  ref 1.14 mine 1.02
+mouth_w              ref 0.95 mine 0.85
+jaw_w                ref 1.68 mine 1.72
+chin_y               ref 1.48 mine 1.47
+nose_w               ref 0.68 mine 0.68
