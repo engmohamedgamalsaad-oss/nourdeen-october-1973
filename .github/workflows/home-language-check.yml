@@ -37,6 +37,12 @@ jobs:
         run: node scripts/check-new-story-readiness.js
       - name: Verify homepage-only language flow
         run: node scripts/check-home-language.js
+      - name: Check Karma ES module syntax
+        run: |
+          node --input-type=module --check < assets/3d/karma/js/KarmaRig.js
+          node --input-type=module --check < assets/3d/karma/js/KarmaController.js
+          node --input-type=module --check < assets/3d/karma/baseline_2026-11-24/KarmaRig.node-test-adapter.js
+          node --input-type=module --check < assets/3d/karma/baseline_2026-11-24/KarmaController.node-test-adapter.js
       - name: Verify five-language translation coverage
         run: node scripts/check-localization-coverage.js
       - name: Verify admin story visibility integration
