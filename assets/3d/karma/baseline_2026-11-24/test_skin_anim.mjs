@@ -16,6 +16,14 @@ const gltf = await new Promise((resolve, reject) => new GLTFLoader().parse(array
 const skinned = [];
 gltf.scene.traverse((node) => { if (node.isSkinnedMesh) skinned.push(node); });
 const rig = createRig(gltf.scene);
+const probeHead = new THREE.Group();
+const probeHair = new THREE.Group();
+attachHead(rig, probeHead, { hair: probeHair });
+const headHairMounts = {
+  headParent: probeHead.parent === rig.headMount,
+  hairParent: probeHair.parent === rig.hairMount,
+  placeholderHidden: !rig.headPlaceholder || rig.headPlaceholder.visible === false
+};
 
 const report = {
   file,
@@ -25,7 +33,7 @@ const report = {
   inverseBindMatrices: skinned.map((mesh) => mesh.skeleton.boneInverses.length),
   rigBones: Object.keys(rig.bones).length,
   mounts: { head: !!rig.headMount, hair: !!rig.hairMount, placeholder: !!rig.headPlaceholder },
-  tests: {}
+  tests: { headHairMounts: { ...headHairMounts, pass: Object.values(headHairMounts).every(Boolean) } }
 };
 
 let maxWeightDeviation = 0;
@@ -265,7 +273,7 @@ report.mobileProfile = {
   note: 'Controller CPU only; excludes GPU skinning, draw calls, texture upload and browser compositing.'
 };
 report.tests.rigAndMotionPass =
-  report.tests.skinData.pass && report.tests.allSixMotionsPass &&
+  report.tests.headHairMounts.pass && report.tests.skinData.pass && report.tests.allSixMotionsPass &&
   report.deformation.pass && report.tests.deformationSweepPass && report.tests.nonIdentityRestRotation.pass;
 report.tests.finalQualityReady = report.tests.rigAndMotionPass && report.tests.deformationQualityPass;
 report.status = report.tests.finalQualityReady ? 'QUALITY_THRESHOLDS_PASS' :
