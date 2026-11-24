@@ -52,6 +52,17 @@ jobs:
           else
             echo "Weight-ramp experiment is not present in this PR merge snapshot; comparison skipped."
           fi
+      - name: Evaluate integrated v1 character experiment without treating it as final
+        continue-on-error: true
+        run: |
+          INTEGRATED=../../../../base-work/assets/3d/karma/integrated_v1_2026-11-24/EXPERIMENT_NOT_FINAL_karma_integrated_v1.glb
+          if [ -f "$INTEGRATED" ]; then
+            if ! node test_skin_anim.mjs "$INTEGRATED" RESULT_integrated_v1.json; then
+              echo "::warning::Integrated v1 experiment has rig, motion or deformation issues; it remains non-final."
+            fi
+          else
+            echo "Integrated v1 experiment not present on the shared branch."
+          fi
       - name: Build a non-destructive mobile optimization candidate
         continue-on-error: true
         run: |
