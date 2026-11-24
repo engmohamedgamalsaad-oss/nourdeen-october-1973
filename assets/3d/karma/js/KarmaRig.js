@@ -18,10 +18,26 @@ export function createRig(gltfScene) {
   const skinned = [];
   gltfScene.traverse((o) => { if (o.isSkinnedMesh) { o.frustumCulled = false; skinned.push(o); } });
   if (!skinned.length) throw new Error('Karma rig: no SkinnedMesh found');
+
+  // A matching node name is not enough: every controller bone must be a real
+  // joint in at least one skin used by the character.
+  const skeletons = skinned.map((mesh) => new Set(mesh.skeleton.bones));
+  const missingJoints = BONES.filter((name) => !skeletons.some((set) => set.has(bones[name])));
+  if (missingJoints.length) {
+    throw new Error('Karma rig: named nodes are not skin joints: ' + missingJoints.join(', '));
+  }
+
+  const headMount = gltfScene.getObjectByName('HeadMount');
+  const hairMount = gltfScene.getObjectByName('HairMount');
+  if (!headMount || !hairMount) {
+    throw new Error('Karma rig: missing required HeadMount or HairMount node');
+  }
+  if (headMount.parent !== bones.Head || hairMount.parent !== bones.Head) {
+    throw new Error('Karma rig: HeadMount and HairMount must be children of Head');
+  }
+
   return {
-    scene: gltfScene, bones, skinned,
-    headMount: gltfScene.getObjectByName('HeadMount'),
-    hairMount: gltfScene.getObjectByName('HairMount'),
+    scene: gltfScene, bones, skinned, headMount, hairMount,
     headPlaceholder: gltfScene.getObjectByName('HEAD_PLACEHOLDER_replace_with_karma_head'),
   };
 }
@@ -39,6 +55,12 @@ export function parseKarmaRig(arrayBuffer) {
 /** Mount Karma's real head (any Object3D) on the Head bone and hide the neutral placeholder.
  *  The head asset is expected to be authored with its origin at the base of the neck, facing +Z. */
 export function attachHead(rig, headObject, { hair = null } = {}) {
+  if (!headObject || !headObject.isObject3D) {
+    throw new TypeError('Karma rig: attachHead expects a THREE.Object3D head');
+  }
+  if (!rig.headMount || (hair && !rig.hairMount)) {
+    throw new Error('Karma rig: required head/hair mount is missing');
+  }
   if (rig.headPlaceholder) rig.headPlaceholder.visible = false;
   rig.headMount.add(headObject);
   if (hair) rig.hairMount.add(hair);
