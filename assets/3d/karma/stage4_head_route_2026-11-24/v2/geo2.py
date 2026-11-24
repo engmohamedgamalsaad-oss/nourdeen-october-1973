@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.interpolate import griddata
+from scipy.interpolate import griddata,LinearNDInterpolator
 from geo import sphere,u,EYE_Y
 ey=lambda k: EYE_Y-k*u
 SKIN=np.array([246,196,168.])
@@ -14,8 +14,8 @@ def head(nl=170,nw=230):
     def bump(cx,cy_,sx,h,sy=None):
         sy=sy or sx
         w=gauss2(P,cx,cy_,sx,sy)*front;P[:]=P+N*(h*w)[:,None]
-    bump(0,ey(0.62),0.014,0.022)          # nose tip
-    bump(0,ey(0.40),0.011,0.013,0.025)     # bridge
+    bump(0,ey(0.62),0.013,0.014)          # nose tip
+    bump(0,ey(0.40),0.011,0.007,0.025)     # bridge
     for s in(-1,1):
         bump(s*0.30*u,ey(0.55),0.008,0.006) # nostril wings
         bump(s*0.84*u,ey(0.50),0.040,0.014,0.036) # round cheeks
@@ -31,7 +31,8 @@ def head(nl=170,nw=230):
 def zf_factory(P,d):
     m=d[:,2]>0.1
     pts=P[m][:,:2];z=P[m][:,2]
-    return lambda x,y: griddata(pts,z,np.stack([np.atleast_1d(x),np.atleast_1d(y)],-1),method='linear')
+    f=LinearNDInterpolator(pts,z)
+    return lambda x,y: f(np.stack([np.atleast_1d(x),np.atleast_1d(y)],-1))
 def tube(path,r,col,ns=8):
     path=np.asarray(path);n=len(path)
     T=np.gradient(path,axis=0);T/=np.linalg.norm(T,axis=1)[:,None]+1e-12

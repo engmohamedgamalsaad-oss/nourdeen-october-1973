@@ -1,20 +1,21 @@
 import numpy as np,sys
 import geo2 as G
 from geo2 import u,ey,EYE_Y,SKIN,tube,ellipsoid
-P,F,d=G.head()
+P,F,d=G.head(260,340)
 zf=G.zf_factory(P,d)
+EI,EO=0.29,0.745
 sn=lambda t,p=0.8: np.sin(np.pi*np.clip(t,0,1))**p
 def eye_curves(s,n=24):
-    t=np.linspace(0,1,n);x=s*(0.267+0.463*t)*u
+    t=np.linspace(0,1,n);x=s*(EI+(EO-EI)*t)*u
     base=EYE_Y-0.062*u*(1-t)
     up=base+0.215*u*sn(t**0.85,0.75);lo=base-0.085*u*sn(t,0.9)
     return t,x,up,lo
 def inside_eye(x,y,s):
-    t=(s*x-0.267*u)/(0.463*u);ok=(t>0.02)&(t<0.98)
+    t=(s*x-EI*u)/((EO-EI)*u);ok=(t>0.02)&(t<0.98)
     base=EYE_Y-0.062*u*(1-t);tt=np.clip(t,0,1)
     up=base+0.215*u*sn(tt**0.85,0.75);lo=base-0.085*u*sn(tt,0.9)
     return ok&(y<up-0.0006)&(y>lo+0.0006)
-L=0.49*u;COR=ey(0.74)
+L=0.54*u;COR=ey(0.74)
 mtop=lambda t: COR+(ey(0.90)-COR)*sn(t,0.8)
 mbot=lambda t: COR+(ey(1.01)-COR)*sn(t,0.8)
 def inside_mouth(x,y):
@@ -49,15 +50,15 @@ for s in(-1,1):
 keep=np.ones(len(F),bool)
 ins=np.zeros(len(P),bool)
 for s in(-1,1): ins|=inside_eye(x,y,s)&front
-ins|=inside_mouth(x,y)&front
 keep=~ins[F].all(1)
 Fk=F[keep]
 parts=[dict(V=P,F=Fk,col=col)]
+C0=np.array([0,0.815,0]);parts.append(dict(V=C0+(P-C0)*0.94,F=F[ins[F].any(1)],col=np.tile([196,128,108.],(len(P),1))))
 Zf=lambda xx,yy: float(zf(xx,yy)[0])
 # eyes
 for s in(-1,1):
-    ex=s*0.50*u;eyc=EYE_Y+0.03*u;r=0.0195
-    D,Fe=G.sphere(72,96);V=D*r+np.array([ex,eyc,Zf(ex,eyc)-r+0.0008])
+    ex=s*(EI+EO)/2*u;eyc=EYE_Y+0.03*u;r=0.0205
+    D,Fe=G.sphere(72,96);V=D*r*np.array([1.06,1.0,1.0])+np.array([ex,eyc,Zf(ex,eyc)-r+0.0008])
     ax=np.array([0,np.sin(0.10),np.cos(0.10)]);ang=np.arccos(np.clip(D@ax,-1,1))
     ec=np.tile([248,244,240.],(len(D),1));ec[ang<0.72]=[70,42,32];ec[ang<0.60]=[112,68,46];ec[ang<0.30]=[22,12,10]
     hl=np.linalg.norm(D[:,:2]-np.array([0.10,0.18]),axis=1)<0.07;ec[hl&(D[:,2]>0.9)]=[255,255,255]
@@ -66,16 +67,34 @@ for s in(-1,1):
     pu=np.array([[a,b,Zf(a,b)+0.0006] for a,b in zip(xx,up)]);pl=np.array([[a,b,Zf(a,b)+0.0004] for a,b in zip(xx,lo)])
     rr=0.0010+0.0014*np.sin(np.pi*t)
     parts.append(tube(pu,rr,(48,28,22)));parts.append(tube(pl,0.0009,(205,128,118)))
-# mouth
-t=np.linspace(0,1,40);mx=-L+2*L*t
-top=np.array([[a,mtop(b),Zf(a,mtop(b))+0.0008] for a,b in zip(mx,t)]);bot=np.array([[a,mbot(b),Zf(a,mbot(b))+0.0008] for a,b in zip(mx,t)])
-parts.append(tube(top,0.0016+0.0010*sn(t),(226,106,122)))
-botl=bot.copy();botl[:,1]-=0.0030*sn(t);parts.append(tube(botl,0.0020+0.0022*sn(t),(238,130,144)))
-zc=Zf(0,ey(0.95))
-parts.append(ellipsoid((0,ey(0.955),zc-0.010),(0.40*u,0.050*u,0.006),(66,20,28)))
-for k in range(8):
-    tx=0.5+(k-3.5)*0.095;xx=-L+2*L*tx
-    yy=mtop(tx)-0.0030
-    parts.append(ellipsoid((xx,yy,Zf(xx,yy)-0.0030),(0.0044,0.0052,0.0030),(250,246,236),8,12))
+# mouth: lips are surface displacement, teeth a continuous ribbon
+def curve_bump(path,h,sig):
+    Nn=(P-np.array([0,0.815,0]));Nn/=np.linalg.norm(Nn,axis=1)[:,None]
+    wm=np.zeros(len(P))
+    for (px,py) in path:
+        wm=np.maximum(wm,np.exp(-(((x-px)**2+(y-py)**2)/(2*sig**2)))*front)
+    P[:]+=Nn*(h*wm)[:,None]
+t=np.linspace(0,1,60);mx=-L+2*L*t
+curve_bump([(a,mtop(b_)+0.0018*sn(b_)) for a,b_ in zip(mx,t)],0.0012,0.0026)
+curve_bump([(a,mbot(b_)-0.0040*sn(b_)) for a,b_ in zip(mx,t)],0.0022,0.0036)
+parts[0]['V']=P
+nt=120;nv=9;Vt=[];Ct=[];Ft=[]
+tt=np.linspace(0.0,1.0,nt)
+for tv in tt:
+    xx=-L+2*L*tv
+    for vi in range(nv):
+        v=vi/(nv-1);yy=mtop(tv)+(mbot(tv)-mtop(tv))*v
+        Vt.append([xx,yy,Zf(xx,yy)+0.0014])
+        gap=abs(np.sin(np.pi*(tv-0.06)/0.88*9))<0.06 and 0.08<tv<0.92
+        if v<0.58: c=(223,213,201) if gap else (250,246,236)
+        elif v<0.66: c=(150,80,80)
+        else: c=(78,24,32) if v<0.85 else (200,98,110)
+        Ct.append(c)
+for k in range(nt-1):
+    for m_ in range(nv-1):
+        a=k*nv+m_;b2=(k+1)*nv+m_;Ft+=[[a,a+1,b2],[a+1,b2+1,b2]]
+parts.append(dict(V=np.array(Vt),F=np.array(Ft),col=np.array(Ct,float),two=True))
+rimu=np.array([[a,mtop(b_),Zf(a,mtop(b_))+0.0004] for a,b_ in zip(mx,t)]);riml=np.array([[a,mbot(b_),Zf(a,mbot(b_))+0.0004] for a,b_ in zip(mx,t)])
+parts.append(tube(rimu,0.0013,(206,98,112),6));parts.append(tube(riml,0.0015,(214,108,122),6))
 import pickle;pickle.dump(parts,open('parts_v2.pkl','wb'))
 print(len(P),len(Fk))
