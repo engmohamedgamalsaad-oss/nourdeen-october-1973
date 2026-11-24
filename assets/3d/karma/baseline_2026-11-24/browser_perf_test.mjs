@@ -46,6 +46,7 @@ try {
   for (const model of models) for (const viewport of viewports) {
     const context = await browser.newContext({ viewport:{width:viewport.width,height:viewport.height}, deviceScaleFactor:1, isMobile:viewport.name==='mobile', hasTouch:viewport.name==='mobile' });
     const page = await context.newPage();
+    page.setDefaultTimeout(60000);
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     page.on('requestfailed', req => errors.push(req.url() + ': ' + (req.failure()?.errorText || 'request failed')));
@@ -56,17 +57,20 @@ try {
       window.addEventListener('unhandledrejection', e => { window.__bootError = String(e.reason); });
     });
     const url = `http://127.0.0.1:${port}/assets/3d/karma/baseline_2026-11-24/browser_perf_page.html?model=${encodeURIComponent(model.url)}`;
+    console.log(`[${model.name}/${viewport.name}] opening preview`);
     const response = await page.goto(url, { waitUntil:'domcontentloaded', timeout:90000 });
     if (!response || !response.ok()) throw new Error('Preview page HTTP failure: ' + (response?.status() ?? 'no response') + ' ' + url);
-    await page.waitForFunction(() => window.__karmaLoaded === true || !!window.__bootError, { timeout:90000 });
+    await page.waitForFunction(() => window.__karmaLoaded === true || !!window.__bootError, null, { timeout:90000 });
     const bootError = await page.evaluate(() => window.__bootError);
     if (bootError) throw new Error('Karma browser boot failed: ' + bootError);
+    console.log(`[${model.name}/${viewport.name}] GLB loaded; running six actions`);
     await page.waitForTimeout(1000);
     await page.evaluate(() => window.__startPerf());
     const actions = await page.evaluate(() => window.__runSixActions());
     await page.waitForTimeout(500);
     const perf = await page.evaluate(() => window.__stopPerf());
     report.results.push({ model:model.name, viewport:viewport.name, actions, perf, errors });
+    console.log(`[${model.name}/${viewport.name}] done: ${perf.fps} fps, ${perf.p95FrameMs} ms p95`);
     await context.close();
   }
 } finally {
