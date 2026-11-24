@@ -147,7 +147,7 @@ test('admin preview switches the story body to the selected locale and displays 
   assert.match(preview, /if \(translationConfirmed\[key\]\) renderTranslationOnPage\(index, translationWorkingText\[key\]\)/);
   assert.match(preview, /site-language-change', function \(\) \{ loadTranslations\(\)\.then\(onUpdated\); \}/);
   assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader\.js\?v=20261123-quiz-loading-1/);
-  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader-audio-flow\.js\?v=20261123-active-language-only-1/);
+  assert.match(fs.readFileSync(path.join(root, 'rebuild/reader.html'), 'utf8'), /reader-audio-flow\.js\?v=20261124-button-state-fix-1/);
 });
 
 test('a single excluded wrong-speaker clip does not invalidate the remaining manifest clips', () => {
@@ -192,7 +192,7 @@ test('French translation preview shows the Arabic reference only once and retrie
   assert.match(assets, /const delayMs = Math\.min\(12000, Math\.max\(retryAfterMs, 2500 \* attempt\)\);/);
   assert.match(assets, /AbortController\(\)[\s\S]{0,120}perAttemptTimeoutMs/);
   assert.match(assets, /بعد " \+ attemptsMade \+ " محاولات/);
-  assert.match(assets, /status: "approved", auto_approved: true, model,/);
+  assert.match(assets, /status: "draft", auto_approved: false, model,/);
 });
 
 test('bulk translation retries failed clips in rounds and stops on lost session', () => {
