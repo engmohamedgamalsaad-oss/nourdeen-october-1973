@@ -8,3 +8,6 @@ Transient after resize: hidden up to about 8 s, then she reappears. Cause not is
 ## Update 17:34 (desktop 1440x900 rerun after elapsed-time recovery, resize snap-in)
 Desktop timelines: entry/cards/slideshow/bottom/360x740/768x1024/back-to-390 all VVVV (full). Resize to 1440x900 after 768x1024: hhhhhhhhhVVV (about 9 s hidden, still a defect, cause not isolated).
 Tried and rejected: forcing a new visit on every resize and forcing recovery while walking made 768x1024 hidden for the whole 12 s (preempt livelock), so those were reverted. Kept: hidden recovery by elapsed time (1.2 s when idle), resize snap of her position into the viewport.
+
+## science.html, phone 390x844 (17:37, baseline fixture)
+entry hhhhhhhhhh, cards VVVVVVVVVVVV, slideshow hhhhhhhhhh, bottom VVVVVVVVVV, 360x740 V x12, 768x1024 V x12, 1440x900 hhhVVVVVVVVV, back 390x844 V x12. Overlap 0. Entry-at-top hidden is unclassified: no card is in the viewport band at scroll 0 on this page (to be checked against screenshot), so absence may be by design.
