@@ -1,17 +1,17 @@
-import sys;sys.path.insert(0,'/tmp/m')
+import sys;sys.path.insert(0,__import__('os').path.dirname(__import__('os').path.abspath(__file__))); from cfg import *
 from load import load; from rast import *; from fit import LM
 from PIL import Image,ImageDraw
 import numpy as np, json
 S=400; BOX=(-1.1,1.1,-1.8,0.55)
-DQ='/tmp/r/assets/3d/karma/face_stage1_2026-11-25/attempt_Q_wider_eyes_lighter_nose_cheeks/'
-Q=json.load(open('/tmp/exp/Q_measured_from_GLB_renders.json'))
+DQ=REPO+'/assets/3d/karma/face_stage1_2026-11-25/attempt_Q_wider_eyes_lighter_nose_cheeks/'
+Q=json.load(open(OUT+'/Q_measured_from_GLB_renders.json'))
 def loadQ(e):
     V,C,I=load(DQ+f'karma_face_stage1_Q_{e}_EXPERIMENT.glb'); V=V.astype(float)
     ipd=Q['ipd_glb_units']; ey=Q['eye_line_y_glb_units']; V[:,0]/=ipd; V[:,1]=(V[:,1]-ey)/ipd; V[:,2]/=ipd
     return V,C,I.reshape(-1,3).astype(int)
 def loadM(e):
-    V,C,I=load(f'/tmp/exp/karma_face_MH_{e}_FITTEST.glb'); return V.astype(float),C,I.reshape(-1,3).astype(int)
-PUP={'stand':('/downloads/image-de4a722b.jpg',(563,246),(657,232)),'wave':('/downloads/image-0b5b46c1.jpg',(583.3,240.7),(672,226)),'clasp':('/downloads/image-89132d01.jpg',(564,284),(660.7,268.3))}
+    V,C,I=load(OUT+f'/karma_face_MH_{e}_FITTEST.glb'); return V.astype(float),C,I.reshape(-1,3).astype(int)
+PUP={'stand':(REFDIR+'/image-de4a722b.jpg',(563,246),(657,232)),'wave':(REFDIR+'/image-0b5b46c1.jpg',(583.3,240.7),(672,226)),'clasp':(REFDIR+'/image-89132d01.jpg',(564,284),(660.7,268.3))}
 def refcrop(k,box=BOX,S=S,grid=True):
     f,p1,p2=PUP[k]; im=Image.open(f).convert('RGB')
     c=((p1[0]+p2[0])/2,(p1[1]+p2[1])/2); dx,dy=p2[0]-p1[0],p2[1]-p1[1]; ipd=np.hypot(dx,dy); a,b=dx/ipd,dy/ipd
@@ -34,7 +34,7 @@ def row(ims):
 if __name__=='__main__':
     Vq,Cq,Tq=loadQ('smile'); Vm,Cm,Tm=loadM('smile')
     qs=render(Vq,Cq,Tq,BOX,S,0.5,'Q smile (from GLB)'); ms=render(Vm,Cm,Tm,BOX,S,0.5,'MakeHuman fit test, smile (from GLB)')
-    row([refcrop(k) for k in ('stand','wave','clasp')]).save('/downloads/panel_refs.png')
-    row([refcrop('stand'),refcrop('wave'),refcrop('clasp'),qs,ms]).save('/tmp/exp/evidence/front_smile_ref_Q_MH.png')
+    row([refcrop(k) for k in ('stand','wave','clasp')]).save(OUT+'/evidence/panel_refs_NOT_PUBLISHED.png')
+    row([refcrop('stand'),refcrop('wave'),refcrop('clasp'),qs,ms]).save(OUT+'/evidence/front_smile_ref_Q_MH.png')
     Vq,Cq,Tq=loadQ('neutral'); Vm,Cm,Tm=loadM('neutral')
-    row([render(Vq,Cq,Tq,BOX,S,0.5,'Q neutral (from GLB)'),render(Vm,Cm,Tm,BOX,S,0.5,'MakeHuman fit test, neutral (from GLB)')]).save('/tmp/exp/evidence/front_neutral_Q_MH.png')
+    row([render(Vq,Cq,Tq,BOX,S,0.5,'Q neutral (from GLB)'),render(Vm,Cm,Tm,BOX,S,0.5,'MakeHuman fit test, neutral (from GLB)')]).save(OUT+'/evidence/front_neutral_Q_MH.png')

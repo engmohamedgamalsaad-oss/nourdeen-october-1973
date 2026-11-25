@@ -1,4 +1,4 @@
-import sys,json;sys.path.insert(0,'/tmp/m')
+import sys,json;sys.path.insert(0,__import__('os').path.dirname(__import__('os').path.abspath(__file__))); from cfg import *
 from lm import *
 from scipy.optimize import least_squares
 body=np.zeros(len(V0),bool); body[sorted(G['body'])]=True

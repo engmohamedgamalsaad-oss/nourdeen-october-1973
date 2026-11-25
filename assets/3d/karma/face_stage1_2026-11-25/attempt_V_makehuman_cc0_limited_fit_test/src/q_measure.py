@@ -1,7 +1,7 @@
-import sys,json;sys.path.insert(0,'/tmp/m')
+import sys,json;sys.path.insert(0,__import__('os').path.dirname(__import__('os').path.abspath(__file__))); from cfg import *
 from load import load
 import numpy as np
-D='/tmp/r/assets/3d/karma/face_stage1_2026-11-25/attempt_Q_wider_eyes_lighter_nose_cheeks/'
+D=REPO+'/assets/3d/karma/face_stage1_2026-11-25/attempt_Q_wider_eyes_lighter_nose_cheeks/'
 # manual anatomical landmarks read off zoomed orthographic front renders of the Q GLB (grid in GLB units); x right, y up
 A={'EL_out':(-.759,.002),'EL_in':(-.272,-.081),'EL_up':(-.514,.098),'EL_lo':(-.514,-.094),
    'ER_out':(.766,.002),'ER_in':(.278,-.069),'ER_up':(.52,.100),'ER_lo':(.52,-.091)}
@@ -30,4 +30,4 @@ for e in ('neutral','smile'):
     ids=np.where(mid)[0]; mi=ids[np.argmin(V[ids,1])]
     m['eye_chin_rule']=round((ey-V[mi,1])/ipd,3)
     out[e]=m
-print(json.dumps(out,indent=1)); json.dump(out,open('/tmp/exp/Q_measured_from_GLB_renders.json','w'),indent=1)
+print(json.dumps(out,indent=1)); json.dump(out,open(OUT+'/Q_measured_from_GLB_renders.json','w'),indent=1)

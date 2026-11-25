@@ -45,3 +45,12 @@ Q chin and subnasale come from the side silhouette render by eye (about +-.06); 
 
 ## Files
 karma_face_MH_neutral_FITTEST.glb, karma_face_MH_smile_FITTEST.glb (sizes, tris and sha256 in glb_info.json), MH_measured_from_GLB.json, Q_measured_from_GLB_renders.json, asset_license_check.json, evidence/ (front panels ref|Q|MH smile and Q|MH neutral, wireframes, annotation zooms, side views), src/ (scripts as used; paths point at /tmp working folders, so they need path edits to rerun).
+
+## Rerun notes (added after the first push; no geometry, GLB or number changed)
+- Scripts in src/ now take paths from src/cfg.py. Defaults: this folder is the output folder; the repo root is five levels up (for the attempt_Q GLBs); the MakeHuman data folder is src/makehuman_clone/makehuman/data. Override with env vars V_OUT, V_REPO, V_MH_DATA, V_REFDIR.
+- Needs python3, numpy, scipy, Pillow, and a clone of makehumancommunity/makehuman at commit a8bc2d54ff0ac92e78ff71431b1023eda42bf482 (assets only are used).
+- Re-measure the exported GLBs: `V_MH_DATA=/path/to/makehuman/makehuman/data python3 src/measure_glb.py` (rewrites MH_measured_from_GLB.json; checked: the output is byte-identical to the committed file).
+- Refit and re-export: `python3 src/runfit.py` then `python3 src/exportmh.py`. Not rerun after the path change.
+- panels.py needs the three reference photos in V_REFDIR (file names image-de4a722b.jpg, image-0b5b46c1.jpg, image-89132d01.jpg). The photos are not published. It was not rerun after the path change.
+- map_*.npy are vertex index maps (GLB vertex order to MakeHuman base vertices). They hold no photo or landmark data.
+- Reference column: the original detector landmark arrays were not retained. Only the U-table values (attempt_U folder) are available. Running a detector again on the original photos would give a new measurement, not the original one.

@@ -1,8 +1,8 @@
-import sys,json,hashlib;sys.path.insert(0,'/tmp/m')
+import sys,json,hashlib;sys.path.insert(0,__import__('os').path.dirname(__import__('os').path.abspath(__file__))); from cfg import *
 from fit import *
 from glbio import write_glb
 from load import load
-d=json.load(open('/tmp/m/fit_x.json')); ID_,EX_,x=d['ID'],d['EX'],np.array(d['x'])
+d=json.load(open(SRC+'/fit_x.json')); ID_,EX_,x=d['ID'],d['EX'],np.array(d['x'])
 nI=len(ID_); wid=x[:nI]; wex=x[nI:]
 def export(P,path):
     Q=norm(P)
@@ -19,9 +19,9 @@ def export(P,path):
     return mp,len(Tn),len(Vn)
 res={}
 for nm,P in [('neutral',build(wid)),('smile',build(wid,wex))]:
-    p=f'/tmp/exp/karma_face_MH_{nm}_FITTEST.glb'
+    p=OUT+f'/karma_face_MH_{nm}_FITTEST.glb'
     mp,nt,nv=export(P,p); b=open(p,'rb').read()
     res[nm]=dict(path=p,bytes=len(b),tris=nt,verts=nv,sha256=hashlib.sha256(b).hexdigest())
-    np.save(f'/tmp/exp/map_{nm}.npy',mp)
+    np.save(OUT+f'/map_{nm}.npy',mp)
 print(json.dumps(res,indent=1))
-json.dump(res,open('/tmp/exp/glb_info.json','w'))
+json.dump(res,open(OUT+'/glb_info.json','w'))

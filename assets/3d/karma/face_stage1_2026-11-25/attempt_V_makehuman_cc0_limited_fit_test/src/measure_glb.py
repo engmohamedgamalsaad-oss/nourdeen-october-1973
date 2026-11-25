@@ -1,4 +1,4 @@
-import sys,json;sys.path.insert(0,'/tmp/m')
+import sys,json;sys.path.insert(0,__import__('os').path.dirname(__import__('os').path.abspath(__file__))); from cfg import *
 from load import load
 from fit import LM
 import numpy as np
@@ -24,6 +24,6 @@ def measure(path,mp):
 if __name__=='__main__':
     out={}
     for nm in ('neutral','smile'):
-        out[nm]=measure(f'/tmp/exp/karma_face_MH_{nm}_FITTEST.glb',np.load(f'/tmp/exp/map_{nm}.npy'))
+        out[nm]=measure(OUT+f'/karma_face_MH_{nm}_FITTEST.glb',np.load(OUT+f'/map_{nm}.npy'))
         print(nm,out[nm])
-    json.dump(out,open('/tmp/exp/MH_measured_from_GLB.json','w'),indent=1)
+    json.dump(out,open(OUT+'/MH_measured_from_GLB.json','w'),indent=1)

@@ -1,5 +1,5 @@
 import numpy as np
-D='/tmp/mh/makehuman/data/'
+from cfg import MH as D
 V0=[];F0=[];G={};cur=None
 for l in open(D+'3dobjs/base.obj'):
     if l.startswith('v '): V0.append([float(x) for x in l.split()[1:4]])

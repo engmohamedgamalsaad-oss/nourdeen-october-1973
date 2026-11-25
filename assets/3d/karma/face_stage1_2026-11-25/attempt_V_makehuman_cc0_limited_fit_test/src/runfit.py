@@ -1,4 +1,4 @@
-import sys,json;sys.path.insert(0,'/tmp/m')
+import sys,json;sys.path.insert(0,__import__('os').path.dirname(__import__('os').path.abspath(__file__))); from cfg import *
 from fit import *
 nI=len(ID);nE=len(EX)
 def resid(x,lam=0.15):
@@ -18,4 +18,4 @@ for n,w in zip(ID+EX,x):
 wid=x[:nI];wex=x[nI:]
 mn=landmarks(build(wid));ms=landmarks(build(wid,wex))
 print('neutral',{k:round(float(v),3) for k,v in mn.items()}); print('smile',{k:round(float(v),3) for k,v in ms.items()})
-json.dump({'ID':ID,'EX':EX,'x':list(map(float,x))},open('fit_x.json','w'))
+json.dump({'ID':ID,'EX':EX,'x':list(map(float,x))},open(SRC+'/fit_x.json','w'))
