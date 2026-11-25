@@ -1,0 +1,17 @@
+{
+ "Y": {
+  "front_region_tris": 1690,
+  "neutral_vs_child_base": {
+   "flipped": 0,
+   "turned_over_60deg": 0,
+   "area_under_25pct": 0,
+   "min_area_ratio": 0.273
+  },
+  "smile_vs_own_neutral": {
+   "flipped": 0,
+   "turned_over_60deg": 6,
+   "area_under_25pct": 4,
+   "min_area_ratio": 0.243
+  }
+ }
+}
