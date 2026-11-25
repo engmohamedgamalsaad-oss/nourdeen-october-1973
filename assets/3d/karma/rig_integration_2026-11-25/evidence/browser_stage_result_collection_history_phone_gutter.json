@@ -1,0 +1,56 @@
+{
+ "phone_good": {
+  "samples": 34,
+  "states": [
+   "idle",
+   "lean",
+   "walk",
+   "wave"
+  ],
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 30,
+  "visible_samples": 4,
+  "max_overlap_all_states": 4,
+  "max_overlap_while_stationary": 4,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": true,
+  "visits": 2,
+  "lastError": null,
+  "canvas_present_at_end": true,
+  "gate_cards_still_in_page": 4,
+  "js_errors": [],
+  "final": {
+   "state": "idle",
+   "x": 340,
+   "y": 492.03125,
+   "vw": 390,
+   "vh": 844,
+   "halfW": 33,
+   "charH": 110,
+   "overlap": 4,
+   "visible": false,
+   "overlap_visible": 0,
+   "inView": true,
+   "scrollY": 0,
+   "visits": 2,
+   "lastError": null
+  }
+ },
+ "phone_badglb": {
+  "samples": 0,
+  "states": [],
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 0,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": null,
+  "lastError": null,
+  "canvas_present_at_end": false,
+  "gate_cards_still_in_page": 4,
+  "js_errors": [],
+  "final": null
+ }
+}

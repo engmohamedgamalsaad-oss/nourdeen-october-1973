@@ -45,6 +45,7 @@ try:
             for i in range(N if variant == 'good' else 6):
                 time.sleep(0.4 if variant == 'good' else 1.0)
                 if variant == 'good': ev("window.__karmaStage ? window.__karmaStage.fastForward(1.0) : 0")
+                if variant == 'good' and i == 1 and CARDSEL != '.gate': ev("(document.querySelector('"+CARDSEL+"')||document.body).scrollIntoView({block:'start'});scrollBy(0,-90)")
                 if variant == 'good' and i == N//2: ev("window.scrollTo(0, document.body.scrollHeight*0.45)")
                 if variant == 'good' and i == (N*3)//4: ev("window.scrollTo(0, 0)")
                 s = ev(SAMPLE.replace('__SEL__', CARDSEL))

@@ -34,9 +34,15 @@ try:
     names = ev("[...document.querySelectorAll('#bar button')].map(b=>b.textContent)")
     for i, nm in enumerate(names):
         ev(f"document.querySelectorAll('#bar button')[{i}].click()")
+        mids = []
+        for k, dt in enumerate((0.6, 0.7)):
+            ev(f"window.__karmaStage.fastForward({dt})")
+            mids.append(ev("__karmaStage.controller.stateName"))
+            shot = call('Page.captureScreenshot', {'format': 'png'})['result']['data']
+            open(f'{out}/mid_{vp}_{i:02d}_{nm.replace(" ", "_")}_{k}.png', 'wb').write(base64.b64decode(shot))
         ev("window.__karmaStage.fastForward(7)")
         s = ev("(()=>{const c=__karmaStage.controller;return {state:c.stateName,x:Math.round(c.pos.x),y:Math.round(c.pos.y),visible:c.object3D.visible,inView:c.pos.x-c.halfW>=-1&&c.pos.x+c.halfW<=innerWidth+1&&c.pos.y<=innerHeight+3,log:document.getElementById('log').textContent}})()")
-        res[nm] = s
+        s['mid_states'] = mids; res[nm] = s
         shot = call('Page.captureScreenshot', {'format': 'png'})['result']['data']
         open(f'{out}/motion_{vp}_{i:02d}_{nm.replace(" ", "_")}.png', 'wb').write(base64.b64decode(shot))
         print(vp, nm, json.dumps(s), flush=True)
