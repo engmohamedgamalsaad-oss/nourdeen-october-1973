@@ -14,6 +14,11 @@ Not affected: live wall-clock runs (KARMA_LIVE=1): live_wallclock_history_phone,
 - history_desktop_live (real time, 4 s per scenario): bottom hhVV, 768x1024 hhVV (2 s transients), others V.
 Live vs stepped differ by 2 s transients at tablet resize and at bottom (live only). Not explained; single runs.
 
+- science_phone_stepped_corrected: entry hhhhhh (4 s off-screen), cards V, slideshow hhhhVV (4 s off-screen waiting), bottom V (1 s mesh clip), others V.
+- people_phone_stepped_corrected: entry absent, cards V, slideshow V, bottom VVVVhh (2 s off-screen), others V.
+- women_phone_stepped_corrected: entry absent, cards V (1 s mesh clip), others V.
+Pixels inspected 19:38 by me: science phone cards (Karma in the bottom-right gutter beside card 2, clear of text/image), desktop people 1440x900 (beside card 2 in the right gutter, clear), people phone bottom (absent at that sample).
+
 ## Open
 - Phone entry at scroll 0 is absent (acceptance 'enters from the right and stays beside the cards' not met at load; met after scrolling to the cards). Prototype fallback.
 - 2 s transient hides in live resize / bottom runs.
