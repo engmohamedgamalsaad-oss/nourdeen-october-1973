@@ -1,0 +1,15 @@
+<!doctype html><body style="margin:0;background:#2b3038"><canvas id=c></canvas>
+<script type="importmap">{"imports":{"three":"/r/node_modules/three/build/three.module.js","three/addons/":"/r/node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const q=new URLSearchParams(location.search);const f=q.get('f'),clay=q.get('clay')==='1',W=1800,Hh=600;
+const cv=document.getElementById('c');cv.width=W;cv.height=Hh;
+const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});r.setSize(W,Hh,false);r.setClearColor(0x2b3038);
+const sc=new THREE.Scene();sc.add(new THREE.HemisphereLight(0xffffff,0x556070,1.1));const dl=new THREE.DirectionalLight(0xffffff,1.6);dl.position.set(1.5,2,3);sc.add(dl);
+new GLTFLoader().load(f,g=>{const o=g.scene;o.traverse(n=>{if(n.isMesh){n.material=(clay&&n.name==='head')?new THREE.MeshStandardMaterial({color:0xc8b8a8,roughness:.8}):new THREE.MeshStandardMaterial({vertexColors:true,roughness:.75});}});sc.add(o);
+ const views=(q.get('yaws')||'0,35').split(',').map(Number);const S=+(q.get('S')||1.0);const cam=new THREE.OrthographicCamera(-S,S,S,-S,.1,20);
+ const t=new THREE.Vector3(+(q.get('tx')||0),+(q.get('ty')||-.3),+(q.get('tz')||-.6));
+ views.forEach((yaw,i)=>{const a=THREE.MathUtils.degToRad(yaw);cam.position.set(t.x+6*Math.sin(a),t.y+0.1,t.z+6*Math.cos(a));cam.lookAt(t);
+  r.setViewport(i*600,0,600,600);r.setScissor(i*600,0,600,600);r.setScissorTest(true);r.render(sc,cam);});
+ document.title='done';});
+</script></body>
