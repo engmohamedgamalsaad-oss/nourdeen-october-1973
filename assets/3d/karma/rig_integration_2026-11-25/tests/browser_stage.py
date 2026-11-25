@@ -31,8 +31,9 @@ try:
     call('Runtime.enable'); call('Page.enable')
     SAMPLE = """(()=>{const s=window.__karmaStage; if(!s) return null; const c=s.controller; const cards=[...document.querySelectorAll('__SEL__, .kh-sp, h1, h2, h3, .lead, .eyebrow, .heading p, .hero p, .hero img, footer, header')].map(e=>e.getBoundingClientRect());
       const b={l:c.pos.x-c.halfW,r:c.pos.x+c.halfW,t:c.pos.y-c.charH,b:c.pos.y};
+      const rb=s.bounds&&s.bounds(); const pen=(k)=>rb?Math.min(Math.min(rb.r,k.right)-Math.max(rb.l,k.left),Math.min(rb.b,k.bottom)-Math.max(rb.t,k.top)):0; const rpen=rb?Math.max(0,...cards.filter(k=>k.width>0).map(pen)):0;
       const ov=cards.filter(k=>k.width>0&&b.l<k.right-1&&b.r>k.left+1&&b.t<k.bottom-1&&b.b>k.top+1).length;
-      return {state:c.stateName,x:c.pos.x,y:c.pos.y,vw:innerWidth,vh:innerHeight,halfW:c.halfW,charH:c.charH,overlap:ov,visible:c.object3D.visible,overlap_visible:c.object3D.visible?ov:0,inView:(b.l>=-1&&b.r<=innerWidth+1&&b.b<=innerHeight+3),scrollY:scrollY,visits:s.state.visits,lastError:s.state.lastError};})()"""
+      return {state:c.stateName,x:c.pos.x,y:c.pos.y,vw:innerWidth,vh:innerHeight,halfW:c.halfW,charH:c.charH,overlap:ov,rendered_pen_px:Math.round(rpen*10)/10,rb:rb&&{l:Math.round(rb.l),r:Math.round(rb.r),t:Math.round(rb.t),b:Math.round(rb.b)},visible:c.object3D.visible,overlap_visible:c.object3D.visible?ov:0,inView:(b.l>=-1&&b.r<=innerWidth+1&&b.b<=innerHeight+3),scrollY:scrollY,visits:s.state.visits,lastError:s.state.lastError};})()"""
     for name, w, h, mob in [v for v in [('desktop', 1440, 900, False), ('phone', 390, 844, True)] if os.environ.get('KARMA_ONLY', v[0]) == v[0]]:
         for variant in ('good', 'badglb'):
             errors.clear()
@@ -54,7 +55,7 @@ try:
                     d = call('Page.captureScreenshot', {'format': 'png'})['result']['data']; open(f'{out}/{name}_{variant}_{i:02d}s.png', 'wb').write(base64.b64decode(d)); shots += 1
             page_ok = ev("document.querySelectorAll('"+CARDSEL+"').length")
             canvas = ev("!!document.getElementById('karma-stage')")
-            results[f'{name}_{variant}'] = {'samples': len(samples), 'states': sorted({s['state'] for s in samples}), 'max_VISIBLE_overlap': max([s['overlap_visible'] for s in samples] or [0]), 'hidden_samples': sum(1 for s in samples if not s['visible']), 'visible_samples': sum(1 for s in samples if s['visible']), 'max_overlap_all_states': max([s['overlap'] for s in samples] or [0]),
+            results[f'{name}_{variant}'] = {'samples': len(samples), 'trace': [{k: x.get(k) for k in ('state','x','y','visible','overlap','rendered_pen_px','rb','scrollY')} for x in samples], 'states': sorted({s['state'] for s in samples}), 'max_rendered_penetration_px_visible': max([s['rendered_pen_px'] for s in samples if s['visible']] or [0]), 'max_rendered_penetration_px_all': max([s['rendered_pen_px'] for s in samples] or [0]), 'rendered_pen_gt3_visible_samples': sum(1 for s in samples if s['visible'] and s['rendered_pen_px']>3), 'max_VISIBLE_overlap': max([s['overlap_visible'] for s in samples] or [0]), 'hidden_samples': sum(1 for s in samples if not s['visible']), 'visible_samples': sum(1 for s in samples if s['visible']), 'max_overlap_all_states': max([s['overlap'] for s in samples] or [0]),
                 'max_overlap_while_stationary': max([s['overlap'] for s in samples if s['state'] not in ('walk',)] or [0]),
                 'samples_overlapping_while_walking': sum(1 for s in samples if s['state'] == 'walk' and s['overlap']),
                 'in_view_after_arrival': all(s['inView'] for s in samples[[i for i, x in enumerate(samples) if x['state'] != 'walk' and x['x'] < x['vw']][0]:]) if any(x['state'] != 'walk' and x['x'] < x['vw'] for x in samples) else None,
