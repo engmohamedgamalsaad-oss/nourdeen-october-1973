@@ -19,7 +19,10 @@ Live vs stepped differ by 2 s transients at tablet resize and at bottom (live on
 - women_phone_stepped_corrected: entry absent, cards V (1 s mesh clip), others V.
 Pixels inspected 19:38 by me: science phone cards (Karma in the bottom-right gutter beside card 2, clear of text/image), desktop people 1440x900 (beside card 2 in the right gutter, clear), people phone bottom (absent at that sample).
 
-## Open
+- dynamic_phone_stepped_corrected: hhhhhh in all 8 scenarios; final cardW=None, visits=0: no story cards in the offline DOM (data-driven; Supabase untouched). NOT TESTABLE offline, not a stage verdict.
+- science_phone_stepped_corrected_run2 (repeat of science): entry absent (6 s off-screen), everything else VVVVVV (1 s mesh clip at cards). Run 1 had slideshow hhhhVV and bottom 1 s clip, so there is run-to-run variation at the slideshow/bottom steps.
+- science_phone_live_trace (real time, KARMA_TRACE): entry absent; cards hhhVVV, slideshow hhVVVV, bottom hhVVVV: on each scroll she is parked off-screen right, the visit is abandoned once (abandoned counter 1,2,3), then she walks IN from the right edge to the gutter (x 445->340) in about 2-3 s; during that walk she is counted h while off-screen. At bottom one 167 ms keep-out hit while walking. Resize to 1440: hVVVVV (about 1 s hidden crossing a card while walking). Interpretation (hypothesis): live re-entry after a scroll costs ~2-3 s of walking in from the right; not a stuck state.
+
 - Phone entry at scroll 0 is absent (acceptance 'enters from the right and stays beside the cards' not met at load; met after scrolling to the cards). Prototype fallback.
 - 2 s transient hides in live resize / bottom runs.
 - Other pages (science/people/women/dynamic) not rerun post-fix on phone; desktop other than history/people not rerun post-fix.
