@@ -895,8 +895,13 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
       var label = 'مقطع ' + (index + 1);
       var view = engineView(language, index);
       var clips = entries.filter(function (entry) { return entry.lang === language && Number(entry.block_index) === index; });
-      var decisions = clips.map(function (entry) { return review.clips && review.clips[entry.key] || null; });
-      if (clips.length && decisions.every(function (d) { return d && d.status === 'accepted'; })) { out.accepted++; out.listened++; return; }
+      var decisions = clips.map(function (entry) {
+        var saved = review.clips && review.clips[entry.key] || null;
+        return saved && saved.status === 'accepted' &&
+          String(saved.audio_sha256 || '').toLowerCase() === String(entry.audio_sha256 || '').toLowerCase()
+          ? saved : null;
+      });
+      if (clips.length && decisions.every(function (d) { return !!d; })) { out.accepted++; out.listened++; return; }
       if (view.state === 'none') { out.none++; out.problems.push(label + ': لم يُرسل إلى المحرك.'); return; }
       if (view.state === 'pending') { out.pending++; out.problems.push(label + ': في الطابور.'); return; }
       if (view.state === 'processing') { out.processing++; out.problems.push(label + ': قيد التوليد.'); return; }
@@ -933,8 +938,8 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
       updateEnginePanels(); updateGenerationSummary(); schedulePoll();
     }
   },
-  /* اعتماد صوت كل مقاطع اللغة دفعة واحدة، وبالمسار نفسه لاعتماد المقطع الواحد: لا يجري إلا بعد اكتمال كل المقاطع
-     والاستماع الكامل لكل مقطع، وبلا مقطع فاشل أو مرفوض أو غير مكتمل. يتوقف عند أول فشل في الحفظ ويُبقي حالة كل مقطع ظاهرة. */
+  /* اعتماد اختياري من مالك الحكاية لكل الملفات الجاهزة. نحفظ كل مقطع على حدة،
+     نكمل بقية المقاطع عند فشل أحدها، ثم نعيد قراءة السجل من الخادم للتحقق من الحفظ الفعلي. */
   approveLanguageAudio: async function (language) {
     if (!story || BULK_AUDIO_LANGS.indexOf(language) < 0) throw new Error('الاعتماد الجماعي متاح للغات المترجمة فقط (en / fr / it / de).');
     if (generationBusy) throw new Error('انتظر انتهاء العملية الصوتية الحالية.');
@@ -952,13 +957,40 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
         if (!(saved && saved.status === 'accepted')) toApprove.push(entry);
       });
     });
-    var done = 0;
+    var done = 0, failures = [];
     for (var i = 0; i < toApprove.length; i++) {
-      await saveReview(toApprove[i], { status: 'accepted' });
-      done++;
+      try {
+        await saveReview(toApprove[i], { status: 'accepted' });
+        done++;
+      } catch (error) {
+        failures.push('مقطع ' + (Number(toApprove[i].block_index) + 1) + ': ' + (error && error.message || error));
+      }
     }
+    // Always trust a fresh server read, not the optimistic browser copy.
+    var persisted = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+    if (!persisted || !persisted.audio_review || !persisted.audio_review.clips) {
+      throw new Error('انتهى الإرسال لكن تعذر التحقق من سجل الاعتمادات المحفوظ على الخادم.');
+    }
+    review = core.cloneReview(persisted.audio_review);
+    var missing = [];
+    indexes.forEach(function (index) {
+      entries.forEach(function (entry) {
+        if (entry.lang !== language || Number(entry.block_index) !== index) return;
+        var saved = review.clips[entry.key];
+        if (!saved || saved.status !== 'accepted' ||
+            String(saved.audio_sha256 || '').toLowerCase() !== String(entry.audio_sha256 || '').toLowerCase()) {
+          missing.push(Number(index) + 1);
+        }
+      });
+    });
     await render();
-    return { approved: done, total: status.total };
+    if (missing.length || failures.length) {
+      var uniqueMissing = Array.from(new Set(missing));
+      throw new Error('تم حفظ ' + (status.total - uniqueMissing.length) + '/' + status.total +
+        ' اعتمادًا فقط. المقاطع التي لم يتأكد اعتمادها: ' + uniqueMissing.join('، ') +
+        (failures.length ? '. تفاصيل: ' + failures.slice(0, 3).join(' | ') : ''));
+    }
+    return { approved: done, total: status.total, verified: true };
   },
   refreshAudio: async function () { await loadManifests(); await loadPublicAudioStatus(); render(); return true; } };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;

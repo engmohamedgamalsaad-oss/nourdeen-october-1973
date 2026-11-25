@@ -702,7 +702,7 @@
         if (!audioBatchBusy && !audioBatchNote[L]) {
           status.textContent = 'الصوت — ' + s.total + ' مقطع: معتمد ' + s.accepted + ' · جاهز ' + s.ready + ' · في الطابور ' + s.pending +
             ' · قيد التوليد ' + s.processing + ' · فاشل ' + s.failed + ' · لم يُرسل ' + s.none + ' · مرفوض ' + s.rejected +
-            '. اعتماد الصوت يتطلب اكتمال كل المقاطع والاستماع لكل مقطع كاملًا.\n' +
+            '. يمكنك اعتماد كل الملفات الجاهزة دفعة واحدة دون الاستماع الفردي؛ لا يشمل ذلك الملفات الناقصة أو الفاشلة.\n' +
             'الترجمة — ' + translationState.total + ' مقطع: معتمد ' + translationState.approved + ' · جاهز للاعتماد ' + translationState.ready + ' · ناقص أو قديم ' + translationState.missing + '.';
         }
         if (audioBatchNote[L]) status.textContent = audioBatchNote[L];
@@ -757,7 +757,7 @@
       approveAll.type = 'button'; approveAll.hidden = true;
       approveAll.title = 'اعتماد اختياري لكل المقاطع الجاهزة دفعة واحدة دون اشتراط الاستماع الفردي؛ لا يشمل المقاطع الفاشلة أو الناقصة أو قيد التوليد.';
       approveAll.addEventListener('click', function () { runAudioBatch('approve', approveAll); });
-      actions.append(translationApprove, reviewButton, generateAll, audioReviewButton, approveAll);
+      actions.append(reviewButton, translationApprove, generateAll, audioReviewButton, approveAll);
       panel.append(title);
       if (translationStatus) {
         translationStatus.classList.add('kh-language-translation-status');
