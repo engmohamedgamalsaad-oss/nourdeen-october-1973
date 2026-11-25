@@ -1,0 +1,32 @@
+{
+ "W": {
+  "front_region_tris": 1686,
+  "neutral_vs_child_base": {
+   "flipped": 0,
+   "turned_over_60deg": 0,
+   "area_under_25pct": 0,
+   "min_area_ratio": 0.266
+  },
+  "smile_vs_own_neutral": {
+   "flipped": 0,
+   "turned_over_60deg": 2,
+   "area_under_25pct": 0,
+   "min_area_ratio": 0.267
+  }
+ },
+ "FITTEST": {
+  "front_region_tris": 1720,
+  "neutral_vs_child_base": {
+   "flipped": 2,
+   "turned_over_60deg": 24,
+   "area_under_25pct": 12,
+   "min_area_ratio": 0.162
+  },
+  "smile_vs_own_neutral": {
+   "flipped": 66,
+   "turned_over_60deg": 92,
+   "area_under_25pct": 14,
+   "min_area_ratio": 0.142
+  }
+ }
+}
