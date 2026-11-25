@@ -7,7 +7,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createRig } from '../../assets/3d/karma/claude_track_2026-11-25/js/KarmaRig.js';
 import { KarmaMotion } from '../../assets/3d/karma/rig_integration_2026-11-25/js/KarmaMotion.js';
 
-const DEFAULTS = { cardSelector: '.gate, .story-card, [data-story-card]', keepOutSelector: 'h1, h2, .lead, .eyebrow, .head p', glbUrl: null, charHeight: null, onState: null };
+const DEFAULTS = { cardSelector: '.gate, .story-index-card, .story-card, [data-story-card]', obstacleSelector: '.kh-sp', keepOutSelector: 'h1, h2, .lead, .eyebrow, .head p, .heading p, .hero p', glbUrl: null, charHeight: null, onState: null };
 
 export async function startKarmaStage(opts = {}) {
   const o = { ...DEFAULTS, ...opts };
@@ -28,9 +28,9 @@ export async function startKarmaStage(opts = {}) {
     const gltf = await new GLTFLoader().loadAsync(o.glbUrl);
     const rig = createRig(gltf.scene);
     const charH = o.charHeight || (mobile ? Math.min(150, vh * 0.2) : Math.min(230, vh * 0.28));
-    const cards = () => [...document.querySelectorAll(o.cardSelector)].filter((e) => e.offsetParent !== null);
+    const cards = () => [...document.querySelectorAll(o.cardSelector + (o.obstacleSelector ? ', ' + o.obstacleSelector : ''))].filter((e) => e.offsetParent !== null);
     const idOf = (el) => (el.dataset.karmaId ||= 'c' + Math.random().toString(36).slice(2, 8));
-    const rectOf = (el) => { const r = el.getBoundingClientRect(); return { id: idOf(el), left: r.left, top: r.top, width: r.width, height: r.height }; };
+    const rectOf = (el) => { const r = el.getBoundingClientRect(); return { id: idOf(el), obstacleOnly: !!(o.obstacleSelector && el.matches(o.obstacleSelector) && !el.matches(o.cardSelector)), left: r.left, top: r.top, width: r.width, height: r.height }; };
     const getCardRects = () => cards().map(rectOf).filter((r) => r.top < vh && r.top + r.height > 0);
     const getKeepOutRects = () => [...document.querySelectorAll(o.keepOutSelector)].map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0 && r.top < vh && r.bottom > 0).map((r) => ({ left: r.left, top: r.top, width: r.width, height: r.height }));
     const c = new KarmaMotion({ rig, getCardRects, getKeepOutRects, viewport: { width: vw, height: vh }, characterHeightPx: charH, modelHeight: 1 });
@@ -38,7 +38,7 @@ export async function startKarmaStage(opts = {}) {
     c.pos.set(vw + c.halfW * 2, vh); // starts off-screen on the right
 
     // choose the card to visit: the most visible one nearest the viewport centre
-    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId); if (!R.length) return null;
+    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId && !r.obstacleOnly); if (!R.length) return null;
       R.sort((a, b) => Math.abs(a.top + a.height / 2 - vh / 2) - Math.abs(b.top + b.height / 2 - vh / 2)); return R[0]; };
     // side with the most free room next to the card; if neither side has room for her body, stand on top
     const sideFor = (r) => { const room = { right: vw - (r.left + r.width), left: r.left }; const need = c.halfW * 2 + 8;
@@ -50,7 +50,7 @@ export async function startKarmaStage(opts = {}) {
     async function visit(first) {
       if (busy || stopped) return; busy = true;
       try {
-        const r = pick(current); if (!r) { busy = false; return; } current = r.id; const side = sideFor(r);
+        let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); r = pick(current); } if (!r) { busy = false; return; } current = r.id; const side = sideFor(r);
         say('walking');
         if (first) await c.runTo(r.id, { side: side === 'top' ? 'left' : side }); else await c.walkTo(r.id, { side });
         if (stopped) return;
@@ -60,7 +60,7 @@ export async function startKarmaStage(opts = {}) {
         await c.stand(); say('idle'); state.visits++;
       } catch (e) { state.lastError = String(e); } finally { busy = false; }
     }
-    visit(true);
+    visit(true); // collection pages render their story cards after load; visit() waits up to 15 s for them
     let scrollT = null; addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(() => { if (!busy) setTimeout(() => visit(false), 600); }, 900); }, { passive: true });
     let rsT = null; addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
       vw = innerWidth; vh = innerHeight; renderer.setSize(vw, vh, false);

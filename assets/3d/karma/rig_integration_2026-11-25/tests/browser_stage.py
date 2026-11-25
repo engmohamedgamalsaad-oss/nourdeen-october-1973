@@ -7,6 +7,7 @@ checks numerically: canvas present, GLB loaded, character box inside viewport, n
 A failing GLB URL must leave the page intact (checked with a bad URL)."""
 import subprocess, sys, time, json, base64, urllib.request, websocket, os
 root, glb, out = sys.argv[1], sys.argv[2], sys.argv[3]; page = sys.argv[4] if len(sys.argv) > 4 else 'index.html'
+CARDSEL = os.environ.get('KARMA_CARDS', '.gate')
 os.makedirs(out, exist_ok=True); N = int(os.environ.get('KARMA_SAMPLES', '30'))
 srv = subprocess.Popen(['python3', '-m', 'http.server', '8766'], cwd=root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 ch = subprocess.Popen(['google-chrome', '--headless=new', '--no-sandbox', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--remote-debugging-port=9334', '--window-size=1440,900', '--user-data-dir=/tmp/cdpprof2', 'about:blank'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -28,7 +29,7 @@ try:
             if r.get('id') == n[0]: return r
     def ev(expr): return call('Runtime.evaluate', {'expression': expr, 'returnByValue': True, 'awaitPromise': True})['result']['result'].get('value')
     call('Runtime.enable'); call('Page.enable')
-    SAMPLE = """(()=>{const s=window.__karmaStage; if(!s) return null; const c=s.controller; const cards=[...document.querySelectorAll('.gate')].map(e=>e.getBoundingClientRect());
+    SAMPLE = """(()=>{const s=window.__karmaStage; if(!s) return null; const c=s.controller; const cards=[...document.querySelectorAll('__SEL__')].map(e=>e.getBoundingClientRect());
       const b={l:c.pos.x-c.halfW,r:c.pos.x+c.halfW,t:c.pos.y-c.charH,b:c.pos.y};
       const ov=cards.filter(k=>k.width>0&&b.l<k.right-1&&b.r>k.left+1&&b.t<k.bottom-1&&b.b>k.top+1).length;
       return {state:c.stateName,x:c.pos.x,y:c.pos.y,vw:innerWidth,vh:innerHeight,halfW:c.halfW,charH:c.charH,overlap:ov,inView:(b.l>=-1&&b.r<=innerWidth+1&&b.b<=innerHeight+3),scrollY:scrollY,visits:s.state.visits,lastError:s.state.lastError};})()"""
@@ -46,11 +47,11 @@ try:
                 if variant == 'good': ev("window.__karmaStage ? window.__karmaStage.fastForward(1.0) : 0")
                 if variant == 'good' and i == N//2: ev("window.scrollTo(0, document.body.scrollHeight*0.45)")
                 if variant == 'good' and i == (N*3)//4: ev("window.scrollTo(0, 0)")
-                s = ev(SAMPLE)
+                s = ev(SAMPLE.replace('__SEL__', CARDSEL))
                 if s: samples.append(s)
                 if variant == 'good' and i in (4, 9, N//2-1, N//2+6, N-2):
                     d = call('Page.captureScreenshot', {'format': 'png'})['result']['data']; open(f'{out}/{name}_{variant}_{i:02d}s.png', 'wb').write(base64.b64decode(d)); shots += 1
-            page_ok = ev("!!document.querySelector('.gate') && document.querySelectorAll('.gate').length")
+            page_ok = ev("document.querySelectorAll('"+CARDSEL+"').length")
             canvas = ev("!!document.getElementById('karma-stage')")
             results[f'{name}_{variant}'] = {'samples': len(samples), 'states': sorted({s['state'] for s in samples}), 'max_overlap_all_states': max([s['overlap'] for s in samples] or [0]),
                 'max_overlap_while_stationary': max([s['overlap'] for s in samples if s['state'] not in ('walk',)] or [0]),
