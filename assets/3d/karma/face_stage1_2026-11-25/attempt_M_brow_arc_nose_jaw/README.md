@@ -1,0 +1,3 @@
+# Attempt M (EXPERIMENT_NOT_FINAL, likeness NOT approved)
+K plus: brow follows the measured reference brow arc (landmark means, shifted down .12 IPD after checking against pixels), flat dark colour band plus a very low ridge; nose tip/wings slimmer and blended; lower-face width reduced (jaw/cheek). Real geometry, flat colours, no photo projection (A, B, C used front projection colour, see their READMEs; D onward flat). Not optimised. 3/4 sheet is NOT matched.
+Faults: brow band is flat and plank-like, lips thin, lower lid dark line, nose tip/alae shading soft, cheek-mouth transitions not refit. Head origin is between the pupils (final export needs neck-base pivot, metre scale, closed back; deferred).
