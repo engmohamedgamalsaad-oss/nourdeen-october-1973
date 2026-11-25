@@ -26,3 +26,14 @@ Overlap with cards while visible: 0 on all pages. Entry hidden on science/people
 2. The harness advances time with fastForward (simulated 60 fps), not wall clock. The elapsed-time recovery used performance.now, so the earlier elapsed-time runs were not a valid test of it. It now uses simulated time (simT). The elapsed-time hypothesis is therefore NOT cleanly disproven or confirmed; the 90-frame result and the elapsed-time results were not comparable.
 3. history.html desktop, 6 s per scenario, sim-time recovery: 768x1024 hhhhhV (5 s hidden), 1440x900 hhVVVV. Other scenarios V.
 4. Trace (KARMA_TRACE=1, 1440x900 resize after 768, trace_history_desktop_resize/log.txt): busy=true, epoch 4, a pick exists (side right, 5 cards), action walk for about 3 s, then look, point; vis=false throughout, including while pointing at the card. So she completes the walk and the gestures while hidden: her arrival stand position still overlaps something (card/keep-out/slideshow) after resize, or the position was computed against pre-resize geometry. Not resolved.
+
+## 18:23 findings (strict test, sim-time recovery, 6 s per scenario unless noted; baseline fixture)
+OBSERVATIONS
+- history desktop, resize 768 -> 1440, earlier trace: she walked from her pre-resize x (about 450-690) across the card column to the right gutter at x about 1313, about 4 s, hidden while overlapping the card (by design hide while crossing). Trace file: evidence/trace_history_desktop_resize_2/log.txt. (An earlier trace, trace_history_desktop_resize, showed a box that did not move; the two traces were taken on different layout timings and I have not reconciled them.)
+- islamic.html phone: page has one story card plus an obstacle block. The pick excluded the card she had just visited, so on a single-card page nothing was eligible and she waited hidden (rects in evidence/trace_islamic_phone_rects/log.txt). Her gutter box also intersects a full-width caption keep-out line at some scroll positions.
+CHANGES (hypotheses behind them, not proven causes)
+- On resize she snaps to the right-hand gutter column instead of crossing the cards.
+- pick() falls back to the same card on single-card pages.
+RESULTS AFTER CHANGES
+- history desktop: all 8 scenarios V x6 (one run). A previous run of an earlier build showed hhhhhV at 768; run-to-run variation not yet assessed (single run per page).
+- islamic phone: entry hhhhhh (card below the fold, no eligible card, expected), bottom hhhhhh (still hidden, caption keep-out; unresolved), other scenarios V. 

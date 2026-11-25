@@ -48,7 +48,8 @@ export async function startKarmaStage(opts = {}) {
     c.pos.set(vw + c.halfW * 2, vh); // starts off-screen on the right
 
     // choose the card to visit: the most visible one nearest the viewport centre
-    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId && !r.obstacleOnly && sideFor(r) && (r.top + r.height / 2) >= charH + 10 && (r.top + r.height / 2) <= vh - 10); if (!R.length) return null;
+    const pick = (avoidId) => { const elig = (r) => !r.obstacleOnly && sideFor(r) && (r.top + r.height / 2) >= charH + 10 && (r.top + r.height / 2) <= vh - 10;
+      let R = getCardRects().filter((r) => r.id !== avoidId && elig(r)); if (!R.length) R = getCardRects().filter(elig); /* single-card page: revisit the same card */ if (!R.length) return null;
       R.sort((a, b) => Math.abs(a.top + a.height / 2 - vh / 2) - Math.abs(b.top + b.height / 2 - vh / 2)); return R[0]; };
     // side with the most free room next to the card; if neither side has room for her body, stand on top
     const sideFor = (r) => { const room = { right: vw - (r.left + r.width), left: r.left }; const need = c.halfW * 2 + 8;
@@ -56,9 +57,9 @@ export async function startKarmaStage(opts = {}) {
     // never cover content: the model is hidden for any frame where its box would overlap a card, photo or text block
     const boxOf = () => ({ l: c.pos.x - c.halfW, r: c.pos.x + c.halfW, t: c.pos.y - charH, b: c.pos.y });
     let hiddenFrames = 0, shownFrames = 0, hiddenSince = 0;
-    const guard = () => { const m = boxOf(); let hit = false;
+    let lastHit = null; const guard = () => { const m = boxOf(); let hit = false; lastHit = null;
       const tol = c.stateName === 'lean' ? 36 : 12; // lean-on-card contact: a few px of arm/shoulder may touch the card edge without hiding her
-      for (const r of [...getCardRects().map((q) => ({ ...q, left: q.left + tol, width: q.width - 2 * tol })), ...getKeepOutRects()]) { if (m.l < r.left + r.width && m.r > r.left && m.t < r.top + r.height && m.b > r.top) { hit = true; break; } }
+      const keeps = getKeepOutRects(); for (const [kind, r] of [...getCardRects().map((q) => ['card', { ...q, left: q.left + tol, width: q.width - 2 * tol }]), ...keeps.map((q) => ['keepout', q])]) { if (m.l < r.left + r.width && m.r > r.left && m.t < r.top + r.height && m.b > r.top) { hit = true; lastHit = { kind, l: Math.round(r.left), t: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height), box: [Math.round(m.l), Math.round(m.t), Math.round(m.r), Math.round(m.b)] }; break; } }
       c.object3D.visible = o.coverGuard ? !hit : true; const tNow = simT * 1000; if (!hit) hiddenSince = 0; else if (!hiddenSince) hiddenSince = tNow; else if (!busy && tNow - hiddenSince > 1200 && !stopped) { hiddenSince = 0; setTimeout(() => visit(false, true), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
     const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
     let simT = 0; const tick = (d) => { simT += d; for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - 4) c.pos.y = vh - 4; };
@@ -82,7 +83,7 @@ export async function startKarmaStage(opts = {}) {
     let rsT = null; addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
       vw = innerWidth; vh = innerHeight; renderer.setSize(vw, vh, false);
       cam.left = -vw / 2; cam.right = vw / 2; cam.top = vh / 2; cam.bottom = -vh / 2; cam.updateProjectionMatrix();
-      c.setViewport(vw, vh); if (o.auto && !busy) setTimeout(() => visit(false), 400); c.setCharacterHeight(o.charHeight || (matchMedia('(max-width: 700px)').matches ? mobH() : Math.min(230, vh * 0.28))); reserve(); c.pos.x = Math.min(c.pos.x, vw - c.halfW - 4); c.pos.y = Math.min(Math.max(c.pos.y, charH + 4), vh - 4); }, 120); });
+      c.setViewport(vw, vh); if (o.auto && !busy) setTimeout(() => visit(false), 400); c.setCharacterHeight(o.charHeight || (matchMedia('(max-width: 700px)').matches ? mobH() : Math.min(230, vh * 0.28))); reserve(); c.pos.x = vw - c.halfW - 4; /* re-enter in the right-hand gutter after a resize instead of walking across the card column */ c.pos.y = Math.min(Math.max(c.pos.y, charH + 4), vh - 4); }, 120); });
     let last = performance.now(), acc = 0; const step = mobile ? 1 / 30 : 0;
     function frame(now) {
       if (stopped) return; requestAnimationFrame(frame);
@@ -94,7 +95,7 @@ export async function startKarmaStage(opts = {}) {
     requestAnimationFrame(frame);
     /** test hook: advance the simulation deterministically (60 fps steps) without waiting real time; promises settle between steps */
     const fastForward = async (sec) => { for (let i = 0; i < Math.round(sec * 60); i++) { tick(1 / 60); await Promise.resolve(); } renderer.render(scene, cam); };
-    const debug = () => { const r = pick(current); return { busy, epoch, hiddenForMs: hiddenSince ? Math.round(simT * 1000 - hiddenSince) : 0, pick: r ? r.id : null, side: r ? sideFor(r) : null, cards: getCardRects().length, action: c.actionName, vis: c.object3D.visible }; };
+    const debug = () => { const r = pick(current); return { busy, epoch, hiddenForMs: hiddenSince ? Math.round(simT * 1000 - hiddenSince) : 0, pick: r ? r.id : null, side: r ? sideFor(r) : null, cards: getCardRects().length, action: c.actionName, vis: c.object3D.visible, hit: lastHit, pos: [Math.round(c.pos.x), Math.round(c.pos.y)], tgt: (() => { try { const t = r && c._resolve({ cardId: r.id, side: sideFor(r), along: 0.5 }); return t ? [Math.round(t.x), Math.round(t.y)] : null; } catch (e) { return String(e); } })(), rects: getCardRects().map((q) => [Math.round(q.left), Math.round(q.top), Math.round(q.width), Math.round(q.height), q.obstacleOnly ? 'obst' : '', sideFor(q) || 'noside']), need: Math.round(c.halfW * 2 + 8), card: r ? [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)] : null, halfW: Math.round(c.halfW), vw, vh, sy: Math.round(scrollY) }; };
     const api = { debug, reserve, controller: c, rig, canvas, state, fastForward, visit: () => visit(false), stop() { stopped = true; canvas.remove(); renderer.dispose(); } };
     window.__karmaStage = api; return api;
   } catch (e) { fail(e); return null; }
