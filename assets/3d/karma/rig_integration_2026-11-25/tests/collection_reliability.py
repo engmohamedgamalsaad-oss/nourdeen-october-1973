@@ -39,7 +39,7 @@ try:
         secs = min(secs, int(os.environ.get('KARMA_SECS', 99)))
         rows = []
         for k in range(secs):
-            ev("window.__karmaStage.fastForward(1)"); rows.append(ev(PROBE)); rows[-1]['dbg'] = ev('window.__karmaStage.debug()') if os.environ.get('KARMA_TRACE') else None
+            (time.sleep(1) if os.environ.get("KARMA_LIVE") else ev("window.__karmaStage.fastForward(1)")); rows.append(ev(PROBE)); rows[-1]['dbg'] = ev('window.__karmaStage.debug()') if os.environ.get('KARMA_TRACE') else None
         vis = sum(1 for r in rows if r['visible'] and r['onScreen']); hid = sum(1 for r in rows if not r['visible'])
         res[label] = {'seconds': secs, 'visible_and_on_screen': vis, 'hidden': hid, 'offscreen': sum(1 for r in rows if not r['onScreen']), 'max_overlap_when_visible': max([r['overlapCards'] for r in rows if r['visible']] or [0]), 'final': rows[-1], 'trace': [r['dbg'] for r in rows] if os.environ.get('KARMA_TRACE') else None, 'timeline': ''.join('V' if (r['visible'] and r['onScreen']) else 'h' for r in rows), 'actions': sorted({r['action'] for r in rows})}
         print(label, json.dumps(res[label]), flush=True)

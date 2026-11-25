@@ -37,3 +37,10 @@ CHANGES (hypotheses behind them, not proven causes)
 RESULTS AFTER CHANGES
 - history desktop: all 8 scenarios V x6 (one run). A previous run of an earlier build showed hhhhhV at 768; run-to-run variation not yet assessed (single run per page).
 - islamic phone: entry hhhhhh (card below the fold, no eligible card, expected), bottom hhhhhh (still hidden, caption keep-out; unresolved), other scenarios V. 
+
+## 18:50 runs (build 4985099a, strict test, sim-time recovery, 6 s/scenario, single runs, baseline fixture, phone 390x844 start)
+OBSERVATIONS (timelines V visible / h hidden)
+- science: entry hhhhhh, all other scenarios V.  people: entry hhhhhh, others V.  women: entry hhhhhh, others V.  (entry: no eligible card in the viewport band at scroll 0, expected but not traced per page)
+- islamic bottom (traced again, run 2): hhhVVV. Hidden about 3 s while she walked up the gutter past a caption keep-out rect (l15 t622 w360 h30); cleared on arrival at the card. Earlier run: hhhhhh. Run-to-run variation exists.
+- LIVE wall-clock run (KARMA_LIVE=1, real time, no fastForward) history phone: entry hhhhhh, bottom hVVVVV, all other V. hiddenForMs advances about 1000 per real second, so the recovery clock matches wall time in the live loop (observation). In the live entry she ran in, then looked/pointed/waved at the viewport bottom (pos 340,840) with her box intersecting a keep-out text block rect (t694 h44, bottom 738) by 8 px for the whole sequence; pick() returned null at that moment (the card she was sent to is no longer in the eligible band). Deterministic-stepping entry run on the same page showed V x10 earlier, so live and stepped runs DIFFER at entry. Cause not established (hypothesis: layout shifts after load, e.g. images, change card positions after visit() chose its target).
+UNRESOLVED: live entry hide; caption keep-out transits; entry-by-design classification per page; desktop only run on history; no Muse model.
