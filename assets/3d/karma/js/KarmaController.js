@@ -2,7 +2,8 @@
 // State-machine controller that moves the Karma rig between real card rectangles.
 // World units = CSS pixels of the canvas (orthographic camera: left=-w/2, right=w/2, top=h/2, bottom=-h/2).
 // Rig convention: faces +Z, Karma's left = +X, origin at the soles. Authored rest rotations are preserved; pose values are local deltas.
-// STATUS: recovered from the first Claude's session log. UNTESTED - never executed against a real GLB.
+// Placement (2026-11-25): perch-follow after walkTo(top), side fallback near screen edges, and a keep-out API for text areas.
+// STATUS: motion logic is covered by assets/3d/karma/controller_tests_2026-11-25 (synthetic rig, no GLB needed).
 import * as THREE from 'three';
 
 const D2R = Math.PI / 180;
@@ -10,17 +11,31 @@ const E = new THREE.Euler();
 const Q = new THREE.Quaternion();
 const DELTA = new THREE.Quaternion();
 
+// Fractions of a card's width tried (in this order, after the requested one) when a 'top' spot is covered by keep-out text.
+const TOP_ALONG_FALLBACKS = [0.15, 0.5, 0.85];
+// A placement that has to be pushed off-screen is always worse than any keep-out overlap (px of push * this weight).
+const OFFSCREEN_WEIGHT = 1000;
+
+const finiteRect = (r) => r && Number.isFinite(r.left) && Number.isFinite(r.top) && Number.isFinite(r.width) && Number.isFinite(r.height) && r.width > 0 && r.height > 0;
+const cleanRects = (list) => (Array.isArray(list) ? list.filter(finiteRect).map((r) => ({ left: r.left, top: r.top, width: r.width, height: r.height })) : []);
+const overlapArea = (b, k) => {
+  const w = Math.min(b.r, k.left + k.width) - Math.max(b.l, k.left);
+  const h = Math.min(b.b, k.top + k.height) - Math.max(b.t, k.top);
+  return w > 0 && h > 0 ? w * h : 0;
+};
+
 export class KarmaController {
   /**
    * @param {object} o
    * @param {{scene:THREE.Object3D,bones:Object<string,THREE.Object3D>}} o.rig  from KarmaRig.js
    * @param {() => Array<{id:string,left:number,top:number,width:number,height:number}>} o.getCardRects  CSS px relative to the canvas, called every frame
+   * @param {() => Array<{left:number,top:number,width:number,height:number}>} [o.getKeepOutRects]  optional; text areas (headings, paragraphs) Karma should not stand in front of, called every frame
    * @param {{width:number,height:number}} o.viewport  canvas size in CSS px
    * @param {number} [o.characterHeightPx=170]
    * @param {number} [o.modelHeight=1]  model height in metres (body only ~1.0)
    */
-  constructor({ rig, getCardRects, viewport, characterHeightPx = 170, modelHeight = 1 }) {
-    this.rig = rig; this.getCardRects = getCardRects;
+  constructor({ rig, getCardRects, getKeepOutRects = null, viewport, characterHeightPx = 170, modelHeight = 1 }) {
+    this.rig = rig; this.getCardRects = getCardRects; this.getKeepOutRects = getKeepOutRects;
     // Cache authored local rest rotations. Animation targets are local deltas,
     // not absolute rotations; this keeps non-identity exported rigs intact.
     this.restQuaternions = Object.fromEntries(
@@ -30,8 +45,10 @@ export class KarmaController {
     this.modelHeight = modelHeight; this.charH = characterHeightPx;
     this.vw = viewport.width; this.vh = viewport.height;
     this.rects = new Map();
+    this.keepOutStatic = []; this.keepOutLive = [];
     this.state = { name: 'idle' }; this.t = 0; this.time = 0; this.queue = [];
     this.gait = 0; this.facing = 0; this.pose = {}; this.jumpDY = 0; this.anchor = null;
+    this.perch = null; // { cardId, along }: card Karma stands on top of after walkTo(top); she keeps following it until another navigation command
     this._applyScale();
     this.pos = new THREE.Vector2(this.vw / 2, this.vh); // CSS px (y down) of the feet, starts at the bottom centre
     this._syncHolder(true);
@@ -48,10 +65,14 @@ export class KarmaController {
     this._refreshRects(); if (this.anchor) this._reanchor(true);
   }
   setCharacterHeight(px) { this.charH = px; this._applyScale(); }
+  /** Static keep-out rectangles (CSS px, same space as the card rects). Replaces the previous list; invalid entries are dropped; pass [] to clear. */
+  setKeepOutRects(rects) { this.keepOutStatic = cleanRects(rects); }
 
-  /** Walk to a card. side: 'top' (stand on it, `along` 0..1), 'left' or 'right' (stand beside it). Preempts walking/leaning. */
+  /** Walk to a card. side: 'top' (stand on it, `along` 0..1), 'left' or 'right' (stand beside it). Preempts walking/leaning.
+   *  Beside a card she uses the other side (or the top) when the requested side has no room on screen or would put her in front of keep-out text.
+   *  After arriving on top she keeps following that card until the next walkTo / leanOn / stand. */
   walkTo(cardId, { side = 'top', along = 0.5 } = {}) { return this._nav({ name: 'walk', cardId, side, along }); }
-  /** Walk next to a card and lean on it until another command arrives. side = which side of the card to stand on. */
+  /** Walk next to a card and lean on it until another command arrives. side = which side of the card to stand on (may flip, see walkTo). */
   leanOn(cardId, { side = 'left' } = {}) { return this._nav({ name: 'walk', cardId, side, along: 0.5, thenLean: true }); }
   /** Cancel everything and return to the neutral idle pose where she stands. */
   stand() { return this._nav({ name: 'idle' }); }
@@ -66,6 +87,7 @@ export class KarmaController {
     const p = this._mk(cmd);
     for (const q of this.queue) this._finish(q, false, 'preempted'); this.queue = [];
     this._finish(this.state, false, 'preempted');
+    this.perch = null; // any new navigation command ends perch-following
     this._enter(cmd); return p;
   }
   _queue(cmd) {
@@ -88,20 +110,54 @@ export class KarmaController {
 
   // ---------- internals: geometry ----------
   _applyScale() { this.scale = this.charH / this.modelHeight; this.halfW = 0.3 * this.charH; this.holder.scale.setScalar(this.scale); }
-  _refreshRects() { this.rects.clear(); for (const r of this.getCardRects() || []) this.rects.set(r.id, r); }
-  /** returns feet target in CSS px (y down) or null if the card no longer exists */
-  _resolve(a) {
-    const r = this.rects.get(a.cardId); if (!r) return null;
+  _refreshRects() {
+    this.rects.clear(); for (const r of this.getCardRects() || []) this.rects.set(r.id, r);
+    this.keepOutLive = typeof this.getKeepOutRects === 'function' ? cleanRects(this.getKeepOutRects()) : [];
+  }
+  /** One candidate feet position for standing at `side` of card `r`, scored (lower is better). */
+  _place(a, r, side, along) {
     const m = 6; let x, y;
-    if (a.side === 'top') { x = r.left + THREE.MathUtils.clamp(a.along, 0.05, 0.95) * r.width; y = r.top; }
+    if (side === 'top') { x = r.left + THREE.MathUtils.clamp(along, 0.05, 0.95) * r.width; y = r.top; }
     else {
       const gap = a.lean ? 0.1 * this.charH : this.halfW + m;
-      x = a.side === 'left' ? r.left - gap : r.left + r.width + gap; y = r.top + r.height;
+      x = side === 'left' ? r.left - gap : r.left + r.width + gap; y = r.top + r.height;
     }
-    x = THREE.MathUtils.clamp(x, this.halfW, Math.max(this.halfW, this.vw - this.halfW));
-    return { x, y: Math.min(y, this.vh + 2) };
+    const cx = THREE.MathUtils.clamp(x, this.halfW, Math.max(this.halfW, this.vw - this.halfW));
+    y = Math.min(y, this.vh + 2);
+    const box = { l: cx - this.halfW, r: cx + this.halfW, t: y - this.charH, b: y };
+    let score = Math.abs(x - cx) * OFFSCREEN_WEIGHT; // had to be pushed back onto the screen: she would overlap the card or leave the viewport
+    for (const k of this.keepOutStatic) score += overlapArea(box, k);
+    for (const k of this.keepOutLive) score += overlapArea(box, k);
+    return { x: cx, y, side, score };
+  }
+  /** returns feet target in CSS px (y down) plus the side actually used ('left' | 'right' | 'top'), or null if the card no longer exists.
+   *  The requested spot wins unless another candidate is strictly better (on-screen, then least keep-out overlap). */
+  _resolve(a) {
+    const r = this.rects.get(a.cardId); if (!r) return null;
+    const cands = [];
+    if (a.side === 'top') {
+      cands.push(this._place(a, r, 'top', a.along));
+      for (const f of TOP_ALONG_FALLBACKS) if (Math.abs(f - a.along) > 1e-6) cands.push(this._place(a, r, 'top', f));
+    } else {
+      cands.push(this._place(a, r, a.side, a.along));
+      cands.push(this._place(a, r, a.side === 'left' ? 'right' : 'left', a.along));
+      const top = this._place(a, r, 'top', 0.5); top.score += 1; // standing on top is the last resort, never preferred on a tie
+      cands.push(top);
+    }
+    let best = cands[0];
+    for (const c of cands) if (c.score < best.score) best = c;
+    return { x: best.x, y: best.y, side: best.side };
   }
   _reanchor() { /* picked up on the next update */ }
+  /** idle only: keep standing on the card she walked on top of. Small drift is followed smoothly; a big move triggers a new walk. */
+  _followPerch(dt) {
+    const p = this.perch; if (!p) return;
+    const tgt = this._resolve({ cardId: p.cardId, side: 'top', along: p.along });
+    if (!tgt) { this.perch = null; return; } // card is gone: just stay where she is
+    const dx = tgt.x - this.pos.x, dy = tgt.y - this.pos.y;
+    if (Math.hypot(dx, dy) > 0.45 * this.charH) { this._enter({ name: 'walk', cardId: p.cardId, side: 'top', along: p.along, resolve: null }); return; }
+    const k = 1 - Math.exp(-6 * dt); this.pos.x += dx * k; this.pos.y += dy * k;
+  }
   _syncHolder(snap = false) {
     this.holder.position.set(this.pos.x - this.vw / 2, this.vh / 2 - (this.pos.y) + this.jumpDY, 0);
     this.holder.rotation.y = this.facing;
@@ -114,7 +170,7 @@ export class KarmaController {
     const T = {}; // target pose, bone -> [x,y,z] radians
     const s = this.state; let faceTo = 0; this.jumpDY = 0;
     const idlePose = () => this._poseIdle(T);
-    if (s.name === 'idle') { idlePose(); faceTo = 0; }
+    if (s.name === 'idle') { this._followPerch(dt); idlePose(); faceTo = 0; }
     else if (s.name === 'walk') faceTo = this._updWalk(dt, T, s);
     else if (s.name === 'lean') faceTo = this._updLean(dt, T, s);
     else if (s.name === 'jump') this._updJump(dt, T, s);
@@ -144,8 +200,11 @@ export class KarmaController {
     if (dist <= Math.max(step, 1.5)) {
       this.pos.set(tgt.x, tgt.y);
       this._finish(s, true);
-      if (s.thenLean) { this.state = { name: 'lean', side: s.side, cardId: s.cardId, resume: null }; this.t = 0; }
-      else this._next();
+      if (s.thenLean && tgt.side !== 'top') { this.state = { name: 'lean', side: tgt.side, cardId: s.cardId, resume: null }; this.t = 0; }
+      else {
+        if (tgt.side === 'top') this.perch = { cardId: s.cardId, along: s.along };
+        this._next();
+      }
       this._poseIdle(T); return 0;
     }
     this.pos.x += (dx / dist) * step; this.pos.y += (dy / dist) * step;
@@ -164,6 +223,10 @@ export class KarmaController {
   _updLean(dt, T, s) {
     const tgt = this._resolve({ cardId: s.cardId, side: s.side, along: .5, lean: true });
     if (!tgt) { this._enter({ name: 'idle' }); this._poseIdle(T); return 0; }
+    if (tgt.side === 'top') { // no room beside the card any more: stand on it instead of leaning
+      this.perch = { cardId: s.cardId, along: .5 }; this._enter({ name: 'idle' }); this._poseIdle(T); return 0;
+    }
+    s.side = tgt.side; // the side may have flipped (screen edge / keep-out text); lean toward the card from the side she is really on
     const dx = tgt.x - this.pos.x, dy = tgt.y - this.pos.y;
     if (Math.hypot(dx, dy) > 0.45 * this.charH) { // card moved far: walk to the new place, then lean again
       this._enter({ name: 'walk', cardId: s.cardId, side: s.side, along: .5, thenLean: true, resolve: null }); this._poseIdle(T); return 0;
