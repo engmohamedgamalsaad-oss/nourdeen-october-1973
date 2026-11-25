@@ -942,7 +942,7 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
     });
     var done = 0;
     for (var i = 0; i < toApprove.length; i++) {
-      await saveReview(toApprove[i], { status: 'accepted', bulk_owner_approved_without_listening: played[toApprove[i].key] !== true });
+      await saveReview(toApprove[i], { status: 'accepted' });
       done++;
     }
     await render();
