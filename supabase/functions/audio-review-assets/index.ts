@@ -884,9 +884,17 @@ Deno.serve(async (req: Request) => {
     if (queueSnap) {
       const kept: any[] = [];
       for (const job of jobs) {
-        const block = queueSnap.i18n?.[job.language]?.blocks?.[job.block_index];
-        if (!isSpeakableBlock(block) || block.speaker !== job.speaker) continue;
-        if (job.payload?.source_text_hash !== await sha256Hex(new TextEncoder().encode(block.text.trim()))) continue;
+        const sourceBlock = queueSnap.i18n?.ar?.blocks?.[job.block_index];
+        const spokenBlock = queueSnap.i18n?.[job.language]?.blocks?.[job.block_index];
+        if (!isSpeakableBlock(sourceBlock) || sourceBlock.speaker !== job.speaker) continue;
+        if (!isSpeakableBlock(spokenBlock) || spokenBlock.speaker !== job.speaker) continue;
+        // source_text_hash is always the original Arabic block hash; translated jobs
+        // also carry spoken_text_hash for the exact localized text sent to the engine.
+        const sourceHash = await sha256Hex(new TextEncoder().encode(sourceBlock.text.trim()));
+        if (job.payload?.source_text_hash !== sourceHash) continue;
+        const spokenHash = await sha256Hex(new TextEncoder().encode(spokenBlock.text.trim()));
+        if (typeof job.payload?.spoken_text_hash === "string" &&
+            job.payload.spoken_text_hash !== spokenHash) continue;
         kept.push(job);
       }
       jobs = kept;
