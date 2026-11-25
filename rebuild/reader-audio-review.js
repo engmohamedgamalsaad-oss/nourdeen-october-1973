@@ -897,7 +897,9 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
       var ready = clips.length > 0 && clips.every(function (entry) { return readyByKey[entry.key] === 'ready'; });
       if (!ready) { out.verifying++; out.problems.push(label + ': ملف الصوت غير جاهز بعد.'); return; }
       out.ready++;
-      if (heard) { out.listened++; pendingApproval++; } else out.problems.push(label + ': لم يُستمع إليه كاملًا بعد.');
+      if (heard) out.listened++;
+      // اعتماد جماعي اختياري: يحق لمالك القصة اعتماد الملفات الجاهزة دون الاستماع لكل مقطع.
+      pendingApproval++;
     });
     out.canApprove = manifestOk && out.total > 0 && pendingApproval > 0 && out.problems.length === 0 &&
       out.accepted + pendingApproval === out.total;
@@ -940,8 +942,7 @@ window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, 
     });
     var done = 0;
     for (var i = 0; i < toApprove.length; i++) {
-      if (played[toApprove[i].key] !== true) throw new Error('توقف الاعتماد: مقطع ' + (Number(toApprove[i].block_index) + 1) + ' لم يُستمع إليه كاملًا.');
-      await saveReview(toApprove[i], { status: 'accepted' });
+      await saveReview(toApprove[i], { status: 'accepted', bulk_owner_approved_without_listening: played[toApprove[i].key] !== true });
       done++;
     }
     await render();
