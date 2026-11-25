@@ -1,0 +1,61 @@
+{
+  "test": "karma-face-v3-limited",
+  "base": "stage4_head_route_2026-11-24/v2, branch feat/karma-controller-rig-hardening-2026-11-24 (PR #710)",
+  "pass": true,
+  "values": {
+    "mouth_geometric_width_u_v2": 1.08,
+    "mouth_geometric_width_u_v3": 1.02,
+    "mouth_predicted_rendered_v3": 0.9444,
+    "mouth_target_rendered": 0.95,
+    "brow_max_thickness_v2": 0.00406,
+    "brow_max_thickness_v3": 0.002842,
+    "brow_drop_u": 0.05,
+    "nose_tip_increase_pct": 28.6,
+    "nose_bridge_increase_pct": 28.6
+  },
+  "checks": [
+    {
+      "name": "mouth_geometric_width_reduced",
+      "pass": true,
+      "actual": 1.02,
+      "expected": 1.02
+    },
+    {
+      "name": "mouth_predicted_rendered_in_target",
+      "pass": true,
+      "actual": 0.9444,
+      "expected": "0.95 +/- 0.03"
+    },
+    {
+      "name": "brow_thickness_reduced_30pct",
+      "pass": true,
+      "actual": 0.002842,
+      "expected": 0.002842
+    },
+    {
+      "name": "brow_lowered_by_0.05u",
+      "pass": true,
+      "actual": 0.05,
+      "expected": 0.05
+    },
+    {
+      "name": "nose_tip_increased_28.6pct",
+      "pass": true,
+      "actual": 28.6,
+      "expected": "20-35%"
+    },
+    {
+      "name": "nose_bridge_increased_28.6pct",
+      "pass": true,
+      "actual": 28.6,
+      "expected": "20-35%"
+    },
+    {
+      "name": "no_photo_texture",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    }
+  ],
+  "note": "Numeric parameter test only. Does not prove visual likeness; render + MediaPipe verification still required."
+}
