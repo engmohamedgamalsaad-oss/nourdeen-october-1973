@@ -1,0 +1,104 @@
+# Per-file CC0 check (MakeHuman repo commit a8bc2d54ff0ac92e78ff71431b1023eda42bf482)
+
+Every file below was opened and its header read before use. All 95 contain the header line 'released as CC0'. Only these files were used. Nothing from other MakeHuman repositories, no other-licence assets, no textures, no reference-image projection.
+
+Source: https://github.com/makehumancommunity/makehuman (paths under makehuman/data/)
+License text: third_party_MakeHuman_CC0/LICENSE.ASSETS.md (CC0 1.0); summary in LICENSE.MakeHuman.md section C.
+
+| file | CC0 header | sha256[:16] |
+|---|---|---|
+| 3dobjs/base.obj | yes | 8e761e6624b8f545 |
+| targets/macrodetails/african-female-child.target | yes | f88b8f252df8a9a3 |
+| targets/macrodetails/asian-female-child.target | yes | a4fffea45a475a24 |
+| targets/macrodetails/caucasian-female-child.target | yes | 17fc408839c0a407 |
+| targets/eyes/l-eye-scale-incr.target | yes | f35550dc3170ca1c |
+| targets/eyes/l-eye-scale-decr.target | yes | a66719f1a42badd9 |
+| targets/eyes/r-eye-scale-incr.target | yes | e1f4cb48575b60a4 |
+| targets/eyes/r-eye-scale-decr.target | yes | f43ba41146723a19 |
+| targets/eyes/l-eye-height1-incr.target | yes | 75ce5285db2e3721 |
+| targets/eyes/l-eye-height1-decr.target | yes | d1d9f77ff6efc9cc |
+| targets/eyes/r-eye-height1-incr.target | yes | daab8f4115ade91e |
+| targets/eyes/r-eye-height1-decr.target | yes | 0e561d96be0453c2 |
+| targets/eyes/l-eye-height2-incr.target | yes | 8521b63c1bf07af0 |
+| targets/eyes/l-eye-height2-decr.target | yes | 11f97a658461ab34 |
+| targets/eyes/r-eye-height2-incr.target | yes | 35e1f070ab8a77dc |
+| targets/eyes/r-eye-height2-decr.target | yes | 8fbe66bf11786f68 |
+| targets/eyes/l-eye-height3-incr.target | yes | 61fd32eedef0b371 |
+| targets/eyes/l-eye-height3-decr.target | yes | 1e52f3d392fc6493 |
+| targets/eyes/r-eye-height3-incr.target | yes | 2f715100eeb9a1ce |
+| targets/eyes/r-eye-height3-decr.target | yes | 06f6172aecca99b6 |
+| targets/eyes/l-eye-corner1-up.target | yes | bfb3b7440addb68b |
+| targets/eyes/l-eye-corner1-down.target | yes | 7f4faca93cab0e8e |
+| targets/eyes/r-eye-corner1-up.target | yes | f1bedac16f1b9e49 |
+| targets/eyes/r-eye-corner1-down.target | yes | a95e120f64af8a7a |
+| targets/eyes/l-eye-corner2-up.target | yes | e31bbedfb1d45145 |
+| targets/eyes/l-eye-corner2-down.target | yes | 16944395e9723983 |
+| targets/eyes/r-eye-corner2-up.target | yes | 121342afb92d0916 |
+| targets/eyes/r-eye-corner2-down.target | yes | cf227aed9a80fd42 |
+| targets/eyes/l-eye-trans-out.target | yes | ca961a4637517aeb |
+| targets/eyes/l-eye-trans-in.target | yes | a92495e3f6cda144 |
+| targets/eyes/r-eye-trans-out.target | yes | 02143e686611f18d |
+| targets/eyes/r-eye-trans-in.target | yes | 4c494f3503b219b0 |
+| targets/eyes/l-eye-trans-up.target | yes | 2b84f1cdb80c9625 |
+| targets/eyes/l-eye-trans-down.target | yes | 3ebdb3fc54e25cad |
+| targets/eyes/r-eye-trans-up.target | yes | f2b2d139f1ab65aa |
+| targets/eyes/r-eye-trans-down.target | yes | 763c2044a7b0e1fe |
+| targets/nose/nose-width1-incr.target | yes | d340bc76601f9061 |
+| targets/nose/nose-width1-decr.target | yes | 91a63986af9115fe |
+| targets/nose/nose-width2-incr.target | yes | 13a9ab9ab6429a58 |
+| targets/nose/nose-width2-decr.target | yes | d3301686c7dfd94b |
+| targets/nose/nose-width3-incr.target | yes | 32a88f1b999ea83f |
+| targets/nose/nose-width3-decr.target | yes | eb3e782e1b335f10 |
+| targets/nose/nose-nostrils-width-incr.target | yes | 15dfd7b35cac462e |
+| targets/nose/nose-nostrils-width-decr.target | yes | 381335aed6091e8b |
+| targets/nose/nose-flaring-incr.target | yes | 697eccedc27b77ab |
+| targets/nose/nose-flaring-decr.target | yes | 394229c051ec21a8 |
+| targets/nose/nose-scale-horiz-incr.target | yes | cc319e3ddb0523fa |
+| targets/nose/nose-scale-horiz-decr.target | yes | 1227e6f513d20258 |
+| targets/nose/nose-scale-vert-incr.target | yes | b87163e4272d77bc |
+| targets/nose/nose-scale-vert-decr.target | yes | a154747135740f63 |
+| targets/nose/nose-scale-depth-incr.target | yes | 6bb03c3065e048d6 |
+| targets/nose/nose-scale-depth-decr.target | yes | b46c35046c9c451b |
+| targets/nose/nose-trans-up.target | yes | 4c1ee5897c22dfb6 |
+| targets/nose/nose-trans-down.target | yes | 6a4d970a97a1e1b3 |
+| targets/nose/nose-point-width-incr.target | yes | c6dca10cdc77721b |
+| targets/nose/nose-point-width-decr.target | yes | b9abb0a0fa7acf32 |
+| targets/mouth/mouth-scale-horiz-incr.target | yes | ccfc39cca249883e |
+| targets/mouth/mouth-scale-horiz-decr.target | yes | 07a9ef160755467a |
+| targets/mouth/mouth-scale-vert-incr.target | yes | acdbd062c3709211 |
+| targets/mouth/mouth-scale-vert-decr.target | yes | 6087f1f8acd837aa |
+| targets/mouth/mouth-trans-up.target | yes | fdbec49a44e94674 |
+| targets/mouth/mouth-trans-down.target | yes | 635eb596ad9ce51a |
+| targets/mouth/mouth-upperlip-height-incr.target | yes | 4eed688bb333c53b |
+| targets/mouth/mouth-upperlip-height-decr.target | yes | 9ec5e25eedc30442 |
+| targets/mouth/mouth-lowerlip-height-incr.target | yes | 42181c0b02e0ed30 |
+| targets/mouth/mouth-lowerlip-height-decr.target | yes | 26503f3ae2e468d9 |
+| targets/mouth/mouth-upperlip-volume-incr.target | yes | b124cbd9b9be3182 |
+| targets/mouth/mouth-upperlip-volume-decr.target | yes | 20b285d94ecb62cf |
+| targets/mouth/mouth-lowerlip-volume-incr.target | yes | dbdaf045b00c67bf |
+| targets/mouth/mouth-lowerlip-volume-decr.target | yes | 45f1fe355546cdaa |
+| targets/head/head-scale-vert-incr.target | yes | d9560ee80b9125da |
+| targets/head/head-scale-vert-decr.target | yes | 928f8900b8955ec7 |
+| targets/head/head-scale-horiz-incr.target | yes | 31830f645c194c94 |
+| targets/head/head-scale-horiz-decr.target | yes | cadb55b340cb94e9 |
+| targets/chin/chin-height-incr.target | yes | 8b13d4a1e0f4b105 |
+| targets/chin/chin-height-decr.target | yes | acf83b5b7f2d6665 |
+| targets/chin/chin-width-incr.target | yes | deef506bfe1883d9 |
+| targets/chin/chin-width-decr.target | yes | ac081bd1652c203f |
+| targets/cheek/l-cheek-volume-incr.target | yes | edb0bf9389aa7fd0 |
+| targets/cheek/l-cheek-volume-decr.target | yes | 527d19395f33c02c |
+| targets/cheek/r-cheek-volume-incr.target | yes | dfdde51eb34b3e2c |
+| targets/cheek/r-cheek-volume-decr.target | yes | 3a356f2f6434ccef |
+| targets/cheek/l-cheek-bones-incr.target | yes | 244ffa39d2d2db94 |
+| targets/cheek/l-cheek-bones-decr.target | yes | 0da776725aabc2cb |
+| targets/cheek/r-cheek-bones-incr.target | yes | a393f67acce21568 |
+| targets/cheek/r-cheek-bones-decr.target | yes | a336b46fe613d857 |
+| targets/expression/units/african/mouth-corner-puller.target | yes | 9cec6411ee6e4c13 |
+| targets/expression/units/asian/mouth-corner-puller.target | yes | 75ec1f2356c381aa |
+| targets/expression/units/caucasian/mouth-corner-puller.target | yes | 75ec1f2356c381aa |
+| targets/expression/units/african/mouth-elevation.target | yes | 66c592bd5e5d4e87 |
+| targets/expression/units/asian/mouth-elevation.target | yes | 4af81349fa582b93 |
+| targets/expression/units/caucasian/mouth-elevation.target | yes | 0b306cea4b0bb372 |
+| targets/expression/units/african/mouth-open.target | yes | c3e586735bdc8dc1 |
+| targets/expression/units/asian/mouth-open.target | yes | 2222072e34027f7b |
+| targets/expression/units/caucasian/mouth-open.target | yes | 07377ba3a3eb1b92 |
