@@ -1,0 +1,144 @@
+{
+ "Run": {
+  "frames": [
+   {
+    "t": 0.4,
+    "state": "walk",
+    "x": 30,
+    "y": 762,
+    "oy": 3.3,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": false
+   },
+   {
+    "t": 0.8,
+    "state": "walk",
+    "x": 224,
+    "y": 629,
+    "oy": 3.4,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 1.2,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 1.8,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 2.6,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   }
+  ],
+  "end": {
+   "state": "idle",
+   "x": 311,
+   "y": 570,
+   "visible": true
+  }
+ },
+ "Jump": {
+  "frames": [
+   {
+    "t": 0.1,
+    "state": "jump",
+    "x": 311,
+    "y": 570,
+    "oy": -5.3,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 0.2,
+    "state": "jump",
+    "x": 311,
+    "y": 570,
+    "oy": 44.6,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 0.3,
+    "state": "jump",
+    "x": 311,
+    "y": 570,
+    "oy": -8.1,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 0.4,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 0.5,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 0.6,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   }
+  ],
+  "end": {
+   "state": "idle",
+   "x": 311,
+   "y": 570,
+   "visible": true
+  }
+ },
+ "js_errors": []
+}

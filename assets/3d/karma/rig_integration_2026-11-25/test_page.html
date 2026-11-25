@@ -24,7 +24,7 @@ for(let i=1;i<=5;i++){const a=document.createElement('a');a.className='story-ind
 <script type="module">
 import {startKarmaStage} from '../../../../khaledoon/assets/karma-stage.js';
 const log=t=>document.getElementById('log').textContent=t;
-const api=await startKarmaStage({glbUrl:new URLSearchParams(location.search).get('glb')||'../baseline_2026-11-24/karma_skinned_baseline_NOT_FINAL.glb',auto:false,onState:s=>log('state: '+s)});
+const api=await startKarmaStage({glbUrl:new URLSearchParams(location.search).get('glb')||'../baseline_2026-11-24/karma_skinned_baseline_NOT_FINAL.glb',auto:false,coverGuard:new URLSearchParams(location.search).get('guard')!=='0',reserveGutter:false,onState:s=>log('state: '+s)});
 if(!api){log('GLB failed to load: page still works (stage removed)');}
 else{
  const c=api.controller, id=n=>document.getElementById('card'+n).dataset.karmaId||(document.getElementById('card'+n).dataset.karmaId='t'+n);
