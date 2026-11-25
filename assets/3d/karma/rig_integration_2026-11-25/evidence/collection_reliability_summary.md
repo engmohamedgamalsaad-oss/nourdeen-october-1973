@@ -11,3 +11,6 @@ Tried and rejected: forcing a new visit on every resize and forcing recovery whi
 
 ## science.html, phone 390x844 (17:37, baseline fixture)
 entry hhhhhhhhhh, cards VVVVVVVVVVVV, slideshow hhhhhhhhhh, bottom VVVVVVVVVV, 360x740 V x12, 768x1024 V x12, 1440x900 hhhVVVVVVVVV, back 390x844 V x12. Overlap 0. Entry-at-top hidden is unclassified: no card is in the viewport band at scroll 0 on this page (to be checked against screenshot), so absence may be by design.
+
+## islamic.html, phone 390x844 (17:40, baseline fixture) UNRESOLVED FAILURES
+entry h x10, cards V x12, slideshow V x10, bottom h x10, 360x740 h x12, 768x1024 h x12, 1440x900 V x12, back 390x844 V x12. Overlap 0. Causes not yet traced.
