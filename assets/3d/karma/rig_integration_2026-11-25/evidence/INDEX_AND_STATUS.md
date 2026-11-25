@@ -1,3 +1,5 @@
+> **STALE NOTICE (00:59): all real-browser results in this evidence folder produced before 00:50 on 2026-11-26 (and any earlier browser result not in browser_cache_off_2026-11-26/) came from a harness whose Chrome profile could serve cached JS. Treat them as unreliable for the current code. Node-simulation TAP results are unaffected.**
+
 # Evidence index and status (updated 19:27, build c2ce0969 + this commit)
 Baseline fixture only. Software GL. Strict test (zero tolerance). Mostly single runs.
 
