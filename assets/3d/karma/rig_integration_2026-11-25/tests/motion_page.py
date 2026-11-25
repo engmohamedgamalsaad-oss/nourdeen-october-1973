@@ -50,7 +50,7 @@ try:
         t0 = 0; frames = []
         for t in TIMES.get(nm, DEF):
             ev(f"window.__karmaStage.fastForward({round(t - t0, 3)})"); t0 = t
-            st = ev("(()=>{const c=__karmaStage.controller;return {state:c.stateName,x:Math.round(c.pos.x),y:Math.round(c.pos.y),oy:+(c.jumpDY||0).toFixed(1),visible:c.object3D.visible,halfW:c.halfW,charH:c.charH,inView:c.pos.x-c.halfW>=-1&&c.pos.x+c.halfW<=innerWidth+1}})()")
+            st = ev("(()=>{const c=__karmaStage.controller;return {state:c.actionName,x:Math.round(c.pos.x),y:Math.round(c.pos.y),oy:+(c.jumpDY||0).toFixed(1),visible:c.object3D.visible,halfW:c.halfW,charH:c.charH,inView:c.pos.x-c.halfW>=-1&&c.pos.x+c.halfW<=innerWidth+1}})()")
             shot = call('Page.captureScreenshot', {'format': 'png'})['result']['data']
             fn = f'{out}/frame_{vp}_{i:02d}_{nm.replace(" ", "_")}_{int(t*1000):04d}ms.png'; open(fn, 'wb').write(base64.b64decode(shot))
             frames.append((t, st, fn))

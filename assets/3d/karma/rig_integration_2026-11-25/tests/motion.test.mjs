@@ -97,3 +97,21 @@ test('every motion keeps bones finite and rotations bounded (no joint wraps past
   for (const f of seq) { const p = f(); let done; p.then((v) => { done = v; }); for (let i = 0; i < 60 * 14 && done === undefined; i++) { c.update(DT); sample(); await Promise.resolve(); } assert.ok(done, 'settled'); assert.ok(finiteBones(rig)); }
   assert.ok(worst < 135, 'worst joint angle ' + worst.toFixed(1)); await settle(c, c.idle(), 3); run(c, 1.5); assert.equal(c.stateName, 'idle');
 });
+
+test('actionName reports the real action (run is not walk, point/look/turn are not wave)', async () => {
+  const { c } = await make(); c.pos.set(900, 700);
+  const seen = new Set(); const p1 = c.runTo('a', { side: 'right' }); for (let i = 0; i < 20; i++) { c.update(DT); } seen.add(c.actionName);
+  await settle(c, p1, 20); const p2 = c.pointAt('a', 1.5); run(c, 0.5); seen.add(c.actionName); await settle(c, p2, 5);
+  const p3 = c.lookAt('a', 1.5); run(c, 0.5); seen.add(c.actionName); await settle(c, p3, 5);
+  const p4 = c.turn('left', 1.2); run(c, 0.5); seen.add(c.actionName); await settle(c, p4, 5);
+  assert.deepEqual([...seen].sort(), ['look', 'point', 'run', 'turn']);
+});
+test('lean on card: the near hand rests on the card edge (contact error <= 8 px), not inside the card face', async () => {
+  const { c, rig, R } = await make({ viewport: { width: 1280, height: 800 }, charH: 150 }); c.pos.set(900, 700);
+  await settle(c, c.leanOn('a', { side: 'right' }), 20); run(c, 1.5);
+  assert.equal(c.stateName, 'lean'); c.object3D.updateMatrixWorld(true);
+  const card = R[0], edge = card.left + card.width; const px = (n) => { const e = rig.bones[n].matrixWorld.elements; return { x: e[12] + 1280 / 2, y: 800 / 2 - e[13] }; };
+  const hand = [px('Hand_L'), px('Hand_R')].sort((a, b) => Math.abs(a.x - edge) - Math.abs(b.x - edge))[0];
+  assert.ok(Math.abs(hand.x - edge) <= 8, 'hand x ' + hand.x.toFixed(1) + ' vs card edge ' + edge);
+  assert.ok(hand.y > card.top && hand.y < card.top + card.height, 'hand height inside card span ' + hand.y.toFixed(1));
+});

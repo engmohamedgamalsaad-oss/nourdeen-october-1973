@@ -100,6 +100,22 @@ export class KarmaMotion extends Base {
     if (!(n === 'wave' && (k === 'turn' || k === 'point'))) this._yawTarget = 0;
     super.update(dt);
   }
+  /** Lean contact: the stock lean stands 0.1*charH from the card edge, which put the near hand about 0.25*charH INSIDE the card face
+   *  (measured by tests/contact_probe.py). Stand `leanReach` further out so the hand tip rests on the card edge instead of covering the card. */
+  _resolve(a) {
+    const t = super._resolve(a);
+    if (t && a && a.lean && t.side && t.side !== 'top') t.x += (t.side === 'right' ? 1 : -1) * (this.leanReach ?? 0.24) * this.charH;
+    return t;
+  }
+  /** Honest name of what she is doing now (stateName is the base controller's internal state: look/point/turn ride on 'wave', run on 'walk'). */
+  get actionName() {
+    const s = this.state; if (!s) return 'idle'; const n = s.name || this.stateName;
+    if (n === 'walk') return s.run ? 'run' : 'walk';
+    if (n === 'wave') return s.kind || 'wave';
+    if (n === 'tilt') return 'lean';
+    if (n === 'lean') return 'lean_on_card';
+    return n;
+  }
   _syncHolder(snap = false) {
     this._yawExtra += (this._yawTarget - this._yawExtra) * (1 - Math.exp(-9 * (this._lastDt || 1 / 60)));
     super._syncHolder(snap);
