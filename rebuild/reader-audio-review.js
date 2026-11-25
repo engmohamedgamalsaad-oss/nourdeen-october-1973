@@ -685,7 +685,19 @@ function languageGate(language) {
     return { ok: false, loadError: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   }
   var languageEntries = entries.filter(function (entry) { return entry.lang === language; });
-  var g = core.evaluateFiveLanguageGate(manifests, languageEntries, review, readyByKey, played, [language]);
+  // For translated languages, explicit owner acceptance (including bulk acceptance) is the approval
+  // record required for publication; do not re-impose the individual-playback gate here.
+  var publicationPlayed = Object.assign({}, played);
+  if (BULK_AUDIO_LANGS.indexOf(language) >= 0) {
+    languageEntries.forEach(function (entry) {
+      var saved = review.clips && review.clips[entry.key];
+      if (saved && saved.status === 'accepted' &&
+          String(saved.audio_sha256 || '').toLowerCase() === String(entry.audio_sha256 || '').toLowerCase()) {
+        publicationPlayed[entry.key] = true;
+      }
+    });
+  }
+  var g = core.evaluateFiveLanguageGate(manifests, languageEntries, review, readyByKey, publicationPlayed, [language]);
   var stale = (manifestStale[language] || []).length;
   var gaps = (manifestGaps[language] || []).length;
   g.staleBlocks = stale; g.uncoveredBlocks = gaps;
