@@ -1,0 +1,9 @@
+landmark residual in IPD units (reference mean of stand/wave/clasp), 68 ICT landmarks
+region                  generic  fit neutral    fit smile
+jaw outline(0-16)         0.159        0.087        0.079
+brows(17-26)              0.113        0.055        0.056
+nose(27-35)               0.117        0.100        0.077
+eyes(36-47)               0.044        0.042        0.035
+mouth(48-67)              0.148        0.094        0.058
+PCA weights |w|=9.0 max|w|=2.73 (N(0,1) prior; typical |w|~10, max~2.5-3), ridge lam=0.001
+expression weights used (smile): {'cheekRaiser_L': 0.59, 'cheekRaiser_R': 0.43, 'eyeSquint_R': 0.17, 'mouthUpperUp_L': 0.66, 'mouthUpperUp_R': 0.68, 'mouthStretch_L': 0.49, 'mouthStretch_R': 0.64, 'mouthDimple_L': 1.0, 'mouthDimple_R': 1.0}
