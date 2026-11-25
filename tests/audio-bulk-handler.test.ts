@@ -348,7 +348,7 @@ Deno.test("queue status matches translated jobs against Arabic source hash and l
   };
   const visible = await call({ action: "queue_status", language: "de", story_snapshot: localizedSnapshot });
   assert.equal(visible.status, 200, JSON.stringify(visible.json));
-  assert.deepEqual(visible.json.jobs.map((job: any) => job.block_index), [4, 3, 1, 0]);
+  assert.deepEqual(visible.json.jobs.map((job: any) => job.block_index), [0, 1, 3, 4]);
 
   // A changed Arabic source or changed German speech text must hide only that stale job.
   const sourceStale = db.queue.find((job: any) => job.block_index === 0);
