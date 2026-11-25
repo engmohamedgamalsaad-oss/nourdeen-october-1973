@@ -53,10 +53,13 @@ export class KarmaMotion extends Base {
    *  (the stand/lean/perch endpoint is deliberately next to or on it). */
   _pathBlocked(a, b, tgt, cardId) {
     const hw = this.halfW * (this.pathBodyScale ?? 0.9), n = Math.max(2, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 6));
+    const inside = (r, x, y) => x + hw > r.left + 0.5 && x - hw < r.left + r.width - 0.5 && y > r.top + 0.5 && y - this.charH < r.top + r.height - 0.5;
+    const esc = new Set(); for (const [id, r] of this.rects) if (inside(r, a.x, a.y)) esc.add(id);   // a card that landed on her: she may walk out of it
     for (let i = 0; i <= n; i++) {
       const x = a.x + (b.x - a.x) * (i / n), y = a.y + (b.y - a.y) * (i / n), nearTgt = Math.hypot(x - tgt.x, y - tgt.y) < 0.8 * this.charH;
       for (const [id, r] of this.rects) {
         if (nearTgt && id === cardId) continue;
+        if (esc.has(id)) { if (inside(r, x, y)) continue; esc.delete(id); } // leaving the card she is already inside: exempt only until she is out of it
         if (x + hw > r.left + 0.5 && x - hw < r.left + r.width - 0.5 && y > r.top + 0.5 && y - this.charH < r.top + r.height - 0.5) return true;
       }
     }
@@ -175,7 +178,7 @@ export class KarmaMotion extends Base {
     return t;
   }
   /** Standing spot must not put her body inside ANOTHER card (the base only checks the target card). Move to the nearest clear x;
-   *  when none exists return null so the walk is refused ('card-missing' path) instead of ending inside text. */
+   *  when none exists return null so the walk is refused ('no-clear-placement' reason) instead of ending inside text. */
   _clearSpot(t, a, strict) {
     const hw = this.halfW, r0 = this.rects.get(a.cardId);
     const bad = (x) => {
@@ -197,6 +200,20 @@ export class KarmaMotion extends Base {
     c.sort((p, q) => Math.abs(p - t.x) - Math.abs(q - t.x));
     for (const x of c) if (x >= lo && x <= hi && !bad(x)) return { ...t, x };
     return null;
+  }
+  /** Precise refusal: the card exists but there is no clear place to stand (neighbour cards / text fill every candidate). */
+  _finish(cmd, completed, reason) {
+    if (!completed && reason === 'card-missing' && cmd && cmd.cardId !== undefined && this.rects.has(cmd.cardId)) reason = 'no-clear-placement';
+    return super._finish(cmd, completed, reason);
+  }
+  /** Lean relocation is never a slide across text: when the lean spot flips side or the straight move to it is blocked, re-walk (the walk detours or holds). */
+  _updLean(dt, T, s) {
+    const req = s.reqSide === undefined ? s.side : s.reqSide;
+    const t = this._resolve({ cardId: s.cardId, side: req, along: 0.5, lean: true });
+    if (t && t.side !== 'top' && Math.hypot(t.x - this.pos.x, t.y - this.pos.y) > 2 && (t.side !== s.side || this._pathBlocked(this.pos, t, t, s.cardId))) {
+      this._enter({ name: 'walk', cardId: s.cardId, side: req, along: 0.5, thenLean: true, resolve: null }); this._poseIdle(T); return 0;
+    }
+    return super._updLean(dt, T, s);
   }
   /** Honest name of what she is doing now (stateName is the base controller's internal state: look/point/turn ride on 'wave', run on 'walk'). */
   get actionName() {

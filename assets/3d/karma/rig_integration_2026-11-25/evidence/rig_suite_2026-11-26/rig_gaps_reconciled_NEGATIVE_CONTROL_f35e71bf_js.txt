@@ -1,0 +1,6 @@
+not ok 15 - refusal reason: card exists but no clear placement => reason "no-clear-placement" (not card-missing)
+not ok 17 - lean follow, NON-overlapping cards (shared test 19 requirement): small drift followed smoothly, big move => 
+not ok 18 - lean follow, OVERLAPPING cards (shared test 19 layout): never inside text; relocation is a walk (not a slide
+not ok 20 - phone resize, OVERLAPPING cards (shared test 21 layout): holds (idle) or leans on a clear spot, never inside
+# pass 16
+# fail 4

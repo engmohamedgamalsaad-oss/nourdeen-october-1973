@@ -132,3 +132,43 @@ test('resize obstruction: viewport narrows mid-walk (setViewport) => no frame cr
   for (let i = 0; i < 25 / DT && r === undefined; i++) { if (i === 30) c.setViewport(600, 800); c.update(DT); await Promise.resolve(); }
   assert.ok(r, 'did not settle'); assert.ok(c.pos.x <= 600 + 1 && c.pos.x >= 0); assert.ok(!inCard(c, R, 'a'));
 });
+
+// ---- reconciled shared-suite requirements (shared tests 19 and 21 use CARDS THAT OVERLAP EACH OTHER; here both variants are kept) ----
+const lastReason = async (c, p, sec) => (await settle(c, p, sec));
+test('refusal reason: card exists but no clear placement => reason "no-clear-placement" (not card-missing)', async () => {
+  const R = [{ id: 'l', left: 0, top: 300, width: 590, height: 160 }, { id: 'a', left: 590, top: 300, width: 100, height: 160 }, { id: 'r', left: 690, top: 300, width: 590, height: 160 }];
+  const { c } = await make({ rects: R }); c.pos.set(640, 700); c.update(DT); c.pos.set(640, 700);
+  const r = await lastReason(c, c.walkTo('a', { side: 'right' }), 20); assert.deepEqual(r, { completed: false, reason: 'no-clear-placement' });
+});
+test('removed card still reports card-missing', async () => {
+  const { c, R } = await make(); const p = c.walkTo('b', { side: 'top' }); run(c, 0.3); R.splice(1, 1);
+  assert.deepEqual(await settle(c, p, 1), { completed: false, reason: 'card-missing' });
+});
+test('lean follow, NON-overlapping cards (shared test 19 requirement): small drift followed smoothly, big move => walk then lean again', async () => {
+  const R = [{ id: 'a', left: 140, top: 420, width: 260, height: 180 }, { id: 'b', left: 900, top: 100, width: 260, height: 200 }];
+  const { c } = await make({ rects: R }); await settle(c, c.leanOn('a', { side: 'right' }), 10);
+  const x0 = c.pos.x; R[0].left += 40; run(c, 2); assert.ok(Math.abs(c.pos.x - (x0 + 40)) < 2); assert.equal(c.stateName, 'lean');
+  R[0].left += 330; R[0].top -= 60; c.update(DT); assert.equal(c.stateName, 'walk');
+  run(c, 8); assert.equal(c.stateName, 'lean'); assert.ok(Math.abs(c.pos.y - (R[0].top + R[0].height)) < 2);
+});
+test('lean follow, OVERLAPPING cards (shared test 19 layout): never inside text; relocation is a walk (not a slide), ends leaning on the free side or holds', async () => {
+  const { c, R } = await make(); await settle(c, c.leanOn('a', { side: 'right' }), 10);
+  R[0].left += 370; R[0].top -= 60; let bad = 0, sawWalk = false, maxStep = 0, prev = { x: c.pos.x, y: c.pos.y };
+  for (let i = 0; i < 10 / DT; i++) { c.update(DT); if (c.stateName === 'walk') sawWalk = true; maxStep = Math.max(maxStep, Math.hypot(c.pos.x - prev.x, c.pos.y - prev.y)); prev = { x: c.pos.x, y: c.pos.y };
+    if (R.some((q) => q.id !== 'a' && c.pos.x + c.halfW * 0.9 > q.left + 1 && c.pos.x - c.halfW * 0.9 < q.left + q.width - 1 && c.pos.y > q.top + 1 && c.pos.y - c.charH < q.top + q.height - 1)) bad++; }
+  assert.equal(bad, 0, 'inside another card for ' + bad + ' frames'); assert.ok(maxStep < 0.1 * c.charH, 'teleport-like step ' + maxStep.toFixed(1)); assert.ok(sawWalk || c.stateName === 'idle');
+});
+test('phone resize, NON-overlapping cards (shared test 21 requirement): stays inside viewport and re-targets the card, leaning', async () => {
+  const R = [{ id: 'a', left: 140, top: 420, width: 260, height: 180 }, { id: 'b', left: 760, top: 300, width: 260, height: 200 }];
+  const { c } = await make({ rects: R }); await settle(c, c.leanOn('b', { side: 'left' }), 10);
+  R[1].left = 150; R[1].top = 180; R[1].width = 190; R[1].height = 150; R[0].left = 150; R[0].top = 520; R[0].width = 190; R[0].height = 150;
+  c.setViewport(390, 844); c.setCharacterHeight(120); run(c, 10);
+  assert.ok(c.pos.x >= c.halfW - 0.01 && c.pos.x <= 390 - c.halfW + 0.01, 'x=' + c.pos.x); assert.ok(c.pos.y <= 846);
+  assert.equal(c.stateName, 'lean'); assert.ok(!inCard(c, R, 'b'));
+});
+test('phone resize, OVERLAPPING cards (shared test 21 layout): holds (idle) or leans on a clear spot, never inside text', async () => {
+  const { c, R } = await make(); await settle(c, c.leanOn('b', { side: 'left' }), 10);
+  R[1].left = 150; R[1].top = 520; R[1].width = 190; R[1].height = 150; c.setViewport(390, 844); c.setCharacterHeight(120); run(c, 10);
+  assert.ok(c.pos.x >= c.halfW - 0.01 && c.pos.x <= 390 - c.halfW + 0.01); assert.ok(!inCard(c, R, 'b'));
+  assert.ok(['idle', 'lean'].includes(c.stateName), c.stateName);
+});
