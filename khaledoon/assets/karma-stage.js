@@ -48,20 +48,20 @@ export async function startKarmaStage(opts = {}) {
     c.pos.set(vw + c.halfW * 2, vh); // starts off-screen on the right
 
     // choose the card to visit: the most visible one nearest the viewport centre
-    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId && !r.obstacleOnly && sideFor(r)); if (!R.length) return null;
+    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId && !r.obstacleOnly && sideFor(r) && (r.top + r.height / 2) >= charH + 10 && (r.top + r.height / 2) <= vh - 10); if (!R.length) return null;
       R.sort((a, b) => Math.abs(a.top + a.height / 2 - vh / 2) - Math.abs(b.top + b.height / 2 - vh / 2)); return R[0]; };
     // side with the most free room next to the card; if neither side has room for her body, stand on top
     const sideFor = (r) => { const room = { right: vw - (r.left + r.width), left: r.left }; const need = c.halfW * 2 + 8;
       if (room.right >= need && room.right >= room.left) return 'right'; if (room.left >= need) return 'left'; return null; };
     // never cover content: the model is hidden for any frame where its box would overlap a card, photo or text block
     const boxOf = () => ({ l: c.pos.x - c.halfW, r: c.pos.x + c.halfW, t: c.pos.y - charH, b: c.pos.y });
-    let hiddenFrames = 0, shownFrames = 0;
+    let hiddenFrames = 0, shownFrames = 0, hiddenRun = 0;
     const guard = () => { const m = boxOf(); let hit = false;
       const tol = c.stateName === 'lean' ? 36 : 12; // lean-on-card contact: a few px of arm/shoulder may touch the card edge without hiding her
       for (const r of [...getCardRects().map((q) => ({ ...q, left: q.left + tol, width: q.width - 2 * tol })), ...getKeepOutRects()]) { if (m.l < r.left + r.width && m.r > r.left && m.t < r.top + r.height && m.b > r.top) { hit = true; break; } }
-      c.object3D.visible = o.coverGuard ? !hit : true; if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
+      c.object3D.visible = o.coverGuard ? !hit : true; hiddenRun = hit ? hiddenRun + 1 : 0; if (hiddenRun > 90 && !busy && !stopped) { hiddenRun = 0; setTimeout(() => visit(false), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
     const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
-    const tick = (d) => { for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); };
+    const tick = (d) => { for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - 4) c.pos.y = vh - 4; };
     let stopped = false, busy = false, current = null; const state = { visits: 0, lastError: null };
     const say = (s) => { if (o.onState) o.onState(s, state); };
     async function visit(first) {
@@ -82,7 +82,7 @@ export async function startKarmaStage(opts = {}) {
     let rsT = null; addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
       vw = innerWidth; vh = innerHeight; renderer.setSize(vw, vh, false);
       cam.left = -vw / 2; cam.right = vw / 2; cam.top = vh / 2; cam.bottom = -vh / 2; cam.updateProjectionMatrix();
-      c.setViewport(vw, vh); c.setCharacterHeight(o.charHeight || (matchMedia('(max-width: 700px)').matches ? mobH() : Math.min(230, vh * 0.28))); reserve(); }, 120); });
+      c.setViewport(vw, vh); if (o.auto && !busy) setTimeout(() => visit(false), 400); c.setCharacterHeight(o.charHeight || (matchMedia('(max-width: 700px)').matches ? mobH() : Math.min(230, vh * 0.28))); reserve(); }, 120); });
     let last = performance.now(), acc = 0; const step = mobile ? 1 / 30 : 0;
     function frame(now) {
       if (stopped) return; requestAnimationFrame(frame);
