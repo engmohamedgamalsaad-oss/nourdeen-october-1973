@@ -14,3 +14,9 @@ entry hhhhhhhhhh, cards VVVVVVVVVVVV, slideshow hhhhhhhhhh, bottom VVVVVVVVVV, 3
 
 ## islamic.html, phone 390x844 (17:40, baseline fixture) UNRESOLVED FAILURES
 entry h x10, cards V x12, slideshow V x10, bottom h x10, 360x740 h x12, 768x1024 h x12, 1440x900 V x12, back 390x844 V x12. Overlap 0. Causes not yet traced.
+
+## people / women / dynamic, phone 390x844 (17:50, baseline fixture)
+people: entry h x10, cards V x12, slideshow h x10, bottom V x10, 360x740 V x12, 768x1024 hhhhhhhVVVVV, 1440x900 hhhhhhhVVVVV, back V x12.
+women: entry h x10, cards V x12, slideshow h x10, bottom V x10, 360x740 V x12, 768x1024 hhV..., 1440x900 hhhV..., back V x12.
+dynamic: h in all 8 scenarios, final state cardW=null, visits=0: no story cards are in the DOM in this offline test (page is data-driven; Supabase was not touched), so the stage had no target. Not testable here, not a stage verdict.
+Overlap with cards while visible: 0 on all pages. Entry hidden on science/people/women/islamic: no card in viewport band at scroll 0 (trace pending). Transient post-resize hide 2 to 7 s on several pages.

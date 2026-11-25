@@ -1,0 +1,203 @@
+{
+ "1_entry_at_top_no_scroll": {
+  "seconds": 10,
+  "visible_and_on_screen": 0,
+  "hidden": 0,
+  "offscreen": 10,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": true,
+   "x": 456,
+   "y": 844,
+   "inView": false,
+   "onScreen": false,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "2_scrolled_to_cards": {
+  "seconds": 12,
+  "visible_and_on_screen": 0,
+  "hidden": 0,
+  "offscreen": 12,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": true,
+   "x": 456,
+   "y": 844,
+   "inView": false,
+   "onScreen": false,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "3_scrolled_to_slideshow": {
+  "seconds": 10,
+  "visible_and_on_screen": 0,
+  "hidden": 0,
+  "offscreen": 10,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": true,
+   "x": 456,
+   "y": 844,
+   "inView": false,
+   "onScreen": false,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "4_scrolled_to_bottom": {
+  "seconds": 10,
+  "visible_and_on_screen": 0,
+  "hidden": 0,
+  "offscreen": 10,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": true,
+   "x": 456,
+   "y": 844,
+   "inView": false,
+   "onScreen": false,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "5_resize_360x740": {
+  "seconds": 12,
+  "visible_and_on_screen": 0,
+  "hidden": 12,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": false,
+   "x": 323,
+   "y": 736,
+   "inView": true,
+   "onScreen": true,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 360,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "6_resize_768x1024": {
+  "seconds": 12,
+  "visible_and_on_screen": 0,
+  "hidden": 12,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": false,
+   "x": 323,
+   "y": 736,
+   "inView": true,
+   "onScreen": true,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 768,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "7_resize_1440x900": {
+  "seconds": 12,
+  "visible_and_on_screen": 0,
+  "hidden": 12,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": false,
+   "x": 323,
+   "y": 736,
+   "inView": true,
+   "onScreen": true,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 1440,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "8_resize_back_390x844": {
+  "seconds": 12,
+  "visible_and_on_screen": 0,
+  "hidden": 12,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": false,
+   "x": 321,
+   "y": 736,
+   "inView": true,
+   "onScreen": true,
+   "gutter": null,
+   "cardW": null,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 0
+  },
+  "timeline": "hhhhhhhhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "js_errors": []
+}
