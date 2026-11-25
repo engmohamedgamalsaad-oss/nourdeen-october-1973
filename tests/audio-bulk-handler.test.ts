@@ -356,7 +356,7 @@ Deno.test("queue status matches translated jobs against Arabic source hash and l
   const spokenStale = db.queue.find((job: any) => job.block_index === 1);
   spokenStale.payload.spoken_text_hash = await sha("different German speech");
   const filtered = await call({ action: "queue_status", language: "de", story_snapshot: localizedSnapshot });
-  assert.deepEqual(filtered.json.jobs.map((job: any) => job.block_index), [4, 3]);
+  assert.deepEqual(filtered.json.jobs.map((job: any) => job.block_index), [3, 4]);
 });
 
 Deno.test("sparse spoken indexes preserve required AR/EN readiness and full listening gates", () => {
