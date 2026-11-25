@@ -79,7 +79,8 @@ export async function startKarmaStage(opts = {}) {
     // actual rendered, animated footprint (Box3 of the skinned meshes, screen px), refreshed every 3rd frame; the controller box is only the fallback
     let fpBox = null, fpAge = 99; state0.fpMs = 0; state0.fpCalls = 0;
     const footprint = () => { if (++fpAge >= 3 || !fpBox) { const t0 = performance.now(); fpBox = fastBounds(); fpAge = 0; state0.fpMs += performance.now() - t0; state0.fpCalls++; } return fpBox; };
-    let lastHit = null; const guard = () => { const m = (o.footprintGuard !== false && footprint()) || boxOf(); let hit = false; lastHit = null;
+    let lastHit = null; const guard = () => { let m = (o.footprintGuard !== false && footprint()) || boxOf(); let hit = false; lastHit = null;
+      if (!c.object3D.visible) { const h = 6; m = { l: m.l - h, r: m.r + h, t: m.t - h, b: m.b + h }; } /* hysteresis: once hidden, she re-appears only when clear by 6 px, so idle sway at a text edge does not flicker */
       const tol = c.stateName === 'lean' ? 8 : 3; // lean-on-card contact: a few px of arm/shoulder may touch the card edge without hiding her
       const am = 2; const keeps = getKeepOutRects().map((q) => ({ left: q.left - am, top: q.top, width: q.width + 2 * am, height: q.height })); /* the rendered animated footprint already includes the arm swing */ for (const [kind, r] of [...getCardRects().map((q) => ['card', { ...q, left: q.left + tol, width: q.width - 2 * tol }]), ...keeps.map((q) => ['keepout', q])]) { if (m.l < r.left + r.width && m.r > r.left && m.t < r.top + r.height && m.b > r.top) { hit = true; lastHit = { kind, l: Math.round(r.left), t: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height), box: [Math.round(m.l), Math.round(m.t), Math.round(m.r), Math.round(m.b)] }; break; } }
       c.object3D.visible = o.coverGuard ? !hit : true; const tNow = simT * 1000; if (!hit) hiddenSince = 0; else if (!hiddenSince) hiddenSince = tNow; else if (!busy && tNow - hiddenSince > 1200 && !stopped) { hiddenSince = 0; setTimeout(() => visit(false, true), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
@@ -88,7 +89,7 @@ export async function startKarmaStage(opts = {}) {
     let simT = 0; const tick = (d) => { simT += d; for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - SAFE) c.pos.y = vh - SAFE; };
     // rest spot in the right gutter: lowest y (from the bottom up) where her box touches no keep-out text and no card
     const restPoint = () => { const x = vw - c.halfW - 4, keeps = [...getKeepOutRects(), ...getCardRects()];
-      for (let y = vh - SAFE; y >= charH + 10; y -= 12) { if (!keeps.some((r) => x - c.halfW < r.left + r.width && x + c.halfW > r.left && y - charH < r.top + r.height && y > r.top)) return { x, y }; }
+      for (let y = vh - SAFE; y >= charH + 10; y -= 12) { if (!keeps.some((r) => x - c.halfW - 14 < r.left + r.width && x + c.halfW + 14 > r.left && y - charH - 14 < r.top + r.height && y + 14 > r.top)) return { x, y }; }
       return { x, y: vh - SAFE }; };
     const parkOff = () => { c.pos.x = vw + c.halfW * 2; /* no eligible card: wait off-screen right, re-enter on the next scroll or resize */ };
     let stopped = false, busy = false, current = null, epoch = 0; const state = state0;
@@ -109,6 +110,8 @@ export async function startKarmaStage(opts = {}) {
       } catch (e) { state.lastError = String(e); } finally { if (my === epoch) { busy = false; if (Math.abs(scrollY - sy0) > 40 && !stopped) setTimeout(() => { if (!busy) visit(false); }, 800); /* page scrolled while she was busy: re-seat */ } }
     }
     reserve(); if (o.auto) setTimeout(() => { reserve(); visit(true); }, 0); // collection pages render their story cards after load; visit() waits up to 15 s for them
+    // the page moved under her: re-test the guard and redraw at once if her visibility flips, so a stale frame never shows her over the new text (matters at low frame rates)
+    addEventListener('scroll', () => { if (stopped) return; const was = c.object3D.visible; fpAge = 99; guard(); if (c.object3D.visible !== was) renderer.render(scene, cam); }, { passive: true });
     let scrollT = null; if (o.auto) addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(() => { if (!busy) setTimeout(() => visit(false), 600); }, 900); }, { passive: true });
     let rsT = null; addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
       vw = innerWidth; vh = innerHeight; renderer.setSize(vw, vh, false);

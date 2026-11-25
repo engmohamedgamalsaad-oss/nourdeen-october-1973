@@ -16,3 +16,12 @@ Run JSON `_run.loaded_js` now has sha256 of the SERVED response body (Network.ge
 desktop (1440x900, 31 samples): precise-Box3 penetration while visible max 0 px; controller overlap 0; walking overlap 0; hidden 8 of 31, visible 23, 0 JS errors. DEFECT: at the bottom-right rest at scroll 0 she flickers visible/hidden between samples (guard touching text with her idle sway).
 phone (390x844, 38 samples): precise penetration while visible max 5.2 px, only in 'lean' (the guard allows 8 px card contact for lean by design: hand rests on the card edge); hidden 2 of 38 samples, visible 36; 0 JS errors. Scroll-0 entry still absent (rest walk 'no-route'); she leaves the screen after scrolling back, not hidden for long.
 Single run per viewport. Not a device.
+
+## final_* (latest tested tree; git_head in each JSON is 08eb5f06+dirty, the dirty part is committed with this folder)
+Changes in this tree vs rev_footprint_guard_*: hysteresis (re-appear only when clear by 6 px), rest spot chosen with a 14 px clearance, scroll listener re-tests the guard and redraws at once, harness measures card-edge contact, card CONTENT penetration and outside-text penetration separately, harness waits two animation frames after each scroll before sampling (earlier real-time samples read the DOM before the page had painted: one sample showed 54 px, an artefact of the sampler, not a painted frame), optional real-time mode (no stepped clock).
+final_desktop_stepped: 31 samples, visible 24, hidden 7, card contact 0, card content 0, outside text 0, rest at scroll 0 no longer flickers (VVVV... for 18 samples).
+final_phone_stepped: 38 samples, visible 34, card contact 5 px (lean), card content 0, outside text 0.
+final_phone_realtime: wall 65 s, about 5.6 fps, 105 samples, visible overlap 0, content 0, outside text 0, hidden 19 (while scrolled back, she is hidden then leaves).
+final_desktop_realtime: wall 82 s, about 1.7 fps (46 guard evaluations x3 frames), 97 samples, overlap 0, content 0, outside text 0, hidden 6.
+The PNGs in these folders are by sample index, not by state; some show no character. The attached morning frames were selected by inspection.
+Phone scroll 0: still absent (rest walk 'no-route'), deliberate tradeoff.

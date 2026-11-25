@@ -27,6 +27,24 @@ For a local three.js set `window.KARMA_THREE_BASE` before the loader (the browse
 - Browser, real `index.html`, desktop 1440x900 and phone 390x844 (touch): GLB loads, character enters and completes one visit (run, look, point, wave, idle), zero JS errors, always inside the viewport after arrival, **0 card overlaps while standing**, bad GLB URL: canvas removed, page intact (8 `.gate` cards still present).
 - Screenshots: `evidence/desktop_stage_21s.png`, `evidence/phone_stage_14s.png`.
 
+## Status update 2026-11-26 01:35 (supersedes the numbers and the gap list below where they conflict)
+All real-browser numbers in this README and in evidence/ older than `evidence/browser_cache_off_2026-11-26/` are STALE/UNRELIABLE (the test browser could serve cached JS). Current browser evidence is only in that folder (cache disabled, loaded-JS hashes of the served bytes recorded in each result JSON). Baseline fixture only, NOT FINAL, software-GL headless Chrome, one run per case, not a device.
+
+Done since: walks and runs route around cards (node, every 1/60 s frame; fuzz 34 scenarios, 0 crossings, 0 ending in another card); no route or no clear standing spot means she holds with a precise reason ('no-route' / 'no-clear-placement') instead of crossing; lean relocation is a re-walk; layout/resize changes re-plan; keep-out is every visible heading, paragraph, link, button, tag and list item outside the cards; the cover guard uses an animated per-bone footprint (an approximation of the rendered mesh, within 0 to 4 px of a per-vertex Box3 in the logged runs, conservative; one-time build cost over the vertices not measured, device cost not measured); a scroll re-test redraws at once so a stale frame does not show her over new text; re-seat after the page scrolls.
+Tests: rig_gaps 22/22, motion 14/14, regression_guards 3/3, shared suite on KarmaMotion 28 tests, 25 pass, 0 fail, 3 todo (#24 prints not ok TODO; the shared test only accepts the left side). The shared suite semantics changed only by the safety rules, backed by rig_gaps overlapping and non-overlapping fixtures; not claimed as an unchanged-green result.
+Browser (cache off): phone and desktop runs show no visible overlap with text, links or card content; phone lean touches the card edge by up to 5 px (card contact only, 0 px into card content or outside text). Real-time (no stepped clock) runs: phone about 5.6 fps and desktop about 1.7 fps in software GL, 65 to 82 s wall each, one run each; they say nothing about a real device.
+
+## Known gaps (current)
+1. Phone at scroll 0: no text-free spot for her, she stays off-screen until a card scrolls in. Fixing it needs a layout change or a smaller character; deliberately NOT done.
+2. Perch on top of a card still covers the row above in some grids; no visual pass with the real model.
+3. Residual card-edge contact while leaning (up to about 5 px), by design for the hand contact.
+4. Real device performance unknown; only headless software-GL timing. Bone-footprint cost on device and its one-time build cost unmeasured.
+5. Collection pages not wired/validated; older collection_* evidence is stale.
+6. Muse contract unconfirmed; the 283k-triangle baseline is far above the 60k gate (model matter).
+7. Skin weights/face deformation of Muse's mesh untested until a Muse GLB exists.
+8. Run-to-run variation exists (single runs); the repeat count is small.
+
+## (historical, stale) status as first written
 ## Known gaps (not fixed yet)
 1. While **walking** she crosses cards (3 of ~27 samples overlap on desktop, 3 of ~26 on phone). The walk path is a straight line. Needs path planning around card rects.
 2. She perches on top of a card (sideFor falls back to `top` when there is no free side). On a card grid this can cover the row above. Needs a visual pass with the real model.
