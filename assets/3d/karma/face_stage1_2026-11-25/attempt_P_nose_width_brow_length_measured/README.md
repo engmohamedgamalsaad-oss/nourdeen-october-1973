@@ -1,0 +1,2 @@
+# Attempt P (EXPERIMENT_NOT_FINAL, likeness NOT approved)
+O plus measurement fixes found by overlaying mean reference landmarks (IPD frame) on the O render: nose was too narrow (alae about +-.2 vs reference about +-.34), brows too short at the outer end. Alae moved out and enlarged, bridge widened toward the base, brows lengthened. Eyes and smile mouth outline already matched the landmark contours. Real geometry, flat colours, no projection. Not optimised. 3/4 sheet NOT matched.
