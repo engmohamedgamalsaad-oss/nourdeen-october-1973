@@ -1,0 +1,19 @@
+{
+ "neutral": {
+  "skin_tris": 8484,
+  "eye_tris": 23040,
+  "teeth_tris": 0,
+  "skin_self_intersecting_pairs": 0,
+  "eyeball_vs_skin_crossing_pairs": 1868,
+  "eyeball_skin_tris_crossed": 280
+ },
+ "smile": {
+  "skin_tris": 8484,
+  "eye_tris": 23040,
+  "teeth_tris": 112,
+  "skin_self_intersecting_pairs": 0,
+  "eyeball_vs_skin_crossing_pairs": 1868,
+  "eyeball_skin_tris_crossed": 280,
+  "teeth_vs_skin_crossing_pairs": 0
+ }
+}
