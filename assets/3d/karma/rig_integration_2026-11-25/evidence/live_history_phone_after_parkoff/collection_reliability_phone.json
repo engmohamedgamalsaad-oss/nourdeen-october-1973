@@ -1,0 +1,3204 @@
+{
+ "1_entry_at_top_no_scroll": {
+  "seconds": 6,
+  "visible_and_on_screen": 0,
+  "hidden": 1,
+  "offscreen": 5,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": true,
+   "x": 456,
+   "y": 840,
+   "inView": false,
+   "onScreen": false,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 0,
+   "dbg": {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": null,
+    "side": null,
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     456,
+     840
+    ],
+    "tgt": null,
+    "rects": [
+     [
+      15,
+      295,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      814,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": null,
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 0
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 1,
+    "hiddenForMs": 767,
+    "pick": null,
+    "side": null,
+    "cards": 2,
+    "action": "idle",
+    "vis": false,
+    "hit": {
+     "kind": "keepout",
+     "l": 15,
+     "t": 694,
+     "w": 360,
+     "h": 44,
+     "box": [
+      307,
+      730,
+      373,
+      840
+     ]
+    },
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": null,
+    "rects": [
+     [
+      15,
+      295,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      814,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": null,
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 0
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": null,
+    "side": null,
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     456,
+     840
+    ],
+    "tgt": null,
+    "rects": [
+     [
+      15,
+      295,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      814,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": null,
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 0
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": null,
+    "side": null,
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     456,
+     840
+    ],
+    "tgt": null,
+    "rects": [
+     [
+      15,
+      295,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      814,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": null,
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 0
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": null,
+    "side": null,
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     456,
+     840
+    ],
+    "tgt": null,
+    "rects": [
+     [
+      15,
+      295,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      814,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": null,
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 0
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": null,
+    "side": null,
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     456,
+     840
+    ],
+    "tgt": null,
+    "rects": [
+     [
+      15,
+      295,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      814,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": null,
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 0
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": null,
+    "side": null,
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     456,
+     840
+    ],
+    "tgt": null,
+    "rects": [
+     [
+      15,
+      295,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      814,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": null,
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 0
+   }
+  ],
+  "timeline": "hhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "2_scrolled_to_cards": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "walk",
+   "visible": true,
+   "x": 340,
+   "y": 840,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 650,
+   "dbg": {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     370,
+     840
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 2,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   }
+  ],
+  "timeline": "VVVVVV",
+  "actions": [
+   "walk"
+  ]
+ },
+ "3_scrolled_to_slideshow": {
+  "seconds": 6,
+  "visible_and_on_screen": 5,
+  "hidden": 0,
+  "offscreen": 1,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "walk",
+   "visible": true,
+   "x": 340,
+   "y": 840,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 300,
+   "dbg": {
+    "busy": true,
+    "epoch": 3,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     846
+    ],
+    "rects": [
+     [
+      15,
+      -5,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      514,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     514,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 300
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 3,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     398,
+     843
+    ],
+    "tgt": [
+     340,
+     846
+    ],
+    "rects": [
+     [
+      15,
+      -5,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      514,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     514,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 300
+   },
+   {
+    "busy": true,
+    "epoch": 3,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     364,
+     840
+    ],
+    "tgt": [
+     340,
+     846
+    ],
+    "rects": [
+     [
+      15,
+      -5,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      514,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     514,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 300
+   },
+   {
+    "busy": true,
+    "epoch": 3,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     846
+    ],
+    "rects": [
+     [
+      15,
+      -5,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      514,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     514,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 300
+   },
+   {
+    "busy": true,
+    "epoch": 3,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     846
+    ],
+    "rects": [
+     [
+      15,
+      -5,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      514,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     514,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 300
+   },
+   {
+    "busy": true,
+    "epoch": 3,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     846
+    ],
+    "rects": [
+     [
+      15,
+      -5,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      514,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     514,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 300
+   },
+   {
+    "busy": true,
+    "epoch": 3,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     840
+    ],
+    "tgt": [
+     340,
+     846
+    ],
+    "rects": [
+     [
+      15,
+      -5,
+      360,
+      350,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      514,
+      286,
+      385,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     514,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 300
+   }
+  ],
+  "timeline": "hVVVVV",
+  "actions": [
+   "walk"
+  ]
+ },
+ "4_scrolled_to_bottom": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "look",
+   "visible": true,
+   "x": 340,
+   "y": 703,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 1667,
+   "dbg": {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 2,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     703
+    ],
+    "tgt": [
+     340,
+     355
+    ],
+    "rects": [
+     [
+      15,
+      -33,
+      286,
+      388,
+      "",
+      "right"
+     ],
+     [
+      15,
+      367,
+      286,
+      336,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     -33,
+     286,
+     388
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 1667
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     380,
+     750
+    ],
+    "tgt": [
+     340,
+     355
+    ],
+    "rects": [
+     [
+      15,
+      -33,
+      286,
+      388,
+      "",
+      "right"
+     ],
+     [
+      15,
+      367,
+      286,
+      336,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     -33,
+     286,
+     388
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 1667
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     361,
+     728
+    ],
+    "tgt": [
+     340,
+     355
+    ],
+    "rects": [
+     [
+      15,
+      -33,
+      286,
+      388,
+      "",
+      "right"
+     ],
+     [
+      15,
+      367,
+      286,
+      336,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     -33,
+     286,
+     388
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 1667
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     343,
+     706
+    ],
+    "tgt": [
+     340,
+     355
+    ],
+    "rects": [
+     [
+      15,
+      -33,
+      286,
+      388,
+      "",
+      "right"
+     ],
+     [
+      15,
+      367,
+      286,
+      336,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     -33,
+     286,
+     388
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 1667
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 2,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     703
+    ],
+    "tgt": [
+     340,
+     355
+    ],
+    "rects": [
+     [
+      15,
+      -33,
+      286,
+      388,
+      "",
+      "right"
+     ],
+     [
+      15,
+      367,
+      286,
+      336,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     -33,
+     286,
+     388
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 1667
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 2,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     703
+    ],
+    "tgt": [
+     340,
+     355
+    ],
+    "rects": [
+     [
+      15,
+      -33,
+      286,
+      388,
+      "",
+      "right"
+     ],
+     [
+      15,
+      367,
+      286,
+      336,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     -33,
+     286,
+     388
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 1667
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 2,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     340,
+     703
+    ],
+    "tgt": [
+     340,
+     355
+    ],
+    "rects": [
+     [
+      15,
+      -33,
+      286,
+      388,
+      "",
+      "right"
+     ],
+     [
+      15,
+      367,
+      286,
+      336,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     -33,
+     286,
+     388
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 1667
+   }
+  ],
+  "timeline": "VVVVVV",
+  "actions": [
+   "look",
+   "walk"
+  ]
+ },
+ "5_resize_360x740": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": true,
+   "x": 323,
+   "y": 703,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 256,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 360,
+   "sy": 630,
+   "dbg": {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     323,
+     703
+    ],
+    "tgt": [
+     310,
+     576
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      256,
+      412,
+      "",
+      "right"
+     ],
+     [
+      15,
+      588,
+      256,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     256,
+     412
+    ],
+    "halfW": 33,
+    "vw": 360,
+    "vh": 740,
+    "sy": 630
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "wave",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     323,
+     703
+    ],
+    "tgt": [
+     310,
+     576
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      256,
+      412,
+      "",
+      "right"
+     ],
+     [
+      15,
+      588,
+      256,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     256,
+     412
+    ],
+    "halfW": 33,
+    "vw": 360,
+    "vh": 740,
+    "sy": 630
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "wave",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     323,
+     703
+    ],
+    "tgt": [
+     310,
+     576
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      256,
+      412,
+      "",
+      "right"
+     ],
+     [
+      15,
+      588,
+      256,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     256,
+     412
+    ],
+    "halfW": 33,
+    "vw": 360,
+    "vh": 740,
+    "sy": 630
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "wave",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     323,
+     703
+    ],
+    "tgt": [
+     310,
+     576
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      256,
+      412,
+      "",
+      "right"
+     ],
+     [
+      15,
+      588,
+      256,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     256,
+     412
+    ],
+    "halfW": 33,
+    "vw": 360,
+    "vh": 740,
+    "sy": 630
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     323,
+     703
+    ],
+    "tgt": [
+     310,
+     576
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      256,
+      412,
+      "",
+      "right"
+     ],
+     [
+      15,
+      588,
+      256,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     256,
+     412
+    ],
+    "halfW": 33,
+    "vw": 360,
+    "vh": 740,
+    "sy": 630
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     323,
+     703
+    ],
+    "tgt": [
+     310,
+     576
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      256,
+      412,
+      "",
+      "right"
+     ],
+     [
+      15,
+      588,
+      256,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     256,
+     412
+    ],
+    "halfW": 33,
+    "vw": 360,
+    "vh": 740,
+    "sy": 630
+   },
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     323,
+     703
+    ],
+    "tgt": [
+     310,
+     576
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      256,
+      412,
+      "",
+      "right"
+     ],
+     [
+      15,
+      588,
+      256,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     256,
+     412
+    ],
+    "halfW": 33,
+    "vw": 360,
+    "vh": 740,
+    "sy": 630
+   }
+  ],
+  "timeline": "VVVVVV",
+  "actions": [
+   "idle",
+   "walk",
+   "wave"
+  ]
+ },
+ "6_resize_768x1024": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "idle",
+   "visible": true,
+   "x": 695,
+   "y": 703,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "146",
+   "cardW": 592,
+   "overlapCards": 0,
+   "visits": 1,
+   "vw": 768,
+   "sy": 557,
+   "dbg": {
+    "busy": false,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "ckxdzh4",
+    "side": "right",
+    "cards": 5,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     695,
+     703
+    ],
+    "tgt": [
+     682,
+     640
+    ],
+    "rects": [
+     [
+      15,
+      -276,
+      738,
+      423,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      291,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      473,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      655,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      837,
+      592,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     15,
+     473,
+     592,
+     166
+    ],
+    "halfW": 69,
+    "vw": 768,
+    "vh": 1024,
+    "sy": 557
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "ckxdzh4",
+    "side": "right",
+    "cards": 5,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     695,
+     703
+    ],
+    "tgt": [
+     682,
+     640
+    ],
+    "rects": [
+     [
+      15,
+      -276,
+      738,
+      423,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      291,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      473,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      655,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      837,
+      592,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     15,
+     473,
+     592,
+     166
+    ],
+    "halfW": 69,
+    "vw": 768,
+    "vh": 1024,
+    "sy": 557
+   },
+   {
+    "busy": false,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "ckxdzh4",
+    "side": "right",
+    "cards": 5,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     695,
+     703
+    ],
+    "tgt": [
+     682,
+     640
+    ],
+    "rects": [
+     [
+      15,
+      -276,
+      738,
+      423,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      291,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      473,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      655,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      837,
+      592,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     15,
+     473,
+     592,
+     166
+    ],
+    "halfW": 69,
+    "vw": 768,
+    "vh": 1024,
+    "sy": 557
+   },
+   {
+    "busy": false,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "ckxdzh4",
+    "side": "right",
+    "cards": 5,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     695,
+     703
+    ],
+    "tgt": [
+     682,
+     640
+    ],
+    "rects": [
+     [
+      15,
+      -276,
+      738,
+      423,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      291,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      473,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      655,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      837,
+      592,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     15,
+     473,
+     592,
+     166
+    ],
+    "halfW": 69,
+    "vw": 768,
+    "vh": 1024,
+    "sy": 557
+   },
+   {
+    "busy": false,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "ckxdzh4",
+    "side": "right",
+    "cards": 5,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     695,
+     703
+    ],
+    "tgt": [
+     682,
+     640
+    ],
+    "rects": [
+     [
+      15,
+      -276,
+      738,
+      423,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      291,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      473,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      655,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      837,
+      592,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     15,
+     473,
+     592,
+     166
+    ],
+    "halfW": 69,
+    "vw": 768,
+    "vh": 1024,
+    "sy": 557
+   },
+   {
+    "busy": false,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "ckxdzh4",
+    "side": "right",
+    "cards": 5,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     695,
+     703
+    ],
+    "tgt": [
+     682,
+     640
+    ],
+    "rects": [
+     [
+      15,
+      -276,
+      738,
+      423,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      291,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      473,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      655,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      837,
+      592,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     15,
+     473,
+     592,
+     166
+    ],
+    "halfW": 69,
+    "vw": 768,
+    "vh": 1024,
+    "sy": 557
+   },
+   {
+    "busy": false,
+    "epoch": 4,
+    "hiddenForMs": 0,
+    "pick": "ckxdzh4",
+    "side": "right",
+    "cards": 5,
+    "action": "idle",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     695,
+     703
+    ],
+    "tgt": [
+     682,
+     640
+    ],
+    "rects": [
+     [
+      15,
+      -276,
+      738,
+      423,
+      "obst",
+      "noside"
+     ],
+     [
+      15,
+      291,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      473,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      655,
+      592,
+      166,
+      "",
+      "right"
+     ],
+     [
+      15,
+      837,
+      592,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     15,
+     473,
+     592,
+     166
+    ],
+    "halfW": 69,
+    "vw": 768,
+    "vh": 1024,
+    "sy": 557
+   }
+  ],
+  "timeline": "VVVVVV",
+  "actions": [
+   "idle"
+  ]
+ },
+ "7_resize_1440x900": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "look",
+   "visible": true,
+   "x": 1313,
+   "y": 515,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "146",
+   "cardW": 1050,
+   "overlapCards": 0,
+   "visits": 1,
+   "vw": 1440,
+   "sy": 505,
+   "dbg": {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 5,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     1313,
+     515
+    ],
+    "tgt": [
+     1313,
+     693
+    ],
+    "rects": [
+     [
+      188,
+      -439,
+      478,
+      459,
+      "obst",
+      "right"
+     ],
+     [
+      188,
+      179,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      357,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      535,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      713,
+      1050,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     188,
+     535,
+     1050,
+     158
+    ],
+    "halfW": 69,
+    "vw": 1440,
+    "vh": 900,
+    "sy": 505
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 5,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     1340,
+     610
+    ],
+    "tgt": [
+     1313,
+     693
+    ],
+    "rects": [
+     [
+      188,
+      -439,
+      478,
+      459,
+      "obst",
+      "right"
+     ],
+     [
+      188,
+      179,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      357,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      535,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      713,
+      1050,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     188,
+     535,
+     1050,
+     158
+    ],
+    "halfW": 69,
+    "vw": 1440,
+    "vh": 900,
+    "sy": 505
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 5,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     1330,
+     576
+    ],
+    "tgt": [
+     1313,
+     693
+    ],
+    "rects": [
+     [
+      188,
+      -439,
+      478,
+      459,
+      "obst",
+      "right"
+     ],
+     [
+      188,
+      179,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      357,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      535,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      713,
+      1050,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     188,
+     535,
+     1050,
+     158
+    ],
+    "halfW": 69,
+    "vw": 1440,
+    "vh": 900,
+    "sy": 505
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 5,
+    "action": "walk",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     1317,
+     529
+    ],
+    "tgt": [
+     1313,
+     693
+    ],
+    "rects": [
+     [
+      188,
+      -439,
+      478,
+      459,
+      "obst",
+      "right"
+     ],
+     [
+      188,
+      179,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      357,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      535,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      713,
+      1050,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     188,
+     535,
+     1050,
+     158
+    ],
+    "halfW": 69,
+    "vw": 1440,
+    "vh": 900,
+    "sy": 505
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 5,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     1313,
+     515
+    ],
+    "tgt": [
+     1313,
+     693
+    ],
+    "rects": [
+     [
+      188,
+      -439,
+      478,
+      459,
+      "obst",
+      "right"
+     ],
+     [
+      188,
+      179,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      357,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      535,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      713,
+      1050,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     188,
+     535,
+     1050,
+     158
+    ],
+    "halfW": 69,
+    "vw": 1440,
+    "vh": 900,
+    "sy": 505
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 5,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     1313,
+     515
+    ],
+    "tgt": [
+     1313,
+     693
+    ],
+    "rects": [
+     [
+      188,
+      -439,
+      478,
+      459,
+      "obst",
+      "right"
+     ],
+     [
+      188,
+      179,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      357,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      535,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      713,
+      1050,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     188,
+     535,
+     1050,
+     158
+    ],
+    "halfW": 69,
+    "vw": 1440,
+    "vh": 900,
+    "sy": 505
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "c4krx5b",
+    "side": "right",
+    "cards": 5,
+    "action": "look",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     1313,
+     515
+    ],
+    "tgt": [
+     1313,
+     693
+    ],
+    "rects": [
+     [
+      188,
+      -439,
+      478,
+      459,
+      "obst",
+      "right"
+     ],
+     [
+      188,
+      179,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      357,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      535,
+      1050,
+      158,
+      "",
+      "right"
+     ],
+     [
+      188,
+      713,
+      1050,
+      158,
+      "",
+      "right"
+     ]
+    ],
+    "need": 146,
+    "card": [
+     188,
+     535,
+     1050,
+     158
+    ],
+    "halfW": 69,
+    "vw": 1440,
+    "vh": 900,
+    "sy": 505
+   }
+  ],
+  "timeline": "VVVVVV",
+  "actions": [
+   "look",
+   "walk"
+  ]
+ },
+ "8_resize_back_390x844": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "action": "wave",
+   "visible": true,
+   "x": 353,
+   "y": 515,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 1,
+   "vw": 390,
+   "sy": 650,
+   "dbg": {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "wave",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     353,
+     515
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   }
+  },
+  "trace": [
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "point",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     353,
+     515
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "point",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     353,
+     515
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "point",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     353,
+     515
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "point",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     353,
+     515
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "point",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     353,
+     515
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   },
+   {
+    "busy": true,
+    "epoch": 5,
+    "hiddenForMs": 0,
+    "pick": "cfvsute",
+    "side": "right",
+    "cards": 2,
+    "action": "wave",
+    "vis": true,
+    "hit": null,
+    "pos": [
+     353,
+     515
+    ],
+    "tgt": [
+     340,
+     548
+    ],
+    "rects": [
+     [
+      15,
+      164,
+      286,
+      385,
+      "",
+      "right"
+     ],
+     [
+      15,
+      560,
+      286,
+      412,
+      "",
+      "right"
+     ]
+    ],
+    "need": 74,
+    "card": [
+     15,
+     164,
+     286,
+     385
+    ],
+    "halfW": 33,
+    "vw": 390,
+    "vh": 844,
+    "sy": 650
+   }
+  ],
+  "timeline": "VVVVVV",
+  "actions": [
+   "point",
+   "wave"
+  ]
+ },
+ "js_errors": []
+}

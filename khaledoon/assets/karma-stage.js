@@ -48,7 +48,8 @@ export async function startKarmaStage(opts = {}) {
     c.pos.set(vw + c.halfW * 2, vh); // starts off-screen on the right
 
     // choose the card to visit: the most visible one nearest the viewport centre
-    const pick = (avoidId) => { const elig = (r) => !r.obstacleOnly && sideFor(r) && (r.top + r.height / 2) >= charH + 10 && (r.top + r.height / 2) <= vh - 10;
+    const elig = (r) => !r.obstacleOnly && sideFor(r) && (r.top + r.height / 2) >= charH + 10 && (r.top + r.height / 2) <= vh - 10;
+    const pick = (avoidId) => {
       let R = getCardRects().filter((r) => r.id !== avoidId && elig(r)); if (!R.length) R = getCardRects().filter(elig); /* single-card page: revisit the same card */ if (!R.length) return null;
       R.sort((a, b) => Math.abs(a.top + a.height / 2 - vh / 2) - Math.abs(b.top + b.height / 2 - vh / 2)); return R[0]; };
     // side with the most free room next to the card; if neither side has room for her body, stand on top
@@ -63,15 +64,17 @@ export async function startKarmaStage(opts = {}) {
       c.object3D.visible = o.coverGuard ? !hit : true; const tNow = simT * 1000; if (!hit) hiddenSince = 0; else if (!hiddenSince) hiddenSince = tNow; else if (!busy && tNow - hiddenSince > 1200 && !stopped) { hiddenSince = 0; setTimeout(() => visit(false, true), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
     const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
     let simT = 0; const tick = (d) => { simT += d; for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - 4) c.pos.y = vh - 4; };
+    const parkOff = () => { c.pos.x = vw + c.halfW * 2; /* no eligible card: wait off-screen right, re-enter on the next scroll or resize */ };
     let stopped = false, busy = false, current = null, epoch = 0; const state = { visits: 0, lastError: null };
     const say = (s) => { if (o.onState) o.onState(s, state); };
     async function visit(first, force) {
       if (stopped) return; if (busy && !force) return; if (force) { epoch++; Promise.resolve(c.stand()).catch(() => {}); } const my = ++epoch; busy = true; const dead = () => stopped || my !== epoch;
       try {
-        reserve(); let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); reserve(); r = pick(current); } if (dead()) return; if (!r) { busy = false; return; } current = r.id; const side = sideFor(r);
+        reserve(); let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); reserve(); r = pick(current); } if (dead()) return; if (!r) { parkOff(); busy = false; return; } current = r.id; const side = sideFor(r);
         say('walking');
         if (first) await c.runTo(r.id, { side }); else await c.walkTo(r.id, { side });
         if (dead()) return;
+        { reserve(); const rr = getCardRects().find((q) => q.id === r.id); if (!rr || !elig(rr)) { state.abandoned = (state.abandoned || 0) + 1; await c.stand(); if (dead()) return; parkOff(); say('idle'); setTimeout(() => { if (!busy) visit(false); }, 600); return; } } // layout moved the card out of reach while she walked: do not gesture at an unreachable card
         say('interacting');
         await c.lookAt(r.id, 1.2); if (dead()) return; await c.pointAt(r.id, 1.8); if (dead()) return; await c.wave(1.6); if (dead()) return;
         await c.leanOn(r.id, { side }); if (dead()) return; await sleep(2.5); if (dead()) return;
