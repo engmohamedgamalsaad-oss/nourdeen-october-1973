@@ -117,7 +117,10 @@ export class KarmaMotion extends Base {
     return n;
   }
   _syncHolder(snap = false) {
-    this._yawExtra += (this._yawTarget - this._yawExtra) * (1 - Math.exp(-9 * (this._lastDt || 1 / 60)));
+    // The base constructor calls _syncHolder before this subclass's fields exist: without these guards holder.rotation.y was NaN
+    // until the first update() (found by the shared rig suite, tests 3 and 5 to 13).
+    const ye = this._yawExtra || 0, yt = this._yawTarget || 0;
+    this._yawExtra = ye + (yt - ye) * (1 - Math.exp(-9 * (this._lastDt || 1 / 60)));
     super._syncHolder(snap);
     this.holder.rotation.y = this.facing + this._yawExtra;
   }

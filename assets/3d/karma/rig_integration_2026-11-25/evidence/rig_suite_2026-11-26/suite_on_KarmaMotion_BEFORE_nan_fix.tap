@@ -1,0 +1,317 @@
+TAP version 13
+# {"sim":"node CPU only, NOT a phone","glbBytes":21425080,"skinnedTriangles":283229,"joints":19,"msPerFrameCPU":0.0184}
+# {"gate":"mobile-budget","fileMB":20.43,"triangles":283229,"textures":2,"maxTextureSidePx":2048,"textureSizes":[[2048,2048],[192,203]],"pass":false}
+# {"gate":"likeness","sha256":"ceae16e011114cf70830f83aea8217a2492253258b748de58c3c46f0667bae1a","approved":false,"why":"no LIKENESS_APPROVAL.json next to the GLB"}
+# Subtest: GLB loads with GLTFLoader and exposes all 19 agreed bones as real THREE.Bone joints
+ok 1 - GLB loads with GLTFLoader and exposes all 19 agreed bones as real THREE.Bone joints
+  ---
+  duration_ms: 131.976609
+  type: 'test'
+  ...
+# Subtest: skin weights: sum to 1, non-negative, valid indices, every joint influences at least one vertex
+ok 2 - skin weights: sum to 1, non-negative, valid indices, every joint influences at least one vertex
+  ---
+  duration_ms: 124.541965
+  type: 'test'
+  ...
+# Subtest: HeadMount and HairMount are children of Head; a head + hair mount, follow Head, and hide the placeholder
+not ok 3 - HeadMount and HairMount are children of Head; a head + hair mount, follow Head, and hide the placeholder
+  ---
+  duration_ms: 77.629626
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:84:1'
+  failureType: 'testCodeFailure'
+  error: 'mounted head does not follow Head bone'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:92:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: rig is rejected when a mount is missing (no silent fallback)
+ok 4 - rig is rejected when a mount is missing (no silent fallback)
+  ---
+  duration_ms: 81.615717
+  type: 'test'
+  ...
+# Subtest: deformation shoulder_L: moves its limb, no NaN, does not drag distant body parts
+not ok 5 - deformation shoulder_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 1423.726651
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 0), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deformation shoulder_R: moves its limb, no NaN, does not drag distant body parts
+not ok 6 - deformation shoulder_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 1431.456746
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 0), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deformation elbow_L: moves its limb, no NaN, does not drag distant body parts
+not ok 7 - deformation elbow_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 814.133282
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 154430), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deformation elbow_R: moves its limb, no NaN, does not drag distant body parts
+not ok 8 - deformation elbow_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 831.007308
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 146114), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deformation hip_L: moves its limb, no NaN, does not drag distant body parts
+not ok 9 - deformation hip_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 781.387891
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 148334), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deformation hip_R: moves its limb, no NaN, does not drag distant body parts
+not ok 10 - deformation hip_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 791.259137
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 138431), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deformation knee_L: moves its limb, no NaN, does not drag distant body parts
+not ok 11 - deformation knee_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 749.071767
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 148334), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deformation knee_R: moves its limb, no NaN, does not drag distant body parts
+not ok 12 - deformation knee_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 745.259834
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:114:3'
+  failureType: 'testCodeFailure'
+  error: 'distant vertices moved by 0.0000 m (0 of 138431), first at rest null'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: neck/head: head and neck rotation carry the head (skinned head vertices OR the mounted head), leave the lower body untouched, no NaN
+not ok 13 - neck/head: head and neck rotation carry the head (skinned head vertices OR the mounted head), leave the lower body untouched, no NaN
+  ---
+  duration_ms: 228.803573
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:122:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    300544 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 300544
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:127:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: six actions complete and end in a sane state
+ok 14 - six actions complete and end in a sane state
+  ---
+  duration_ms: 110.712921
+  type: 'test'
+  ...
+# Subtest: walkTo top: feet end exactly on the card top edge, inside the card horizontally
+ok 15 - walkTo top: feet end exactly on the card top edge, inside the card horizontally
+  ---
+  duration_ms: 65.899774
+  type: 'test'
+  ...
+# Subtest: jump: rises then returns to the ground level; wave raises the hand above the shoulder
+ok 16 - jump: rises then returns to the ground level; wave raises the hand above the shoulder
+  ---
+  duration_ms: 84.818259
+  type: 'test'
+  ...
+# Subtest: preemption: a second walkTo resolves the first as preempted; stand() clears the queue; no stuck promises
+ok 17 - preemption: a second walkTo resolves the first as preempted; stand() clears the queue; no stuck promises
+  ---
+  duration_ms: 53.159953
+  type: 'test'
+  ...
+# Subtest: queued jump during a walk runs after arrival (no animation conflict)
+ok 18 - queued jump during a walk runs after arrival (no animation conflict)
+  ---
+  duration_ms: 76.529999
+  type: 'test'
+  ...
+# Subtest: leanOn follows a card that drifts a little (smooth) and re-walks when it jumps far
+ok 19 - leanOn follows a card that drifts a little (smooth) and re-walks when it jumps far
+  ---
+  duration_ms: 83.434764
+  type: 'test'
+  ...
+# Subtest: card removed mid-walk: promise resolves card-missing, state returns to idle
+ok 20 - card removed mid-walk: promise resolves card-missing, state returns to idle
+  ---
+  duration_ms: 54.738536
+  type: 'test'
+  ...
+# Subtest: resize desktop -> phone: Karma stays fully inside the viewport and re-targets the card
+ok 21 - resize desktop -> phone: Karma stays fully inside the viewport and re-targets the card
+  ---
+  duration_ms: 86.999967
+  type: 'test'
+  ...
+# Subtest: Karma never overlaps a card while standing beside it (side placement, normal layout)
+ok 22 - Karma never overlaps a card while standing beside it (side placement, normal layout)
+  ---
+  duration_ms: 84.966504
+  type: 'test'
+  ...
+# Subtest: GAP: after walkTo(top) the character should keep following that card when it moves
+ok 23 - GAP: after walkTo(top) the character should keep following that card when it moves # TODO controller drops the anchor when walkTo completes
+  ---
+  duration_ms: 102.016113
+  type: 'test'
+  ...
+# Subtest: GAP: card near the screen edge on a phone: side placement overlaps the card instead of choosing the other side
+not ok 24 - GAP: card near the screen edge on a phone: side placement overlaps the card instead of choosing the other side # TODO x is clamped, no side fallback
+  ---
+  duration_ms: 68.754574
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:203:1'
+  failureType: 'testCodeFailure'
+  error: 'standing box overlaps card'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:206:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: GAP: no API for keep-out text areas (headings/paragraphs); controller only knows card rects
+ok 25 - GAP: no API for keep-out text areas (headings/paragraphs); controller only knows card rects # TODO getKeepOutRects not implemented
+  ---
+  duration_ms: 72.801154
+  type: 'test'
+  ...
+# Subtest: simulated phone profile: controller + skeleton CPU cost per frame stays small
+ok 26 - simulated phone profile: controller + skeleton CPU cost per frame stays small
+  ---
+  duration_ms: 75.130387
+  type: 'test'
+  ...
+# Subtest: GATE mobile budget: triangles <= 60k and every texture <= 2048px (report always; enforced with KARMA_MOBILE_BUDGET=strict)
+ok 27 - GATE mobile budget: triangles <= 60k and every texture <= 2048px (report always; enforced with KARMA_MOBILE_BUDGET=strict)
+  ---
+  duration_ms: 6.664722
+  type: 'test'
+  ...
+# Subtest: GATE likeness: needs a LIKENESS_APPROVAL.json bound to THIS file hash (report always; enforced with KARMA_REQUIRE_LIKENESS=1)
+ok 28 - GATE likeness: needs a LIKENESS_APPROVAL.json bound to THIS file hash (report always; enforced with KARMA_REQUIRE_LIKENESS=1)
+  ---
+  duration_ms: 24.778154
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 15
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 3
+# duration_ms 9436.994223
