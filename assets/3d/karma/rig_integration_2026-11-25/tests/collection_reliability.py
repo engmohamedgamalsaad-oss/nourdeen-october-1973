@@ -40,7 +40,7 @@ try:
         for k in range(secs):
             ev("window.__karmaStage.fastForward(1)"); rows.append(ev(PROBE))
         vis = sum(1 for r in rows if r['visible'] and r['onScreen']); hid = sum(1 for r in rows if not r['visible'])
-        res[label] = {'seconds': secs, 'visible_and_on_screen': vis, 'hidden': hid, 'offscreen': sum(1 for r in rows if not r['onScreen']), 'max_overlap_when_visible': max([r['overlapCards'] for r in rows if r['visible']] or [0]), 'final': rows[-1], 'actions': sorted({r['action'] for r in rows})}
+        res[label] = {'seconds': secs, 'visible_and_on_screen': vis, 'hidden': hid, 'offscreen': sum(1 for r in rows if not r['onScreen']), 'max_overlap_when_visible': max([r['overlapCards'] for r in rows if r['visible']] or [0]), 'final': rows[-1], 'timeline': ''.join('V' if (r['visible'] and r['onScreen']) else 'h' for r in rows), 'actions': sorted({r['action'] for r in rows})}
         print(label, json.dumps(res[label]), flush=True)
     def shot(name):
         d = call('Page.captureScreenshot', {'format': 'png'})['result']['data']; open(f'{out}/{name}.png', 'wb').write(base64.b64decode(d))
