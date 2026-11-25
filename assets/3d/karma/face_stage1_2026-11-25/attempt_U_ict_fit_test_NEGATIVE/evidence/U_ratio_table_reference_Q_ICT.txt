@@ -1,0 +1,17 @@
+Q contour keys ['eyeL', 'eyeR', 'lipOuter', 'lipInner']
+measure (IPD units, smile)                 ref mean   ref sd Q(contour)   ICT neut  ICT smile
+eye width L (outer-inner)                     0.448    0.004      0.465      0.400      0.396
+eye width R                                   0.446    0.003      0.462      0.400      0.396
+eye aperture L (centre upper-lower)           0.145    0.007      0.189      0.126      0.103
+eye aperture R                                0.146    0.004      0.190      0.126      0.102
+inner-eye gap (39-42)                         0.562    0.009        n/a      0.622      0.620
+outer eye span (36-45)                        1.445    0.004        n/a      1.422      1.413
+alar width (31-35)                            0.676    0.006        n/a      0.452      0.553
+mouth width (48-54)                           0.989    0.013      0.989      0.813      0.975
+outer lip height centre (51-57)               0.317    0.007      0.340      0.221      0.269
+face width at jaw angles (4-12)               1.717    0.010        n/a      1.708      1.756
+eye-line to subnasale y                       0.687    0.013        n/a      0.623      0.605
+subnasale to chin y (33-8)                    0.847    0.017        n/a      0.839      0.834
+eye-line to chin y                            1.533    0.028        n/a      1.462      1.439
+eye-line to mouth centre y                    0.953    0.018        n/a      0.883      0.837
+Q n/a rows: Q has no landmark vertices; those distances need a mesh measurement I did not do. Q contour rows are the contour inputs, apertures after the x1.12/1.08 lid widening, so they equal the intended shape, not the rendered silhouette. Lip-height row for Q is the outer lip OUTLINE extent (includes smile U-shape), ICT row is only centre 51-57.
