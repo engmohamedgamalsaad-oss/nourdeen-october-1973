@@ -755,7 +755,7 @@
       generateAll.addEventListener('click', function () { runAudioBatch('generate', generateAll); });
       var approveAll = el('button', 'kh-audio-review-btn kh-language-audio-approve-all', 'اعتماد كل المقاطع');
       approveAll.type = 'button'; approveAll.hidden = true;
-      approveAll.title = 'يعتمد صوت كل المقاطع دفعة واحدة، بعد اكتمالها جميعًا والاستماع الكامل لكل مقطع.';
+      approveAll.title = 'اعتماد اختياري لكل المقاطع الجاهزة دفعة واحدة دون اشتراط الاستماع الفردي؛ لا يشمل المقاطع الفاشلة أو الناقصة أو قيد التوليد.';
       approveAll.addEventListener('click', function () { runAudioBatch('approve', approveAll); });
       actions.append(translationApprove, reviewButton, generateAll, audioReviewButton, approveAll);
       panel.append(title);
