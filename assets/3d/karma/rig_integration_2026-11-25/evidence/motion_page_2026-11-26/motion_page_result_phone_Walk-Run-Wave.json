@@ -1,0 +1,198 @@
+{
+ "Walk": {
+  "frames": [
+   {
+    "t": 0.6,
+    "state": "walk",
+    "x": 463,
+    "y": 769,
+    "oy": 2.4,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": false
+   },
+   {
+    "t": 1.4,
+    "state": "walk",
+    "x": 364,
+    "y": 639,
+    "oy": 2.5,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": false
+   },
+   {
+    "t": 2.4,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 3.4,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 4.4,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   }
+  ],
+  "end": {
+   "state": "idle",
+   "x": 311,
+   "y": 570,
+   "visible": true
+  }
+ },
+ "Run": {
+  "frames": [
+   {
+    "t": 0.4,
+    "state": "run",
+    "x": 55,
+    "y": 570,
+    "oy": 5.1,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 0.8,
+    "state": "run",
+    "x": 290,
+    "y": 570,
+    "oy": 1,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 1.2,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 1.8,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 2.6,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   }
+  ],
+  "end": {
+   "state": "idle",
+   "x": 311,
+   "y": 570,
+   "visible": true
+  }
+ },
+ "Wave": {
+  "frames": [
+   {
+    "t": 0.3,
+    "state": "wave",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 0.8,
+    "state": "wave",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 1.4,
+    "state": "wave",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 2.0,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   },
+   {
+    "t": 2.8,
+    "state": "idle",
+    "x": 311,
+    "y": 570,
+    "oy": 0,
+    "visible": true,
+    "halfW": 45,
+    "charH": 150,
+    "inView": true
+   }
+  ],
+  "end": {
+   "state": "idle",
+   "x": 311,
+   "y": 570,
+   "visible": true
+  }
+ },
+ "js_errors": []
+}
