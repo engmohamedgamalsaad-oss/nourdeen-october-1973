@@ -1,0 +1,36 @@
+{
+ "ipd_glb_units": 1.0375,
+ "eye_line_y_glb_units": 0.0033,
+ "neutral": {
+  "eye_w": 0.476,
+  "aper": 0.185,
+  "inner_gap": 0.53,
+  "outer_span": 1.47,
+  "alar_w": null,
+  "eye_sub": 0.716,
+  "eye_chin_visual": 1.468,
+  "sub_chin_visual": 0.752,
+  "mouth_w": 0.825,
+  "lip_h": 0.209,
+  "eye_mouthc": 0.924,
+  "face_w_y-0.95": 1.571,
+  "face_w_y-0.5": 1.696,
+  "eye_chin_rule": 2.216
+ },
+ "smile": {
+  "eye_w": 0.476,
+  "aper": 0.185,
+  "inner_gap": 0.53,
+  "outer_span": 1.47,
+  "alar_w": null,
+  "eye_sub": 0.716,
+  "eye_chin_visual": 1.468,
+  "sub_chin_visual": 0.752,
+  "mouth_w": 0.952,
+  "lip_h": 0.319,
+  "eye_mouthc": 0.955,
+  "face_w_y-0.95": 1.571,
+  "face_w_y-0.5": 1.712,
+  "eye_chin_rule": 2.216
+ }
+}
