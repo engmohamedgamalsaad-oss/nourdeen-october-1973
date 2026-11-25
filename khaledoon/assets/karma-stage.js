@@ -7,7 +7,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createRig } from '../../assets/3d/karma/claude_track_2026-11-25/js/KarmaRig.js';
 import { KarmaMotion } from '../../assets/3d/karma/rig_integration_2026-11-25/js/KarmaMotion.js';
 
-const DEFAULTS = { cardSelector: '.gate, .story-index-card, .story-card, [data-story-card]', obstacleSelector: '.kh-sp', keepOutSelector: 'h1, h2, .lead, .eyebrow, .head p, .heading p, .hero p', glbUrl: null, charHeight: null, onState: null };
+const DEFAULTS = { cardSelector: '.gate, .story-index-card, .story-card, [data-story-card]', obstacleSelector: '.kh-sp', keepOutSelector: 'h1, h2, h3, .lead, .eyebrow, .head p, .heading p, .hero p, .hero img, .kh-sp, footer, header', glbUrl: null, charHeight: null, onState: null };
 
 export async function startKarmaStage(opts = {}) {
   const o = { ...DEFAULTS, ...opts };
@@ -38,11 +38,17 @@ export async function startKarmaStage(opts = {}) {
     c.pos.set(vw + c.halfW * 2, vh); // starts off-screen on the right
 
     // choose the card to visit: the most visible one nearest the viewport centre
-    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId && !r.obstacleOnly); if (!R.length) return null;
+    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId && !r.obstacleOnly && sideFor(r)); if (!R.length) return null;
       R.sort((a, b) => Math.abs(a.top + a.height / 2 - vh / 2) - Math.abs(b.top + b.height / 2 - vh / 2)); return R[0]; };
     // side with the most free room next to the card; if neither side has room for her body, stand on top
     const sideFor = (r) => { const room = { right: vw - (r.left + r.width), left: r.left }; const need = c.halfW * 2 + 8;
-      if (room.right >= need && room.right >= room.left) return 'right'; if (room.left >= need) return 'left'; return 'top'; };
+      if (room.right >= need && room.right >= room.left) return 'right'; if (room.left >= need) return 'left'; return null; };
+    // never cover content: the model is hidden for any frame where its box would overlap a card, photo or text block
+    const boxOf = () => ({ l: c.pos.x - c.halfW, r: c.pos.x + c.halfW, t: c.pos.y - charH, b: c.pos.y });
+    let hiddenFrames = 0, shownFrames = 0;
+    const guard = () => { const m = boxOf(); let hit = false;
+      for (const r of [...getCardRects(), ...getKeepOutRects()]) { if (m.l < r.left + r.width && m.r > r.left && m.t < r.top + r.height && m.b > r.top) { hit = true; break; } }
+      c.object3D.visible = !hit; if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
     const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
     const tick = (d) => { for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); };
     let stopped = false, busy = false, current = null; const state = { visits: 0, lastError: null };
@@ -52,11 +58,11 @@ export async function startKarmaStage(opts = {}) {
       try {
         let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); r = pick(current); } if (!r) { busy = false; return; } current = r.id; const side = sideFor(r);
         say('walking');
-        if (first) await c.runTo(r.id, { side: side === 'top' ? 'left' : side }); else await c.walkTo(r.id, { side });
+        if (first) await c.runTo(r.id, { side }); else await c.walkTo(r.id, { side });
         if (stopped) return;
         say('interacting');
         await c.lookAt(r.id, 1.2); await c.pointAt(r.id, 1.8); await c.wave(1.6);
-        if (side !== 'top') { await c.leanOn(r.id, { side }); await sleep(2.5); }
+        await c.leanOn(r.id, { side }); await sleep(2.5);
         await c.stand(); say('idle'); state.visits++;
       } catch (e) { state.lastError = String(e); } finally { busy = false; }
     }
@@ -72,7 +78,7 @@ export async function startKarmaStage(opts = {}) {
       if (document.hidden) { last = now; return; }
       const dt = Math.min((now - last) / 1000, 0.1); last = now; acc += dt;
       if (step && acc < step) return; const d = step ? acc : dt; acc = 0;
-      tick(d); renderer.render(scene, cam);
+      tick(d); guard(); renderer.render(scene, cam);
     }
     requestAnimationFrame(frame);
     /** test hook: advance the simulation deterministically (60 fps steps) without waiting real time; promises settle between steps */

@@ -1,0 +1,53 @@
+{
+ "phone_good": {
+  "samples": 28,
+  "states": [
+   "idle"
+  ],
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 28,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": 0,
+  "lastError": null,
+  "canvas_present_at_end": true,
+  "gate_cards_still_in_page": 4,
+  "js_errors": [],
+  "final": {
+   "state": "idle",
+   "x": 480,
+   "y": 844,
+   "vw": 390,
+   "vh": 844,
+   "halfW": 45,
+   "charH": 150,
+   "overlap": 0,
+   "visible": true,
+   "overlap_visible": 0,
+   "inView": false,
+   "scrollY": 0,
+   "visits": 0,
+   "lastError": null
+  }
+ },
+ "phone_badglb": {
+  "samples": 0,
+  "states": [],
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 0,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": null,
+  "lastError": null,
+  "canvas_present_at_end": false,
+  "gate_cards_still_in_page": 4,
+  "js_errors": [],
+  "final": null
+ }
+}
