@@ -1,0 +1,83 @@
+// khaledoon/assets/karma-stage.js
+// Karma 3D stage for the story-card pages. ES module. Loaded only when the page opts in (see karma-stage-loader.js).
+// Draws the real skinned Karma GLB (Three.js, orthographic, CSS-pixel world) on a transparent fixed canvas above the page,
+// next to the story cards, driven by KarmaMotion. If anything fails the canvas is removed and the page is untouched.
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { createRig } from '../../assets/3d/karma/claude_track_2026-11-25/js/KarmaRig.js';
+import { KarmaMotion } from '../../assets/3d/karma/rig_integration_2026-11-25/js/KarmaMotion.js';
+
+const DEFAULTS = { cardSelector: '.gate, .story-card, [data-story-card]', keepOutSelector: 'h1, h2, .lead, .eyebrow, .head p', glbUrl: null, charHeight: null, onState: null };
+
+export async function startKarmaStage(opts = {}) {
+  const o = { ...DEFAULTS, ...opts };
+  if (!o.glbUrl) throw new Error('karma-stage: glbUrl is required');
+  const mobile = matchMedia('(max-width: 700px)').matches || matchMedia('(pointer: coarse)').matches;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'karma-stage'; canvas.setAttribute('aria-hidden', 'true');
+  canvas.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:40;';
+  document.body.appendChild(canvas);
+  const fail = (e) => { try { canvas.remove(); } catch (_) {} console.warn('karma-stage disabled:', e && e.message || e); };
+  try {
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !mobile, powerPreference: 'low-power' });
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1.5 : 2));
+    let vw = innerWidth, vh = innerHeight; renderer.setSize(vw, vh, false);
+    const scene = new THREE.Scene();
+    const cam = new THREE.OrthographicCamera(-vw / 2, vw / 2, vh / 2, -vh / 2, -2000, 2000); cam.position.z = 500;
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7a70, 1.6)); const dl = new THREE.DirectionalLight(0xffffff, 1.6); dl.position.set(-0.4, 0.8, 1); scene.add(dl);
+    const gltf = await new GLTFLoader().loadAsync(o.glbUrl);
+    const rig = createRig(gltf.scene);
+    const charH = o.charHeight || (mobile ? Math.min(150, vh * 0.2) : Math.min(230, vh * 0.28));
+    const cards = () => [...document.querySelectorAll(o.cardSelector)].filter((e) => e.offsetParent !== null);
+    const idOf = (el) => (el.dataset.karmaId ||= 'c' + Math.random().toString(36).slice(2, 8));
+    const rectOf = (el) => { const r = el.getBoundingClientRect(); return { id: idOf(el), left: r.left, top: r.top, width: r.width, height: r.height }; };
+    const getCardRects = () => cards().map(rectOf).filter((r) => r.top < vh && r.top + r.height > 0);
+    const getKeepOutRects = () => [...document.querySelectorAll(o.keepOutSelector)].map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0 && r.top < vh && r.bottom > 0).map((r) => ({ left: r.left, top: r.top, width: r.width, height: r.height }));
+    const c = new KarmaMotion({ rig, getCardRects, getKeepOutRects, viewport: { width: vw, height: vh }, characterHeightPx: charH, modelHeight: 1 });
+    scene.add(c.object3D);
+    c.pos.set(vw + c.halfW * 2, vh); // starts off-screen on the right
+
+    // choose the card to visit: the most visible one nearest the viewport centre
+    const pick = (avoidId) => { const R = getCardRects().filter((r) => r.id !== avoidId); if (!R.length) return null;
+      R.sort((a, b) => Math.abs(a.top + a.height / 2 - vh / 2) - Math.abs(b.top + b.height / 2 - vh / 2)); return R[0]; };
+    // side with the most free room next to the card; if neither side has room for her body, stand on top
+    const sideFor = (r) => { const room = { right: vw - (r.left + r.width), left: r.left }; const need = c.halfW * 2 + 8;
+      if (room.right >= need && room.right >= room.left) return 'right'; if (room.left >= need) return 'left'; return 'top'; };
+    const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
+    const tick = (d) => { for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); };
+    let stopped = false, busy = false, current = null; const state = { visits: 0, lastError: null };
+    const say = (s) => { if (o.onState) o.onState(s, state); };
+    async function visit(first) {
+      if (busy || stopped) return; busy = true;
+      try {
+        const r = pick(current); if (!r) { busy = false; return; } current = r.id; const side = sideFor(r);
+        say('walking');
+        if (first) await c.runTo(r.id, { side: side === 'top' ? 'left' : side }); else await c.walkTo(r.id, { side });
+        if (stopped) return;
+        say('interacting');
+        await c.lookAt(r.id, 1.2); await c.pointAt(r.id, 1.8); await c.wave(1.6);
+        if (side !== 'top') { await c.leanOn(r.id, { side }); await sleep(2.5); }
+        await c.stand(); say('idle'); state.visits++;
+      } catch (e) { state.lastError = String(e); } finally { busy = false; }
+    }
+    visit(true);
+    let scrollT = null; addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(() => { if (!busy) setTimeout(() => visit(false), 600); }, 900); }, { passive: true });
+    let rsT = null; addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
+      vw = innerWidth; vh = innerHeight; renderer.setSize(vw, vh, false);
+      cam.left = -vw / 2; cam.right = vw / 2; cam.top = vh / 2; cam.bottom = -vh / 2; cam.updateProjectionMatrix();
+      c.setViewport(vw, vh); c.setCharacterHeight(o.charHeight || (matchMedia('(max-width: 700px)').matches ? Math.min(150, vh * 0.2) : Math.min(230, vh * 0.28))); }, 120); });
+    let last = performance.now(), acc = 0; const step = mobile ? 1 / 30 : 0;
+    function frame(now) {
+      if (stopped) return; requestAnimationFrame(frame);
+      if (document.hidden) { last = now; return; }
+      const dt = Math.min((now - last) / 1000, 0.1); last = now; acc += dt;
+      if (step && acc < step) return; const d = step ? acc : dt; acc = 0;
+      tick(d); renderer.render(scene, cam);
+    }
+    requestAnimationFrame(frame);
+    /** test hook: advance the simulation deterministically (60 fps steps) without waiting real time; promises settle between steps */
+    const fastForward = async (sec) => { for (let i = 0; i < Math.round(sec * 60); i++) { tick(1 / 60); await Promise.resolve(); } renderer.render(scene, cam); };
+    const api = { controller: c, rig, canvas, state, fastForward, visit: () => visit(false), stop() { stopped = true; canvas.remove(); renderer.dispose(); } };
+    window.__karmaStage = api; return api;
+  } catch (e) { fail(e); return null; }
+}
