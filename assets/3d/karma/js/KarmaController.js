@@ -3,7 +3,7 @@
 // World units = CSS pixels of the canvas (orthographic camera: left=-w/2, right=w/2, top=h/2, bottom=-h/2).
 // Rig convention: faces +Z, Karma's left = +X, origin at the soles. Authored rest rotations are preserved; pose values are local deltas.
 // Placement (2026-11-25): perch-follow after walkTo(top), side fallback near screen edges, and a keep-out API for text areas.
-// STATUS: motion logic is covered by assets/3d/karma/controller_tests_2026-11-25 (synthetic rig, no GLB needed).
+// STATUS: placement/state logic has a unit-test file at assets/3d/karma/controller_tests_2026-11-25/controller_logic.test.mjs, but it has NOT yet been run against three@0.170.0 (no CI run yet). Treat the motion logic as unverified until it has.
 import * as THREE from 'three';
 
 const D2R = Math.PI / 180;
