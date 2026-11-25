@@ -1,0 +1,16 @@
+{
+ "smile": {
+  "skin_tris": 8484,
+  "flipped_dot_lt_0": 0,
+  "turn_over_60deg": 0,
+  "area_ratio_min": 0.326,
+  "area_lt_0.25": 0
+ },
+ "neutral": {
+  "skin_tris": 8484,
+  "flipped_dot_lt_0": 0,
+  "turn_over_60deg": 0,
+  "area_ratio_min": 0.331,
+  "area_lt_0.25": 0
+ }
+}
