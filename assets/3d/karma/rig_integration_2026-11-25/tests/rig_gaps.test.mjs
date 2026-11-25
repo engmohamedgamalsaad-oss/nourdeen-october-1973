@@ -76,7 +76,7 @@ test('path: with no card in the way the walk is still a straight line (no needle
 // separately as `noRoute` (she then walks straight, the old behaviour) and are NOT hidden in the pass count.
 test('path fuzz: 60 seeded scenarios, no frame crosses a card', async () => {
   let seed = 1234567; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
-  let ran = 0, crossed = 0, arrived = 0, endpointInOtherCard = 0; const bad = [];
+  let ran = 0, crossed = 0, arrived = 0, endpointInOtherCard = 0, held = 0; const bad = [];
   for (let k = 0; k < 60; k++) {
     const phone = k % 2 === 1, vp = phone ? { width: 390, height: 844 } : { width: 1280, height: 800 }, charH = phone ? 120 : 170;
     const R = []; const want = 2 + Math.floor(rnd() * 3);
@@ -88,14 +88,47 @@ test('path fuzz: 60 seeded scenarios, no frame crosses a card', async () => {
     c.pos.set(c.halfW + rnd() * (vp.width - 2 * c.halfW), charH + rnd() * (vp.height - charH)); c.update(DT);
     const hw0 = c.halfW * 0.9; if (R.some((r) => c.pos.x + hw0 > r.left && c.pos.x - hw0 < r.left + r.width && c.pos.y > r.top && c.pos.y - c.charH < r.top + r.height)) continue; // started inside a card: not a path test
     const id = R[Math.floor(rnd() * R.length)].id, side = ['left', 'right', 'top'][Math.floor(rnd() * 3)];
-    const T0 = c._resolve({ cardId: id, side, along: 0.5 });   // endpoint inside ANOTHER card is a placement issue (neighbour cards are not considered by side placement), not a path issue
-    if (R.some((r) => r.id !== id && T0.x + hw0 > r.left && T0.x - hw0 < r.left + r.width && T0.y > r.top && T0.y - c.charH < r.top + r.height)) { endpointInOtherCard++; rnd(); continue; }
     const t = await walkTrace(c, R, rnd() < 0.5 ? c.walkTo(id, { side }) : c.runTo(id, { side }), 25);
     if (process.env.FUZZ_DEBUG && k === +process.env.FUZZ_DEBUG) console.log('# DBG', JSON.stringify({R: R.map(r=>({id:r.id,l:Math.round(r.left),t:Math.round(r.top),w:Math.round(r.width),h:Math.round(r.height)})), id, side, start: t.first, pos: [Math.round(c.pos.x), Math.round(c.pos.y)], halfW: c.halfW, tgt: c._resolve({cardId:id,side,along:0.5}), route: c._route}));
-    ran++; if (t.r && t.r.completed) arrived++; if (t.bad) { crossed++; if (c._route === null && c._routeFor) { } bad.push({ k, vp: phone ? 'phone' : 'desk', side, first: t.first, bad: t.bad }); }
+    ran++; if (t.r && t.r.completed) { arrived++; const e = c.pos; if (R.some((r) => r.id !== id && e.x + hw0 > r.left && e.x - hw0 < r.left + r.width && e.y > r.top && e.y - c.charH < r.top + r.height)) endpointInOtherCard++; } else held++; if (t.bad) { crossed++; if (c._route === null && c._routeFor) { } bad.push({ k, vp: phone ? 'phone' : 'desk', side, first: t.first, bad: t.bad }); }
   }
-  console.log('# FUZZ ' + JSON.stringify({ ran, arrived, skippedEndpointInOtherCard: endpointInOtherCard, crossedScenarios: crossed, details: bad.slice(0, 8) }));
+  console.log('# FUZZ ' + JSON.stringify({ ran, arrived, endsInsideOtherCard: endpointInOtherCard, held, crossedScenarios: crossed, details: bad.slice(0, 8) }));
   assert.ok(ran >= 30, 'too few valid scenarios: ' + ran);
-  assert.equal(arrived, ran, 'some walks did not arrive');
+  assert.equal(endpointInOtherCard, 0, 'walks that ended inside a neighbour card: ' + endpointInOtherCard);
+  assert.equal(arrived + held, ran);
   assert.equal(crossed, 0, 'scenarios with a crossing: ' + JSON.stringify(bad.slice(0, 5)));
+});
+
+// Safety-hold tests: no clear route / no clear standing spot => she holds, never crosses or ends inside a card.
+const inCard = (c, R, skip) => R.some((r) => r.id !== skip && c.pos.x + c.halfW * 0.9 > r.left && c.pos.x - c.halfW * 0.9 < r.left + r.width && c.pos.y > r.top && c.pos.y - c.charH < r.top + r.height);
+test('no-route: a wall of cards across the whole width => she holds (completed:false, no crossing), not a straight walk through text', async () => {
+  const R = [{ id: 'w1', left: 0, top: 300, width: 660, height: 120 }, { id: 'w2', left: 660, top: 300, width: 620, height: 120 }, { id: 'tg', left: 500, top: 100, width: 200, height: 80 }];
+  const { c } = await make({ rects: R }); c.pos.set(300, 780); c.update(DT); c.pos.set(300, 780);
+  const t = await walkTrace(c, R, c.walkTo('tg', { side: 'right' }), 20);
+  assert.equal(t.r.completed, false); assert.equal(t.bad, 0, 'crossed in ' + t.bad + ' frames'); assert.ok(c.pos.y > 420, 'she went past the wall');
+});
+test('adjacent-card endpoint: requested side is filled by a neighbour card => she ends in a clear spot or holds, never inside the neighbour', async () => {
+  const R = [{ id: 'a', left: 500, top: 300, width: 200, height: 160 }, { id: 'n', left: 705, top: 300, width: 220, height: 160 }];
+  for (const side of ['right', 'left']) { const { c } = await make({ rects: R }); c.pos.set(100, 700); c.update(DT); c.pos.set(100, 700);
+    const t = await walkTrace(c, R, c.walkTo('a', { side }), 25); assert.equal(t.bad, 0, side + ' crossed'); assert.ok(!inCard(c, R, 'a'), side + ': ended inside the neighbour card'); }
+});
+test('adjacent-card endpoint, no clear spot at all => refused (completed:false), not placed inside text', async () => {
+  const R = [{ id: 'l', left: 0, top: 300, width: 590, height: 160 }, { id: 'a', left: 590, top: 300, width: 100, height: 160 }, { id: 'r', left: 690, top: 300, width: 590, height: 160 }];
+  const { c } = await make({ rects: R }); c.pos.set(640, 700); c.update(DT); c.pos.set(640, 700);
+  const t = await walkTrace(c, R, c.walkTo('a', { side: 'right' }), 20); assert.equal(t.r.completed, false); assert.ok(!inCard(c, R, 'a'));
+});
+test('moving obstruction: a card slides into the planned route mid-walk => route is re-planned, no frame crosses', async () => {
+  const R = [{ id: 'a', left: 500, top: 300, width: 260, height: 300 }, { id: 'm', left: 200, top: 700, width: 120, height: 60 }];
+  const { c } = await make({ rects: R }); c.pos.set(100, 450); c.update(DT); c.pos.set(100, 450);
+  let n = 0; const p = c.walkTo('a', { side: 'right' }); let r; p.then((v) => { r = v; }); let bad = 0;
+  for (let i = 0; i < 25 / DT && r === undefined; i++, n++) { if (n === 60) { R[1].left = 150; R[1].top = 600; R[1].width = 200; R[1].height = 120; }
+    c.update(DT); await Promise.resolve(); if (n > 61 && R.some((q) => c.pos.x + c.halfW * 0.9 > q.left + 1 && c.pos.x - c.halfW * 0.9 < q.left + q.width - 1 && c.pos.y > q.top + 1 && c.pos.y - c.charH < q.top + q.height - 1 && !(q.id === 'a' && Math.hypot(c.pos.x - (q.left + q.width), c.pos.y - (q.top + q.height)) < c.charH))) bad++; }
+  assert.ok(r, 'did not settle'); assert.equal(bad, 0, 'crossed in ' + bad + ' frames after the card moved');
+});
+test('resize obstruction: viewport narrows mid-walk (setViewport) => no frame crosses, ends inside the viewport', async () => {
+  const R = [{ id: 'a', left: 300, top: 300, width: 200, height: 200 }];
+  const { c } = await make({ rects: R, viewport: { width: 1280, height: 800 } }); c.pos.set(1100, 700); c.update(DT); c.pos.set(1100, 700);
+  const p = c.walkTo('a', { side: 'right' }); let r; p.then((v) => { r = v; });
+  for (let i = 0; i < 25 / DT && r === undefined; i++) { if (i === 30) c.setViewport(600, 800); c.update(DT); await Promise.resolve(); }
+  assert.ok(r, 'did not settle'); assert.ok(c.pos.x <= 600 + 1 && c.pos.x >= 0); assert.ok(!inCard(c, R, 'a'));
 });

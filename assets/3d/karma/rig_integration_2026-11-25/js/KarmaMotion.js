@@ -66,13 +66,15 @@ export class KarmaMotion extends Base {
    *  The route is the shortest path over a visibility graph whose nodes are the start, the target and points just outside each card's corners. */
   _detourWp(s) {
     const a = this.anchor || s, tgt = this._resolve(a); if (!tgt) return null;
+    const sig = [...this.rects].map(([i, r]) => i + ':' + Math.round(r.left) + ',' + Math.round(r.top) + ',' + Math.round(r.width) + ',' + Math.round(r.height)).join('|') + '@' + Math.round(this.vw);
+    if (this._routeSig !== sig) { this._routeSig = sig; this._route = null; s._detours = 0; s._noRoute = false; } // layout moved or resized: plan again
     if (this._route && this._routeFor === s) {
       while (this._route.length && Math.hypot(this._route[0].x - this.pos.x, this._route[0].y - this.pos.y) <= 1.5) this._route.shift();
       if (this._route.length) return this._route[0];
       this._route = null;
     }
     if (!this._pathBlocked(this.pos, tgt, tgt, a.cardId)) return null;
-    if ((s._detours = (s._detours || 0) + 1) > 4) return null;
+    if ((s._detours = (s._detours || 0) + 1) > 4) { s._noRoute = true; return null; }
     const hw = this.halfW, m = 6, lo = hw, hi = Math.max(hw, this.vw - hw), clampX = (x) => Math.min(Math.max(x, lo), hi);
     const nodes = [{ x: this.pos.x, y: this.pos.y }, { x: tgt.x, y: tgt.y }];
     for (const r of this.rects.values()) {
@@ -87,14 +89,16 @@ export class KarmaMotion extends Base {
       if (u < 0 || dist[u] === Infinity || u === 1) break; done[u] = true;
       for (let v = 1; v < n; v++) if (!done[v] && dist[u] + d(u, v) < dist[v] && !this._pathBlocked(nodes[u], nodes[v], tgt, a.cardId)) { dist[v] = dist[u] + d(u, v); prev[v] = u; }
     }
-    if (dist[1] === Infinity) return null;
+    if (dist[1] === Infinity) { s._noRoute = true; return null; } // no clear route: hold, never cross text
     const route = []; for (let v = 1; v > 0; v = prev[v]) route.unshift(nodes[v]);
     route.pop();                      // the last node is the real target: super handles the arrival
     if (!route.length) return null;
     this._route = route; this._routeFor = s; return route[0];
   }
   _updWalk(dt, T, s) {
-    const wp = this._detourWp(s), pre = this.pos.clone(), k = s.run ? 2.3 : 1;
+    const wp = this._detourWp(s);
+    if (s._noRoute && this.state === s) { this._yawTarget = 0; this._finish(s, false, 'no-route'); this._next(); this._poseIdle(T); return 0; }
+    const pre = this.pos.clone(), k = s.run ? 2.3 : 1;
     const f = this._updWalkPose(dt, T, s);
     if (wp && this.state === s) {
       const dx = wp.x - pre.x, dy = wp.y - pre.y, dist = Math.hypot(dx, dy) || 1, step = Math.min(1.05 * this.charH * dt * k, dist);
@@ -158,9 +162,41 @@ export class KarmaMotion extends Base {
   /** Lean contact: the stock lean stands 0.1*charH from the card edge, which put the near hand about 0.25*charH INSIDE the card face
    *  (measured by tests/contact_probe.py). Stand `leanReach` further out so the hand tip rests on the card edge instead of covering the card. */
   _resolve(a) {
-    const t = super._resolve(a);
+    let t = super._resolve(a);
+    if (t) {
+      let u = this._clearSpot(t, a, true);
+      if (!u && a && (a.side === 'left' || a.side === 'right')) {            // requested side is filled by a neighbour: try the opposite side of the same card
+        const alt = super._resolve({ ...a, side: a.side === 'left' ? 'right' : 'left' });
+        if (alt) u = this._clearSpot(alt, { ...a, side: alt.side }, true);
+      }
+      t = u || this._clearSpot(t, a, false);
+    }
     if (t && a && a.lean && t.side && t.side !== 'top') t.x += (t.side === 'right' ? 1 : -1) * (this.leanReach ?? 0.24) * this.charH;
     return t;
+  }
+  /** Standing spot must not put her body inside ANOTHER card (the base only checks the target card). Move to the nearest clear x;
+   *  when none exists return null so the walk is refused ('card-missing' path) instead of ending inside text. */
+  _clearSpot(t, a, strict) {
+    const hw = this.halfW, r0 = this.rects.get(a.cardId);
+    const bad = (x) => {
+      for (const [id, r] of this.rects) {
+        if (id === a.cardId) continue;
+        if (x + hw > r.left + 0.5 && x - hw < r.left + r.width - 0.5 && t.y > r.top + 0.5 && t.y - this.charH < r.top + r.height - 0.5) return true;
+      }
+      if (r0 && t.side !== 'top' && this._overlapsCard({ ...t, x }, r0, a.lean)) return true;
+      return false;
+    };
+    if (!bad(t.x)) return t;
+    return strict ? null : this._slide(t, a, bad);
+  }
+  _slide(t, a, bad) {
+    const hw = this.halfW;
+    if (t.side === 'top') return null;
+    const lo = hw, hi = Math.max(hw, this.vw - hw), c = [];
+    for (const r of this.rects.values()) c.push(r.left - hw - 1, r.left + r.width + hw + 1);
+    c.sort((p, q) => Math.abs(p - t.x) - Math.abs(q - t.x));
+    for (const x of c) if (x >= lo && x <= hi && !bad(x)) return { ...t, x };
+    return null;
   }
   /** Honest name of what she is doing now (stateName is the base controller's internal state: look/point/turn ride on 'wave', run on 'walk'). */
   get actionName() {
