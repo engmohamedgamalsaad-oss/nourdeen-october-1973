@@ -144,15 +144,15 @@
  },
  "6_resize_768x1024": {
   "seconds": 12,
-  "visible_and_on_screen": 10,
-  "hidden": 2,
+  "visible_and_on_screen": 12,
+  "hidden": 0,
   "offscreen": 0,
   "max_overlap_when_visible": 0,
   "final": {
    "action": "idle",
    "visible": true,
    "x": 685,
-   "y": 649,
+   "y": 640,
    "inView": true,
    "onScreen": true,
    "gutter": "146",
@@ -160,9 +160,9 @@
    "overlapCards": 0,
    "visits": 6,
    "vw": 768,
-   "sy": 548
+   "sy": 557
   },
-  "timeline": "hhVVVVVVVVVV",
+  "timeline": "VVVVVVVVVVVV",
   "actions": [
    "idle",
    "lean_on_card",
@@ -173,15 +173,15 @@
  },
  "7_resize_1440x900": {
   "seconds": 12,
-  "visible_and_on_screen": 4,
-  "hidden": 8,
+  "visible_and_on_screen": 3,
+  "hidden": 9,
   "offscreen": 0,
   "max_overlap_when_visible": 0,
   "final": {
    "action": "idle",
    "visible": true,
-   "x": 1362,
-   "y": 337,
+   "x": 1316,
+   "y": 693,
    "inView": true,
    "onScreen": true,
    "gutter": "146",
@@ -191,7 +191,7 @@
    "vw": 1440,
    "sy": 505
   },
-  "timeline": "hhhhhhhhVVVV",
+  "timeline": "hhhhhhhhhVVV",
   "actions": [
    "idle",
    "lean_on_card",
@@ -208,22 +208,27 @@
   "offscreen": 0,
   "max_overlap_when_visible": 0,
   "final": {
-   "action": "walk",
+   "action": "idle",
    "visible": true,
-   "x": 340,
-   "y": 840,
+   "x": 338,
+   "y": 548,
    "inView": true,
    "onScreen": true,
    "gutter": "74",
    "cardW": 286,
    "overlapCards": 0,
-   "visits": 7,
+   "visits": 8,
    "vw": 390,
    "sy": 650
   },
   "timeline": "VVVVVVVVVVVV",
   "actions": [
-   "walk"
+   "idle",
+   "lean_on_card",
+   "look",
+   "point",
+   "walk",
+   "wave"
   ]
  },
  "js_errors": []

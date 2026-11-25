@@ -55,34 +55,34 @@ export async function startKarmaStage(opts = {}) {
       if (room.right >= need && room.right >= room.left) return 'right'; if (room.left >= need) return 'left'; return null; };
     // never cover content: the model is hidden for any frame where its box would overlap a card, photo or text block
     const boxOf = () => ({ l: c.pos.x - c.halfW, r: c.pos.x + c.halfW, t: c.pos.y - charH, b: c.pos.y });
-    let hiddenFrames = 0, shownFrames = 0, hiddenRun = 0;
+    let hiddenFrames = 0, shownFrames = 0, hiddenSince = 0;
     const guard = () => { const m = boxOf(); let hit = false;
       const tol = c.stateName === 'lean' ? 36 : 12; // lean-on-card contact: a few px of arm/shoulder may touch the card edge without hiding her
       for (const r of [...getCardRects().map((q) => ({ ...q, left: q.left + tol, width: q.width - 2 * tol })), ...getKeepOutRects()]) { if (m.l < r.left + r.width && m.r > r.left && m.t < r.top + r.height && m.b > r.top) { hit = true; break; } }
-      c.object3D.visible = o.coverGuard ? !hit : true; hiddenRun = hit ? hiddenRun + 1 : 0; if (hiddenRun > 90 && !busy && !stopped) { hiddenRun = 0; setTimeout(() => visit(false), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
+      c.object3D.visible = o.coverGuard ? !hit : true; const tNow = performance.now(); if (!hit) hiddenSince = 0; else if (!hiddenSince) hiddenSince = tNow; else if (!busy && tNow - hiddenSince > 1200 && !stopped && !document.hidden) { hiddenSince = 0; setTimeout(() => visit(false, true), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
     const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
     const tick = (d) => { for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - 4) c.pos.y = vh - 4; };
-    let stopped = false, busy = false, current = null; const state = { visits: 0, lastError: null };
+    let stopped = false, busy = false, current = null, epoch = 0; const state = { visits: 0, lastError: null };
     const say = (s) => { if (o.onState) o.onState(s, state); };
-    async function visit(first) {
-      if (busy || stopped) return; busy = true;
+    async function visit(first, force) {
+      if (stopped) return; if (busy && !force) return; if (force) { epoch++; Promise.resolve(c.stand()).catch(() => {}); } const my = ++epoch; busy = true; const dead = () => stopped || my !== epoch;
       try {
-        reserve(); let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); reserve(); r = pick(current); } if (!r) { busy = false; return; } current = r.id; const side = sideFor(r);
+        reserve(); let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); reserve(); r = pick(current); } if (dead()) return; if (!r) { busy = false; return; } current = r.id; const side = sideFor(r);
         say('walking');
         if (first) await c.runTo(r.id, { side }); else await c.walkTo(r.id, { side });
-        if (stopped) return;
+        if (dead()) return;
         say('interacting');
-        await c.lookAt(r.id, 1.2); await c.pointAt(r.id, 1.8); await c.wave(1.6);
-        await c.leanOn(r.id, { side }); await sleep(2.5);
-        await c.stand(); say('idle'); state.visits++;
-      } catch (e) { state.lastError = String(e); } finally { busy = false; }
+        await c.lookAt(r.id, 1.2); if (dead()) return; await c.pointAt(r.id, 1.8); if (dead()) return; await c.wave(1.6); if (dead()) return;
+        await c.leanOn(r.id, { side }); if (dead()) return; await sleep(2.5); if (dead()) return;
+        await c.stand(); if (dead()) return; say('idle'); state.visits++;
+      } catch (e) { state.lastError = String(e); } finally { if (my === epoch) busy = false; }
     }
     reserve(); if (o.auto) setTimeout(() => { reserve(); visit(true); }, 0); // collection pages render their story cards after load; visit() waits up to 15 s for them
     let scrollT = null; if (o.auto) addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(() => { if (!busy) setTimeout(() => visit(false), 600); }, 900); }, { passive: true });
     let rsT = null; addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
       vw = innerWidth; vh = innerHeight; renderer.setSize(vw, vh, false);
       cam.left = -vw / 2; cam.right = vw / 2; cam.top = vh / 2; cam.bottom = -vh / 2; cam.updateProjectionMatrix();
-      c.setViewport(vw, vh); if (o.auto && !busy) setTimeout(() => visit(false), 400); c.setCharacterHeight(o.charHeight || (matchMedia('(max-width: 700px)').matches ? mobH() : Math.min(230, vh * 0.28))); reserve(); }, 120); });
+      c.setViewport(vw, vh); if (o.auto && !busy) setTimeout(() => visit(false), 400); c.setCharacterHeight(o.charHeight || (matchMedia('(max-width: 700px)').matches ? mobH() : Math.min(230, vh * 0.28))); reserve(); c.pos.x = Math.min(c.pos.x, vw - c.halfW - 4); c.pos.y = Math.min(Math.max(c.pos.y, charH + 4), vh - 4); }, 120); });
     let last = performance.now(), acc = 0; const step = mobile ? 1 / 30 : 0;
     function frame(now) {
       if (stopped) return; requestAnimationFrame(frame);
