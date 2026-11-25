@@ -1,0 +1,24 @@
+{
+ "smile": {
+  "verts_AI": 16067,
+  "verts_AJ": 16259,
+  "tris_AI": 31636,
+  "tris_AJ": 32020,
+  "orig_vertex_max_pos_change": 6.591949208711867e-17,
+  "orig_tris_identical": true,
+  "bytes": 645292,
+  "sha256": "44eb14f0f643ee2031a6ff05156e5b4f1702a897a3d58f0bb51b1625b0016501",
+  "finite": true
+ },
+ "neutral": {
+  "verts_AI": 15980,
+  "verts_AJ": 16172,
+  "tris_AI": 31524,
+  "tris_AJ": 31908,
+  "orig_vertex_max_pos_change": 6.852157730108388e-17,
+  "orig_tris_identical": true,
+  "bytes": 642556,
+  "sha256": "cf6426d082788a227f86d0297f933113f059e01901aa0b16fcdf1242bfe2fe38",
+  "finite": true
+ }
+}
