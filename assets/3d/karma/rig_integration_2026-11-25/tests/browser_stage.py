@@ -28,12 +28,12 @@ try:
             if r.get('method') == 'Runtime.exceptionThrown': errors.append(r['params']['exceptionDetails'].get('exception', {}).get('description', 'exception')[:200])
             if r.get('id') == n[0]: return r
     def ev(expr): return call('Runtime.evaluate', {'expression': expr, 'returnByValue': True, 'awaitPromise': True})['result']['result'].get('value')
-    call('Runtime.enable'); call('Page.enable')
+    call('Runtime.enable'); call('Page.enable'); call('Network.enable'); call('Network.setCacheDisabled', {'cacheDisabled': True})
     SAMPLE = """(()=>{const s=window.__karmaStage; if(!s) return null; const c=s.controller; const cards=[...document.querySelectorAll('__SEL__, .kh-sp, h1, h2, h3, .lead, .eyebrow, .heading p, .hero p, .hero img, footer, header')].map(e=>e.getBoundingClientRect());
       const b={l:c.pos.x-c.halfW,r:c.pos.x+c.halfW,t:c.pos.y-c.charH,b:c.pos.y};
       const rb=s.bounds&&s.bounds(); const pen=(k)=>rb?Math.min(Math.min(rb.r,k.right)-Math.max(rb.l,k.left),Math.min(rb.b,k.bottom)-Math.max(rb.t,k.top)):0; const rpen=rb?Math.max(0,...cards.filter(k=>k.width>0).map(pen)):0;
       const ov=cards.filter(k=>k.width>0&&b.l<k.right-1&&b.r>k.left+1&&b.t<k.bottom-1&&b.b>k.top+1).length;
-      return {state:c.stateName,x:c.pos.x,y:c.pos.y,vw:innerWidth,vh:innerHeight,halfW:c.halfW,charH:c.charH,overlap:ov,rendered_pen_px:Math.round(rpen*10)/10,rb:rb&&{l:Math.round(rb.l),r:Math.round(rb.r),t:Math.round(rb.t),b:Math.round(rb.b)},visible:c.object3D.visible,overlap_visible:c.object3D.visible?ov:0,inView:(b.l>=-1&&b.r<=innerWidth+1&&b.b<=innerHeight+3),scrollY:scrollY,visits:s.state.visits,lastError:s.state.lastError};})()"""
+      return {state:c.stateName,x:c.pos.x,y:c.pos.y,vw:innerWidth,vh:innerHeight,halfW:c.halfW,charH:c.charH,overlap:ov,dbg:(s.debug?JSON.stringify(s.debug()).slice(0,260):null),rendered_pen_px:Math.round(rpen*10)/10,rb:rb&&{l:Math.round(rb.l),r:Math.round(rb.r),t:Math.round(rb.t),b:Math.round(rb.b)},visible:c.object3D.visible,overlap_visible:c.object3D.visible?ov:0,inView:(b.l>=-1&&b.r<=innerWidth+1&&b.b<=innerHeight+3),scrollY:scrollY,visits:s.state.visits,lastError:s.state.lastError};})()"""
     for name, w, h, mob in [v for v in [('desktop', 1440, 900, False), ('phone', 390, 844, True)] if os.environ.get('KARMA_ONLY', v[0]) == v[0]]:
         for variant in ('good', 'badglb'):
             errors.clear()
@@ -46,20 +46,20 @@ try:
             for i in range(N if variant == 'good' else 6):
                 time.sleep(0.4 if variant == 'good' else 1.0)
                 if variant == 'good': ev("window.__karmaStage ? window.__karmaStage.fastForward(1.0) : 0")
-                if variant == 'good' and i == 1 and CARDSEL != '.gate': ev("(document.querySelector('"+CARDSEL+"')||document.body).scrollIntoView({block:'start'});scrollBy(0,-90)")
-                if variant == 'good' and i == N//2: ev("window.scrollTo(0, document.body.scrollHeight*0.45)")
-                if variant == 'good' and i == (N*3)//4: ev("window.scrollTo(0, 0)")
+                if variant == 'good' and i == 1 and CARDSEL != '.gate' and not os.environ.get('KARMA_NOSCROLL'): ev("(document.querySelector('"+CARDSEL+"')||document.body).scrollIntoView({block:'start'});scrollBy(0,-90)")
+                if variant == 'good' and i == N//2 and not os.environ.get('KARMA_NOSCROLL'): ev("window.scrollTo(0, document.body.scrollHeight*0.45)")
+                if variant == 'good' and i == (N*3)//4 and not os.environ.get('KARMA_NOSCROLL'): ev("window.scrollTo(0, 0)")
                 s = ev(SAMPLE.replace('__SEL__', CARDSEL))
                 if s: samples.append(s)
-                if variant == 'good' and i in (4, 9, N//2-1, N//2+6, N-2):
+                if variant == 'good' and i in [int(v) for v in os.environ.get('KARMA_SHOTS', '4,9,%d,%d,%d' % (N//2-1, N//2+6, N-2)).split(',')]:
                     d = call('Page.captureScreenshot', {'format': 'png'})['result']['data']; open(f'{out}/{name}_{variant}_{i:02d}s.png', 'wb').write(base64.b64decode(d)); shots += 1
             page_ok = ev("document.querySelectorAll('"+CARDSEL+"').length")
             canvas = ev("!!document.getElementById('karma-stage')")
-            results[f'{name}_{variant}'] = {'samples': len(samples), 'trace': [{k: x.get(k) for k in ('state','x','y','visible','overlap','rendered_pen_px','rb','scrollY')} for x in samples], 'states': sorted({s['state'] for s in samples}), 'max_rendered_penetration_px_visible': max([s['rendered_pen_px'] for s in samples if s['visible']] or [0]), 'max_rendered_penetration_px_all': max([s['rendered_pen_px'] for s in samples] or [0]), 'rendered_pen_gt3_visible_samples': sum(1 for s in samples if s['visible'] and s['rendered_pen_px']>3), 'max_VISIBLE_overlap': max([s['overlap_visible'] for s in samples] or [0]), 'hidden_samples': sum(1 for s in samples if not s['visible']), 'visible_samples': sum(1 for s in samples if s['visible']), 'max_overlap_all_states': max([s['overlap'] for s in samples] or [0]),
+            results[f'{name}_{variant}'] = {'samples': len(samples), 'trace': [{k: x.get(k) for k in ('state','x','y','visible','overlap','rendered_pen_px','rb','scrollY','dbg')} for x in samples], 'states': sorted({s['state'] for s in samples}), 'max_rendered_penetration_px_visible': max([s['rendered_pen_px'] for s in samples if s['visible']] or [0]), 'max_rendered_penetration_px_all': max([s['rendered_pen_px'] for s in samples] or [0]), 'rendered_pen_gt3_visible_samples': sum(1 for s in samples if s['visible'] and s['rendered_pen_px']>3), 'max_VISIBLE_overlap': max([s['overlap_visible'] for s in samples] or [0]), 'hidden_samples': sum(1 for s in samples if not s['visible']), 'visible_samples': sum(1 for s in samples if s['visible']), 'max_overlap_all_states': max([s['overlap'] for s in samples] or [0]),
                 'max_overlap_while_stationary': max([s['overlap'] for s in samples if s['state'] not in ('walk',)] or [0]),
                 'samples_overlapping_while_walking': sum(1 for s in samples if s['state'] == 'walk' and s['overlap']),
                 'in_view_after_arrival': all(s['inView'] for s in samples[[i for i, x in enumerate(samples) if x['state'] != 'walk' and x['x'] < x['vw']][0]:]) if any(x['state'] != 'walk' and x['x'] < x['vw'] for x in samples) else None,
-                'visits': samples[-1]['visits'] if samples else None, 'lastError': samples[-1]['lastError'] if samples else None, 'canvas_present_at_end': canvas, 'gate_cards_still_in_page': page_ok, 'js_errors': list(errors)[:5], 'final': samples[-1] if samples else None}
+                'visits': samples[-1]['visits'] if samples else None, 'lastError': samples[-1]['lastError'] if samples else None, 'state_extra': ev('JSON.stringify({rw: window.__karmaStage && window.__karmaStage.state.restWalk, rr: window.__karmaStage && window.__karmaStage.state.restRects})'), 'canvas_present_at_end': canvas, 'gate_cards_still_in_page': page_ok, 'js_errors': list(errors)[:5], 'final': samples[-1] if samples else None}
             print(name, variant, json.dumps(results[f'{name}_{variant}'])[:600], flush=True)
     json.dump(results, open(f'{out}/browser_stage_result_' + os.environ.get('KARMA_ONLY', 'all') + '.json', 'w'), indent=1)
 finally:

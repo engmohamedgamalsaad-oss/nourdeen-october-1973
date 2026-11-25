@@ -20,6 +20,9 @@ export class KarmaMotion extends Base {
   // ---------- public API ----------
   idle() { return this.stand(); }
   runTo(cardId, { side = 'left', along = 0.5 } = {}) { return this._nav({ name: 'walk', run: true, cardId, side, along }); }
+  _enter(cmd, ...r) { const o = super._enter(cmd, ...r); if (cmd && cmd.name === 'walk' && cmd.point && this.anchor) this.anchor.point = cmd.point; return o; }
+  /** Walk to a free point (feet at x,y, canvas CSS px), detouring around cards; used for the resting spot when no card is in view (phone entry at scroll 0). */
+  walkToPoint(x, y, { run = false } = {}) { return this._nav({ name: 'walk', run, cardId: undefined, side: 'free', along: 0.5, point: { x, y } }); }
   /** target: a card id, or {x,y} in canvas CSS px. Holds the gaze `seconds`, then returns. */
   lookAt(target, seconds = 1.8) { return this._act({ name: 'wave', kind: 'look', target, dur: seconds }); }
   /** Turn the body toward a card and extend the arm on that side toward it. */
@@ -165,6 +168,7 @@ export class KarmaMotion extends Base {
   /** Lean contact: the stock lean stands 0.1*charH from the card edge, which put the near hand about 0.25*charH INSIDE the card face
    *  (measured by tests/contact_probe.py). Stand `leanReach` further out so the hand tip rests on the card edge instead of covering the card. */
   _resolve(a) {
+    if (a && a.point) { const hw = this.halfW; return { x: Math.min(Math.max(a.point.x, hw), Math.max(hw, this.vw - hw)), y: Math.min(a.point.y, this.vh), side: 'free' }; }
     let t = super._resolve(a);
     if (t) {
       let u = this._clearSpot(t, a, true);

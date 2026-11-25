@@ -172,3 +172,15 @@ test('phone resize, OVERLAPPING cards (shared test 21 layout): holds (idle) or l
   assert.ok(c.pos.x >= c.halfW - 0.01 && c.pos.x <= 390 - c.halfW + 0.01); assert.ok(!inCard(c, R, 'b'));
   assert.ok(['idle', 'lean'].includes(c.stateName), c.stateName);
 });
+
+test('walkToPoint (phone entry at scroll 0): enters from off-screen right to a rest point, arrives, never crosses a card on the way', async () => {
+  const R = [{ id: 'a', left: 20, top: 300, width: 250, height: 200 }];
+  const { c } = await make({ rects: R, viewport: { width: 390, height: 844 }, charH: 110 }); c.pos.set(390 + c.halfW * 2, 834); c.update(DT); c.pos.set(390 + c.halfW * 2, 834);
+  const t = await walkTrace(c, R, c.walkToPoint(390 - c.halfW - 4, 834), 20);
+  assert.equal(t.r.completed, true, JSON.stringify(t.r) + JSON.stringify(c.pos)); assert.ok(Math.abs(c.pos.x - (390 - c.halfW - 4)) < 1.5 && Math.abs(c.pos.y - 834) < 1.5, JSON.stringify(c.pos)); assert.equal(t.bad, 0);
+});
+test('walkToPoint with a wall of cards between => holds (no-route), never crosses', async () => {
+  const R = [{ id: 'w1', left: 0, top: 300, width: 200, height: 120 }, { id: 'w2', left: 200, top: 300, width: 190, height: 120 }];
+  const { c } = await make({ rects: R, viewport: { width: 390, height: 844 }, charH: 110 }); c.pos.set(200, 800); c.update(DT); c.pos.set(200, 800);
+  const t = await walkTrace(c, R, c.walkToPoint(200, 200), 20); assert.equal(t.r.completed, false); assert.equal(t.bad, 0);
+});

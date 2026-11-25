@@ -71,7 +71,7 @@ export async function startKarmaStage(opts = {}) {
     async function visit(first, force) {
       if (stopped) return; if (busy && !force) return; if (force) { epoch++; Promise.resolve(c.stand()).catch(() => {}); } const my = ++epoch; busy = true; const dead = () => stopped || my !== epoch;
       try {
-        reserve(); let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); reserve(); r = pick(current); } if (dead()) return; if (!r) { parkOff(); busy = false; return; } current = r.id; const side = sideFor(r);
+        reserve(); let r = pick(current); for (let w = 0; !r && w < 20 && !stopped; w++) { await sleep(0.75); reserve(); r = pick(current); if (!r && w === 2 && c.pos.x >= vw && o.restSpot !== false) { say('walking'); state.restWalk = await c.walkToPoint(vw - c.halfW - 4, vh - SAFE); if (dead()) return; state.restRects = getCardRects().map((q) => [Math.round(q.left), Math.round(q.top), Math.round(q.width), Math.round(q.height)]); await c.stand(); say('idle'); } /* no card in view yet (scroll 0 on a phone): enter and wait in the right gutter instead of staying off-screen */ } if (dead()) return; if (!r) { if (c.pos.x < vw && o.restSpot !== false) { say('walking'); state.restWalk = await c.walkToPoint(vw - c.halfW - 4, vh - SAFE); if (dead()) return; await c.stand(); say('idle'); } else parkOff(); busy = false; return; } /* no card in view: wait in the right gutter, no teleport off-screen */ current = r.id; const side = sideFor(r);
         say('walking');
         if (first) await c.runTo(r.id, { side }); else await c.walkTo(r.id, { side });
         if (dead()) return;
