@@ -1,0 +1,7 @@
+numpy
+scipy
+scikit-image
+trimesh
+pillow
+fast-simplification
+mediapipe  # only for lm.py on the private images
