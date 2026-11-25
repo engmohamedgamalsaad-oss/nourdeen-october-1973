@@ -1,0 +1,109 @@
+name: Karma 3D rig and motion verification
+
+on:
+  pull_request:
+    paths:
+      - 'assets/3d/karma/**'
+      - '.github/workflows/karma-3d-check.yml'
+  push:
+    branches:
+      - 'feat/karma-controller-rig-hardening-2026-11-24'
+    paths:
+      - 'assets/3d/karma/**'
+      - '.github/workflows/karma-3d-check.yml'
+
+jobs:
+  rig-and-six-motions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: assets/3d/karma/baseline_2026-11-24
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the current shared Karma work branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/karma-3d-blockout-handoff-2026-11-24
+          path: base-work
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install the pinned Three.js and browser test dependencies
+        run: |
+          npm install --no-audit --no-fund
+          npm install --no-save playwright @gltf-transform/cli --no-audit --no-fund
+          npx playwright install chromium
+      - name: Syntax-check canonical rig and controller modules
+        run: |
+          node --input-type=module --check < ../js/KarmaRig.js
+          node --input-type=module --check < ../js/KarmaController.js
+          node --input-type=module --check < KarmaRig.node-test-adapter.js
+          node --input-type=module --check < KarmaController.node-test-adapter.js
+          node --check test_skin_anim.mjs
+          node --check browser_perf_test.mjs
+      - name: Run rig and six-motion checks on preserved baseline
+        run: node test_skin_anim.mjs karma_skinned_baseline_NOT_FINAL.glb RESULT_baseline.json
+      - name: Compare the independent weight-ramp experiment when present in the current base
+        run: |
+          EXPERIMENT=../../../../base-work/assets/3d/karma/rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb
+          if [ -f "$EXPERIMENT" ]; then
+            node test_skin_anim.mjs "$EXPERIMENT" RESULT_weights_v2.json
+          else
+            echo "Weight-ramp experiment is not present in this PR merge snapshot; comparison skipped."
+          fi
+      - name: Evaluate integrated v1 character experiment without treating it as final
+        continue-on-error: true
+        run: |
+          INTEGRATED=../../../../base-work/assets/3d/karma/integrated_v1_2026-11-24/EXPERIMENT_NOT_FINAL_karma_integrated_v1.glb
+          if [ -f "$INTEGRATED" ]; then
+            if ! node test_skin_anim.mjs "$INTEGRATED" RESULT_integrated_v1.json; then
+              echo "::warning::Integrated v1 experiment has rig, motion or deformation issues; it remains non-final."
+            fi
+          else
+            echo "Integrated v1 experiment not present on the shared branch."
+          fi
+      - name: Build a non-destructive mobile optimization candidate
+        continue-on-error: true
+        run: |
+          EXPERIMENT=../../../../base-work/assets/3d/karma/rig_tests_2026-11-24/weights_v2_test/EXPERIMENT_NOT_FINAL_karma_skinned_baseline_weights_v2.glb
+          if [ -f "$EXPERIMENT" ]; then
+            npx gltf-transform optimize "$EXPERIMENT" karma_weights_v2_optimized_NOT_FINAL.glb \
+              --instance false --palette false --flatten false --simplify true --simplify-ratio 0.6 \
+              --simplify-error 0.001 --compress false --texture-compress webp --prune false
+            if ! node restore_karma_rig_mounts.mjs karma_weights_v2_optimized_NOT_FINAL.glb; then
+              echo "::warning::Could not restore the required mount hierarchy; discarding optimization candidate."
+              rm -f karma_weights_v2_optimized_NOT_FINAL.glb
+            elif ! KARMA_STRICT_DEFORMATION=1 node test_skin_anim.mjs karma_weights_v2_optimized_NOT_FINAL.glb RESULT_optimized.json; then
+              echo "::warning::Optimized candidate failed rig, motion or deformation quality; discarding it."
+              rm -f karma_weights_v2_optimized_NOT_FINAL.glb RESULT_optimized.json
+            fi
+          else
+            echo "No weight-ramp experiment; optimization candidate skipped."
+          fi
+      - name: Strictly verify any final Karma GLB delivered on the branch
+        run: |
+          mapfile -d '' models < <(
+            find .. -type f -name '*.glb' ! -path '*/archive_2026-11-24/*' ! -iname '*not_final*' -print0
+            find ../../../../base-work/assets/3d/karma -type f -name '*.glb' ! -path '*/archive_2026-11-24/*' ! -iname '*not_final*' -print0
+          )
+          if [ "${#models[@]}" -eq 0 ]; then
+            echo "No final GLB delivered yet; only preserved non-final baselines are present."
+            exit 0
+          fi
+          for model in "${models[@]}"; do
+            output="RESULT_delivery_$(basename "${model%.glb}").json"
+            KARMA_STRICT_DEFORMATION=1 node test_skin_anim.mjs "$model" "$output"
+          done
+      - name: Run desktop and mobile browser render performance checks
+        run: node browser_perf_test.mjs RESULT_browser_perf.json
+      - name: Upload measured baseline, experiment and browser reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: karma-rig-six-motion-reports
+          path: |
+            assets/3d/karma/baseline_2026-11-24/RESULT_baseline.json
+            assets/3d/karma/baseline_2026-11-24/RESULT_weights_v2.json
+            assets/3d/karma/baseline_2026-11-24/RESULT_*.json
+          if-no-files-found: warn
