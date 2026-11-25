@@ -57,10 +57,11 @@ export class KarmaMotion extends Base {
   _pathBlocked(a, b, tgt, cardId) {
     const hw = this.halfW * (this.pathBodyScale ?? 0.9), n = Math.max(2, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 6));
     const inside = (r, x, y) => x + hw > r.left + 0.5 && x - hw < r.left + r.width - 0.5 && y > r.top + 0.5 && y - this.charH < r.top + r.height - 0.5;
-    const esc = new Set(); for (const [id, r] of this.rects) if (inside(r, a.x, a.y)) esc.add(id);   // a card that landed on her: she may walk out of it
+    const all = [...this.rects, ...(this._keep || []).map((k, ki) => ['@keep' + ki, k])];
+    const esc = new Set(); for (const [id, r] of all) if (inside(r, a.x, a.y)) esc.add(id);   // a card that landed on her: she may walk out of it
     for (let i = 0; i <= n; i++) {
       const x = a.x + (b.x - a.x) * (i / n), y = a.y + (b.y - a.y) * (i / n), nearTgt = Math.hypot(x - tgt.x, y - tgt.y) < 0.8 * this.charH;
-      for (const [id, r] of this.rects) {
+      for (const [id, r] of all) {
         if (nearTgt && id === cardId) continue;
         if (esc.has(id)) { if (inside(r, x, y)) continue; esc.delete(id); } // leaving the card she is already inside: exempt only until she is out of it
         if (x + hw > r.left + 0.5 && x - hw < r.left + r.width - 0.5 && y > r.top + 0.5 && y - this.charH < r.top + r.height - 0.5) return true;
@@ -83,7 +84,7 @@ export class KarmaMotion extends Base {
     if ((s._detours = (s._detours || 0) + 1) > 4) { s._noRoute = true; return null; }
     const hw = this.halfW, m = 6, lo = hw, hi = Math.max(hw, this.vw - hw), clampX = (x) => Math.min(Math.max(x, lo), hi);
     const nodes = [{ x: this.pos.x, y: this.pos.y }, { x: tgt.x, y: tgt.y }];
-    for (const r of this.rects.values()) {
+    for (const r of [...this.rects.values(), ...(this._keep || [])]) {
       const xs = [clampX(r.left - hw * 0.9 - m), clampX(r.left + r.width + hw * 0.9 + m)];
       const ys = [r.top - m, Math.min(this.vh, r.top + r.height + this.charH + m)];
       for (const x of xs) for (const y of ys) nodes.push({ x, y });

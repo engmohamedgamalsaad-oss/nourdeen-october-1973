@@ -20,12 +20,15 @@ try:
         except Exception: pass
     assert tabs, 'chrome did not start'
     ws = websocket.create_connection([t for t in tabs if t['type'] == 'page'][0]['webSocketDebuggerUrl'], timeout=180, suppress_origin=True)
-    n = [0]; errors = []
+    n = [0]; errors = []; loaded = {}
     def call(m, p=None):
         n[0] += 1; ws.send(json.dumps({'id': n[0], 'method': m, 'params': p or {}}))
         while True:
             r = json.loads(ws.recv())
             if r.get('method') == 'Runtime.exceptionThrown': errors.append(r['params']['exceptionDetails'].get('exception', {}).get('description', 'exception')[:200])
+            if r.get('method') == 'Network.responseReceived':
+                rp = r['params']['response']
+                if rp['url'].split('?')[0].endswith('.js') and 'localhost:8766' in rp['url'] and 'node_modules' not in rp['url']: loaded[rp['url']] = {'status': rp['status'], 'fromDiskCache': rp.get('fromDiskCache'), 'fromServiceWorker': rp.get('fromServiceWorker')}
             if r.get('id') == n[0]: return r
     def ev(expr): return call('Runtime.evaluate', {'expression': expr, 'returnByValue': True, 'awaitPromise': True})['result']['result'].get('value')
     call('Runtime.enable'); call('Page.enable'); call('Network.enable'); call('Network.setCacheDisabled', {'cacheDisabled': True})
@@ -61,6 +64,13 @@ try:
                 'in_view_after_arrival': all(s['inView'] for s in samples[[i for i, x in enumerate(samples) if x['state'] != 'walk' and x['x'] < x['vw']][0]:]) if any(x['state'] != 'walk' and x['x'] < x['vw'] for x in samples) else None,
                 'visits': samples[-1]['visits'] if samples else None, 'lastError': samples[-1]['lastError'] if samples else None, 'state_extra': ev('JSON.stringify({rw: window.__karmaStage && window.__karmaStage.state.restWalk, rr: window.__karmaStage && window.__karmaStage.state.restRects})'), 'canvas_present_at_end': canvas, 'gate_cards_still_in_page': page_ok, 'js_errors': list(errors)[:5], 'final': samples[-1] if samples else None}
             print(name, variant, json.dumps(results[f'{name}_{variant}'])[:600], flush=True)
+    import hashlib; hs = {}
+    for u, m in loaded.items():
+        fp = os.path.join(root, u.split('localhost:8766/')[1].split('?')[0])
+        if os.path.exists(fp): hs[u] = dict(m, sha256_on_disk=hashlib.sha256(open(fp, 'rb').read()).hexdigest()[:16])
+    try: rev = subprocess.check_output(['git', '-C', root, 'rev-parse', '--short', 'HEAD']).decode().strip() + ('+dirty' if subprocess.check_output(['git', '-C', root, 'status', '--porcelain', '--untracked-files=no']).strip() else '')
+    except Exception: rev = None
+    results['_run'] = {'git_head': rev, 'cache_disabled': True, 'loaded_js': hs, 'any_from_cache': any(v.get('fromDiskCache') for v in hs.values())}
     json.dump(results, open(f'{out}/browser_stage_result_' + os.environ.get('KARMA_ONLY', 'all') + '.json', 'w'), indent=1)
 finally:
     ch.kill(); srv.kill()
