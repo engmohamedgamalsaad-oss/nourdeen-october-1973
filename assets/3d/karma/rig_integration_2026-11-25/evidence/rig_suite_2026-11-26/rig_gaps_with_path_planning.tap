@@ -1,0 +1,65 @@
+TAP version 13
+# \# FUZZ {"ran":33,"arrived":33,"skippedEndpointInOtherCard":1,"crossedScenarios":0,"details":[]}
+# Subtest: construction leaves the holder transform finite (no NaN before the first update)
+ok 1 - construction leaves the holder transform finite (no NaN before the first update)
+  ---
+  duration_ms: 126.449932
+  type: 'test'
+  ...
+# Subtest: gap 1: after walkTo(top) she keeps following that card when it moves
+ok 2 - gap 1: after walkTo(top) she keeps following that card when it moves
+  ---
+  duration_ms: 141.690605
+  type: 'test'
+  ...
+# Subtest: gap 2: card at the phone screen edge, requested side left: standing box does not overlap the card, stays in view
+ok 3 - gap 2: card at the phone screen edge, requested side left: standing box does not overlap the card, stays in view
+  ---
+  duration_ms: 91.606314
+  type: 'test'
+  ...
+# Subtest: gap 2: card at the phone screen edge, requested side right: standing box does not overlap the card, stays in view
+ok 4 - gap 2: card at the phone screen edge, requested side right: standing box does not overlap the card, stays in view
+  ---
+  duration_ms: 95.538401
+  type: 'test'
+  ...
+# Subtest: gap 3: keep-out rectangles (text) push the standing position sideways, never into a card or out of view
+ok 5 - gap 3: keep-out rectangles (text) push the standing position sideways, never into a card or out of view
+  ---
+  duration_ms: 75.823874
+  type: 'test'
+  ...
+# Subtest: path: walk from the far side of a card to its other side never crosses any card (every frame)
+ok 6 - path: walk from the far side of a card to its other side never crosses any card (every frame)
+  ---
+  duration_ms: 77.146997
+  type: 'test'
+  ...
+# Subtest: path: run from the far side of a card to its other side never crosses any card (every frame)
+ok 7 - path: run from the far side of a card to its other side never crosses any card (every frame)
+  ---
+  duration_ms: 65.617944
+  type: 'test'
+  ...
+# Subtest: path: with no card in the way the walk is still a straight line (no needless detour)
+ok 8 - path: with no card in the way the walk is still a straight line (no needless detour)
+  ---
+  duration_ms: 62.198388
+  type: 'test'
+  ...
+# Subtest: path fuzz: 60 seeded scenarios, no frame crosses a card
+ok 9 - path fuzz: 60 seeded scenarios, no frame crosses a card
+  ---
+  duration_ms: 3417.816961
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4296.534663

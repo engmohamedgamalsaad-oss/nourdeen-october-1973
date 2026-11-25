@@ -48,7 +48,62 @@ export class KarmaMotion extends Base {
   }
 
   // ---------- run: the walk with a faster clock and a run pose ----------
+  // ---------- walk path: go around cards instead of through them (README known gap 1) ----------
+  /** True if the standing box (halfW wide, charH tall, feet at the point) at any sample on a->b overlaps a card. Samples near `tgt` ignore the target card
+   *  (the stand/lean/perch endpoint is deliberately next to or on it). */
+  _pathBlocked(a, b, tgt, cardId) {
+    const hw = this.halfW * (this.pathBodyScale ?? 0.9), n = Math.max(2, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 6));
+    for (let i = 0; i <= n; i++) {
+      const x = a.x + (b.x - a.x) * (i / n), y = a.y + (b.y - a.y) * (i / n), nearTgt = Math.hypot(x - tgt.x, y - tgt.y) < 0.8 * this.charH;
+      for (const [id, r] of this.rects) {
+        if (nearTgt && id === cardId) continue;
+        if (x + hw > r.left + 0.5 && x - hw < r.left + r.width - 0.5 && y > r.top + 0.5 && y - this.charH < r.top + r.height - 0.5) return true;
+      }
+    }
+    return false;
+  }
+  /** Next waypoint of a detour, or null when the straight line is clear (or no clear route exists: then she walks straight as before).
+   *  The route is the shortest path over a visibility graph whose nodes are the start, the target and points just outside each card's corners. */
+  _detourWp(s) {
+    const a = this.anchor || s, tgt = this._resolve(a); if (!tgt) return null;
+    if (this._route && this._routeFor === s) {
+      while (this._route.length && Math.hypot(this._route[0].x - this.pos.x, this._route[0].y - this.pos.y) <= 1.5) this._route.shift();
+      if (this._route.length) return this._route[0];
+      this._route = null;
+    }
+    if (!this._pathBlocked(this.pos, tgt, tgt, a.cardId)) return null;
+    if ((s._detours = (s._detours || 0) + 1) > 4) return null;
+    const hw = this.halfW, m = 6, lo = hw, hi = Math.max(hw, this.vw - hw), clampX = (x) => Math.min(Math.max(x, lo), hi);
+    const nodes = [{ x: this.pos.x, y: this.pos.y }, { x: tgt.x, y: tgt.y }];
+    for (const r of this.rects.values()) {
+      const xs = [clampX(r.left - hw * 0.9 - m), clampX(r.left + r.width + hw * 0.9 + m)];
+      const ys = [r.top - m, Math.min(this.vh, r.top + r.height + this.charH + m)];
+      for (const x of xs) for (const y of ys) nodes.push({ x, y });
+    }
+    const n = nodes.length, dist = new Array(n).fill(Infinity), prev = new Array(n).fill(-1), done = new Array(n).fill(false); dist[0] = 0;
+    const d = (i, j) => Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+    for (let it = 0; it < n; it++) {
+      let u = -1; for (let i = 0; i < n; i++) if (!done[i] && (u < 0 || dist[i] < dist[u])) u = i;
+      if (u < 0 || dist[u] === Infinity || u === 1) break; done[u] = true;
+      for (let v = 1; v < n; v++) if (!done[v] && dist[u] + d(u, v) < dist[v] && !this._pathBlocked(nodes[u], nodes[v], tgt, a.cardId)) { dist[v] = dist[u] + d(u, v); prev[v] = u; }
+    }
+    if (dist[1] === Infinity) return null;
+    const route = []; for (let v = 1; v > 0; v = prev[v]) route.unshift(nodes[v]);
+    route.pop();                      // the last node is the real target: super handles the arrival
+    if (!route.length) return null;
+    this._route = route; this._routeFor = s; return route[0];
+  }
   _updWalk(dt, T, s) {
+    const wp = this._detourWp(s), pre = this.pos.clone(), k = s.run ? 2.3 : 1;
+    const f = this._updWalkPose(dt, T, s);
+    if (wp && this.state === s) {
+      const dx = wp.x - pre.x, dy = wp.y - pre.y, dist = Math.hypot(dx, dy) || 1, step = Math.min(1.05 * this.charH * dt * k, dist);
+      this.pos.set(pre.x + (dx / dist) * step, pre.y + (dy / dist) * step);
+      return Math.sign(dx || 1) * (Math.abs(dx) > 4 ? 0.95 : 0);
+    }
+    return f;
+  }
+  _updWalkPose(dt, T, s) {
     if (!s.run) return super._updWalk(dt, T, s);
     const f = super._updWalk(dt * 2.3, T, s);
     const g = this.gait, sw = Math.sin(g);

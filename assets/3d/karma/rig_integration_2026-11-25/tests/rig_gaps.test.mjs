@@ -45,3 +45,57 @@ test('gap 3: keep-out rectangles (text) push the standing position sideways, nev
   const r = R[0]; assert.ok(!(c.pos.x + hw > r.left + 0.6 && c.pos.x - hw < r.left + r.width - 0.6), 'pushed into card a');
   assert.ok(c.pos.x >= hw - 0.01 && c.pos.x <= 1280 - hw + 0.01);
 });
+
+// ---- walk path clearance (README known gap 1): full trajectory, sampled every frame, not just the endpoint ----
+const overlapFrames = (c, R, hwScale = 0.9) => { let n = 0, first = null; const hw = c.halfW * hwScale;
+  for (const r of R) if (c.pos.x + hw > r.left + 0.5 && c.pos.x - hw < r.left + r.width - 0.5 && c.pos.y > r.top + 0.5 && c.pos.y - c.charH < r.top + r.height - 0.5) { n++; first = first || [Math.round(c.pos.x), Math.round(c.pos.y), r.id]; }
+  return { n, first }; };
+async function walkTrace(c, R, p, seconds) { let r; p.then((v) => { r = v; }); let bad = 0, first = null, frames = 0;
+  for (let i = 0; i < seconds / DT && r === undefined; i++) { c.update(DT); await Promise.resolve(); frames++; const o = overlapFrames(c, R); if (o.n) { bad++; first = first || o.first; } }
+  return { r, bad, first, frames }; }
+for (const [name, mode] of [['walk', 'walkTo'], ['run', 'runTo']]) test('path: ' + name + ' from the far side of a card to its other side never crosses any card (every frame)', async () => {
+  const R = [{ id: 'a', left: 500, top: 300, width: 260, height: 300 }];
+  const { c } = await make({ rects: R }); c.pos.set(120, 650); c.update(DT);   // start left of the card, feet below it
+  c.pos.x = 120; c.pos.y = 450;                                                  // beside it, same height band as the card
+  const t = await walkTrace(c, R, c[mode]('a', { side: 'right' }), 20);
+  assert.equal(t.r.completed, true, 'did not arrive');
+  assert.equal(t.bad, 0, 'crossed a card in ' + t.bad + ' of ' + t.frames + ' frames, first at ' + JSON.stringify(t.first));
+});
+test('path: with no card in the way the walk is still a straight line (no needless detour)', async () => {
+  const R = [{ id: 'a', left: 500, top: 300, width: 260, height: 300 }];
+  const { c } = await make({ rects: R }); c.pos.set(1100, 700); c.update(DT);
+  c.pos.x = 1100; c.pos.y = 700; const start = { x: c.pos.x, y: c.pos.y }; const p = c.walkTo('a', { side: 'right' });
+  let maxDev = 0, r; p.then((v) => { r = v; }); const tgt = c._resolve(c.anchor);
+  for (let i = 0; i < 20 / DT && r === undefined; i++) { c.update(DT); await Promise.resolve();
+    const L = Math.hypot(tgt.x - start.x, tgt.y - start.y) || 1; maxDev = Math.max(maxDev, Math.abs((tgt.x - start.x) * (start.y - c.pos.y) - (start.x - c.pos.x) * (tgt.y - start.y)) / L); }
+  assert.equal(r.completed, true); assert.ok(maxDev < 2, 'deviated from the straight line by ' + maxDev.toFixed(1) + ' px');
+});
+
+// Seeded fuzz: random non-overlapping card layouts (desktop and phone sized), random start, random card and side, walk or run.
+// Counts frames where the standing box overlaps ANY card. A route may legitimately not exist (cards packed edge to edge): those are counted
+// separately as `noRoute` (she then walks straight, the old behaviour) and are NOT hidden in the pass count.
+test('path fuzz: 60 seeded scenarios, no frame crosses a card', async () => {
+  let seed = 1234567; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+  let ran = 0, crossed = 0, arrived = 0, endpointInOtherCard = 0; const bad = [];
+  for (let k = 0; k < 60; k++) {
+    const phone = k % 2 === 1, vp = phone ? { width: 390, height: 844 } : { width: 1280, height: 800 }, charH = phone ? 120 : 170;
+    const R = []; const want = 2 + Math.floor(rnd() * 3);
+    for (let t = 0; t < 60 && R.length < want; t++) { const w = phone ? 150 + rnd() * 100 : 200 + rnd() * 160, h = 90 + rnd() * 140;
+      const r = { id: 'c' + R.length, left: 10 + rnd() * (vp.width - w - 20), top: 60 + rnd() * (vp.height - h - 240), width: w, height: h };
+      if (R.every((o) => r.left > o.left + o.width + 0.35 * charH + 4 || r.left + r.width + 0.35 * charH + 4 < o.left || r.top > o.top + o.height + charH + 4 || r.top + r.height + charH + 4 < o.top)) R.push(r); }
+    if (!R.length) continue;
+    const { c } = await make({ viewport: vp, rects: R, charH });
+    c.pos.set(c.halfW + rnd() * (vp.width - 2 * c.halfW), charH + rnd() * (vp.height - charH)); c.update(DT);
+    const hw0 = c.halfW * 0.9; if (R.some((r) => c.pos.x + hw0 > r.left && c.pos.x - hw0 < r.left + r.width && c.pos.y > r.top && c.pos.y - c.charH < r.top + r.height)) continue; // started inside a card: not a path test
+    const id = R[Math.floor(rnd() * R.length)].id, side = ['left', 'right', 'top'][Math.floor(rnd() * 3)];
+    const T0 = c._resolve({ cardId: id, side, along: 0.5 });   // endpoint inside ANOTHER card is a placement issue (neighbour cards are not considered by side placement), not a path issue
+    if (R.some((r) => r.id !== id && T0.x + hw0 > r.left && T0.x - hw0 < r.left + r.width && T0.y > r.top && T0.y - c.charH < r.top + r.height)) { endpointInOtherCard++; rnd(); continue; }
+    const t = await walkTrace(c, R, rnd() < 0.5 ? c.walkTo(id, { side }) : c.runTo(id, { side }), 25);
+    if (process.env.FUZZ_DEBUG && k === +process.env.FUZZ_DEBUG) console.log('# DBG', JSON.stringify({R: R.map(r=>({id:r.id,l:Math.round(r.left),t:Math.round(r.top),w:Math.round(r.width),h:Math.round(r.height)})), id, side, start: t.first, pos: [Math.round(c.pos.x), Math.round(c.pos.y)], halfW: c.halfW, tgt: c._resolve({cardId:id,side,along:0.5}), route: c._route}));
+    ran++; if (t.r && t.r.completed) arrived++; if (t.bad) { crossed++; if (c._route === null && c._routeFor) { } bad.push({ k, vp: phone ? 'phone' : 'desk', side, first: t.first, bad: t.bad }); }
+  }
+  console.log('# FUZZ ' + JSON.stringify({ ran, arrived, skippedEndpointInOtherCard: endpointInOtherCard, crossedScenarios: crossed, details: bad.slice(0, 8) }));
+  assert.ok(ran >= 30, 'too few valid scenarios: ' + ran);
+  assert.equal(arrived, ran, 'some walks did not arrive');
+  assert.equal(crossed, 0, 'scenarios with a crossing: ' + JSON.stringify(bad.slice(0, 5)));
+});
