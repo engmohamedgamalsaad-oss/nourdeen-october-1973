@@ -34,14 +34,14 @@ try:
     SEL = ".story-index-card"
     PROBE = """(()=>{const s=__karmaStage,c=s.controller;const k=document.querySelector('%s');const r=k&&k.getBoundingClientRect();const b={l:c.pos.x-c.halfW,r:c.pos.x+c.halfW,t:c.pos.y-c.charH,b:c.pos.y};
       const cards=[...document.querySelectorAll('%s')].map(e=>e.getBoundingClientRect());const ov=cards.filter(q=>q.width>0&&b.l<q.right-1&&b.r>q.left+1&&b.t<q.bottom-1&&b.b>q.top+1).length;
-      return {action:c.actionName,visible:c.object3D.visible,x:Math.round(c.pos.x),y:Math.round(c.pos.y),inView:b.l>=-1&&b.r<=innerWidth+1&&b.b<=innerHeight&&b.t>=-1,onScreen:c.pos.x<innerWidth&&c.pos.y<=innerHeight,gutter:k&&k.parentElement.dataset.karmaGutter,cardW:r&&Math.round(r.width),overlapCards:ov,visits:s.state.visits,vw:innerWidth,sy:Math.round(scrollY)}})()""" % (SEL, SEL)
+      const mb=s.bounds();return {mb:mb&&{l:Math.round(mb.l),r:Math.round(mb.r),t:Math.round(mb.t),b:Math.round(mb.b)},meshInView:!!mb&&mb.l>=0&&mb.r<=innerWidth&&mb.t>=0&&mb.b<=innerHeight,action:c.actionName,visible:c.object3D.visible,x:Math.round(c.pos.x),y:Math.round(c.pos.y),inView:b.l>=-1&&b.r<=innerWidth+1&&b.b<=innerHeight&&b.t>=-1,onScreen:c.pos.x<innerWidth&&c.pos.y<=innerHeight,gutter:k&&k.parentElement.dataset.karmaGutter,cardW:r&&Math.round(r.width),overlapCards:ov,visits:s.state.visits,vw:innerWidth,sy:Math.round(scrollY)}})()""" % (SEL, SEL)
     def settle_run(label, secs=12):
         secs = min(secs, int(os.environ.get('KARMA_SECS', 99)))
         rows = []
         for k in range(secs):
             (time.sleep(1) if os.environ.get("KARMA_LIVE") else ev("window.__karmaStage.fastForward(1)")); rows.append(ev(PROBE)); rows[-1]['dbg'] = ev('window.__karmaStage.debug()') if os.environ.get('KARMA_TRACE') else None
         vis = sum(1 for r in rows if r['visible'] and r['onScreen']); hid = sum(1 for r in rows if not r['visible'])
-        res[label] = {'seconds': secs, 'visible_and_on_screen': vis, 'hidden': hid, 'offscreen': sum(1 for r in rows if not r['onScreen']), 'max_overlap_when_visible': max([r['overlapCards'] for r in rows if r['visible']] or [0]), 'final': rows[-1], 'trace': [r['dbg'] for r in rows] if os.environ.get('KARMA_TRACE') else None, 'timeline': ''.join('V' if (r['visible'] and r['onScreen']) else 'h' for r in rows), 'actions': sorted({r['action'] for r in rows})}
+        res[label] = {'seconds': secs, 'visible_and_on_screen': vis, 'hidden': hid, 'offscreen': sum(1 for r in rows if not r['onScreen']), 'mesh_clipped_seconds': sum(1 for r in rows if r['visible'] and r['onScreen'] and not r['meshInView']), 'max_overlap_when_visible': max([r['overlapCards'] for r in rows if r['visible']] or [0]), 'final': rows[-1], 'trace': [r['dbg'] for r in rows] if os.environ.get('KARMA_TRACE') else None, 'timeline': ''.join('V' if (r['visible'] and r['onScreen']) else 'h' for r in rows), 'actions': sorted({r['action'] for r in rows})}
         print(label, json.dumps(res[label]), flush=True)
     def shot(name):
         d = call('Page.captureScreenshot', {'format': 'png'})['result']['data']; open(f'{out}/{name}.png', 'wb').write(base64.b64decode(d))

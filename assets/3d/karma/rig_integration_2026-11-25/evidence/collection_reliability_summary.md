@@ -51,3 +51,8 @@ UNRESOLVED: live entry hide; caption keep-out transits; entry-by-design classifi
 - Change 2: when no eligible card exists she parks off-screen right (x = vw + 2*halfW) and re-enters on the next scroll/resize/retry.
 - Run after change 2 (live_history_phone_after_parkoff): entry = off-screen right (5 of 6 s off-screen, 1 s hidden), slideshow hVVVVV, all other scenarios VVVVVV. Entry absence is now off-screen, not a hidden model overlapping text. It is still ABSENT at entry on this page: no eligible card is in the viewport at scroll 0 (cards are below the fold), which I classify as by design (unconfirmed with the user).
 - Single run; stepped re-run after change 2 not yet done.
+
+## 19:16 (build with SAFE margin and mesh projected bounds)
+- Floor park margin: feet kept 10 px inside the viewport bottom (SAFE=10). Clipping is now also measured from the projected mesh bounding box (Box3 precise, per frame): column mesh_clipped_seconds / field mb / meshInView in the JSON. history phone stepped: mesh_clipped_seconds 0 in every scenario; mesh bottom 834 of 844 at the floor.
+- Entry divergence stepped vs live explained by TRACE (evidence/trace_history_phone_entry_stepped_meshbounds/log.txt): at load visit(first) picked a card, she RAN to (340,834) hidden behind a keep-out rect for about 5 s, revalidation abandoned the target (abandoned=1), then she parked off-screen (x 456). The live run showed the same sequence; the stepped 6 s window simply ended around the abandon moment. So the two paths are the same implementation, different sampling windows. Remaining user-visible issue: about 5 s of a hidden run at the floor at entry. Pixels: entry absent (rel_1_entry.png).
+- desktop science stepped (single run): VVVVVV in all 8 scenarios.
