@@ -334,6 +334,31 @@ Deno.test("publication can start with a non-spoken heading in the current previe
   assert.equal(db.uploads.length,2);
 });
 
+Deno.test("queue status matches translated jobs against Arabic source hash and localized spoken hash", async () => {
+  db.queue.length = 0;
+  setReview({ translations: await translations("de", [0, 1, 3, 4]) });
+  const queued = await call({ action: "enqueue_approved_language", language: "de" });
+  assert.equal(queued.status, 200, JSON.stringify(queued.json));
+  assert.equal(db.queue.length, 4);
+
+  const localizedDe = ar.map((block, i) => ({ ...block, text: block.speaker === "title" ? block.text : "de text " + i }));
+  const localizedSnapshot = {
+    section: "science", slug: "t",
+    blocks: { ar, de: localizedDe },
+  };
+  const visible = await call({ action: "queue_status", language: "de", story_snapshot: localizedSnapshot });
+  assert.equal(visible.status, 200, JSON.stringify(visible.json));
+  assert.deepEqual(visible.json.jobs.map((job: any) => job.block_index), [4, 3, 1, 0]);
+
+  // A changed Arabic source or changed German speech text must hide only that stale job.
+  const sourceStale = db.queue.find((job: any) => job.block_index === 0);
+  sourceStale.payload.source_text_hash = await sha("different Arabic source");
+  const spokenStale = db.queue.find((job: any) => job.block_index === 1);
+  spokenStale.payload.spoken_text_hash = await sha("different German speech");
+  const filtered = await call({ action: "queue_status", language: "de", story_snapshot: localizedSnapshot });
+  assert.deepEqual(filtered.json.jobs.map((job: any) => job.block_index), [4, 3]);
+});
+
 Deno.test("sparse spoken indexes preserve required AR/EN readiness and full listening gates", () => {
   const entries=[{key:"ar-1",lang:"ar",block_index:1},{key:"en-1",lang:"en",block_index:1}];
   const review=core.emptyReview();
