@@ -59,9 +59,9 @@ export async function startKarmaStage(opts = {}) {
     const guard = () => { const m = boxOf(); let hit = false;
       const tol = c.stateName === 'lean' ? 36 : 12; // lean-on-card contact: a few px of arm/shoulder may touch the card edge without hiding her
       for (const r of [...getCardRects().map((q) => ({ ...q, left: q.left + tol, width: q.width - 2 * tol })), ...getKeepOutRects()]) { if (m.l < r.left + r.width && m.r > r.left && m.t < r.top + r.height && m.b > r.top) { hit = true; break; } }
-      c.object3D.visible = o.coverGuard ? !hit : true; const tNow = performance.now(); if (!hit) hiddenSince = 0; else if (!hiddenSince) hiddenSince = tNow; else if (!busy && tNow - hiddenSince > 1200 && !stopped && !document.hidden) { hiddenSince = 0; setTimeout(() => visit(false, true), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
+      c.object3D.visible = o.coverGuard ? !hit : true; const tNow = simT * 1000; if (!hit) hiddenSince = 0; else if (!hiddenSince) hiddenSince = tNow; else if (!busy && tNow - hiddenSince > 1200 && !stopped) { hiddenSince = 0; setTimeout(() => visit(false, true), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
     const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
-    const tick = (d) => { for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - 4) c.pos.y = vh - 4; };
+    let simT = 0; const tick = (d) => { simT += d; for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - 4) c.pos.y = vh - 4; };
     let stopped = false, busy = false, current = null, epoch = 0; const state = { visits: 0, lastError: null };
     const say = (s) => { if (o.onState) o.onState(s, state); };
     async function visit(first, force) {
@@ -94,7 +94,8 @@ export async function startKarmaStage(opts = {}) {
     requestAnimationFrame(frame);
     /** test hook: advance the simulation deterministically (60 fps steps) without waiting real time; promises settle between steps */
     const fastForward = async (sec) => { for (let i = 0; i < Math.round(sec * 60); i++) { tick(1 / 60); await Promise.resolve(); } renderer.render(scene, cam); };
-    const api = { reserve, controller: c, rig, canvas, state, fastForward, visit: () => visit(false), stop() { stopped = true; canvas.remove(); renderer.dispose(); } };
+    const debug = () => { const r = pick(current); return { busy, epoch, hiddenForMs: hiddenSince ? Math.round(simT * 1000 - hiddenSince) : 0, pick: r ? r.id : null, side: r ? sideFor(r) : null, cards: getCardRects().length, action: c.actionName, vis: c.object3D.visible }; };
+    const api = { debug, reserve, controller: c, rig, canvas, state, fastForward, visit: () => visit(false), stop() { stopped = true; canvas.remove(); renderer.dispose(); } };
     window.__karmaStage = api; return api;
   } catch (e) { fail(e); return null; }
 }
