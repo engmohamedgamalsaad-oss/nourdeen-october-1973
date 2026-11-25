@@ -7,7 +7,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createRig } from '../../assets/3d/karma/claude_track_2026-11-25/js/KarmaRig.js';
 import { KarmaMotion } from '../../assets/3d/karma/rig_integration_2026-11-25/js/KarmaMotion.js';
 
-const DEFAULTS = { cardSelector: '.gate, .story-index-card, .story-card, [data-story-card]', obstacleSelector: '.kh-sp', keepOutSelector: 'h1, h2, h3, .lead, .eyebrow, .head p, .heading p, .hero p, .hero img, .kh-sp, footer, header', glbUrl: null, charHeight: null, onState: null };
+const DEFAULTS = { cardSelector: '.gate, .story-index-card, .story-card, [data-story-card]', obstacleSelector: '.kh-sp', keepOutSelector: 'h1, h2, h3, .lead, .eyebrow, .head p, .heading p, .hero p, .hero img, .kh-sp, footer, header', glbUrl: null, auto: true, charHeight: null, onState: null };
 
 export async function startKarmaStage(opts = {}) {
   const o = { ...DEFAULTS, ...opts };
@@ -66,8 +66,8 @@ export async function startKarmaStage(opts = {}) {
         await c.stand(); say('idle'); state.visits++;
       } catch (e) { state.lastError = String(e); } finally { busy = false; }
     }
-    visit(true); // collection pages render their story cards after load; visit() waits up to 15 s for them
-    let scrollT = null; addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(() => { if (!busy) setTimeout(() => visit(false), 600); }, 900); }, { passive: true });
+    if (o.auto) visit(true); // collection pages render their story cards after load; visit() waits up to 15 s for them
+    let scrollT = null; if (o.auto) addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(() => { if (!busy) setTimeout(() => visit(false), 600); }, 900); }, { passive: true });
     let rsT = null; addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
       vw = innerWidth; vh = innerHeight; renderer.setSize(vw, vh, false);
       cam.left = -vw / 2; cam.right = vw / 2; cam.top = vh / 2; cam.bottom = -vh / 2; cam.updateProjectionMatrix();

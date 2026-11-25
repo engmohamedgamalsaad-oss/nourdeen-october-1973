@@ -1,0 +1,83 @@
+{
+ "Idle": {
+  "state": "idle",
+  "x": 1578,
+  "y": 900,
+  "visible": true,
+  "inView": false,
+  "log": "Idle done"
+ },
+ "Walk": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Walk done"
+ },
+ "Run": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Run done"
+ },
+ "Jump": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Jump done"
+ },
+ "Wave": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Wave done"
+ },
+ "Look": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Look done"
+ },
+ "Point": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Point done"
+ },
+ "Lean": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Lean done"
+ },
+ "Turn": {
+  "state": "idle",
+  "x": 1068,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Turn done"
+ },
+ "Lean on card": {
+  "state": "lean",
+  "x": 1016,
+  "y": 680,
+  "visible": true,
+  "inView": true,
+  "log": "Lean on card done"
+ },
+ "js_errors": []
+}
