@@ -1332,7 +1332,7 @@ function engineView(language, index) {
   var view = { state: 'none', label: 'لم يُرسل بعد', detail: '', canResend: false };
   if (clip && clip.status === 'accepted') return { state: 'accepted', label: 'معتمد ✓', detail: 'تم اعتماد صوت هذا المقطع.', canResend: false };
   if (job) {
-    if (job.status === 'pending') view = { state: 'pending', label: 'في الطابور', detail: job.attempts > 0 ? 'أُعيد للطابور (محاولة ' + job.attempts + ') — ' + (job.last_error || 'بانتظار Colab') : 'بانتظار اتصال Colab…', canResend: false };
+    if (job.status === 'pending') view = { state: 'pending', label: 'في الطابور', detail: job.attempts > 0 ? 'أُعيد للطابور (محاولة ' + job.attempts + ') — ' + (job.last_error || 'في انتظار دوره بعد الطلبات الأسبق') : 'في انتظار دوره؛ يعالج العامل الطلبات الأسبق أولًا.', canResend: false };
     else if (job.status === 'processing') view = { state: 'processing', label: 'قيد التوليد الآن', detail: 'Colab يعمل على هذا المقطع.', canResend: false };
     else if (job.status === 'completed') view = audioVerified
       ? { state: 'completed', label: 'الصوت جاهز', detail: clip && clip.status === 'rejected' ? 'رُفض هذا الملف؛ يمكنك إعادة توليد هذا المقطع وحده.' : 'تم رفع الملف والتحقق من بصمته وظهوره في manifest؛ استمع إليه في الخطوة ٤.', canResend: !!(clip && clip.status === 'rejected') }
