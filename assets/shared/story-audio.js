@@ -348,7 +348,7 @@
     stop();
     setLanguage();
     var thisLoad = ++manifestRun;
-    if (!['ar', 'en'].includes(lang)) { host.hidden = true; queue = []; manifestState = 'failed'; return; }
+    if (!['ar', 'en', 'fr', 'it', 'de'].includes(lang)) { host.hidden = true; queue = []; manifestState = 'failed'; return; }
     host.hidden = true;
     manifestState = 'loading';
     manifestUrl = new URL(encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', PUBLIC_AUDIO_ROOT);
