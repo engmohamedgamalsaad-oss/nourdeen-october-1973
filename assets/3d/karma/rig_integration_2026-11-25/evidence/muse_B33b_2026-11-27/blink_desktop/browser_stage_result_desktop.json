@@ -1,0 +1,909 @@
+{
+ "desktop_good": {
+  "samples": 26,
+  "trace": [
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 670,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "walk",
+    "x": 1490.6615038442378,
+    "y": 692.2088859232654,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1436,
+     "r": 1546,
+     "t": 460,
+     "b": 688
+    },
+    "fb": {
+     "l": 1435,
+     "r": 1554,
+     "t": 460,
+     "b": 707
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"walk\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1491,692],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "walk",
+    "x": 1383.047999652323,
+    "y": 436.18054893586014,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1327,
+     "r": 1438,
+     "t": 206,
+     "b": 433
+    },
+    "fb": {
+     "l": 1327,
+     "r": 1447,
+     "t": 205,
+     "b": 451
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"walk\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1383,436],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1314,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 167,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1313,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 167,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1314,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 167,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1313,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 167,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1313,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 167,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1314,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 168,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1313,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 167,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1367,
+    "y": 398,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1313,
+     "r": 1421,
+     "t": 168,
+     "b": 398
+    },
+    "fb": {
+     "l": 1313,
+     "r": 1425,
+     "t": 167,
+     "b": 419
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1367,398],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "walk",
+    "x": 1366.1249655306865,
+    "y": 481.31290488484746,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1319,
+     "r": 1426,
+     "t": 248,
+     "b": 477
+    },
+    "fb": {
+     "l": 1315,
+     "r": 1435,
+     "t": 244,
+     "b": 491
+    },
+    "scrollY": 1858,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cwxb8jv\",\"side\":\"right\",\"cards\":8,\"action\":\"run\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1366,481],\"tgt\":[1361,528],\"rects\":[[919,-28,373,260,\"\",\"left\"],[526,-28,373,260,\"\",\"right\"],",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "wave",
+    "x": 1365.6348876953125,
+    "y": 528.031005859375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1310,
+     "r": 1421,
+     "t": 298,
+     "b": 528
+    },
+    "fb": {
+     "l": 1310,
+     "r": 1424,
+     "t": 296,
+     "b": 549
+    },
+    "scrollY": 1858,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cwxb8jv\",\"side\":\"right\",\"cards\":8,\"action\":\"look\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1366,528],\"tgt\":[1361,528],\"rects\":[[919,-28,373,260,\"\",\"left\"],[526,-28,373,260,\"\",\"right\"]",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "wave",
+    "x": 1365.6348876953125,
+    "y": 528.031005859375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1312,
+     "r": 1424,
+     "t": 298,
+     "b": 528
+    },
+    "fb": {
+     "l": 1309,
+     "r": 1432,
+     "t": 297,
+     "b": 549
+    },
+    "scrollY": 1858,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cwxb8jv\",\"side\":\"right\",\"cards\":8,\"action\":\"point\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1366,528],\"tgt\":[1363,511],\"rects\":[[919,-28,373,260,\"\",\"left\"],[526,-28,373,260,\"\",\"right\"",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "wave",
+    "x": 1365.6348876953125,
+    "y": 528.031005859375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1310,
+     "r": 1422,
+     "t": 298,
+     "b": 528
+    },
+    "fb": {
+     "l": 1309,
+     "r": 1424,
+     "t": 298,
+     "b": 549
+    },
+    "scrollY": 1858,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cwxb8jv\",\"side\":\"right\",\"cards\":8,\"action\":\"point\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1366,528],\"tgt\":[1363,511],\"rects\":[[919,-28,373,260,\"\",\"left\"],[526,-28,373,260,\"\",\"right\"",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "wave",
+    "x": 1365.6348876953125,
+    "y": 528.031005859375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1320,
+     "r": 1419,
+     "t": 297,
+     "b": 528
+    },
+    "fb": {
+     "l": 1315,
+     "r": 1424,
+     "t": 292,
+     "b": 549
+    },
+    "scrollY": 1858,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cwxb8jv\",\"side\":\"right\",\"cards\":8,\"action\":\"wave\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1366,528],\"tgt\":[1363,511],\"rects\":[[919,-28,373,260,\"\",\"left\"],[526,-28,373,260,\"\",\"right\"]",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "lean",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1323,
+     "r": 1420,
+     "t": 281,
+     "b": 514
+    },
+    "fb": {
+     "l": 1306,
+     "r": 1432,
+     "t": 276,
+     "b": 532
+    },
+    "scrollY": 1858,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cwxb8jv\",\"side\":\"right\",\"cards\":8,\"action\":\"lean_on_card\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":[1363,511],\"rects\":[[919,-28,373,260,\"\",\"left\"],[526,-28,373,260,\"\",",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "lean",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1324,
+     "r": 1421,
+     "t": 281,
+     "b": 514
+    },
+    "fb": {
+     "l": 1306,
+     "r": 1432,
+     "t": 276,
+     "b": 532
+    },
+    "scrollY": 1858,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cwxb8jv\",\"side\":\"right\",\"cards\":8,\"action\":\"lean_on_card\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":[1363,511],\"rects\":[[919,-28,373,260,\"\",\"left\"],[526,-28,373,260,\"\",",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1425,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1317,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1425,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1317,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1425,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1316,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1425,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1317,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1425,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1317,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1424,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1316,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1425,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1317,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1370.7,
+    "y": 511.34375,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1317,
+     "r": 1425,
+     "t": 281,
+     "b": 511
+    },
+    "fb": {
+     "l": 1316,
+     "r": 1429,
+     "t": 281,
+     "b": 532
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   }
+  ],
+  "states": [
+   "idle",
+   "lean",
+   "walk",
+   "wave"
+  ],
+  "max_rendered_penetration_px_visible": 0,
+  "max_rendered_penetration_px_all": 0,
+  "rendered_pen_gt3_visible_samples": 0,
+  "vis_max_card_contact_px": 0,
+  "vis_max_card_CONTENT_pen_px": 0,
+  "vis_max_outside_text_pen_px": 0,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 26,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": true,
+  "visits": 1,
+  "lastError": null,
+  "wall_seconds": 41.4,
+  "state_extra": "{\"rw\":{\"completed\":true},\"fpMs\":39.499999998370185,\"fpCalls\":563,\"blinks\":8}",
+  "canvas_present_at_end": true,
+  "gate_cards_still_in_page": 8,
+  "js_errors": [],
+  "final": {
+   "state": "idle",
+   "x": 1370.7,
+   "y": 511.34375,
+   "vw": 1440,
+   "vh": 900,
+   "halfW": 69,
+   "charH": 230,
+   "overlap": 0,
+   "card_contact": 0,
+   "card_content": 0,
+   "out_text": 0,
+   "fb": {
+    "l": 1316,
+    "r": 1429,
+    "t": 281,
+    "b": 532
+   },
+   "dbg": "{\"busy\":true,\"epoch\":2,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1371,511],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+   "rendered_pen_px": 0,
+   "rb": {
+    "l": 1317,
+    "r": 1425,
+    "t": 281,
+    "b": 511
+   },
+   "visible": true,
+   "overlap_visible": 0,
+   "inView": true,
+   "scrollY": 0,
+   "visits": 1,
+   "lastError": null
+  }
+ },
+ "desktop_badglb": {
+  "samples": 0,
+  "trace": [],
+  "states": [],
+  "max_rendered_penetration_px_visible": 0,
+  "max_rendered_penetration_px_all": 0,
+  "rendered_pen_gt3_visible_samples": 0,
+  "vis_max_card_contact_px": 0,
+  "vis_max_card_CONTENT_pen_px": 0,
+  "vis_max_outside_text_pen_px": 0,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 0,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": null,
+  "lastError": null,
+  "wall_seconds": 10.1,
+  "state_extra": "{}",
+  "canvas_present_at_end": false,
+  "gate_cards_still_in_page": 8,
+  "js_errors": [],
+  "final": null
+ },
+ "_run": {
+  "git_head": "c0bf8968+dirty",
+  "cache_disabled": true,
+  "loaded_js": {
+   "http://localhost:8766/assets/shared/home-language-only.js?v=20261020-de-unified": {
+    "requestId": "4908.95",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "9be0bcb345fed42f",
+    "sha256_on_disk": "9be0bcb345fed42f"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon.js?v=20261018-collections": {
+    "requestId": "4908.104",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "839a23fceef9773c",
+    "sha256_on_disk": "839a23fceef9773c"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-i18n-extra.js?v=20261018-collections": {
+    "requestId": "4908.105",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "3cd76c597273a66a",
+    "sha256_on_disk": "3cd76c597273a66a"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-search.js?v=20261018-collections": {
+    "requestId": "4908.106",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "11371e0eb11d5da1",
+    "sha256_on_disk": "11371e0eb11d5da1"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-hero-motion.js?v=13": {
+    "requestId": "4908.107",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "d0704453d380a897",
+    "sha256_on_disk": "d0704453d380a897"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-world-map-layer.js?v=20261030-layer-2": {
+    "requestId": "4908.109",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "6b8dd197b5a31a95",
+    "sha256_on_disk": "6b8dd197b5a31a95"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-world.js?v=20261102-story-globe-link-1": {
+    "requestId": "4908.108",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "7e8f94f220631a97",
+    "sha256_on_disk": "7e8f94f220631a97"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-map.js?v=20261029-map-handoff-2": {
+    "requestId": "4908.110",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "1af35464e005ea26",
+    "sha256_on_disk": "1af35464e005ea26"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-world-motion.js?v=20261028-2": {
+    "requestId": "4908.111",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "a469b8499b87d8a1",
+    "sha256_on_disk": "a469b8499b87d8a1"
+   },
+   "http://localhost:8766/khaledoon/assets/sections-runtime-config.js?v=20261019-1": {
+    "requestId": "4908.112",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "5ee1d80ac78f08df",
+    "sha256_on_disk": "5ee1d80ac78f08df"
+   },
+   "http://localhost:8766/khaledoon/assets/karma-stage-loader.js": {
+    "requestId": "4908.113",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "9afb572b550c608c",
+    "sha256_on_disk": "9afb572b550c608c"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-favorites.js?v=20261018-collections": {
+    "requestId": "4908.163",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "42f8e28419d79e1f",
+    "sha256_on_disk": "42f8e28419d79e1f"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-world-gl.js?v=20261030-gl-1": {
+    "requestId": "4908.165",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "2fb79b8f898f8948",
+    "sha256_on_disk": "2fb79b8f898f8948"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-world-map-layer.js?v=20261030-layer-1": {
+    "requestId": "4908.172",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "6b8dd197b5a31a95",
+    "sha256_on_disk": "6b8dd197b5a31a95"
+   },
+   "http://localhost:8766/khaledoon/assets/karma-stage.js": {
+    "requestId": "4908.173",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "ffca5da60596ae67",
+    "sha256_on_disk": "ffca5da60596ae67"
+   },
+   "http://localhost:8766/assets/3d/karma/rig_integration_2026-11-25/js/KarmaModelAdapter.js": {
+    "requestId": "4908.176",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "9dd9955c4325fbca",
+    "sha256_on_disk": "9dd9955c4325fbca"
+   },
+   "http://localhost:8766/assets/3d/karma/rig_integration_2026-11-25/js/KarmaMotion.js": {
+    "requestId": "4908.177",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "353df56e539c8631",
+    "sha256_on_disk": "353df56e539c8631"
+   },
+   "http://localhost:8766/assets/3d/karma/claude_track_2026-11-25/js/KarmaRig.js": {
+    "requestId": "4908.178",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "b6471374b0938000",
+    "sha256_on_disk": "b6471374b0938000"
+   },
+   "http://localhost:8766/assets/3d/karma/claude_track_2026-11-25/js/KarmaController.js": {
+    "requestId": "4908.179",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "db43877b457de6a6",
+    "sha256_on_disk": "db43877b457de6a6"
+   },
+   "http://localhost:8766/assets/3d/karma/claude_track_2026-11-25/js/KarmaController.v710.js": {
+    "requestId": "4908.181",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "320d5c7471e73af1",
+    "sha256_on_disk": "320d5c7471e73af1"
+   }
+  },
+  "any_from_cache": false
+ }
+}

@@ -79,7 +79,17 @@ export async function startKarmaStage(opts = {}) {
       if (room.right >= need && room.right >= room.left) return 'right'; if (room.left >= need) return 'left'; return null; };
     // never cover content: the model is hidden for any frame where its box would overlap a card, photo or text block
     const boxOf = () => ({ l: c.pos.x - c.halfW, r: c.pos.x + c.halfW, t: c.pos.y - charH, b: c.pos.y });
-    const state0 = { visits: 0, lastError: null, modelMode: adapted.mode, modelHeight: Math.round(modelHeight * 1000) / 1000 };
+    const state0 = { visits: 0, lastError: null, modelMode: adapted.mode, modelHeight: Math.round(modelHeight * 1000) / 1000, blinks: 0 };
+    // idle blink through the model's eyeBlink_L/R morph targets (B29/B33b have them; the baseline fixture has none: no-op).
+    // Both eyes together: about 70 ms close, 120 ms open, every 2-5.5 s. Driven from tick(), so the deterministic fastForward steps it too.
+    const blinkMeshes = [];
+    for (const m of rig.skinned) { const d = m.morphTargetDictionary; if (d && d.eyeBlink_L != null && d.eyeBlink_R != null) blinkMeshes.push([m, d.eyeBlink_L, d.eyeBlink_R]); }
+    let blinkWait = 2 + Math.random() * 3, blinkT = -1;
+    const blink = (d) => { if (!blinkMeshes.length) return;
+      if (blinkT < 0) { blinkWait -= d; if (blinkWait > 0) return; blinkT = 0; }
+      blinkT += d; let v = 0;
+      if (blinkT < 0.07) v = blinkT / 0.07; else if (blinkT < 0.19) v = 1 - (blinkT - 0.07) / 0.12; else { blinkT = -1; blinkWait = 2 + Math.random() * 3.5; state0.blinks++; }
+      for (const [m, l, r] of blinkMeshes) { m.morphTargetInfluences[l] = v; m.morphTargetInfluences[r] = v; } };
     let hiddenFrames = 0, shownFrames = 0, hiddenSince = 0;
     // actual rendered, animated footprint (Box3 of the skinned meshes, screen px), refreshed every 3rd frame; the controller box is only the fallback
     let fpBox = null, fpAge = 99; state0.fpMs = 0; state0.fpCalls = 0;
@@ -91,7 +101,7 @@ export async function startKarmaStage(opts = {}) {
       c.object3D.visible = o.coverGuard ? !hit : true; const tNow = simT * 1000; if (!hit) hiddenSince = 0; else if (!hiddenSince) hiddenSince = tNow; else if (!busy && tNow - hiddenSince > 1200 && !stopped) { hiddenSince = 0; setTimeout(() => visit(false, true), 0); } if (hit) hiddenFrames++; else shownFrames++; state.hiddenFrames = hiddenFrames; state.shownFrames = shownFrames; };
     const timers = []; const sleep = (sec) => new Promise((res) => timers.push({ t: sec, res }));
     const SAFE = 10; // px: keep her feet this far inside the viewport bottom
-    let simT = 0; const tick = (d) => { simT += d; for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); if (c.pos.x < vw && c.pos.y > vh - SAFE) c.pos.y = vh - SAFE; };
+    let simT = 0; const tick = (d) => { simT += d; for (let i = timers.length - 1; i >= 0; i--) { timers[i].t -= d; if (timers[i].t <= 0) timers.splice(i, 1)[0].res(); } c.update(d); blink(d); if (c.pos.x < vw && c.pos.y > vh - SAFE) c.pos.y = vh - SAFE; };
     // rest spot in the right gutter: lowest y (from the bottom up) where her box touches no keep-out text and no card
     const restPoint = () => { const x = vw - c.halfW - 4, keeps = [...getKeepOutRects(), ...getCardRects()];
       for (let y = vh - SAFE; y >= charH + 10; y -= 12) { if (!keeps.some((r) => x - c.halfW - 14 < r.left + r.width && x + c.halfW + 14 > r.left && y - charH - 14 < r.top + r.height && y + 14 > r.top)) return { x, y }; }
