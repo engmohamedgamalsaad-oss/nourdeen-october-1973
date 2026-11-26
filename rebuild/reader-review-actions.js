@@ -152,14 +152,20 @@ function refreshGate(){
  panel.dataset.gate='ok';
  gatePill.textContent='النص قابل للنشر دون صوت';
  gateFill.style.width='100%';
- var total=Number(g&&g.total)||0,accepted=Number(g&&g.accepted)||0,full='';
- gateFill.style.width=(total?Math.round(accepted/total*100):0)+'%';
+ var total=Number(g&&g.total)||0,accepted=Number(g&&g.accepted)||0;
+ var stale=Number(g&&g.staleBlocks)||0,uncovered=Number(g&&g.uncoveredBlocks)||0,full='';
+ // Stale and uncovered blocks are excluded from the current-entry total; include them in
+ // the progress denominator so a partial/current acceptance cannot look like 100% ready.
+ var progressTotal=total+stale+uncovered;
+ gateFill.style.width=(progressTotal?Math.round(accepted/progressTotal*100):0)+'%';
  if(!g){setNote('يمكن اعتماد ونشر النص الآن دون ملفات صوت. حالة الصوت اختيارية ولا تمنع النشر.');return}
  try{full=String(api.gateSummary()||'')}catch(e){full=''}
  var note='';
  if(g.loading)note='يمكن اعتماد ونشر النص الآن. يجري فحص الصوت الاختياري في الخلفية.';
  else if(g.loadError)note='يمكن اعتماد ونشر النص دون صوت. تعذر فحص ملفات الصوت؛ أصلح ذلك عند تجهيز الصوت.';
  else if(g.missingLanguages)note='لم يتم إنشاء الصوت بعد لبعض اللغات. يمكنك اعتماد ونشر النص الآن، وإضافة الصوت لاحقًا.';
+ else if(stale)note='تم قبول '+accepted+'/'+total+' من المقاطع الحالية، لكن توجد '+stale+' مقاطع صوت قديمة لا تطابق نص القراءة المعتمد. هذه المقاطع القديمة غير محسوبة ضمن المقبول. يمكنك نشر النص دون انتظار إصلاح الصوت.';
+ else if(uncovered)note='تم قبول '+accepted+'/'+total+' من المقاطع الحالية، لكن يوجد '+uncovered+' مقطع لم يُنشأ صوته بعد. يمكنك نشر النص الآن وتوليد الصوت لاحقًا.';
  else if(g.ok)note='الصوت العربي جاهز ومقبول ('+accepted+'/'+total+')، لكنه ليس شرطًا لنشر النص.';
  else note='حالة الصوت: '+accepted+'/'+total+' مقبول. يمكنك اعتماد ونشر النص دون انتظار اكتمال الصوت.';
  setNote(note,full&&full!==note?full:'');
