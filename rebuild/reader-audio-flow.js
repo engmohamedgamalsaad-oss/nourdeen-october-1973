@@ -445,7 +445,7 @@
     var job = jobOf(Number(box.dataset.index));
     if (!job) return queueKnown ? 'لم يُرسل هذا المقطع للتوليد بعد.' : 'تعذر معرفة حالة التوليد الآن (سجّل الدخول من لوحة الإدارة أو حدّث الصفحة).';
     var age = ageText(job);
-    if (job.status === 'pending') return 'المقطع في الطابور بانتظار اتصال Colab' + (age ? ' (' + age + ')' : '') + '.';
+    if (job.status === 'pending') return 'المقطع في الطابور' + (age ? ' (' + age + ')' : '') + '، وسيبدأ بعد إنهاء الطلبات الأسبق.';
     if (job.status === 'processing') return 'Colab يولّد الصوت الآن' + (age ? ' (' + age + ')' : '') + '.';
     if (job.status === 'completed') return 'اكتمل التوليد' + (age ? ' (' + age + ')' : '') + '.';
     if (job.status === 'failed') return 'فشل التوليد: ' + String(job.last_error || 'سبب غير معروف').slice(0, 160);
