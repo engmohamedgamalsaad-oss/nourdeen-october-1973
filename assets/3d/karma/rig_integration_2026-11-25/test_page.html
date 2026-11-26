@@ -18,13 +18,13 @@ body.spacious main{padding-right:130px}
 const q=new URLSearchParams(location.search); if(q.get('spacious')!=='0') document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('spacious'));
 window.KARMA_THREE_BASE=q.get('three')||'https://cdn.jsdelivr.net/npm/three@0.170.0';
 const im=document.createElement('script');im.type='importmap';im.textContent=JSON.stringify({imports:{three:KARMA_THREE_BASE+'/build/three.module.js','three/addons/':KARMA_THREE_BASE+'/examples/jsm/'}});document.head.appendChild(im);
-const glb=q.get('glb')||'../baseline_2026-11-24/karma_skinned_baseline_NOT_FINAL.glb';document.getElementById('m').textContent=glb;
+const glb=q.get('glb')||'../muse_B33b_2026-11-27/karma_hyper3d_fullbody_MASTER_EXPERIMENT_NOT_FINAL_B33b.glb';document.getElementById('m').textContent=glb;
 for(let i=1;i<=5;i++){const a=document.createElement('a');a.className='story-index-card';a.id='card'+i;a.textContent='Story card '+i+' (text that must never be covered)';document.getElementById('cards').appendChild(a);}
 </script>
 <script type="module">
 import {startKarmaStage} from '../../../../khaledoon/assets/karma-stage.js';
 const log=t=>document.getElementById('log').textContent=t;
-const api=await startKarmaStage({glbUrl:new URLSearchParams(location.search).get('glb')||'../baseline_2026-11-24/karma_skinned_baseline_NOT_FINAL.glb',auto:false,coverGuard:new URLSearchParams(location.search).get('guard')!=='0',reserveGutter:false,onState:s=>log('state: '+s)});
+const api=await startKarmaStage({glbUrl:new URLSearchParams(location.search).get('glb')||'../muse_B33b_2026-11-27/karma_hyper3d_fullbody_MASTER_EXPERIMENT_NOT_FINAL_B33b.glb',auto:false,coverGuard:new URLSearchParams(location.search).get('guard')!=='0',reserveGutter:false,onState:s=>log('state: '+s)});
 if(!api){log('GLB failed to load: page still works (stage removed)');}
 else{
  const c=api.controller, id=n=>document.getElementById('card'+n).dataset.karmaId||(document.getElementById('card'+n).dataset.karmaId='t'+n);

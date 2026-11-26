@@ -4,7 +4,7 @@
 // next to the story cards, driven by KarmaMotion. If anything fails the canvas is removed and the page is untouched.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { createRig } from '../../assets/3d/karma/claude_track_2026-11-25/js/KarmaRig.js';
+import { adaptRig, measureModelHeight } from '../../assets/3d/karma/rig_integration_2026-11-25/js/KarmaModelAdapter.js';
 import { KarmaMotion } from '../../assets/3d/karma/rig_integration_2026-11-25/js/KarmaMotion.js';
 
 const DEFAULTS = { cardSelector: '.gate, .story-index-card, .story-card, [data-story-card]', obstacleSelector: '.kh-sp', keepOutSelector: '.tag, h1, h2, h3, .lead, .eyebrow, .head p, .heading p, .hero p, .hero img, .kh-sp, footer, header', glbUrl: null, auto: true, reserveGutter: true, coverGuard: true, charHeight: null, onState: null };
@@ -26,7 +26,9 @@ export async function startKarmaStage(opts = {}) {
     const cam = new THREE.OrthographicCamera(-vw / 2, vw / 2, vh / 2, -vh / 2, -2000, 2000); cam.position.z = 500;
     scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7a70, 1.6)); const dl = new THREE.DirectionalLight(0xffffff, 1.6); dl.position.set(-0.4, 0.8, 1); scene.add(dl);
     const gltf = await new GLTFLoader().loadAsync(o.glbUrl);
-    const rig = createRig(gltf.scene);
+    const adapted = adaptRig(gltf.scene); // contract-native GLB: verbatim rig path; B29 GLB: in-memory bone alias (PROPOSED contract change, 2026-11-27)
+    const rig = adapted.rig;
+    const modelHeight = measureModelHeight(gltf.scene); // real bind-pose height; the controller scales charH/modelHeight, no hard-coded 1 m
     const mobH = () => (o.reserveGutter ? Math.min(110, vh * 0.15) : Math.min(150, vh * 0.2));
     const charH = o.charHeight || (mobile ? mobH() : Math.min(230, vh * 0.28));
     const cards = () => [...document.querySelectorAll(o.cardSelector + (o.obstacleSelector ? ', ' + o.obstacleSelector : ''))].filter((e) => e.offsetParent !== null);
@@ -39,7 +41,7 @@ export async function startKarmaStage(opts = {}) {
       for (const e of document.querySelectorAll(o.keepOutSelector + ', ' + TEXTSEL)) { if (seen.has(e)) continue; seen.add(e); if (e.closest(o.cardSelector) || e.closest('#karma-stage')) continue;
         const r = e.getBoundingClientRect(); if (r.width > 0 && r.height > 0 && r.top < vh && r.bottom > 0 && getComputedStyle(e).visibility !== 'hidden') out.push({ left: r.left, top: r.top, width: r.width, height: r.height }); }
       return out; };
-    const c = new KarmaMotion({ rig, getCardRects, getKeepOutRects, viewport: { width: vw, height: vh }, characterHeightPx: charH, modelHeight: 1 });
+    const c = new KarmaMotion({ rig, getCardRects, getKeepOutRects, viewport: { width: vw, height: vh }, characterHeightPx: charH, modelHeight });
     // Responsive layout: when the cards leave no free side (phones), reserve real in-flow space (right padding on the cards' container)
     // sized to the character, so she stands in a gutter instead of over content. No overlay, no hiding.
     let gutterEl = null, gutterOrig = '';
@@ -50,6 +52,9 @@ export async function startKarmaStage(opts = {}) {
       if (wide && room) { host.style.paddingRight = gutterOrig; return; }
       host.style.paddingRight = need + 'px'; host.dataset.karmaGutter = String(need); };
     scene.add(c.object3D);
+    // startup race: before the first controller tick the holder still sits at the world origin (screen centre);
+    // a scroll-triggered render in that window would paint her over mid-screen text. Hidden until the first guard pass.
+    c.object3D.visible = false;
     // Cheap animated footprint: for every bone, the bone-local box of the vertices it dominates (computed once from the bind pose);
     // each frame the 8 corners of those boxes are carried by the animated bone matrices and projected. Replaces the per-frame Box3 over ~283k vertices (measured ~90 ms per call).
     const boneBoxes = []; { const seenB = new Map(); const v = new THREE.Vector3(), m4 = new THREE.Matrix4();
@@ -74,7 +79,7 @@ export async function startKarmaStage(opts = {}) {
       if (room.right >= need && room.right >= room.left) return 'right'; if (room.left >= need) return 'left'; return null; };
     // never cover content: the model is hidden for any frame where its box would overlap a card, photo or text block
     const boxOf = () => ({ l: c.pos.x - c.halfW, r: c.pos.x + c.halfW, t: c.pos.y - charH, b: c.pos.y });
-    const state0 = { visits: 0, lastError: null };
+    const state0 = { visits: 0, lastError: null, modelMode: adapted.mode, modelHeight: Math.round(modelHeight * 1000) / 1000 };
     let hiddenFrames = 0, shownFrames = 0, hiddenSince = 0;
     // actual rendered, animated footprint (Box3 of the skinned meshes, screen px), refreshed every 3rd frame; the controller box is only the fallback
     let fpBox = null, fpAge = 99; state0.fpMs = 0; state0.fpCalls = 0;

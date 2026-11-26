@@ -6,16 +6,17 @@ globalThis.self = globalThis; globalThis.createImageBitmap = async () => ({ widt
 const THREE = await import('three');
 const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
 const here = path.dirname(fileURLToPath(import.meta.url));
-const { createRig, BONES } = await import('../../claude_track_2026-11-25/js/KarmaRig.js');
+const { BONES } = await import('../../claude_track_2026-11-25/js/KarmaRig.js');
+const { adaptRig, measureModelHeight } = await import('../js/KarmaModelAdapter.js');
 const { KarmaMotion, MOTIONS } = await import('../js/KarmaMotion.js');
 const GLB = process.env.KARMA_GLB || path.join(here, '../../baseline_2026-11-24/karma_skinned_baseline_NOT_FINAL.glb');
 const DT = 1 / 60;
 const buf = fs.readFileSync(GLB); const AB = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
 const parse = () => new Promise((res, rej) => new GLTFLoader().parse(AB.slice(0), '', res, rej));
 async function make({ viewport = { width: 1280, height: 800 }, rects, charH = 170 } = {}) {
-  const gltf = await parse(); const rig = createRig(gltf.scene);
+  const gltf = await parse(); const rig = adaptRig(gltf.scene).rig; const mh = measureModelHeight(gltf.scene);
   const R = rects || [{ id: 'a', left: 140, top: 420, width: 260, height: 180 }, { id: 'b', left: 760, top: 300, width: 260, height: 200 }];
-  return { R, rig, c: new KarmaMotion({ rig, getCardRects: () => R, viewport, characterHeightPx: charH, modelHeight: 1 }) };
+  return { R, rig, c: new KarmaMotion({ rig, getCardRects: () => R, viewport, characterHeightPx: charH, modelHeight: mh }) };
 }
 const settle = async (c, p, sec) => { let r; p.then((v) => { r = v; }); for (let i = 0; i < sec / DT && r === undefined; i++) { c.update(DT); await Promise.resolve(); }
   if (r === undefined) throw new Error('promise did not settle in ' + sec + 's, state=' + c.stateName); return r; };

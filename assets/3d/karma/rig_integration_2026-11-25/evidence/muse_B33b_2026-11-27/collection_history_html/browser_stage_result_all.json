@@ -1,0 +1,1754 @@
+{
+ "desktop_good": {
+  "samples": 29,
+  "trace": [
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 670,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 670,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1524,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 669,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 1578,
+    "y": 900,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 1525,
+     "r": 1632,
+     "t": 670,
+     "b": 900
+    },
+    "fb": {
+     "l": 1524,
+     "r": 1636,
+     "t": 670,
+     "b": 921
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   }
+  ],
+  "states": [
+   "idle"
+  ],
+  "max_rendered_penetration_px_visible": 0,
+  "max_rendered_penetration_px_all": 0,
+  "rendered_pen_gt3_visible_samples": 0,
+  "vis_max_card_contact_px": 0,
+  "vis_max_card_CONTENT_pen_px": 0,
+  "vis_max_outside_text_pen_px": 0,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 29,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": 0,
+  "lastError": null,
+  "wall_seconds": 22.3,
+  "state_extra": "{\"rw\":{\"completed\":false,\"reason\":\"no-route\"},\"fpMs\":25.700000000884756,\"fpCalls\":623}",
+  "canvas_present_at_end": true,
+  "gate_cards_still_in_page": 0,
+  "js_errors": [],
+  "final": {
+   "state": "idle",
+   "x": 1578,
+   "y": 900,
+   "vw": 1440,
+   "vh": 900,
+   "halfW": 69,
+   "charH": 230,
+   "overlap": 0,
+   "card_contact": 0,
+   "card_content": 0,
+   "out_text": 0,
+   "fb": {
+    "l": 1524,
+    "r": 1636,
+    "t": 670,
+    "b": 921
+   },
+   "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[1578,900],\"tgt\":null,\"rects\":[],\"need\":146,\"card\":null,\"halfW\":69,\"vw\":1440,\"vh\":900,\"sy\":0}",
+   "rendered_pen_px": 0,
+   "rb": {
+    "l": 1525,
+    "r": 1632,
+    "t": 670,
+    "b": 900
+   },
+   "visible": true,
+   "overlap_visible": 0,
+   "inView": false,
+   "scrollY": 0,
+   "visits": 0,
+   "lastError": null
+  }
+ },
+ "desktop_badglb": {
+  "samples": 0,
+  "trace": [],
+  "states": [],
+  "max_rendered_penetration_px_visible": 0,
+  "max_rendered_penetration_px_all": 0,
+  "rendered_pen_gt3_visible_samples": 0,
+  "vis_max_card_contact_px": 0,
+  "vis_max_card_CONTENT_pen_px": 0,
+  "vis_max_outside_text_pen_px": 0,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 0,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": null,
+  "lastError": null,
+  "wall_seconds": 6.6,
+  "state_extra": "{}",
+  "canvas_present_at_end": false,
+  "gate_cards_still_in_page": 0,
+  "js_errors": [],
+  "final": null
+ },
+ "phone_good": {
+  "samples": 29,
+  "trace": [
+   {
+    "state": "idle",
+    "x": 456,
+    "y": 844,
+    "visible": false,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 169,
+     "r": 221,
+     "t": 734,
+     "b": 844
+    },
+    "fb": {
+     "l": 169,
+     "r": 223,
+     "t": 734,
+     "b": 854
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[456,844],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 456,
+    "y": 844,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 431,
+     "r": 482,
+     "t": 734,
+     "b": 844
+    },
+    "fb": {
+     "l": 430,
+     "r": 484,
+     "t": 734,
+     "b": 854
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[456,844],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "walk",
+    "x": 452.16801769529104,
+    "y": 843.627962883038,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 425,
+     "r": 479,
+     "t": 732,
+     "b": 842
+    },
+    "fb": {
+     "l": 425,
+     "r": 481,
+     "t": 732,
+     "b": 851
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"walk\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[452,844],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 328,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 328,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 328,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 328,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 328,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 328,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 328,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 327,
+     "r": 379,
+     "t": 724,
+     "b": 834
+    },
+    "fb": {
+     "l": 327,
+     "r": 381,
+     "t": 724,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+    "card_contact": 0,
+    "card_content": 0,
+    "out_text": 0
+   }
+  ],
+  "states": [
+   "idle",
+   "walk"
+  ],
+  "max_rendered_penetration_px_visible": 0,
+  "max_rendered_penetration_px_all": 0,
+  "rendered_pen_gt3_visible_samples": 0,
+  "vis_max_card_contact_px": 0,
+  "vis_max_card_CONTENT_pen_px": 0,
+  "vis_max_outside_text_pen_px": 0,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 1,
+  "visible_samples": 28,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": true,
+  "visits": 0,
+  "lastError": null,
+  "wall_seconds": 16.3,
+  "state_extra": "{\"rw\":{\"completed\":true},\"fpMs\":24.29999999993015,\"fpCalls\":656}",
+  "canvas_present_at_end": true,
+  "gate_cards_still_in_page": 0,
+  "js_errors": [],
+  "final": {
+   "state": "idle",
+   "x": 353,
+   "y": 834,
+   "vw": 390,
+   "vh": 844,
+   "halfW": 33,
+   "charH": 110,
+   "overlap": 0,
+   "card_contact": 0,
+   "card_content": 0,
+   "out_text": 0,
+   "fb": {
+    "l": 327,
+    "r": 381,
+    "t": 724,
+    "b": 844
+   },
+   "dbg": "{\"busy\":false,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}",
+   "rendered_pen_px": 0,
+   "rb": {
+    "l": 327,
+    "r": 379,
+    "t": 724,
+    "b": 834
+   },
+   "visible": true,
+   "overlap_visible": 0,
+   "inView": true,
+   "scrollY": 0,
+   "visits": 0,
+   "lastError": null
+  }
+ },
+ "phone_badglb": {
+  "samples": 0,
+  "trace": [],
+  "states": [],
+  "max_rendered_penetration_px_visible": 0,
+  "max_rendered_penetration_px_all": 0,
+  "rendered_pen_gt3_visible_samples": 0,
+  "vis_max_card_contact_px": 0,
+  "vis_max_card_CONTENT_pen_px": 0,
+  "vis_max_outside_text_pen_px": 0,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 0,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": null,
+  "lastError": null,
+  "wall_seconds": 6.1,
+  "state_extra": "{}",
+  "canvas_present_at_end": false,
+  "gate_cards_still_in_page": 0,
+  "js_errors": [],
+  "final": null
+ },
+ "_run": {
+  "git_head": "11077232+dirty",
+  "cache_disabled": true,
+  "loaded_js": {
+   "http://localhost:8766/assets/shared/home-language-only.js?v=20261020-de-unified": {
+    "requestId": "3036.191",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "9be0bcb345fed42f",
+    "sha256_on_disk": "9be0bcb345fed42f"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-theme.js?v=1": {
+    "requestId": "3036.192",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "644669609164dfb0",
+    "sha256_on_disk": "644669609164dfb0"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-pages-i18n.js?v=20261018-collections": {
+    "requestId": "3036.193",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "18c928e676dd3506",
+    "sha256_on_disk": "18c928e676dd3506"
+   },
+   "http://localhost:8766/khaledoon/assets/story-collections.js?v=20261030-gallery-8": {
+    "requestId": "3036.194",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "dfdc313e60c27b7a",
+    "sha256_on_disk": "dfdc313e60c27b7a"
+   },
+   "http://localhost:8766/khaledoon/assets/karma-stage-loader.js": {
+    "requestId": "3036.195",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "9afb572b550c608c",
+    "sha256_on_disk": "9afb572b550c608c"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-favorites.js?v=1": {
+    "requestId": "3036.205",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "42f8e28419d79e1f",
+    "sha256_on_disk": "42f8e28419d79e1f"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-story-map-link.js?v=1": {
+    "requestId": "3036.206",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "3a3393497838ff1e",
+    "sha256_on_disk": "3a3393497838ff1e"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-story-motion.js?v=20261031-motion-1": {
+    "requestId": "3036.208",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "bf6b1ba23fb5cdbc",
+    "sha256_on_disk": "bf6b1ba23fb5cdbc"
+   },
+   "http://localhost:8766/khaledoon/assets/khaledoon-story-nav.js?v=20261031-nav-1": {
+    "requestId": "3036.207",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "19451e802f405804",
+    "sha256_on_disk": "19451e802f405804"
+   },
+   "http://localhost:8766/khaledoon/assets/karma-stage.js": {
+    "requestId": "3036.236",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "489ac8d1d0ee0bc5",
+    "sha256_on_disk": "489ac8d1d0ee0bc5"
+   },
+   "http://localhost:8766/assets/3d/karma/rig_integration_2026-11-25/js/KarmaModelAdapter.js": {
+    "requestId": "3036.239",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "9dd9955c4325fbca",
+    "sha256_on_disk": "9dd9955c4325fbca"
+   },
+   "http://localhost:8766/assets/3d/karma/rig_integration_2026-11-25/js/KarmaMotion.js": {
+    "requestId": "3036.240",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "353df56e539c8631",
+    "sha256_on_disk": "353df56e539c8631"
+   },
+   "http://localhost:8766/assets/3d/karma/claude_track_2026-11-25/js/KarmaRig.js": {
+    "requestId": "3036.241",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "b6471374b0938000",
+    "sha256_on_disk": "b6471374b0938000"
+   },
+   "http://localhost:8766/assets/3d/karma/claude_track_2026-11-25/js/KarmaController.js": {
+    "requestId": "3036.242",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "db43877b457de6a6",
+    "sha256_on_disk": "db43877b457de6a6"
+   },
+   "http://localhost:8766/assets/3d/karma/claude_track_2026-11-25/js/KarmaController.v710.js": {
+    "requestId": "3036.244",
+    "status": 200,
+    "fromDiskCache": false,
+    "fromServiceWorker": false,
+    "sha256_served_body": "320d5c7471e73af1",
+    "sha256_on_disk": "320d5c7471e73af1"
+   }
+  },
+  "any_from_cache": false
+ }
+}

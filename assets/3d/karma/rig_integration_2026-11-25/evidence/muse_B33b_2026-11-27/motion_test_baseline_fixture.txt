@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: API: every motion name has a controller entry point
+ok 1 - API: every motion name has a controller entry point
+  ---
+  duration_ms: 149.388516
+  type: 'test'
+  ...
+# Subtest: run: reaches the card faster than walk, same destination, no overlap, no NaN
+ok 2 - run: reaches the card faster than walk, same destination, no overlap, no NaN
+  ---
+  duration_ms: 195.528826
+  type: 'test'
+  ...
+# Subtest: run pose differs from walk pose (forward lean, bent elbows)
+ok 3 - run pose differs from walk pose (forward lean, bent elbows)
+  ---
+  duration_ms: 167.645456
+  type: 'test'
+  ...
+# Subtest: look: head turns toward the target on the correct side and returns to rest
+ok 4 - look: head turns toward the target on the correct side and returns to rest
+  ---
+  duration_ms: 101.59392
+  type: 'test'
+  ...
+# Subtest: look at a card id works; missing card resolves card-missing and goes idle
+ok 5 - look at a card id works; missing card resolves card-missing and goes idle
+  ---
+  duration_ms: 81.913147
+  type: 'test'
+  ...
+# Subtest: point: body turns toward the card, near arm rises, far arm does not; returns to idle
+ok 6 - point: body turns toward the card, near arm rises, far arm does not; returns to idle
+  ---
+  duration_ms: 87.566465
+  type: 'test'
+  ...
+# Subtest: turn: body yaw goes to the requested side and returns; front is a no-op yaw
+ok 7 - turn: body yaw goes to the requested side and returns; front is a no-op yaw
+  ---
+  duration_ms: 82.189785
+  type: 'test'
+  ...
+# Subtest: lean(dir) tilts the spine sideways and recovers
+ok 8 - lean(dir) tilts the spine sideways and recovers
+  ---
+  duration_ms: 66.298788
+  type: 'test'
+  ...
+# Subtest: policy: navigation cancels running action and queue (preempted)
+ok 9 - policy: navigation cancels running action and queue (preempted)
+  ---
+  duration_ms: 69.745643
+  type: 'test'
+  ...
+# Subtest: policy: actions run serially (wave then point never overlap), queue limit 3
+ok 10 - policy: actions run serially (wave then point never overlap), queue limit 3
+  ---
+  duration_ms: 68.155715
+  type: 'test'
+  ...
+# Subtest: policy: a newer look replaces the running look
+ok 11 - policy: a newer look replaces the running look
+  ---
+  duration_ms: 60.86313
+  type: 'test'
+  ...
+# Subtest: every motion keeps bones finite and rotations bounded (no joint wraps past 135 deg of rest) and returns to idle
+ok 12 - every motion keeps bones finite and rotations bounded (no joint wraps past 135 deg of rest) and returns to idle
+  ---
+  duration_ms: 87.38977
+  type: 'test'
+  ...
+# Subtest: actionName reports the real action (run is not walk, point/look/turn are not wave)
+ok 13 - actionName reports the real action (run is not walk, point/look/turn are not wave)
+  ---
+  duration_ms: 73.094417
+  type: 'test'
+  ...
+# Subtest: lean on card: the near hand rests on the card edge (contact error <= 8 px), not inside the card face
+ok 14 - lean on card: the near hand rests on the card edge (contact error <= 8 px), not inside the card face
+  ---
+  duration_ms: 88.947175
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1539.459837

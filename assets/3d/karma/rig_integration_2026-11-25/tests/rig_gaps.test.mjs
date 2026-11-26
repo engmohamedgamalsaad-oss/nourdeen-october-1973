@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 globalThis.self = globalThis; globalThis.createImageBitmap = async () => ({ width: 1, height: 1, close() {} });
 const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
-const { createRig } = await import('../../claude_track_2026-11-25/js/KarmaRig.js');
+const { adaptRig, measureModelHeight } = await import('../js/KarmaModelAdapter.js');
 const { KarmaMotion } = await import('../js/KarmaMotion.js');
 const GLB = process.env.KARMA_GLB; if (!GLB) throw new Error('Set KARMA_GLB');
 const DT = 1 / 60;
@@ -15,7 +15,7 @@ async function make({ viewport = { width: 1280, height: 800 }, rects, charH = 17
   const b = fs.readFileSync(GLB); const ab = b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength);
   const scene = (await new Promise((res, rej) => new GLTFLoader().parse(ab, '', res, rej))).scene;
   const R = rects || [{ id: 'a', left: 140, top: 420, width: 260, height: 180 }, { id: 'b', left: 760, top: 300, width: 260, height: 200 }];
-  return { R, c: new KarmaMotion({ rig: createRig(scene), getCardRects: () => R, viewport, characterHeightPx: charH, modelHeight: 1, ...extra }) };
+  return { R, c: new KarmaMotion({ rig: adaptRig(scene).rig, getCardRects: () => R, viewport, characterHeightPx: charH, modelHeight: measureModelHeight(scene), ...extra }) };
 }
 const settle = async (c, p, seconds) => { let r; p.then((v) => { r = v; });
   for (let i = 0; i < seconds / DT && r === undefined; i++) { c.update(DT); await Promise.resolve(); }
