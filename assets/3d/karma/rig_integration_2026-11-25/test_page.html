@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Karma all-motion test page</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:0;background:#f4efe6;color:#222}
+header{padding:12px 16px;background:#1d2b4f;color:#fff}
+#bar{display:flex;flex-wrap:wrap;gap:6px;padding:8px 16px;background:#fff;border-bottom:1px solid #ccc;position:sticky;top:0;z-index:60}
+#bar button{padding:6px 10px;border:1px solid #1d2b4f;border-radius:8px;background:#fff;font-size:14px}
+main{max-width:560px;margin:20px auto;padding:0 16px 400px}
+body.spacious main{padding-right:130px}
+.story-index-card{display:block;border:1px solid #bbb;border-radius:14px;background:#fff;padding:18px;margin:16px 0;height:130px}
+#log{position:fixed;bottom:6px;left:6px;font:12px monospace;background:#000a;color:#fff;padding:4px 8px;border-radius:6px;z-index:70;max-width:80vw}
+</style></head><body>
+<header><b>Karma motion test page</b> (NOT the site). Model: <code id="m"></code></header>
+<div id="bar"></div>
+<main id="cards"></main><div id="log">loading...</div>
+<script>
+const q=new URLSearchParams(location.search); if(q.get('spacious')!=='0') document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('spacious'));
+window.KARMA_THREE_BASE=q.get('three')||'https://cdn.jsdelivr.net/npm/three@0.170.0';
+const im=document.createElement('script');im.type='importmap';im.textContent=JSON.stringify({imports:{three:KARMA_THREE_BASE+'/build/three.module.js','three/addons/':KARMA_THREE_BASE+'/examples/jsm/'}});document.head.appendChild(im);
+const glb=q.get('glb')||'../muse_B33b_2026-11-27/karma_hyper3d_fullbody_MASTER_EXPERIMENT_NOT_FINAL_B33b.glb';document.getElementById('m').textContent=glb;
+for(let i=1;i<=5;i++){const a=document.createElement('a');a.className='story-index-card';a.id='card'+i;a.textContent='Story card '+i+' (text that must never be covered)';document.getElementById('cards').appendChild(a);}
+</script>
+<script type="module">
+import {startKarmaStage} from '../../../../khaledoon/assets/karma-stage.js';
+const log=t=>document.getElementById('log').textContent=t;
+const api=await startKarmaStage({glbUrl:new URLSearchParams(location.search).get('glb')||'../muse_B33b_2026-11-27/karma_hyper3d_fullbody_MASTER_EXPERIMENT_NOT_FINAL_B33b.glb',auto:false,coverGuard:new URLSearchParams(location.search).get('guard')!=='0',reserveGutter:false,onState:s=>log('state: '+s)});
+if(!api){log('GLB failed to load: page still works (stage removed)');}
+else{
+ const c=api.controller, id=n=>document.getElementById('card'+n).dataset.karmaId||(document.getElementById('card'+n).dataset.karmaId='t'+n);
+ const near=()=>{const R=[...document.querySelectorAll('.story-index-card')].map(e=>({e,r:e.getBoundingClientRect()})).filter(x=>x.r.top<innerHeight&&x.r.bottom>0);return R.sort((a,b)=>Math.abs(a.r.top-innerHeight/2)-Math.abs(b.r.top-innerHeight/2))[0].e;};
+ const cid=()=>{const e=near();return e.dataset.karmaId||(e.dataset.karmaId='t'+e.id);};
+ const side=()=>{const r=near().getBoundingClientRect();return innerWidth-r.right>=r.left?'right':'left';};
+ const M={Idle:()=>c.idle(),Walk:()=>c.walkTo(cid(),{side:side()}),Run:()=>c.runTo(cid(),{side:side()}),Jump:()=>c.jump(),Wave:()=>c.wave(2),Look:()=>c.lookAt(cid(),1.8),Point:()=>c.pointAt(cid(),2),Lean:()=>c.lean('left',1.4),Turn:()=>c.turn('left',1.2),'Lean on card':async()=>{await c.walkTo(cid(),{side:side()});await c.leanOn(cid(),{side:side()});}};
+ for(const [k,f] of Object.entries(M)){const b=document.createElement('button');b.textContent=k;b.onclick=()=>{log(k);Promise.resolve(f()).then(()=>log(k+' done'),e=>log(k+' cancelled: '+e));};document.getElementById('bar').appendChild(b);}
+ log('ready: '+Object.keys(M).join(', '));
+}
+</script></body></html>

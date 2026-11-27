@@ -1,0 +1,426 @@
+{
+ "phone_good": {
+  "samples": 22,
+  "trace": [
+   {
+    "state": "idle",
+    "x": 456,
+    "y": 844,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 421,
+     "r": 491,
+     "t": 734,
+     "b": 844
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[456,844],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "walk",
+    "x": 402.3522477340746,
+    "y": 838.7914803625317,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 378,
+     "r": 431,
+     "t": 728,
+     "b": 836
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"walk\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[402,839],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 318,
+     "r": 388,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 318,
+     "r": 388,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 319,
+     "r": 387,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 318,
+     "r": 388,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 318,
+     "r": 388,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 319,
+     "r": 387,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 318,
+     "r": 388,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "idle",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 319,
+     "r": 387,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":null,\"rects\":[],\"need\":74,\"card\":null,\"halfW\":33,\"vw\":390,\"vh\":844,\"sy\":0}"
+   },
+   {
+    "state": "walk",
+    "x": 353,
+    "y": 834,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 319,
+     "r": 387,
+     "t": 724,
+     "b": 834
+    },
+    "scrollY": 2669,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cdsryts\",\"side\":\"right\",\"cards\":4,\"action\":\"run\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[353,834],\"tgt\":[338,694],\"rects\":[[17,-46,281,237,\"\",\"right\"],[17,205,281,237,\"\",\"right\"],[17"
+   },
+   {
+    "state": "walk",
+    "x": 339.780197748702,
+    "y": 449.0349881120635,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 303,
+     "r": 375,
+     "t": 336,
+     "b": 446
+    },
+    "scrollY": 2669,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cdsryts\",\"side\":\"right\",\"cards\":4,\"action\":\"run\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[340,449],\"tgt\":[339,678],\"rects\":[[16,-66,284,240,\"\",\"right\"],[16,186,284,240,\"\",\"right\"],[16"
+   },
+   {
+    "state": "wave",
+    "x": 339,
+    "y": 425.921875,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 305,
+     "r": 372,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 2669,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cdsryts\",\"side\":\"right\",\"cards\":4,\"action\":\"look\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[339,426],\"tgt\":[339,678],\"rects\":[[16,-66,284,240,\"\",\"right\"],[16,186,284,240,\"\",\"right\"],[1"
+   },
+   {
+    "state": "wave",
+    "x": 339,
+    "y": 425.921875,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 0,
+    "rb": {
+     "l": 300,
+     "r": 363,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 2669,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cdsryts\",\"side\":\"right\",\"cards\":4,\"action\":\"point\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[339,426],\"tgt\":[339,678],\"rects\":[[16,-66,284,240,\"\",\"right\"],[16,186,284,240,\"\",\"right\"],["
+   },
+   {
+    "state": "wave",
+    "x": 339,
+    "y": 425.921875,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 2.4,
+    "rb": {
+     "l": 298,
+     "r": 373,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 2669,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cdsryts\",\"side\":\"right\",\"cards\":4,\"action\":\"wave\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[339,426],\"tgt\":[339,678],\"rects\":[[16,-66,284,240,\"\",\"right\"],[16,186,284,240,\"\",\"right\"],[1"
+   },
+   {
+    "state": "wave",
+    "x": 339,
+    "y": 425.921875,
+    "visible": true,
+    "overlap": 0,
+    "rendered_pen_px": 5.3,
+    "rb": {
+     "l": 295,
+     "r": 373,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 2669,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":\"cdsryts\",\"side\":\"right\",\"cards\":4,\"action\":\"wave\",\"vis\":true,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":null,\"pos\":[339,426],\"tgt\":[339,678],\"rects\":[[16,-66,284,240,\"\",\"right\"],[16,186,284,240,\"\",\"right\"],[1"
+   },
+   {
+    "state": "idle",
+    "x": 337.4,
+    "y": 425.921875,
+    "visible": false,
+    "overlap": 2,
+    "rendered_pen_px": 54.6,
+    "rb": {
+     "l": 299,
+     "r": 372,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":0,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":{\"kind\":\"keepout\",\"l\":16,\"t\":228,\"w\":358,\"h\":110,\"box\":[304,316,370,426]},\"pos\":[337,426],\"tgt\":null,\"rects\":[]"
+   },
+   {
+    "state": "idle",
+    "x": 337.4,
+    "y": 425.921875,
+    "visible": false,
+    "overlap": 2,
+    "rendered_pen_px": 54.4,
+    "rb": {
+     "l": 303,
+     "r": 372,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":1,\"hiddenForMs\":1100,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":0,\"abandoned\":0,\"lastError\":null,\"hit\":{\"kind\":\"keepout\",\"l\":16,\"t\":261,\"w\":358,\"h\":110,\"box\":[304,316,370,426]},\"pos\":[337,426],\"tgt\":null,\"rects\""
+   },
+   {
+    "state": "idle",
+    "x": 337.4,
+    "y": 425.921875,
+    "visible": false,
+    "overlap": 2,
+    "rendered_pen_px": 54.4,
+    "rb": {
+     "l": 304,
+     "r": 371,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":3,\"hiddenForMs\":900,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":{\"kind\":\"keepout\",\"l\":16,\"t\":261,\"w\":358,\"h\":110,\"box\":[304,316,370,426]},\"pos\":[337,426],\"tgt\":null,\"rects\":"
+   },
+   {
+    "state": "idle",
+    "x": 337.4,
+    "y": 425.921875,
+    "visible": false,
+    "overlap": 2,
+    "rendered_pen_px": 54.4,
+    "rb": {
+     "l": 302,
+     "r": 372,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":3,\"hiddenForMs\":3333,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":{\"kind\":\"keepout\",\"l\":16,\"t\":261,\"w\":358,\"h\":110,\"box\":[304,316,370,426]},\"pos\":[337,426],\"tgt\":null,\"rects\""
+   },
+   {
+    "state": "idle",
+    "x": 337.4,
+    "y": 425.921875,
+    "visible": false,
+    "overlap": 2,
+    "rendered_pen_px": 54.4,
+    "rb": {
+     "l": 304,
+     "r": 371,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":3,\"hiddenForMs\":4783,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":{\"kind\":\"keepout\",\"l\":16,\"t\":261,\"w\":358,\"h\":110,\"box\":[304,316,370,426]},\"pos\":[337,426],\"tgt\":null,\"rects\""
+   },
+   {
+    "state": "idle",
+    "x": 337.4,
+    "y": 425.921875,
+    "visible": false,
+    "overlap": 2,
+    "rendered_pen_px": 54.4,
+    "rb": {
+     "l": 303,
+     "r": 372,
+     "t": 316,
+     "b": 426
+    },
+    "scrollY": 0,
+    "dbg": "{\"busy\":true,\"epoch\":3,\"hiddenForMs\":6333,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":{\"kind\":\"keepout\",\"l\":16,\"t\":261,\"w\":358,\"h\":110,\"box\":[304,316,370,426]},\"pos\":[337,426],\"tgt\":null,\"rects\""
+   }
+  ],
+  "states": [
+   "idle",
+   "walk",
+   "wave"
+  ],
+  "max_rendered_penetration_px_visible": 5.3,
+  "max_rendered_penetration_px_all": 54.6,
+  "rendered_pen_gt3_visible_samples": 1,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 6,
+  "visible_samples": 16,
+  "max_overlap_all_states": 2,
+  "max_overlap_while_stationary": 2,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": true,
+  "visits": 1,
+  "lastError": null,
+  "state_extra": "{\"rw\":{\"completed\":true},\"rr\":[]}",
+  "canvas_present_at_end": true,
+  "gate_cards_still_in_page": 8,
+  "js_errors": [],
+  "final": {
+   "state": "idle",
+   "x": 337.4,
+   "y": 425.921875,
+   "vw": 390,
+   "vh": 844,
+   "halfW": 33,
+   "charH": 110,
+   "overlap": 2,
+   "dbg": "{\"busy\":true,\"epoch\":3,\"hiddenForMs\":6333,\"pick\":null,\"side\":null,\"cards\":0,\"action\":\"idle\",\"vis\":false,\"visits\":1,\"abandoned\":0,\"lastError\":null,\"hit\":{\"kind\":\"keepout\",\"l\":16,\"t\":261,\"w\":358,\"h\":110,\"box\":[304,316,370,426]},\"pos\":[337,426],\"tgt\":null,\"rects\"",
+   "rendered_pen_px": 54.4,
+   "rb": {
+    "l": 303,
+    "r": 372,
+    "t": 316,
+    "b": 426
+   },
+   "visible": false,
+   "overlap_visible": 0,
+   "inView": true,
+   "scrollY": 0,
+   "visits": 1,
+   "lastError": null
+  }
+ },
+ "phone_badglb": {
+  "samples": 0,
+  "trace": [],
+  "states": [],
+  "max_rendered_penetration_px_visible": 0,
+  "max_rendered_penetration_px_all": 0,
+  "rendered_pen_gt3_visible_samples": 0,
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 0,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": null,
+  "lastError": null,
+  "state_extra": "{}",
+  "canvas_present_at_end": false,
+  "gate_cards_still_in_page": 8,
+  "js_errors": [],
+  "final": null
+ }
+}

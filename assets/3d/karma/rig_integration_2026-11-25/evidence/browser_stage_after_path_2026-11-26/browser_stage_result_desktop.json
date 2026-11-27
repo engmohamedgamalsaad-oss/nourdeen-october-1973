@@ -1,0 +1,55 @@
+{
+ "desktop_good": {
+  "samples": 19,
+  "states": [
+   "idle",
+   "walk",
+   "wave"
+  ],
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 2,
+  "visible_samples": 17,
+  "max_overlap_all_states": 3,
+  "max_overlap_while_stationary": 2,
+  "samples_overlapping_while_walking": 1,
+  "in_view_after_arrival": true,
+  "visits": 1,
+  "lastError": null,
+  "canvas_present_at_end": true,
+  "gate_cards_still_in_page": 8,
+  "js_errors": [],
+  "final": {
+   "state": "idle",
+   "x": 1362,
+   "y": 528.0450439453125,
+   "vw": 1440,
+   "vh": 900,
+   "halfW": 69,
+   "charH": 230,
+   "overlap": 0,
+   "visible": true,
+   "overlap_visible": 0,
+   "inView": true,
+   "scrollY": 0,
+   "visits": 1,
+   "lastError": null
+  }
+ },
+ "desktop_badglb": {
+  "samples": 0,
+  "states": [],
+  "max_VISIBLE_overlap": 0,
+  "hidden_samples": 0,
+  "visible_samples": 0,
+  "max_overlap_all_states": 0,
+  "max_overlap_while_stationary": 0,
+  "samples_overlapping_while_walking": 0,
+  "in_view_after_arrival": null,
+  "visits": null,
+  "lastError": null,
+  "canvas_present_at_end": false,
+  "gate_cards_still_in_page": 8,
+  "js_errors": [],
+  "final": null
+ }
+}

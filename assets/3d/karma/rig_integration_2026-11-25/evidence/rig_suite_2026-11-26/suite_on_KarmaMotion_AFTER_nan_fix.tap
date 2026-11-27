@@ -1,0 +1,193 @@
+TAP version 13
+# {"sim":"node CPU only, NOT a phone","glbBytes":21425080,"skinnedTriangles":283229,"joints":19,"msPerFrameCPU":0.017}
+# {"gate":"mobile-budget","fileMB":20.43,"triangles":283229,"textures":2,"maxTextureSidePx":2048,"textureSizes":[[2048,2048],[192,203]],"pass":false}
+# {"gate":"likeness","sha256":"ceae16e011114cf70830f83aea8217a2492253258b748de58c3c46f0667bae1a","approved":false,"why":"no LIKENESS_APPROVAL.json next to the GLB"}
+# Subtest: GLB loads with GLTFLoader and exposes all 19 agreed bones as real THREE.Bone joints
+ok 1 - GLB loads with GLTFLoader and exposes all 19 agreed bones as real THREE.Bone joints
+  ---
+  duration_ms: 125.924543
+  type: 'test'
+  ...
+# Subtest: skin weights: sum to 1, non-negative, valid indices, every joint influences at least one vertex
+ok 2 - skin weights: sum to 1, non-negative, valid indices, every joint influences at least one vertex
+  ---
+  duration_ms: 122.562548
+  type: 'test'
+  ...
+# Subtest: HeadMount and HairMount are children of Head; a head + hair mount, follow Head, and hide the placeholder
+ok 3 - HeadMount and HairMount are children of Head; a head + hair mount, follow Head, and hide the placeholder
+  ---
+  duration_ms: 80.427434
+  type: 'test'
+  ...
+# Subtest: rig is rejected when a mount is missing (no silent fallback)
+ok 4 - rig is rejected when a mount is missing (no silent fallback)
+  ---
+  duration_ms: 68.919563
+  type: 'test'
+  ...
+# Subtest: deformation shoulder_L: moves its limb, no NaN, does not drag distant body parts
+ok 5 - deformation shoulder_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 1311.327103
+  type: 'test'
+  ...
+# Subtest: deformation shoulder_R: moves its limb, no NaN, does not drag distant body parts
+ok 6 - deformation shoulder_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 1321.663619
+  type: 'test'
+  ...
+# Subtest: deformation elbow_L: moves its limb, no NaN, does not drag distant body parts
+ok 7 - deformation elbow_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 881.338746
+  type: 'test'
+  ...
+# Subtest: deformation elbow_R: moves its limb, no NaN, does not drag distant body parts
+ok 8 - deformation elbow_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 807.416205
+  type: 'test'
+  ...
+# Subtest: deformation hip_L: moves its limb, no NaN, does not drag distant body parts
+ok 9 - deformation hip_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 810.455423
+  type: 'test'
+  ...
+# Subtest: deformation hip_R: moves its limb, no NaN, does not drag distant body parts
+ok 10 - deformation hip_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 793.775375
+  type: 'test'
+  ...
+# Subtest: deformation knee_L: moves its limb, no NaN, does not drag distant body parts
+ok 11 - deformation knee_L: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 772.507124
+  type: 'test'
+  ...
+# Subtest: deformation knee_R: moves its limb, no NaN, does not drag distant body parts
+ok 12 - deformation knee_R: moves its limb, no NaN, does not drag distant body parts
+  ---
+  duration_ms: 792.632939
+  type: 'test'
+  ...
+# Subtest: neck/head: head and neck rotation carry the head (skinned head vertices OR the mounted head), leave the lower body untouched, no NaN
+ok 13 - neck/head: head and neck rotation carry the head (skinned head vertices OR the mounted head), leave the lower body untouched, no NaN
+  ---
+  duration_ms: 337.767155
+  type: 'test'
+  ...
+# Subtest: six actions complete and end in a sane state
+ok 14 - six actions complete and end in a sane state
+  ---
+  duration_ms: 114.210773
+  type: 'test'
+  ...
+# Subtest: walkTo top: feet end exactly on the card top edge, inside the card horizontally
+ok 15 - walkTo top: feet end exactly on the card top edge, inside the card horizontally
+  ---
+  duration_ms: 61.548854
+  type: 'test'
+  ...
+# Subtest: jump: rises then returns to the ground level; wave raises the hand above the shoulder
+ok 16 - jump: rises then returns to the ground level; wave raises the hand above the shoulder
+  ---
+  duration_ms: 74.638664
+  type: 'test'
+  ...
+# Subtest: preemption: a second walkTo resolves the first as preempted; stand() clears the queue; no stuck promises
+ok 17 - preemption: a second walkTo resolves the first as preempted; stand() clears the queue; no stuck promises
+  ---
+  duration_ms: 60.096583
+  type: 'test'
+  ...
+# Subtest: queued jump during a walk runs after arrival (no animation conflict)
+ok 18 - queued jump during a walk runs after arrival (no animation conflict)
+  ---
+  duration_ms: 86.001695
+  type: 'test'
+  ...
+# Subtest: leanOn follows a card that drifts a little (smooth) and re-walks when it jumps far
+ok 19 - leanOn follows a card that drifts a little (smooth) and re-walks when it jumps far
+  ---
+  duration_ms: 70.969243
+  type: 'test'
+  ...
+# Subtest: card removed mid-walk: promise resolves card-missing, state returns to idle
+ok 20 - card removed mid-walk: promise resolves card-missing, state returns to idle
+  ---
+  duration_ms: 76.850554
+  type: 'test'
+  ...
+# Subtest: resize desktop -> phone: Karma stays fully inside the viewport and re-targets the card
+ok 21 - resize desktop -> phone: Karma stays fully inside the viewport and re-targets the card
+  ---
+  duration_ms: 73.888798
+  type: 'test'
+  ...
+# Subtest: Karma never overlaps a card while standing beside it (side placement, normal layout)
+ok 22 - Karma never overlaps a card while standing beside it (side placement, normal layout)
+  ---
+  duration_ms: 100.083628
+  type: 'test'
+  ...
+# Subtest: GAP: after walkTo(top) the character should keep following that card when it moves
+ok 23 - GAP: after walkTo(top) the character should keep following that card when it moves # TODO controller drops the anchor when walkTo completes
+  ---
+  duration_ms: 88.212407
+  type: 'test'
+  ...
+# Subtest: GAP: card near the screen edge on a phone: side placement overlaps the card instead of choosing the other side
+not ok 24 - GAP: card near the screen edge on a phone: side placement overlaps the card instead of choosing the other side # TODO x is clamped, no side fallback
+  ---
+  duration_ms: 82.098677
+  type: 'test'
+  location: '/tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:203:1'
+  failureType: 'testCodeFailure'
+  error: 'standing box overlaps card'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/repo/assets/3d/karma/integration_tests_2026-11-25/controller_integration.test.mjs:206:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: GAP: no API for keep-out text areas (headings/paragraphs); controller only knows card rects
+ok 25 - GAP: no API for keep-out text areas (headings/paragraphs); controller only knows card rects # TODO getKeepOutRects not implemented
+  ---
+  duration_ms: 45.401466
+  type: 'test'
+  ...
+# Subtest: simulated phone profile: controller + skeleton CPU cost per frame stays small
+ok 26 - simulated phone profile: controller + skeleton CPU cost per frame stays small
+  ---
+  duration_ms: 93.695544
+  type: 'test'
+  ...
+# Subtest: GATE mobile budget: triangles <= 60k and every texture <= 2048px (report always; enforced with KARMA_MOBILE_BUDGET=strict)
+ok 27 - GATE mobile budget: triangles <= 60k and every texture <= 2048px (report always; enforced with KARMA_MOBILE_BUDGET=strict)
+  ---
+  duration_ms: 6.720758
+  type: 'test'
+  ...
+# Subtest: GATE likeness: needs a LIKENESS_APPROVAL.json bound to THIS file hash (report always; enforced with KARMA_REQUIRE_LIKENESS=1)
+ok 28 - GATE likeness: needs a LIKENESS_APPROVAL.json bound to THIS file hash (report always; enforced with KARMA_REQUIRE_LIKENESS=1)
+  ---
+  duration_ms: 32.23773
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 3
+# duration_ms 9450.082673

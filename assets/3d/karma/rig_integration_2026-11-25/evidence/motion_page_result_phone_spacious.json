@@ -1,0 +1,123 @@
+{
+ "Idle": {
+  "state": "idle",
+  "x": 456,
+  "y": 844,
+  "visible": true,
+  "inView": false,
+  "log": "Idle done",
+  "mid_states": [
+   "idle",
+   "idle"
+  ]
+ },
+ "Walk": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Walk done",
+  "mid_states": [
+   "walk",
+   "walk"
+  ]
+ },
+ "Run": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Run done",
+  "mid_states": [
+   "idle",
+   "idle"
+  ]
+ },
+ "Jump": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Jump done",
+  "mid_states": [
+   "jump",
+   "idle"
+  ]
+ },
+ "Wave": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Wave done",
+  "mid_states": [
+   "wave",
+   "wave"
+  ]
+ },
+ "Look": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Look done",
+  "mid_states": [
+   "wave",
+   "wave"
+  ]
+ },
+ "Point": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Point done",
+  "mid_states": [
+   "wave",
+   "wave"
+  ]
+ },
+ "Lean": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Lean done",
+  "mid_states": [
+   "tilt",
+   "idle"
+  ]
+ },
+ "Turn": {
+  "state": "idle",
+  "x": 355,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Turn done",
+  "mid_states": [
+   "wave",
+   "idle"
+  ]
+ },
+ "Lean on card": {
+  "state": "lean",
+  "x": 327,
+  "y": 570,
+  "visible": true,
+  "inView": true,
+  "log": "Lean on card done",
+  "mid_states": [
+   "lean",
+   "lean"
+  ]
+ },
+ "js_errors": []
+}

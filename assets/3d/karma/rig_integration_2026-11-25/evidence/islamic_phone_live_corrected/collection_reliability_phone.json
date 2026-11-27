@@ -1,0 +1,289 @@
+{
+ "1_entry_at_top_no_scroll": {
+  "seconds": 6,
+  "visible_and_on_screen": 0,
+  "hidden": 0,
+  "offscreen": 6,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 422,
+    "r": 490,
+    "t": 734,
+    "b": 844
+   },
+   "meshInView": false,
+   "action": "idle",
+   "visible": true,
+   "x": 456,
+   "y": 844,
+   "inView": false,
+   "onScreen": false,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 0,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "hhhhhh",
+  "actions": [
+   "idle"
+  ]
+ },
+ "2_scrolled_to_cards": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 296,
+    "r": 369,
+    "t": 586,
+    "b": 696
+   },
+   "meshInView": true,
+   "action": "point",
+   "visible": true,
+   "x": 340,
+   "y": 696,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 427,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "VVVVVV",
+  "actions": [
+   "look",
+   "point"
+  ]
+ },
+ "3_scrolled_to_slideshow": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 313,
+    "r": 376,
+    "t": 585,
+    "b": 696
+   },
+   "meshInView": true,
+   "action": "wave",
+   "visible": true,
+   "x": 340,
+   "y": 696,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 0,
+   "vw": 390,
+   "sy": 300,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "VVVVVV",
+  "actions": [
+   "point",
+   "wave"
+  ]
+ },
+ "4_scrolled_to_bottom": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 311,
+    "r": 381,
+    "t": 496,
+    "b": 606
+   },
+   "meshInView": true,
+   "action": "idle",
+   "visible": true,
+   "x": 346,
+   "y": 606,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 1,
+   "vw": 390,
+   "sy": 517,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "VVVVVV",
+  "actions": [
+   "idle",
+   "lean_on_card"
+  ]
+ },
+ "5_resize_360x740": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 273,
+    "r": 334,
+    "t": 482,
+    "b": 592
+   },
+   "meshInView": true,
+   "action": "point",
+   "visible": true,
+   "x": 310,
+   "y": 592,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 256,
+   "overlapCards": 0,
+   "visits": 1,
+   "vw": 360,
+   "sy": 511,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "VVVVVV",
+  "actions": [
+   "look",
+   "point"
+  ]
+ },
+ "6_resize_768x1024": {
+  "seconds": 6,
+  "visible_and_on_screen": 4,
+  "hidden": 2,
+  "offscreen": 0,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 597,
+    "r": 758,
+    "t": 667,
+    "b": 899
+   },
+   "meshInView": true,
+   "action": "lean_on_card",
+   "visible": true,
+   "x": 685,
+   "y": 898,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "146",
+   "cardW": 592,
+   "overlapCards": 0,
+   "visits": 1,
+   "vw": 768,
+   "sy": 81,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "hhVVVV",
+  "actions": [
+   "lean_on_card",
+   "walk"
+  ]
+ },
+ "7_resize_1440x900": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 1235,
+    "r": 1379,
+    "t": 646,
+    "b": 876
+   },
+   "meshInView": true,
+   "action": "idle",
+   "visible": true,
+   "x": 1307,
+   "y": 876,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "146",
+   "cardW": 1050,
+   "overlapCards": 0,
+   "visits": 2,
+   "vw": 1440,
+   "sy": 48,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "VVVVVV",
+  "actions": [
+   "idle"
+  ]
+ },
+ "8_resize_back_390x844": {
+  "seconds": 6,
+  "visible_and_on_screen": 6,
+  "hidden": 0,
+  "offscreen": 0,
+  "mesh_clipped_seconds": 0,
+  "max_overlap_when_visible": 0,
+  "final": {
+   "mb": {
+    "l": 296,
+    "r": 369,
+    "t": 586,
+    "b": 696
+   },
+   "meshInView": true,
+   "action": "point",
+   "visible": true,
+   "x": 340,
+   "y": 696,
+   "inView": true,
+   "onScreen": true,
+   "gutter": "74",
+   "cardW": 286,
+   "overlapCards": 0,
+   "visits": 2,
+   "vw": 390,
+   "sy": 427,
+   "dbg": null
+  },
+  "trace": null,
+  "timeline": "VVVVVV",
+  "actions": [
+   "look",
+   "point"
+  ]
+ },
+ "js_errors": []
+}

@@ -1,0 +1,95 @@
+TAP version 13
+# \# FUZZ {"ran":34,"arrived":34,"endsInsideOtherCard":0,"held":0,"crossedScenarios":0,"details":[]}
+# Subtest: construction leaves the holder transform finite (no NaN before the first update)
+ok 1 - construction leaves the holder transform finite (no NaN before the first update)
+  ---
+  duration_ms: 129.844569
+  type: 'test'
+  ...
+# Subtest: gap 1: after walkTo(top) she keeps following that card when it moves
+ok 2 - gap 1: after walkTo(top) she keeps following that card when it moves
+  ---
+  duration_ms: 141.343499
+  type: 'test'
+  ...
+# Subtest: gap 2: card at the phone screen edge, requested side left: standing box does not overlap the card, stays in view
+ok 3 - gap 2: card at the phone screen edge, requested side left: standing box does not overlap the card, stays in view
+  ---
+  duration_ms: 100.498975
+  type: 'test'
+  ...
+# Subtest: gap 2: card at the phone screen edge, requested side right: standing box does not overlap the card, stays in view
+ok 4 - gap 2: card at the phone screen edge, requested side right: standing box does not overlap the card, stays in view
+  ---
+  duration_ms: 100.92411
+  type: 'test'
+  ...
+# Subtest: gap 3: keep-out rectangles (text) push the standing position sideways, never into a card or out of view
+ok 5 - gap 3: keep-out rectangles (text) push the standing position sideways, never into a card or out of view
+  ---
+  duration_ms: 78.970418
+  type: 'test'
+  ...
+# Subtest: path: walk from the far side of a card to its other side never crosses any card (every frame)
+ok 6 - path: walk from the far side of a card to its other side never crosses any card (every frame)
+  ---
+  duration_ms: 91.507686
+  type: 'test'
+  ...
+# Subtest: path: run from the far side of a card to its other side never crosses any card (every frame)
+ok 7 - path: run from the far side of a card to its other side never crosses any card (every frame)
+  ---
+  duration_ms: 57.381642
+  type: 'test'
+  ...
+# Subtest: path: with no card in the way the walk is still a straight line (no needless detour)
+ok 8 - path: with no card in the way the walk is still a straight line (no needless detour)
+  ---
+  duration_ms: 67.945514
+  type: 'test'
+  ...
+# Subtest: path fuzz: 60 seeded scenarios, no frame crosses a card
+ok 9 - path fuzz: 60 seeded scenarios, no frame crosses a card
+  ---
+  duration_ms: 3706.625065
+  type: 'test'
+  ...
+# Subtest: no-route: a wall of cards across the whole width => she holds (completed:false, no crossing), not a straight walk through text
+ok 10 - no-route: a wall of cards across the whole width => she holds (completed:false, no crossing), not a straight walk through text
+  ---
+  duration_ms: 64.811634
+  type: 'test'
+  ...
+# Subtest: adjacent-card endpoint: requested side is filled by a neighbour card => she ends in a clear spot or holds, never inside the neighbour
+ok 11 - adjacent-card endpoint: requested side is filled by a neighbour card => she ends in a clear spot or holds, never inside the neighbour
+  ---
+  duration_ms: 134.024491
+  type: 'test'
+  ...
+# Subtest: adjacent-card endpoint, no clear spot at all => refused (completed:false), not placed inside text
+ok 12 - adjacent-card endpoint, no clear spot at all => refused (completed:false), not placed inside text
+  ---
+  duration_ms: 51.794063
+  type: 'test'
+  ...
+# Subtest: moving obstruction: a card slides into the planned route mid-walk => route is re-planned, no frame crosses
+ok 13 - moving obstruction: a card slides into the planned route mid-walk => route is re-planned, no frame crosses
+  ---
+  duration_ms: 78.955632
+  type: 'test'
+  ...
+# Subtest: resize obstruction: viewport narrows mid-walk (setViewport) => no frame crosses, ends inside the viewport
+ok 14 - resize obstruction: viewport narrows mid-walk (setViewport) => no frame crosses, ends inside the viewport
+  ---
+  duration_ms: 77.921128
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5036.835056
