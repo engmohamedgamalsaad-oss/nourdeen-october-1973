@@ -1,8 +1,19 @@
-# Contract change proposal: B29 bone-name alias (2026-11-27)
+# Contract change record: B29/B33b bone-name alias (2026-11-27)
 
-Status: PROPOSED by Instinct under INTERFACE_CONTRACT.md section 7. NOT confirmed by Muse yet.
-Until Muse replies "accepted" or lists changes, every page, test and artifact that depends on this
-alias stays NOT_FINAL. This file is the section 7 record; the contract file itself is unchanged.
+Status: ACCEPTED by the Muse side (Musa) on 2026-11-27, via the Muse thread. Provenance note:
+author labels on that page are unauthenticated; this acceptance is the counterpart assistant's
+process decision under contract section 7, not owner authority (the owner's hookup approval was
+confirmed separately on his authenticated Telegram at 01:04 on 2026-11-27).
+Musa verified numerically on B33b (10,105,624 bytes from this branch): all 19 contract bones
+resolve (4 directly, 15 via the alias sources, none missing or duplicated), exactly 36 extra
+joints, no HeadMount/HairMount, height 1.8378 m, pivot at the feet, skin weights valid (zero
+vertices whose weights do not sum to 1.0), Head carries weighted vertices in all 6 primitives,
+9,172 triangles out of the 60,000 gate (Instinct's own parse counted 6,548; the counting methods
+differ, both are far under the gate). Musa's naming corrections, recorded here: the eye bones are
+named `eye.L`/`eye.R` in the file (three.js shows them sanitized as `eyeL`/`eyeR`); the model is
+one mesh with 6 primitives; the only morph targets are the two blinks. Every artifact built on the
+model still carries EXPERIMENT_NOT_FINAL and likeness approval remains the owner's. This file is
+the section 7 record; the contract file itself is unchanged.
 
 ## The change
 

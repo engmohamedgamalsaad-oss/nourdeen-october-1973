@@ -26,7 +26,7 @@ export async function startKarmaStage(opts = {}) {
     const cam = new THREE.OrthographicCamera(-vw / 2, vw / 2, vh / 2, -vh / 2, -2000, 2000); cam.position.z = 500;
     scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7a70, 1.6)); const dl = new THREE.DirectionalLight(0xffffff, 1.6); dl.position.set(-0.4, 0.8, 1); scene.add(dl);
     const gltf = await new GLTFLoader().loadAsync(o.glbUrl);
-    const adapted = adaptRig(gltf.scene); // contract-native GLB: verbatim rig path; B29 GLB: in-memory bone alias (PROPOSED contract change, 2026-11-27)
+    const adapted = adaptRig(gltf.scene); // contract-native GLB: verbatim rig path; B29 GLB: in-memory bone alias (contract change accepted by Muse, 2026-11-27)
     const rig = adapted.rig;
     const modelHeight = measureModelHeight(gltf.scene); // real bind-pose height; the controller scales charH/modelHeight, no hard-coded 1 m
     const mobH = () => (o.reserveGutter ? Math.min(110, vh * 0.15) : Math.min(150, vh * 0.2));

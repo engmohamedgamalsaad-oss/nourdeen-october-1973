@@ -2,8 +2,8 @@
 
 Scope: the owner confirmed the hookup on his authenticated Telegram at 01:04 on 2026-11-27
 ("continue and link the model"). Branch only; no merge, no deploy, no Supabase edits. The model is
-EXPERIMENT_NOT_FINAL and NOT likeness-approved. The bone-name alias it needs is a PROPOSED contract
-change (../../CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md), posted to Muse; not confirmed yet.
+EXPERIMENT_NOT_FINAL and NOT likeness-approved. The bone-name alias it needs is recorded as ACCEPTED by Muse
+on 2026-11-27 (../../CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md).
 
 Environment: headless Chrome, software GL (SwiftShader), cache disabled, Node 22, three 0.170.0.
 Single runs, not a real device. Screenshots are full-page at normal scale only.

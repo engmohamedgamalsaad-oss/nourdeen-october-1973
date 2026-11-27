@@ -59,8 +59,8 @@ Browser (cache off): phone and desktop runs show no visible overlap with text, l
 The owner confirmed the hookup on his authenticated Telegram at 01:04 on 2026-11-27. The stage is now
 wired ON by default (opt-out `?karma=0`) on the pages carrying the loader, defaulting to the Muse B33b
 model (full build desktop, MOBILE build on small screens; B29 fallback via `?glb=`). B33b needs the
-PROPOSED bone-name alias (CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md, posted to Muse, not yet
-confirmed) plus measured model height and a startup-visibility fix, all in
+bone-name alias (CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md, ACCEPTED by Muse on
+2026-11-27 after numeric verification on B33b) plus measured model height and a startup-visibility fix, all in
 `js/KarmaModelAdapter.js` + `karma-stage.js`; contract files and the PR #710 code are untouched.
 Results and the honest defect list: `evidence/muse_B33b_2026-11-27/README.md`. Headline: node motion
 12/14 on B33b (two cosmetic proportion failures, listed), rig_gaps 22/22, baseline fixture still

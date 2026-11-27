@@ -9,9 +9,9 @@
 //     Bones are renamed in memory per ALIAS_B29, then the SAME checks createRig performs are
 //     applied, except HeadMount/HairMount are omitted as contract section 3 allows when
 //     "Muse delivers a head that is already skinned to Head".
-// Status: shape B is a PROPOSED contract change (section 7: bone names), posted to Muse on
-// 2026-11-27 and recorded in CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md. Until Muse
-// confirms, every artifact built on shape B stays NOT_FINAL.
+// Status: shape B is a contract change (section 7: bone names) ACCEPTED by Muse on 2026-11-27
+// after numeric verification on B33b; recorded in CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md.
+// Model artifacts stay EXPERIMENT_NOT_FINAL regardless; likeness approval remains the owner's.
 import * as THREE from 'three';
 import { BONES, createRig } from '../../claude_track_2026-11-25/js/KarmaRig.js';
 

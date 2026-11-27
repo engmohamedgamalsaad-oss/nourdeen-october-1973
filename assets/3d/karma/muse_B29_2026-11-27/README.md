@@ -13,4 +13,4 @@ Measured facts (both files): GLB 2.0, one scene, 4 skinned primitives in one ski
 contract section 5; morph targets `eyeBlink_L`/`eyeBlink_R` on all 4 primitives (currently unused by
 the stage); bind height 1.838 m, faces +Z, left hand at +X, pivot at the soles; 6,548 triangles.
 Bone names do NOT match the contract's 19 names and there are no HeadMount/HairMount nodes:
-see `../rig_integration_2026-11-25/CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md` (PROPOSED).
+see `../rig_integration_2026-11-25/CONTRACT_CHANGE_PROPOSAL_B29_ALIAS_2026-11-27.md` (ACCEPTED by Muse 2026-11-27).
